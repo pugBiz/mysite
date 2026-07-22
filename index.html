@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pug's Business | Smart Solutions</title>
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --bg-light: #f9fafb;
+            --border-color: #e5e7eb;
+            --max-width: 1100px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            color: var(--text-main);
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-light);
+        }
+
+        /* Navigation */
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            z-index: 10;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, var(--bg-light) 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 0;
+            background-color: var(--bg-light);
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        blockquote {
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-top: 1rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 0;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: var(--bg-light);
+            padding: 2rem;
+            border-radius: 0.5rem;
+        }
+
+        .testimonial-card p {
+            margin-bottom: 1rem;
+        }
+
+        .author {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Call To Action */
+        .cta-section {
+            padding: 5rem 0;
+            text-align: center;
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .cta-section h2 {
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-light {
+            background-color: #ffffff;
+            color: var(--primary);
+        }
+
+        .btn-light:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero-cta { flex-direction: column; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation -->
+    <header class="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">Pug's Business</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#" class="btn btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Empowering Your Vision with Pug's Business</h1>
+            <p>We help businesses simplify operations, save time, and achieve consistent growth with tailored software and service tools.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn btn-primary">Explore Solutions</a>
+                <a href="#" class="btn btn-secondary">Watch Quick Demo (1 Min)</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Benefits / Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose Pug's Business</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Simple Integration</h3>
+                    <p>Connects seamlessly with your existing workflow without steep learning curves or complex setup headaches.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Reliable Performance</h3>
+                    <p>Fast, secure, and always accessible when you need it, ensuring peace of mind and uninterrupted work.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Dedicated Support</h3>
+                    <p>Direct help whenever you run into questions, giving you fast answers so you never get stuck.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container about-content">
+            <h2 class="section-title">Built with quality and simplicity at the core</h2>
+            <blockquote>
+                "At Pug's Business, we believe tools and services should just work. Our mission is to strip away unnecessary complexity and provide clean, dependable, and user-friendly solutions designed around how real people actually work."
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Clients Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>"Effortless and reliable. Implementing Pug's Business tools was a breeze. It saves our team hours every single week."</p>
+                    <div class="author">— Sarah M., Small Business Owner</div>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Clean design, incredible support. Finally, a solution that doesn't feel cluttered or overly complex."</p>
+                    <div class="author">— David K., Project Lead</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call To Action -->
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <h2>Ready to Elevate Your Workflow?</h2>
+            <p>Join hundreds of satisfied users and start streamlining your day-to-day operations with Pug's Business today.</p>
+            <a href="#" class="btn btn-light">Get Started Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div>© 2026 Pug's Business. All rights reserved.</div>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Support</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+</html>
