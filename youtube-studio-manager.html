@@ -427,7 +427,7 @@
 
   <!-- Connect YouTube API Modal -->
   <div data-id="189" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="190" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative">
+    <div data-id="190" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
       <button data-id="191" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
         <i data-id="192" data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -458,56 +458,64 @@
       </div>
       <input data-id="211" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
       <input data-id="212" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
-      <button data-id="213" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
-        <i data-id="214" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
+
+      <!-- Gemini API Key -->
+      <div data-id="213" style="margin-top:12px;">
+        <label data-id="214" style="color:#aaa; font-size:13px; display:block; margin-bottom:6px;">Gemini API Key <span data-id="215" style="color:#717171;">(for AI generation on external hosts)</span></label>
+        <input data-id="216" type="password" id="gemini-key-input" placeholder="AIza..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red" />
+        <p data-id="217" style="color:#717171; font-size:11px; margin-top:4px;">Only needed when running outside Copilot. Uses Gemini 2.5 Flash. Get yours free at aistudio.google.com. Stored in localStorage only.</p>
+      </div>
+
+      <button data-id="218" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
+        <i data-id="219" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
       </button>
     </div>
   </div>
 
   <!-- Delete Confirmation Modal -->
-  <div data-id="215" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="216" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <div data-id="217" class="flex items-center gap-3 mb-4">
-        <div data-id="218" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
-          <i data-id="219" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
+  <div data-id="220" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="221" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <div data-id="222" class="flex items-center gap-3 mb-4">
+        <div data-id="223" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
+          <i data-id="224" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
         </div>
-        <h3 data-id="220" class="text-lg font-bold text-white">Delete Video?</h3>
+        <h3 data-id="225" class="text-lg font-bold text-white">Delete Video?</h3>
       </div>
-      <p data-id="221" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
-      <div data-id="222" class="flex gap-3 justify-end">
-        <button data-id="223" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="224" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
+      <p data-id="226" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
+      <div data-id="227" class="flex gap-3 justify-end">
+        <button data-id="228" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="229" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
       </div>
     </div>
   </div>
 
   <!-- Playlist Remove Modal -->
-  <div data-id="225" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="226" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="227" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
-      <div data-id="228" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
+  <div data-id="230" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="231" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="232" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
+      <div data-id="233" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
       </div>
-      <div data-id="229" id="pr-loading" class="hidden text-center py-4"><span data-id="230" class="spinner spinner-red"></span><span data-id="231" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
-      <div data-id="232" class="flex gap-3 justify-end">
-        <button data-id="233" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="234" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
+      <div data-id="234" id="pr-loading" class="hidden text-center py-4"><span data-id="235" class="spinner spinner-red"></span><span data-id="236" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
+      <div data-id="237" class="flex gap-3 justify-end">
+        <button data-id="238" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="239" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
       </div>
     </div>
   </div>
 
   <!-- Create Playlist Modal -->
-  <div data-id="235" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="236" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="237" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
-      <input data-id="238" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <select data-id="239" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-        <option data-id="240" value="public">Public</option>
-        <option data-id="241" value="unlisted">Unlisted</option>
-        <option data-id="242" value="private">Private</option>
+  <div data-id="240" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="241" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="242" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
+      <input data-id="243" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <select data-id="244" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
+        <option data-id="245" value="public">Public</option>
+        <option data-id="246" value="unlisted">Unlisted</option>
+        <option data-id="247" value="private">Private</option>
       </select>
-      <div data-id="243" class="flex gap-3 justify-end">
-        <button data-id="244" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="245" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
+      <div data-id="248" class="flex gap-3 justify-end">
+        <button data-id="249" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="250" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
       </div>
     </div>
   </div>
@@ -518,6 +526,78 @@
     // ============================================================
     if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
       lucide.createIcons();
+    }
+
+    // ============================================================
+    // UNIVERSAL AI CHAT WRAPPER
+    // ============================================================
+    async function aiChat(messages) {
+      // Inside Copilot — use AppSDK
+      if (typeof AppSDK !== 'undefined' && AppSDK?.ai?.chat) {
+        const result = await AppSDK.ai.chat({ messages });
+        // AppSDK returns { content: string } or a plain string
+        return (result && result.content) ? result.content : String(result);
+      }
+
+      // Outside Copilot (GitHub Pages etc.) — use Gemini 2.5 Flash directly
+      const apiKey = localStorage.getItem('gemini_api_key');
+      if (!apiKey) {
+        throw new Error('No Gemini API key found. Please open the Connect panel and enter your Gemini API key.');
+      }
+
+      // Merge system + user messages into a single prompt for Gemini 2.5 Flash
+      const systemMsg = messages.find(m => m.role === 'system');
+      const userMsg = messages.find(m => m.role === 'user');
+      const combinedPrompt = (systemMsg ? systemMsg.content + '\n\n' : '') + (userMsg ? userMsg.content : '');
+
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: combinedPrompt }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 1000 }
+          })
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `Gemini API error ${res.status}`);
+      }
+
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    }
+
+    // ============================================================
+    // AI KEY BANNER
+    // ============================================================
+    function checkAIKeyBanner() {
+      const existing = document.getElementById('ai-key-banner');
+      if (existing) existing.remove();
+      if (typeof AppSDK === 'undefined' && !localStorage.getItem('gemini_api_key')) {
+        const banner = document.createElement('div');
+        banner.id = 'ai-key-banner';
+        banner.style.cssText = 'background:rgba(124,94,0,0.6); border:1px solid #f0b400; border-radius:8px; padding:12px 16px; margin-bottom:16px; color:#fff; font-size:13px; display:flex; align-items:center; gap:10px;';
+        const span1 = document.createElement('span');
+        span1.textContent = '⚠️';
+        const span2 = document.createElement('span');
+        span2.innerHTML = '<strong>Gemini API key required</strong> for AI generation. Click <strong>Connect YouTube API</strong> in the header and enter your Gemini API key.';
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '✕';
+        closeBtn.style.cssText = 'margin-left:auto; background:none; border:none; color:#aaa; cursor:pointer; font-size:16px;';
+        closeBtn.addEventListener('click', function() {
+          const b = document.getElementById('ai-key-banner');
+          if (b) b.remove();
+        });
+        banner.appendChild(span1);
+        banner.appendChild(span2);
+        banner.appendChild(closeBtn);
+        const uploadTab = document.getElementById('tab-upload');
+        if (uploadTab) uploadTab.insertBefore(banner, uploadTab.firstChild);
+      }
     }
 
     // ============================================================
@@ -788,6 +868,7 @@
       } else {
         loadDemoForTab(tab);
       }
+      if (tab === 'upload') checkAIKeyBanner();
     }
 
     function loadDemoForTab(tab) {
@@ -950,10 +1031,6 @@
     // ============================================================
     // VIDEO FRAME EXTRACTION
     // ============================================================
-    /**
-     * Extracts N evenly-spaced frames from a video File object.
-     * Returns an array of base64 JPEG data URLs (compressed to 640px wide max).
-     */
     async function extractFramesFromVideo(file, frameCount = 6) {
       return new Promise((resolve, reject) => {
         const video = document.getElementById('frame-extractor');
@@ -972,7 +1049,6 @@
             return reject(new Error('Could not read video duration.'));
           }
 
-          // Sample at 10%, 25%, 40%, 55%, 70%, 85% of the video
           const timestamps = Array.from({ length: frameCount }, (_, i) =>
             duration * (0.10 + i * ((0.85 - 0.10) / (frameCount - 1)))
           );
@@ -989,13 +1065,11 @@
           };
 
           video.addEventListener('seeked', () => {
-            // Draw frame to canvas, scaling to max 640px wide
             const MAX_W = 640;
             const scale = Math.min(1, MAX_W / video.videoWidth);
             canvas.width = Math.round(video.videoWidth * scale);
             canvas.height = Math.round(video.videoHeight * scale);
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            // Compress to JPEG at 0.75 quality to keep payload small
             frames.push(canvas.toDataURL('image/jpeg', 0.75));
             idx++;
             captureNext();
@@ -1012,14 +1086,14 @@
     }
 
     // ============================================================
-    // FRAME PIXEL ANALYSIS (local canvas-based color/brightness)
+    // FRAME PIXEL ANALYSIS
     // ============================================================
     function analyzeFramePixels(dataUrl) {
       return new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          canvas.width = 64; // downsample for speed
+          canvas.width = 64;
           canvas.height = 36;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, 64, 36);
@@ -1038,7 +1112,6 @@
           b = Math.round(b / total);
           brightness = Math.round(brightness / total);
 
-          // Classify dominant color tone
           let colorTone = 'neutral';
           if (r > g + 40 && r > b + 40) colorTone = 'warm/red-dominant (possibly indoor, fire, sunset)';
           else if (g > r + 30 && g > b + 20) colorTone = 'green-dominant (possibly outdoor, nature, plants)';
@@ -1047,7 +1120,6 @@
           else if (r < 60 && g < 60 && b < 60) colorTone = 'very dark (possibly night scene, dark studio, cinematic)';
           else if (r > 150 && g > 120 && b < 80) colorTone = 'warm golden (possibly vlog, lifestyle, food, cooking)';
 
-          // Brightness label
           let brightnessLabel = brightness < 60 ? 'dark/low-light' : brightness < 130 ? 'medium-lit' : 'bright/well-lit';
 
           resolve(`Color tone: ${colorTone}. Brightness: ${brightnessLabel} (avg ${brightness}/255). RGB avg: (${r},${g},${b}).`);
@@ -1061,7 +1133,6 @@
     // FRAME STRIP PREVIEW
     // ============================================================
     function renderFrameStrip(frames) {
-      // Remove existing strip if any
       const existing = document.getElementById('frame-strip-wrapper');
       if (existing) existing.remove();
 
@@ -1094,7 +1165,6 @@
         strip.appendChild(img);
       });
 
-      // Insert after the upload zone
       const uploadZoneEl = document.getElementById('upload-zone-m3n4');
       if (uploadZoneEl && uploadZoneEl.parentNode) {
         uploadZoneEl.parentNode.insertBefore(wrapper, uploadZoneEl.nextSibling);
@@ -1102,7 +1172,7 @@
     }
 
     // ============================================================
-    // AI GENERATION — VIDEO FRAME EXTRACTION + LOCAL ANALYSIS PIPELINE
+    // AI GENERATION — VIDEO FRAME EXTRACTION + ANALYSIS PIPELINE
     // ============================================================
     const aiBtn = document.getElementById('ai-gen-btn-q3r4');
     aiBtn.addEventListener('click', async () => {
@@ -1144,18 +1214,17 @@
         const playlistNames = state.playlists.map(p => p.snippet?.title || p.name || '').filter(Boolean);
         const playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
 
-        // --- STEP 4: Call AppSDK.ai.chat() with a PLAIN STRING for content ---
+        // --- STEP 4: Call aiChat() universal wrapper ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> AI analyzing video...';
 
-        const response = await AppSDK.ai.chat({
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a YouTube SEO expert. You will be given a video filename and a visual analysis of frames sampled throughout the video (color tones, brightness, scene characteristics). Use these signals to infer the video topic and generate optimized YouTube metadata. Always respond with valid JSON only — no markdown, no explanation, no code fences.'
-            },
-            {
-              role: 'user',
-              content: `Video filename: "${filename}"
+        const rawText_result = await aiChat([
+          {
+            role: 'system',
+            content: 'You are a YouTube SEO expert. You will be given a video filename and a visual analysis of frames sampled throughout the video (color tones, brightness, scene characteristics). Use these signals to infer the video topic and generate optimized YouTube metadata. Always respond with valid JSON only — no markdown, no explanation, no code fences.'
+          },
+          {
+            role: 'user',
+            content: `Video filename: "${filename}"
 
 Visual frame analysis (6 frames sampled evenly throughout the video):
 ${frameReport}
@@ -1168,21 +1237,16 @@ Based on the filename and visual characteristics above, generate:
 
 Respond ONLY with this exact JSON structure:
 {"title": "...", "description": "...", "tags": "...", "playlist": "..."}`
-            }
-          ]
-        });
+          }
+        ]);
 
-        // --- STEP 5: Parse response.content (not response directly) ---
-        let rawText = (response && response.content) ? response.content : String(response);
-
-        // Strip any accidental markdown code fences
-        rawText = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+        // --- STEP 5: Parse response ---
+        let rawText = rawText_result.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
         let parsed;
         try {
           parsed = JSON.parse(rawText);
         } catch (e) {
-          // Try to extract a JSON object from within the string
           const match = rawText.match(/\{[\s\S]*\}/);
           if (match) {
             parsed = JSON.parse(match[0]);
@@ -1201,7 +1265,6 @@ Respond ONLY with this exact JSON structure:
         if (descEl) descEl.value = parsed.description || '';
         if (tagsEl) tagsEl.value = parsed.tags || '';
 
-        // Match AI playlist suggestion to available playlist options
         if (playlistEl && parsed.playlist) {
           const options = Array.from(playlistEl.options);
           const matchOpt = options.find(o =>
@@ -2230,6 +2293,11 @@ Respond ONLY with this exact JSON structure:
     // ============================================================
     document.getElementById('connect-api-btn-k1l2').addEventListener('click', () => {
       if (state.isConnected || state.token) return;
+      // Restore saved Gemini key into the input
+      const savedGeminiKey = localStorage.getItem('gemini_api_key');
+      if (savedGeminiKey && document.getElementById('gemini-key-input')) {
+        document.getElementById('gemini-key-input').value = savedGeminiKey;
+      }
       document.getElementById('api-modal-u1v1').classList.remove('hidden');
     });
     document.getElementById('api-modal-close-w2x2').addEventListener('click', () => {
@@ -2238,7 +2306,24 @@ Respond ONLY with this exact JSON structure:
 
     document.getElementById('authorize-btn-a4b4').addEventListener('click', () => {
       const clientId = document.getElementById('client-id-input-y3z3').value.trim();
-      if (!clientId) { showNotification('Please enter your Client ID.', 'warning'); return; }
+
+      // Save Gemini key regardless of whether YouTube client ID is provided
+      const geminiKey = document.getElementById('gemini-key-input')?.value?.trim();
+      if (geminiKey) {
+        localStorage.setItem('gemini_api_key', geminiKey);
+        showNotification('Gemini API key saved.', 'success');
+        checkAIKeyBanner();
+      }
+
+      if (!clientId) {
+        // If no client ID but Gemini key was saved, just close the modal
+        if (geminiKey) {
+          document.getElementById('api-modal-u1v1').classList.add('hidden');
+          return;
+        }
+        showNotification('Please enter your Client ID or Gemini API key.', 'warning');
+        return;
+      }
 
       const apiKey = document.getElementById('api-key-input').value.trim();
       localStorage.setItem('yt_client_id', clientId);
@@ -2286,6 +2371,13 @@ Respond ONLY with this exact JSON structure:
       }
 
       renderQueue();
+      checkAIKeyBanner();
+
+      // Restore saved Gemini key into input if modal opens
+      const savedGeminiKey = localStorage.getItem('gemini_api_key');
+      if (savedGeminiKey && document.getElementById('gemini-key-input')) {
+        document.getElementById('gemini-key-input').value = savedGeminiKey;
+      }
     })();
   </script>
 </body>
