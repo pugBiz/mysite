@@ -97,7 +97,7 @@
     .progress-bar-container { height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 6px; }
     .progress-bar-fill { height: 100%; background: var(--yt-red); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
 
-    .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast-container { position: fixed; bottom: 240px; right: 20px; z-index: 100; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
     .toast { pointer-events: auto; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 8px; animation: toastIn 0.3s ease-out; max-width: 360px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
     .toast.success { background: #1a3a1a; border: 1px solid #2ba640; }
     .toast.error { background: #3a1a1a; border: 1px solid #ff4444; }
@@ -113,10 +113,24 @@
 
     .connect-prompt { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; }
 
+    #log-body::-webkit-scrollbar { width: 5px; }
+    #log-body::-webkit-scrollbar-track { background: #0a0a0a; }
+    #log-body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+    .log-entry { display: flex; gap: 8px; align-items: flex-start; padding: 2px 0; border-bottom: 1px solid #1a1a1a; }
+    .log-time { color: #555; font-size: 10px; white-space: nowrap; padding-top: 1px; min-width: 70px; }
+    .log-icon { font-size: 11px; min-width: 14px; }
+    .log-msg { color: #ccc; font-size: 11px; line-height: 1.5; word-break: break-word; }
+    .log-msg.success { color: #2ba640; }
+    .log-msg.error { color: #ff4444; }
+    .log-msg.warning { color: #f0b400; }
+    .log-msg.info { color: #3ea6ff; }
+
     @media (max-width: 767px) {
       .sidebar { transform: translateX(-100%); position: fixed; z-index: 40; }
       .sidebar.open { transform: translateX(0); }
       .main-area { margin-left: 0 !important; }
+      #log-panel { left: 0 !important; }
     }
   </style>
 </head>
@@ -189,7 +203,7 @@
   </aside>
 
   <!-- Main Content Area -->
-  <div data-id="33" class="main-area md:ml-[220px] min-h-screen">
+  <div data-id="33" class="main-area md:ml-[220px] min-h-screen" style="padding-bottom: 220px;">
     <!-- Top Header -->
     <header data-id="34" id="top-header-g7h8" class="sticky top-0 z-30 bg-yt-bg/95 backdrop-blur-sm border-b border-yt-border px-4 md:px-8 py-4 flex items-center justify-between">
       <div data-id="35" class="flex items-center gap-3 ml-10 md:ml-0">
@@ -520,6 +534,41 @@
     </div>
   </div>
 
+  <!-- Activity Log Panel -->
+  <div data-id="251" id="log-panel" style="
+    position: fixed; bottom: 0; left: 220px; right: 0; z-index: 999;
+    background: #0a0a0a; border-top: 1px solid #333;
+    transition: height 0.3s ease; height: 216px; overflow: hidden;
+    font-family: 'Inter', monospace; font-size: 12px;
+  ">
+    <!-- Log Header / Toggle Bar -->
+    <div data-id="252" id="log-toggle" style="
+      height: 36px; display: flex; align-items: center; gap: 10px;
+      padding: 0 16px; cursor: pointer; user-select: none;
+      border-bottom: 1px solid #2a2a2a; background: #111;
+    ">
+      <span data-id="253" style="color:#ff4444; font-size:10px;">●</span>
+      <span data-id="254" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
+      <span data-id="255" id="log-count-badge" style="
+        background:#333; color:#aaa; border-radius:10px;
+        padding:1px 7px; font-size:10px; min-width:20px; text-align:center;
+      ">0</span>
+      <div data-id="256" style="flex:1"></div>
+      <button data-id="257" id="log-clear-btn" style="
+        background:none; border:1px solid #333; color:#717171; border-radius:4px;
+        padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s;
+      ">Clear</button>
+      <span data-id="258" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
+    </div>
+    <!-- Log Body -->
+    <div data-id="259" id="log-body" style="
+      height: 180px; overflow-y: auto; padding: 8px 16px;
+      display: flex; flex-direction: column; gap: 3px;
+    ">
+      <div data-id="260" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
+    </div>
+  </div>
+
   <script>
     // ============================================================
     // ICONS — progressive enhancement
@@ -527,6 +576,67 @@
     if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
       lucide.createIcons();
     }
+
+    // ============================================================
+    // ACTIVITY LOG SYSTEM
+    // ============================================================
+    let logOpen = true;
+    let logCount = 0;
+
+    function toggleLog() {
+      logOpen = !logOpen;
+      const panel = document.getElementById('log-panel');
+      const chevron = document.getElementById('log-chevron');
+      panel.style.height = logOpen ? '216px' : '36px';
+      chevron.style.transform = logOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    function clearLog() {
+      const body = document.getElementById('log-body');
+      body.innerHTML = '<div style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">Log cleared.</div>';
+      logCount = 0;
+      document.getElementById('log-count-badge').textContent = '0';
+    }
+
+    function addLog(message, type) {
+      type = type || 'info';
+      const body = document.getElementById('log-body');
+
+      // Remove placeholder text on first real entry
+      if (logCount === 0) body.innerHTML = '';
+
+      logCount++;
+      document.getElementById('log-count-badge').textContent = logCount;
+
+      const icons = { success: '✓', error: '✗', warning: '⚠', info: '›' };
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.innerHTML =
+        '<span class="log-time">' + time + '</span>' +
+        '<span class="log-icon">' + (icons[type] || '›') + '</span>' +
+        '<span class="log-msg ' + type + '">' + message + '</span>';
+      body.appendChild(entry);
+      body.scrollTop = body.scrollHeight;
+
+      // Auto-open log panel on errors or warnings
+      if ((type === 'error' || type === 'warning') && !logOpen) {
+        toggleLog();
+      }
+    }
+
+    // Log toggle & clear via addEventListener (CSP-safe)
+    document.getElementById('log-toggle').addEventListener('click', function(e) {
+      // Don't toggle if the clear button was clicked
+      if (e.target.id === 'log-clear-btn') return;
+      toggleLog();
+    });
+    document.getElementById('log-clear-btn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      clearLog();
+    });
 
     // ============================================================
     // UNIVERSAL AI CHAT WRAPPER
@@ -542,6 +652,7 @@
       // Outside Copilot (GitHub Pages etc.) — use Gemini 2.5 Flash directly
       const apiKey = localStorage.getItem('gemini_api_key');
       if (!apiKey) {
+        addLog('No Gemini API key found — please enter your key in the Connect panel', 'error');
         throw new Error('No Gemini API key found. Please open the Connect panel and enter your Gemini API key.');
       }
 
@@ -564,6 +675,7 @@
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
+        addLog('Gemini API error ' + res.status + ': ' + (err?.error?.message || 'Unknown error'), 'error');
         throw new Error(err?.error?.message || `Gemini API error ${res.status}`);
       }
 
@@ -667,12 +779,16 @@
     // ============================================================
     // NOTIFICATION / TOAST SYSTEM
     // ============================================================
-    function showNotification(message, type = 'info') {
+    function showNotification(message, type) {
+      type = type || 'info';
+      // Also log to the activity log
+      addLog(message, type);
+
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
+      toast.className = 'toast ' + type;
       const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
-      toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span><span>${message}</span>`;
+      toast.innerHTML = '<span>' + (icons[type] || 'ℹ') + '</span><span>' + message + '</span>';
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.animation = 'toastOut 0.3s forwards';
@@ -722,12 +838,13 @@
     // ============================================================
     // API FETCH WRAPPER
     // ============================================================
-    async function ytFetch(url, options = {}) {
+    async function ytFetch(url, options) {
+      options = options || {};
       if (!state.token) throw new Error('Not authenticated');
       const res = await fetch(url, {
         ...options,
         headers: {
-          'Authorization': `Bearer ${state.token}`,
+          'Authorization': 'Bearer ' + state.token,
           'Content-Type': 'application/json',
           ...(options.headers || {})
         }
@@ -735,13 +852,15 @@
       if (res.status === 401) {
         state.token = null;
         localStorage.removeItem('yt_access_token');
+        addLog('Session expired — token is invalid (401). Please reconnect.', 'error');
         showNotification('Session expired. Please reconnect.', 'error');
         updateConnectionUI(false);
         return null;
       }
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err?.error?.message || `API error ${res.status}`);
+        addLog('API error: ' + (err?.error?.message || 'Unknown error'), 'error');
+        throw new Error(err?.error?.message || 'API error ' + res.status);
       }
       return res.json();
     }
@@ -778,9 +897,10 @@
 
     async function initConnectedState() {
       updateConnectionUI(true);
+      addLog('Authenticating with YouTube API...', 'info');
       showNotification('Connecting to YouTube...', 'info');
       try {
-        const data = await ytFetch(`${YT_API}/channels?part=snippet,statistics,contentDetails&mine=true`);
+        const data = await ytFetch(YT_API + '/channels?part=snippet,statistics,contentDetails&mine=true');
         if (!data || !data.items?.length) throw new Error('No channel found');
         const ch = data.items[0];
         state.channelId = ch.id;
@@ -788,7 +908,12 @@
         state.channelAvatar = ch.snippet.thumbnails?.default?.url;
         state.isConnected = true;
         updateChannelUI(ch);
-        showNotification(`Connected: ${ch.snippet.title}`, 'success');
+        addLog('Connected to channel: ' + ch.snippet.title, 'success');
+        addLog('Channel ID: ' + ch.id, 'info');
+        const subCount = parseInt(ch.statistics?.subscriberCount || 0);
+        const viewCount = parseInt(ch.statistics?.viewCount || 0);
+        addLog('Stats loaded — Views: ' + formatNumber(viewCount) + ', Subscribers: ' + formatNumber(subCount), 'success');
+        showNotification('Connected: ' + ch.snippet.title, 'success');
         loadTabData(activeTab);
       } catch (e) {
         state.isConnected = false;
@@ -821,7 +946,7 @@
       const nameEl = document.getElementById('sidebar-channel-name');
       const subEl = document.getElementById('sidebar-channel-sub');
       if (ch.snippet.thumbnails?.default?.url) {
-        avatarEl.innerHTML = `<img src="${ch.snippet.thumbnails.default.url}" class="w-10 h-10 rounded-full object-cover" alt="Channel avatar" />`;
+        avatarEl.innerHTML = '<img src="' + ch.snippet.thumbnails.default.url + '" class="w-10 h-10 rounded-full object-cover" alt="Channel avatar" />';
       }
       nameEl.textContent = ch.snippet.title || 'Your Channel';
       const subCount = parseInt(ch.statistics?.subscriberCount || 0);
@@ -897,7 +1022,7 @@
     function formatDuration(minutes) {
       const h = Math.floor(minutes / 60);
       const m = Math.round(minutes % 60);
-      return h > 0 ? `${h}h ${m}m` : `${m}m`;
+      return h > 0 ? h + 'h ' + m + 'm' : m + 'm';
     }
 
     function formatDate(isoStr) {
@@ -914,8 +1039,8 @@
     const headerTitle = document.getElementById('header-title-i9j0');
     const tabNames = { upload: 'Upload & Queue', performance: 'Performance', lowperformers: 'Low Performers', playlists: 'Playlists' };
 
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
+    navItems.forEach(function(item) {
+      item.addEventListener('click', function() {
         const tab = item.dataset.tab;
         switchTab(tab);
         document.getElementById('sidebar-c3d4').classList.remove('open');
@@ -924,7 +1049,7 @@
 
     function switchTab(tab) {
       activeTab = tab;
-      navItems.forEach(n => {
+      navItems.forEach(function(n) {
         n.classList.remove('active', 'text-white');
         n.classList.add('text-yt-muted');
         if (n.dataset.tab === tab) {
@@ -932,23 +1057,23 @@
           n.classList.remove('text-yt-muted');
         }
       });
-      tabContents.forEach(tc => tc.classList.remove('active'));
-      const el = document.getElementById('tab-' + tab);
+      tabContents.forEach(function(tc) { tc.classList.remove('active'); });
+      var el = document.getElementById('tab-' + tab);
       if (el) el.classList.add('active');
       headerTitle.textContent = tabNames[tab] || '';
       loadTabData(tab);
     }
 
     // Mobile sidebar
-    document.getElementById('mobile-menu-btn-a1b2').addEventListener('click', () => {
+    document.getElementById('mobile-menu-btn-a1b2').addEventListener('click', function() {
       document.getElementById('sidebar-c3d4').classList.add('open');
     });
-    document.getElementById('sidebar-close-e5f6').addEventListener('click', () => {
+    document.getElementById('sidebar-close-e5f6').addEventListener('click', function() {
       document.getElementById('sidebar-c3d4').classList.remove('open');
     });
 
     // Refresh button
-    document.getElementById('refresh-tab-btn').addEventListener('click', () => {
+    document.getElementById('refresh-tab-btn').addEventListener('click', function() {
       loadTabData(activeTab);
       showNotification('Refreshing data...', 'info');
     });
@@ -960,10 +1085,10 @@
     // PLAYLIST DROPDOWN POPULATION
     // ============================================================
     function populatePlaylistDropdown(playlists) {
-      const select = document.getElementById('vid-playlist-e1f2');
+      var select = document.getElementById('vid-playlist-e1f2');
       select.innerHTML = '<option value="">Select playlist...</option>';
-      playlists.forEach(pl => {
-        const opt = document.createElement('option');
+      playlists.forEach(function(pl) {
+        var opt = document.createElement('option');
         opt.value = pl.id;
         opt.textContent = pl.snippet?.title || pl.name || 'Untitled';
         select.appendChild(opt);
@@ -976,7 +1101,7 @@
     async function loadUserPlaylists() {
       if (!state.token) { populatePlaylistDropdown(MOCK_PLAYLISTS); return; }
       try {
-        const data = await ytFetch(`${YT_API}/playlists?part=snippet&mine=true&maxResults=50`);
+        var data = await ytFetch(YT_API + '/playlists?part=snippet&mine=true&maxResults=50');
         if (!data) return;
         state.playlists = data.items || [];
         populatePlaylistDropdown(state.playlists);
@@ -988,23 +1113,23 @@
     // ============================================================
     // FILE UPLOAD
     // ============================================================
-    const uploadZone = document.getElementById('upload-zone-m3n4');
-    const fileInput = document.getElementById('file-input-q7r8');
-    const browseBtn = document.getElementById('browse-btn-o5p6');
-    const fileInfo = document.getElementById('file-info-s9t0');
-    const fileName = document.getElementById('file-name-u1v2');
-    const fileSize = document.getElementById('file-size-w3x4');
+    var uploadZone = document.getElementById('upload-zone-m3n4');
+    var fileInput = document.getElementById('file-input-q7r8');
+    var browseBtn = document.getElementById('browse-btn-o5p6');
+    var fileInfo = document.getElementById('file-info-s9t0');
+    var fileName = document.getElementById('file-name-u1v2');
+    var fileSize = document.getElementById('file-size-w3x4');
 
-    browseBtn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
-    uploadZone.addEventListener('click', () => fileInput.click());
-    uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
-    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-    uploadZone.addEventListener('drop', (e) => {
+    browseBtn.addEventListener('click', function(e) { e.stopPropagation(); fileInput.click(); });
+    uploadZone.addEventListener('click', function() { fileInput.click(); });
+    uploadZone.addEventListener('dragover', function(e) { e.preventDefault(); uploadZone.classList.add('dragover'); });
+    uploadZone.addEventListener('dragleave', function() { uploadZone.classList.remove('dragover'); });
+    uploadZone.addEventListener('drop', function(e) {
       e.preventDefault();
       uploadZone.classList.remove('dragover');
       if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
     });
-    fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFile(fileInput.files[0]); });
+    fileInput.addEventListener('change', function() { if (fileInput.files.length) handleFile(fileInput.files[0]); });
 
     function handleFile(file) {
       selectedFile = file;
@@ -1012,17 +1137,18 @@
       fileName.textContent = file.name;
       fileSize.textContent = formatBytes(file.size);
       fileInfo.classList.remove('hidden');
+      addLog('Video selected: ' + file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)', 'info');
     }
 
     // ============================================================
     // SCHEDULE TOGGLE
     // ============================================================
-    const scheduleToggle = document.getElementById('schedule-toggle-g3h4');
-    const schedulePicker = document.getElementById('schedule-picker-k7l8');
-    const scheduleLabel = document.getElementById('schedule-label-i5j6');
+    var scheduleToggle = document.getElementById('schedule-toggle-g3h4');
+    var schedulePicker = document.getElementById('schedule-picker-k7l8');
+    var scheduleLabel = document.getElementById('schedule-label-i5j6');
 
-    scheduleToggle.addEventListener('click', () => {
-      const isActive = scheduleToggle.classList.toggle('active');
+    scheduleToggle.addEventListener('click', function() {
+      var isActive = scheduleToggle.classList.toggle('active');
       scheduleToggle.setAttribute('aria-checked', isActive);
       schedulePicker.classList.toggle('hidden', !isActive);
       scheduleLabel.textContent = isActive ? 'Scheduled' : 'Publish Immediately';
@@ -1031,31 +1157,32 @@
     // ============================================================
     // VIDEO FRAME EXTRACTION
     // ============================================================
-    async function extractFramesFromVideo(file, frameCount = 6) {
-      return new Promise((resolve, reject) => {
-        const video = document.getElementById('frame-extractor');
-        const canvas = document.getElementById('frame-canvas');
-        const ctx = canvas.getContext('2d');
-        const objectUrl = URL.createObjectURL(file);
-        const frames = [];
+    async function extractFramesFromVideo(file, frameCount) {
+      frameCount = frameCount || 6;
+      return new Promise(function(resolve, reject) {
+        var video = document.getElementById('frame-extractor');
+        var canvas = document.getElementById('frame-canvas');
+        var ctx = canvas.getContext('2d');
+        var objectUrl = URL.createObjectURL(file);
+        var frames = [];
 
         video.src = objectUrl;
         video.load();
 
-        video.addEventListener('loadedmetadata', () => {
-          const duration = video.duration;
+        video.addEventListener('loadedmetadata', function() {
+          var duration = video.duration;
           if (!duration || !isFinite(duration)) {
             URL.revokeObjectURL(objectUrl);
             return reject(new Error('Could not read video duration.'));
           }
 
-          const timestamps = Array.from({ length: frameCount }, (_, i) =>
-            duration * (0.10 + i * ((0.85 - 0.10) / (frameCount - 1)))
-          );
+          var timestamps = Array.from({ length: frameCount }, function(_, i) {
+            return duration * (0.10 + i * ((0.85 - 0.10) / (frameCount - 1)));
+          });
 
-          let idx = 0;
+          var idx = 0;
 
-          const captureNext = () => {
+          var captureNext = function() {
             if (idx >= timestamps.length) {
               URL.revokeObjectURL(objectUrl);
               resolve(frames);
@@ -1064,9 +1191,9 @@
             video.currentTime = timestamps[idx];
           };
 
-          video.addEventListener('seeked', () => {
-            const MAX_W = 640;
-            const scale = Math.min(1, MAX_W / video.videoWidth);
+          video.addEventListener('seeked', function() {
+            var MAX_W = 640;
+            var scale = Math.min(1, MAX_W / video.videoWidth);
             canvas.width = Math.round(video.videoWidth * scale);
             canvas.height = Math.round(video.videoHeight * scale);
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -1078,7 +1205,7 @@
           captureNext();
         }, { once: true });
 
-        video.addEventListener('error', () => {
+        video.addEventListener('error', function() {
           URL.revokeObjectURL(objectUrl);
           reject(new Error('Browser could not load this video format.'));
         }, { once: true });
@@ -1088,20 +1215,20 @@
     // ============================================================
     // FRAME PIXEL ANALYSIS
     // ============================================================
-    function analyzeFramePixels(dataUrl) {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
+    function analyzeFramePixels(dataUrl, frameIndex) {
+      return new Promise(function(resolve) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
           canvas.width = 64;
           canvas.height = 36;
-          const ctx = canvas.getContext('2d');
+          var ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, 64, 36);
-          const data = ctx.getImageData(0, 0, 64, 36).data;
+          var data = ctx.getImageData(0, 0, 64, 36).data;
 
-          let r = 0, g = 0, b = 0, brightness = 0;
-          const total = 64 * 36;
-          for (let i = 0; i < data.length; i += 4) {
+          var r = 0, g = 0, b = 0, brightness = 0;
+          var total = 64 * 36;
+          for (var i = 0; i < data.length; i += 4) {
             r += data[i];
             g += data[i + 1];
             b += data[i + 2];
@@ -1112,7 +1239,7 @@
           b = Math.round(b / total);
           brightness = Math.round(brightness / total);
 
-          let colorTone = 'neutral';
+          var colorTone = 'neutral';
           if (r > g + 40 && r > b + 40) colorTone = 'warm/red-dominant (possibly indoor, fire, sunset)';
           else if (g > r + 30 && g > b + 20) colorTone = 'green-dominant (possibly outdoor, nature, plants)';
           else if (b > r + 30 && b > g + 20) colorTone = 'blue-dominant (possibly sky, water, tech/screen)';
@@ -1120,11 +1247,13 @@
           else if (r < 60 && g < 60 && b < 60) colorTone = 'very dark (possibly night scene, dark studio, cinematic)';
           else if (r > 150 && g > 120 && b < 80) colorTone = 'warm golden (possibly vlog, lifestyle, food, cooking)';
 
-          let brightnessLabel = brightness < 60 ? 'dark/low-light' : brightness < 130 ? 'medium-lit' : 'bright/well-lit';
+          var brightnessLabel = brightness < 60 ? 'dark/low-light' : brightness < 130 ? 'medium-lit' : 'bright/well-lit';
 
-          resolve(`Color tone: ${colorTone}. Brightness: ${brightnessLabel} (avg ${brightness}/255). RGB avg: (${r},${g},${b}).`);
+          addLog('Frame ' + (frameIndex + 1) + ': ' + colorTone + ', ' + brightnessLabel, 'info');
+
+          resolve('Color tone: ' + colorTone + '. Brightness: ' + brightnessLabel + ' (avg ' + brightness + '/255). RGB avg: (' + r + ',' + g + ',' + b + ').');
         };
-        img.onerror = () => resolve('Frame analysis unavailable.');
+        img.onerror = function() { resolve('Frame analysis unavailable.'); };
         img.src = dataUrl;
       });
     }
@@ -1133,39 +1262,32 @@
     // FRAME STRIP PREVIEW
     // ============================================================
     function renderFrameStrip(frames) {
-      const existing = document.getElementById('frame-strip-wrapper');
+      var existing = document.getElementById('frame-strip-wrapper');
       if (existing) existing.remove();
 
-      const strip = document.createElement('div');
+      var strip = document.createElement('div');
       strip.id = 'frame-strip';
-      strip.style.cssText = `
-        display: flex; gap: 6px; padding: 10px;
-        background: #1a1a1a; border-radius: 8px; overflow-x: auto;
-        border: 1px solid #333;
-      `;
+      strip.style.cssText = 'display: flex; gap: 6px; padding: 10px; background: #1a1a1a; border-radius: 8px; overflow-x: auto; border: 1px solid #333;';
 
-      const label = document.createElement('p');
+      var label = document.createElement('p');
       label.style.cssText = 'color: #aaa; font-size: 12px; margin-bottom: 6px;';
       label.textContent = '🎞️ Frames analyzed by AI:';
 
-      const wrapper = document.createElement('div');
+      var wrapper = document.createElement('div');
       wrapper.id = 'frame-strip-wrapper';
       wrapper.style.cssText = 'margin-top: 12px; margin-bottom: 6px;';
       wrapper.appendChild(label);
       wrapper.appendChild(strip);
 
-      frames.forEach((dataUrl, i) => {
-        const img = document.createElement('img');
+      frames.forEach(function(dataUrl, i) {
+        var img = document.createElement('img');
         img.src = dataUrl;
-        img.title = `Frame ${i + 1}`;
-        img.style.cssText = `
-          height: 72px; width: auto; border-radius: 4px; flex-shrink: 0;
-          border: 1px solid #444; object-fit: cover;
-        `;
+        img.title = 'Frame ' + (i + 1);
+        img.style.cssText = 'height: 72px; width: auto; border-radius: 4px; flex-shrink: 0; border: 1px solid #444; object-fit: cover;';
         strip.appendChild(img);
       });
 
-      const uploadZoneEl = document.getElementById('upload-zone-m3n4');
+      var uploadZoneEl = document.getElementById('upload-zone-m3n4');
       if (uploadZoneEl && uploadZoneEl.parentNode) {
         uploadZoneEl.parentNode.insertBefore(wrapper, uploadZoneEl.nextSibling);
       }
@@ -1174,9 +1296,9 @@
     // ============================================================
     // AI GENERATION — VIDEO FRAME EXTRACTION + ANALYSIS PIPELINE
     // ============================================================
-    const aiBtn = document.getElementById('ai-gen-btn-q3r4');
-    aiBtn.addEventListener('click', async () => {
-      const file = window.selectedVideoFile || null;
+    var aiBtn = document.getElementById('ai-gen-btn-q3r4');
+    aiBtn.addEventListener('click', async function() {
+      var file = window.selectedVideoFile || null;
 
       if (!file) {
         showNotification('Please select a video file first.', 'warning');
@@ -1189,8 +1311,9 @@
 
       try {
         // --- STEP 1: Extract frames ---
+        addLog('Starting frame extraction from video...', 'info');
         showNotification('Extracting frames from your video...', 'info');
-        let frames;
+        var frames;
         try {
           frames = await extractFramesFromVideo(file, 6);
         } catch (frameErr) {
@@ -1198,56 +1321,50 @@
           throw frameErr;
         }
 
-        showNotification(`Captured ${frames.length} frames — analyzing visuals...`, 'info');
+        addLog('Extracted ' + frames.length + ' frames successfully', 'success');
+        showNotification('Captured ' + frames.length + ' frames — analyzing visuals...', 'info');
 
         // --- STEP 2: Show frame strip preview ---
         renderFrameStrip(frames);
 
         // --- STEP 3: Analyze each frame's pixels locally ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Analyzing frames...';
-        const frameDescriptions = await Promise.all(frames.map((f, i) =>
-          analyzeFramePixels(f).then(desc => `Frame ${i+1} (at ${Math.round((0.10 + i * 0.15) * 100)}% of video): ${desc}`)
-        ));
+        var frameDescriptions = await Promise.all(frames.map(function(f, i) {
+          return analyzeFramePixels(f, i).then(function(desc) {
+            return 'Frame ' + (i+1) + ' (at ' + Math.round((0.10 + i * 0.15) * 100) + '% of video): ' + desc;
+          });
+        }));
 
-        const frameReport = frameDescriptions.join('\n');
-        const filename = window.selectedVideoFile ? window.selectedVideoFile.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') : 'unknown video';
-        const playlistNames = state.playlists.map(p => p.snippet?.title || p.name || '').filter(Boolean);
-        const playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
+        var frameReport = frameDescriptions.join('\n');
+        var filename = window.selectedVideoFile ? window.selectedVideoFile.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') : 'unknown video';
+        var playlistNames = state.playlists.map(function(p) { return p.snippet?.title || p.name || ''; }).filter(Boolean);
+        var playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
 
         // --- STEP 4: Call aiChat() universal wrapper ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> AI analyzing video...';
+        addLog('Sending frame analysis to Gemini 2.5 Flash...', 'info');
 
-        const rawText_result = await aiChat([
+        var rawText_result = await aiChat([
           {
             role: 'system',
             content: 'You are a YouTube SEO expert. You will be given a video filename and a visual analysis of frames sampled throughout the video (color tones, brightness, scene characteristics). Use these signals to infer the video topic and generate optimized YouTube metadata. Always respond with valid JSON only — no markdown, no explanation, no code fences.'
           },
           {
             role: 'user',
-            content: `Video filename: "${filename}"
-
-Visual frame analysis (6 frames sampled evenly throughout the video):
-${frameReport}
-
-Based on the filename and visual characteristics above, generate:
-1. An engaging YouTube title (max 60 chars, front-load the main keyword)
-2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)
-3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)
-4. The single most appropriate playlist from: [${playlistList}]
-
-Respond ONLY with this exact JSON structure:
-{"title": "...", "description": "...", "tags": "...", "playlist": "..."}`
+            content: 'Video filename: "' + filename + '"\n\nVisual frame analysis (6 frames sampled evenly throughout the video):\n' + frameReport + '\n\nBased on the filename and visual characteristics above, generate:\n1. An engaging YouTube title (max 60 chars, front-load the main keyword)\n2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)\n3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)\n4. The single most appropriate playlist from: [' + playlistList + ']\n\nRespond ONLY with this exact JSON structure:\n{"title": "...", "description": "...", "tags": "...", "playlist": "..."}'
           }
         ]);
 
         // --- STEP 5: Parse response ---
-        let rawText = rawText_result.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+        addLog('Gemini response received — parsing JSON...', 'info');
+        var rawText = rawText_result.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
-        let parsed;
+        var parsed;
         try {
           parsed = JSON.parse(rawText);
         } catch (e) {
-          const match = rawText.match(/\{[\s\S]*\}/);
+          addLog('JSON parse failed — attempting regex extraction...', 'warning');
+          var match = rawText.match(/\{[\s\S]*\}/);
           if (match) {
             parsed = JSON.parse(match[0]);
           } else {
@@ -1256,24 +1373,29 @@ Respond ONLY with this exact JSON structure:
         }
 
         // --- STEP 6: Populate form fields ---
-        const titleEl = document.getElementById('vid-title-y5z6');
-        const descEl = document.getElementById('vid-desc-a7b8');
-        const tagsEl = document.getElementById('vid-tags-c9d0');
-        const playlistEl = document.getElementById('vid-playlist-e1f2');
+        var titleEl = document.getElementById('vid-title-y5z6');
+        var descEl = document.getElementById('vid-desc-a7b8');
+        var tagsEl = document.getElementById('vid-tags-c9d0');
+        var playlistEl = document.getElementById('vid-playlist-e1f2');
 
         if (titleEl) titleEl.value = parsed.title || '';
         if (descEl) descEl.value = parsed.description || '';
         if (tagsEl) tagsEl.value = parsed.tags || '';
 
+        addLog('✓ Title: "' + (parsed.title || '') + '"', 'success');
+        addLog('✓ Tags: ' + (parsed.tags || ''), 'success');
+        addLog('✓ Playlist: ' + (parsed.playlist || ''), 'success');
+
         if (playlistEl && parsed.playlist) {
-          const options = Array.from(playlistEl.options);
-          const matchOpt = options.find(o =>
-            o.text.toLowerCase().includes(parsed.playlist.toLowerCase()) ||
-            parsed.playlist.toLowerCase().includes(o.text.toLowerCase())
-          );
+          var options = Array.from(playlistEl.options);
+          var matchOpt = options.find(function(o) {
+            return o.text.toLowerCase().includes(parsed.playlist.toLowerCase()) ||
+              parsed.playlist.toLowerCase().includes(o.text.toLowerCase());
+          });
           if (matchOpt) playlistEl.value = matchOpt.value;
         }
 
+        addLog('AI generation complete — all fields populated!', 'success');
         showNotification('AI generated your video metadata from visual content!', 'success');
 
       } catch (err) {
@@ -1289,10 +1411,11 @@ Respond ONLY with this exact JSON structure:
     // YOUTUBE UPLOAD — RESUMABLE
     // ============================================================
     async function uploadVideoToYouTube(file, metadata, queueId) {
-      const initRes = await fetch(`${YT_UPLOAD}?uploadType=resumable&part=snippet,status`, {
+      addLog('Initiating YouTube upload: "' + metadata.title + '"', 'info');
+      var initRes = await fetch(YT_UPLOAD + '?uploadType=resumable&part=snippet,status', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${state.token}`,
+          'Authorization': 'Bearer ' + state.token,
           'Content-Type': 'application/json',
           'X-Upload-Content-Type': file.type || 'video/mp4',
           'X-Upload-Content-Length': file.size
@@ -1301,7 +1424,7 @@ Respond ONLY with this exact JSON structure:
           snippet: {
             title: metadata.title,
             description: metadata.description || '',
-            tags: (metadata.tags || '').split(',').map(t => t.trim()).filter(Boolean),
+            tags: (metadata.tags || '').split(',').map(function(t) { return t.trim(); }).filter(Boolean),
             categoryId: '22',
             defaultLanguage: 'en'
           },
@@ -1314,93 +1437,105 @@ Respond ONLY with this exact JSON structure:
       });
 
       if (!initRes.ok) throw new Error('Failed to initiate upload: ' + initRes.status);
-      const uploadUrl = initRes.headers.get('Location');
+      var uploadUrl = initRes.headers.get('Location');
       if (!uploadUrl) throw new Error('No upload URL returned');
 
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
+      addLog('Upload session created — transferring video file...', 'info');
+
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
         xhr.open('PUT', uploadUrl);
         xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
-        xhr.upload.addEventListener('progress', (e) => {
+        xhr.upload.addEventListener('progress', function(e) {
           if (e.lengthComputable) {
-            const pct = Math.round((e.loaded / e.total) * 100);
+            var pct = Math.round((e.loaded / e.total) * 100);
             updateQueueItemProgress(queueId, pct);
+            if (pct % 25 === 0) addLog('Upload progress: ' + pct + '%', 'info');
           }
         });
-        xhr.addEventListener('load', () => {
+        xhr.addEventListener('load', function() {
           if (xhr.status >= 200 && xhr.status < 300) {
-            try { resolve(JSON.parse(xhr.responseText)); }
-            catch { resolve({ id: 'unknown' }); }
+            try {
+              var video = JSON.parse(xhr.responseText);
+              addLog('Upload complete! Video ID: ' + video.id, 'success');
+              resolve(video);
+            }
+            catch (e) {
+              addLog('Upload complete! Video ID: unknown', 'success');
+              resolve({ id: 'unknown' });
+            }
           } else {
             reject(new Error('Upload failed: ' + xhr.status));
           }
         });
-        xhr.addEventListener('error', () => reject(new Error('Network error during upload')));
+        xhr.addEventListener('error', function() { reject(new Error('Network error during upload')); });
         xhr.send(file);
       });
     }
 
     async function addVideoToPlaylist(videoId, playlistId) {
-      await ytFetch(`${YT_API}/playlistItems?part=snippet`, {
+      addLog('Adding video to playlist: ' + playlistId, 'info');
+      await ytFetch(YT_API + '/playlistItems?part=snippet', {
         method: 'POST',
         body: JSON.stringify({
           snippet: {
-            playlistId,
-            resourceId: { kind: 'youtube#video', videoId }
+            playlistId: playlistId,
+            resourceId: { kind: 'youtube#video', videoId: videoId }
           }
         })
       });
+      addLog('Video added to playlist successfully', 'success');
     }
 
     function updateQueueItemProgress(queueId, pct) {
-      const bar = document.querySelector(`[data-queue-id="${queueId}"] .progress-bar-fill`);
+      var bar = document.querySelector('[data-queue-id="' + queueId + '"] .progress-bar-fill');
       if (bar) bar.style.width = pct + '%';
-      const statusEl = document.querySelector(`[data-queue-id="${queueId}"] .queue-status`);
-      if (statusEl) statusEl.textContent = `Uploading ${pct}%`;
+      var statusEl = document.querySelector('[data-queue-id="' + queueId + '"] .queue-status');
+      if (statusEl) statusEl.textContent = 'Uploading ' + pct + '%';
     }
 
     // ============================================================
     // ADD TO QUEUE
     // ============================================================
-    const addQueueBtn = document.getElementById('add-queue-btn-s5t6');
-    addQueueBtn.addEventListener('click', () => {
-      const title = document.getElementById('vid-title-y5z6').value.trim();
+    var addQueueBtn = document.getElementById('add-queue-btn-s5t6');
+    addQueueBtn.addEventListener('click', function() {
+      var title = document.getElementById('vid-title-y5z6').value.trim();
       if (!title) { showNotification('Please enter a video title.', 'warning'); return; }
 
-      const isScheduled = scheduleToggle.classList.contains('active');
-      let scheduled = 'Publish Immediately';
-      let scheduledTime = null;
+      var isScheduled = scheduleToggle.classList.contains('active');
+      var scheduled = 'Publish Immediately';
+      var scheduledTime = null;
       if (isScheduled) {
-        const d = document.getElementById('schedule-date-m9n0').value;
-        const t = document.getElementById('schedule-time-o1p2').value;
+        var d = document.getElementById('schedule-date-m9n0').value;
+        var t = document.getElementById('schedule-time-o1p2').value;
         if (d && t) {
-          const dt = new Date(d + 'T' + t);
+          var dt = new Date(d + 'T' + t);
           scheduled = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' · ' + dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
           scheduledTime = dt.toISOString();
         }
       }
 
-      const playlistSelect = document.getElementById('vid-playlist-e1f2');
-      const playlistId = playlistSelect.value;
-      const playlistName = playlistSelect.options[playlistSelect.selectedIndex]?.text || 'None';
-      const id = 'q' + Date.now();
+      var playlistSelect = document.getElementById('vid-playlist-e1f2');
+      var playlistId = playlistSelect.value;
+      var playlistName = playlistSelect.options[playlistSelect.selectedIndex]?.text || 'None';
+      var id = 'q' + Date.now();
 
       state.uploadQueue.push({
-        id,
-        title,
+        id: id,
+        title: title,
         description: document.getElementById('vid-desc-a7b8').value,
         tags: document.getElementById('vid-tags-c9d0').value,
-        scheduled,
-        scheduledTime,
-        playlistId,
-        playlistName,
+        scheduled: scheduled,
+        scheduledTime: scheduledTime,
+        playlistId: playlistId,
+        playlistName: playlistName,
         status: 'Queued',
         progress: 0,
         file: selectedFile
       });
 
       renderQueue();
-      showNotification(`"${title}" added to queue.`, 'success');
+      showNotification('"' + title + '" added to queue.', 'success');
 
       // Clear form
       document.getElementById('vid-title-y5z6').value = '';
@@ -1413,8 +1548,8 @@ Respond ONLY with this exact JSON structure:
     // QUEUE RENDERING
     // ============================================================
     function renderQueue() {
-      const container = document.getElementById('queue-list-w9x0');
-      const countEl = document.getElementById('queue-count-u7v8');
+      var container = document.getElementById('queue-list-w9x0');
+      var countEl = document.getElementById('queue-count-u7v8');
       countEl.textContent = state.uploadQueue.length + ' video' + (state.uploadQueue.length !== 1 ? 's' : '');
 
       if (state.uploadQueue.length === 0) {
@@ -1422,58 +1557,57 @@ Respond ONLY with this exact JSON structure:
         return;
       }
 
-      container.innerHTML = state.uploadQueue.map(item => {
-        const statusColors = { Queued: 'bg-blue-500/20 text-blue-400', Uploading: 'bg-yellow-500/20 text-yellow-400', Done: 'bg-green-500/20 text-green-400', Failed: 'bg-red-500/20 text-red-400' };
-        const sc = statusColors[item.status] || statusColors.Queued;
-        const hasFile = !!item.file;
-        const showUploadBtn = hasFile && item.status === 'Queued' && state.isConnected;
-        return `
-          <div class="flex flex-col bg-yt-card rounded-lg p-3 border border-yt-border card-lift" data-queue-id="${item.id}">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <div class="w-full sm:w-28 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center shrink-0">
-                <i data-lucide="play" class="w-6 h-6 text-gray-500"></i>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-white truncate">${item.title}</p>
-                <p class="text-xs text-yt-muted mt-0.5">${item.scheduled}</p>
-                <div class="flex items-center gap-2 mt-1.5 flex-wrap">
-                  <span class="text-xs bg-yt-surface text-yt-muted px-2 py-0.5 rounded">${item.playlistName}</span>
-                  <span class="text-xs px-2 py-0.5 rounded queue-status ${sc}">${item.status}${item.status === 'Uploading' ? ' ' + item.progress + '%' : ''}</span>
-                  ${hasFile ? `<span class="text-xs text-yt-dimmed">${item.file.name}</span>` : ''}
-                </div>
-              </div>
-              <div class="flex items-center gap-1 shrink-0">
-                ${showUploadBtn ? `<button class="queue-upload-btn px-3 py-1.5 bg-yt-red hover:bg-yt-redDark text-white text-xs font-semibold rounded-lg btn-press transition-colors" data-qid="${item.id}">Upload Now</button>` : ''}
-                <button class="queue-remove-btn p-1.5 text-yt-muted hover:text-red-400 transition-colors" data-qid="${item.id}">
-                  <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-              </div>
-            </div>
-            <div class="progress-bar-container"><div class="progress-bar-fill" style="width: ${item.progress || 0}%"></div></div>
-          </div>`;
+      container.innerHTML = state.uploadQueue.map(function(item) {
+        var statusColors = { Queued: 'bg-blue-500/20 text-blue-400', Uploading: 'bg-yellow-500/20 text-yellow-400', Done: 'bg-green-500/20 text-green-400', Failed: 'bg-red-500/20 text-red-400' };
+        var sc = statusColors[item.status] || statusColors.Queued;
+        var hasFile = !!item.file;
+        var showUploadBtn = hasFile && item.status === 'Queued' && state.isConnected;
+        return '<div class="flex flex-col bg-yt-card rounded-lg p-3 border border-yt-border card-lift" data-queue-id="' + item.id + '">' +
+            '<div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">' +
+              '<div class="w-full sm:w-28 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center shrink-0">' +
+                '<i data-lucide="play" class="w-6 h-6 text-gray-500"></i>' +
+              '</div>' +
+              '<div class="flex-1 min-w-0">' +
+                '<p class="text-sm font-semibold text-white truncate">' + item.title + '</p>' +
+                '<p class="text-xs text-yt-muted mt-0.5">' + item.scheduled + '</p>' +
+                '<div class="flex items-center gap-2 mt-1.5 flex-wrap">' +
+                  '<span class="text-xs bg-yt-surface text-yt-muted px-2 py-0.5 rounded">' + item.playlistName + '</span>' +
+                  '<span class="text-xs px-2 py-0.5 rounded queue-status ' + sc + '">' + item.status + (item.status === 'Uploading' ? ' ' + item.progress + '%' : '') + '</span>' +
+                  (hasFile ? '<span class="text-xs text-yt-dimmed">' + item.file.name + '</span>' : '') +
+                '</div>' +
+              '</div>' +
+              '<div class="flex items-center gap-1 shrink-0">' +
+                (showUploadBtn ? '<button class="queue-upload-btn px-3 py-1.5 bg-yt-red hover:bg-yt-redDark text-white text-xs font-semibold rounded-lg btn-press transition-colors" data-qid="' + item.id + '">Upload Now</button>' : '') +
+                '<button class="queue-remove-btn p-1.5 text-yt-muted hover:text-red-400 transition-colors" data-qid="' + item.id + '">' +
+                  '<i data-lucide="x" class="w-4 h-4"></i>' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="progress-bar-container"><div class="progress-bar-fill" style="width: ' + (item.progress || 0) + '%"></div></div>' +
+          '</div>';
       }).join('');
 
-      container.querySelectorAll('.queue-remove-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const qid = btn.dataset.qid;
-          const idx = state.uploadQueue.findIndex(q => q.id === qid);
+      container.querySelectorAll('.queue-remove-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var qid = btn.dataset.qid;
+          var idx = state.uploadQueue.findIndex(function(q) { return q.id === qid; });
           if (idx > -1) {
-            const card = btn.closest('[data-queue-id]');
+            var card = btn.closest('[data-queue-id]');
             card.classList.add('fade-out');
-            setTimeout(() => { state.uploadQueue.splice(idx, 1); renderQueue(); }, 400);
+            setTimeout(function() { state.uploadQueue.splice(idx, 1); renderQueue(); }, 400);
           }
         });
       });
 
-      container.querySelectorAll('.queue-upload-btn').forEach(btn => {
-        btn.addEventListener('click', () => startUpload(btn.dataset.qid));
+      container.querySelectorAll('.queue-upload-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { startUpload(btn.dataset.qid); });
       });
 
       if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
     }
 
     async function startUpload(queueId) {
-      const item = state.uploadQueue.find(q => q.id === queueId);
+      var item = state.uploadQueue.find(function(q) { return q.id === queueId; });
       if (!item || !item.file) { showNotification('No file selected for this item.', 'error'); return; }
       if (!state.isConnected) { showNotification('Connect your YouTube account to upload.', 'warning'); return; }
 
@@ -1482,7 +1616,7 @@ Respond ONLY with this exact JSON structure:
       renderQueue();
 
       try {
-        const video = await uploadVideoToYouTube(item.file, {
+        var video = await uploadVideoToYouTube(item.file, {
           title: item.title,
           description: item.description,
           tags: item.tags,
@@ -1493,12 +1627,12 @@ Respond ONLY with this exact JSON structure:
         item.status = 'Done';
         item.progress = 100;
         renderQueue();
-        showNotification(`"${item.title}" uploaded successfully!`, 'success');
+        showNotification('"' + item.title + '" uploaded successfully!', 'success');
 
         if (item.playlistId && video?.id) {
           try {
             await addVideoToPlaylist(video.id, item.playlistId);
-            showNotification(`Added to playlist "${item.playlistName}".`, 'success');
+            showNotification('Added to playlist "' + item.playlistName + '".', 'success');
           } catch (plErr) {
             showNotification('Could not add to playlist: ' + plErr.message, 'warning');
           }
@@ -1516,44 +1650,50 @@ Respond ONLY with this exact JSON structure:
     async function loadPerformanceData() {
       hideDemoModeBanner('performance');
       showTabLoading('performance');
+      addLog('Loading channel statistics...', 'info');
       try {
-        const today = new Date().toISOString().split('T')[0];
-        const thirtyAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        var today = new Date().toISOString().split('T')[0];
+        var thirtyAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        const analyticsViews = await ytFetch(
-          `${YT_ANALYTICS}/reports?ids=channel==MINE&startDate=${thirtyAgo}&endDate=${today}&metrics=views,estimatedMinutesWatched,likes,comments,shares&dimensions=day&sort=day`
+        addLog('Fetching 30-day analytics from YouTube Analytics API...', 'info');
+
+        var analyticsViews = await ytFetch(
+          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + thirtyAgo + '&endDate=' + today + '&metrics=views,estimatedMinutesWatched,likes,comments,shares&dimensions=day&sort=day'
         );
 
         if (analyticsViews?.rows?.length) {
-          const totals = analyticsViews.rows.reduce((acc, row) => ({
-            views: acc.views + row[1],
-            watchMinutes: acc.watchMinutes + row[2],
-            likes: acc.likes + row[3],
-            comments: acc.comments + row[4],
-            shares: acc.shares + row[5]
-          }), { views: 0, watchMinutes: 0, likes: 0, comments: 0, shares: 0 });
+          var totals = analyticsViews.rows.reduce(function(acc, row) {
+            return {
+              views: acc.views + row[1],
+              watchMinutes: acc.watchMinutes + row[2],
+              likes: acc.likes + row[3],
+              comments: acc.comments + row[4],
+              shares: acc.shares + row[5]
+            };
+          }, { views: 0, watchMinutes: 0, likes: 0, comments: 0, shares: 0 });
 
           updateStatCards(totals);
           updateViewsChart(analyticsViews.rows);
           updateEngagementFromTotals(totals);
         }
 
-        const topVideos = await ytFetch(`${YT_API}/search?part=snippet&forMine=true&type=video&order=viewCount&maxResults=6`);
+        var topVideos = await ytFetch(YT_API + '/search?part=snippet&forMine=true&type=video&order=viewCount&maxResults=6');
         if (topVideos?.items?.length) {
-          const videoIds = topVideos.items.map(v => v.id.videoId).join(',');
-          const videoStats = await ytFetch(`${YT_API}/videos?part=statistics,snippet&id=${videoIds}`);
+          var videoIds = topVideos.items.map(function(v) { return v.id.videoId; }).join(',');
+          var videoStats = await ytFetch(YT_API + '/videos?part=statistics,snippet&id=' + videoIds);
           if (videoStats?.items) updateVideoBarChart(videoStats.items);
         }
 
-        const retentionData = await ytFetch(
-          `${YT_ANALYTICS}/reports?ids=channel==MINE&startDate=${thirtyAgo}&endDate=${today}&metrics=averageViewPercentage,averageViewDuration&dimensions=video&sort=-averageViewPercentage&maxResults=3`
+        var retentionData = await ytFetch(
+          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + thirtyAgo + '&endDate=' + today + '&metrics=averageViewPercentage,averageViewDuration&dimensions=video&sort=-averageViewPercentage&maxResults=3'
         );
         if (retentionData?.rows?.length) {
-          const retVideoIds = retentionData.rows.map(r => r[0]).join(',');
-          const retVideoDetails = await ytFetch(`${YT_API}/videos?part=snippet&id=${retVideoIds}`);
+          var retVideoIds = retentionData.rows.map(function(r) { return r[0]; }).join(',');
+          var retVideoDetails = await ytFetch(YT_API + '/videos?part=snippet&id=' + retVideoIds);
           updateRetentionChartFromAPI(retentionData.rows, retVideoDetails?.items || []);
         }
 
+        addLog('Analytics data loaded — updating charts...', 'success');
         animateCounters();
       } catch (e) {
         showNotification('Analytics error — showing demo data.', 'warning');
@@ -1572,26 +1712,26 @@ Respond ONLY with this exact JSON structure:
     }
 
     function updateViewsChart(rows) {
-      const labels = rows.map(r => {
-        const d = new Date(r[0]);
+      var labels = rows.map(function(r) {
+        var d = new Date(r[0]);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       });
-      const data = rows.map(r => r[1]);
+      var data = rows.map(function(r) { return r[1]; });
       createOrUpdateViewsChart(labels, data);
     }
 
     function updateVideoBarChart(items) {
-      const labels = items.map(v => v.snippet?.title?.substring(0, 25) + (v.snippet?.title?.length > 25 ? '...' : '') || 'Unknown');
-      const data = items.map(v => parseInt(v.statistics?.viewCount || 0));
+      var labels = items.map(function(v) { return v.snippet?.title?.substring(0, 25) + (v.snippet?.title?.length > 25 ? '...' : '') || 'Unknown'; });
+      var data = items.map(function(v) { return parseInt(v.statistics?.viewCount || 0); });
       createOrUpdateTopVidsChart(labels, data);
     }
 
     function updateRetentionChartFromAPI(rows, details) {
-      const datasets = rows.map((row, i) => {
-        const detail = details.find(d => d.id === row[0]);
-        const title = detail?.snippet?.title?.substring(0, 20) || `Video ${i + 1}`;
-        const pct = row[1];
-        const colors = ['#ff0000', '#3ea6ff', '#2ba640'];
+      var datasets = rows.map(function(row, i) {
+        var detail = details.find(function(d) { return d.id === row[0]; });
+        var title = detail?.snippet?.title?.substring(0, 20) || ('Video ' + (i + 1));
+        var pct = row[1];
+        var colors = ['#ff0000', '#3ea6ff', '#2ba640'];
         return {
           label: title,
           data: [100, Math.round(pct * 0.75), Math.round(pct * 0.6), Math.round(pct * 0.45), Math.round(pct * 0.3)],
@@ -1604,13 +1744,13 @@ Respond ONLY with this exact JSON structure:
     }
 
     function updateEngagementFromTotals(totals) {
-      const total = totals.likes + totals.comments + totals.shares;
+      var total = totals.likes + totals.comments + totals.shares;
       if (total === 0) return;
-      const likesPct = Math.round((totals.likes / total) * 100);
-      const sharesPct = Math.round((totals.shares / total) * 100);
-      const commentsPct = 100 - likesPct - sharesPct;
+      var likesPct = Math.round((totals.likes / total) * 100);
+      var sharesPct = Math.round((totals.shares / total) * 100);
+      var commentsPct = 100 - likesPct - sharesPct;
       createOrUpdateEngagementChart(
-        [`Likes (${likesPct}%)`, `Shares (${sharesPct}%)`, `Comments (${commentsPct}%)`],
+        ['Likes (' + likesPct + '%)', 'Shares (' + sharesPct + '%)', 'Comments (' + commentsPct + '%)'],
         [likesPct, sharesPct, commentsPct]
       );
     }
@@ -1619,8 +1759,8 @@ Respond ONLY with this exact JSON structure:
     // CHART CREATION / UPDATE FUNCTIONS
     // ============================================================
     function createOrUpdateViewsChart(labels, data) {
-      const ctx = document.getElementById('chart-views-a1b1').getContext('2d');
-      const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+      var ctx = document.getElementById('chart-views-a1b1').getContext('2d');
+      var gradient = ctx.createLinearGradient(0, 0, 0, 250);
       gradient.addColorStop(0, 'rgba(255, 0, 0, 0.25)');
       gradient.addColorStop(1, 'rgba(255, 0, 0, 0.0)');
 
@@ -1631,42 +1771,42 @@ Respond ONLY with this exact JSON structure:
       chartInstances.views = new Chart(ctx, {
         type: 'line',
         data: {
-          labels,
+          labels: labels,
           datasets: [{
-            label: 'Views', data, borderColor: '#ff0000', backgroundColor: gradient,
+            label: 'Views', data: data, borderColor: '#ff0000', backgroundColor: gradient,
             fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 5,
             pointHoverBackgroundColor: '#ff0000', borderWidth: 2
           }]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1a1a', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#333', borderWidth: 1, padding: 10, callbacks: { label: ctx => ctx.parsed.y.toLocaleString() + ' views' } } },
+          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1a1a', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#333', borderWidth: 1, padding: 10, callbacks: { label: function(ctx) { return ctx.parsed.y.toLocaleString() + ' views'; } } } },
           scales: {
             x: { grid: { display: false }, ticks: { maxRotation: 0, maxTicksLimit: 7, font: { size: 10 } } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => (v / 1000).toFixed(0) + 'k', font: { size: 10 } } }
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: function(v) { return (v / 1000).toFixed(0) + 'k'; }, font: { size: 10 } } }
           }
         }
       });
     }
 
     function createOrUpdateTopVidsChart(labels, data) {
-      const ctx = document.getElementById('chart-topvids-c2d2').getContext('2d');
+      var ctx = document.getElementById('chart-topvids-c2d2').getContext('2d');
       if (chartInstances.topVids) chartInstances.topVids.destroy();
       chartInstances.topVids = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels,
+          labels: labels,
           datasets: [{
-            label: 'Views', data,
+            label: 'Views', data: data,
             backgroundColor: ['#ff0000', '#ff2200', '#ff4400', '#ff6600', '#ff8800', '#ffaa00'],
             borderRadius: 6, borderSkipped: false
           }]
         },
         options: {
           indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1a1a', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#333', borderWidth: 1, callbacks: { label: ctx => ctx.parsed.x.toLocaleString() + ' views' } } },
+          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1a1a', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#333', borderWidth: 1, callbacks: { label: function(ctx) { return ctx.parsed.x.toLocaleString() + ' views'; } } } },
           scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => (v / 1000).toFixed(0) + 'k', font: { size: 10 } } },
+            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: function(v) { return (v / 1000).toFixed(0) + 'k'; }, font: { size: 10 } } },
             y: { grid: { display: false }, ticks: { font: { size: 10 } } }
           }
         }
@@ -1674,31 +1814,31 @@ Respond ONLY with this exact JSON structure:
     }
 
     function createOrUpdateRetentionChart(datasets) {
-      const ctx = document.getElementById('chart-retention-e3f3').getContext('2d');
+      var ctx = document.getElementById('chart-retention-e3f3').getContext('2d');
       if (chartInstances.retention) chartInstances.retention.destroy();
       chartInstances.retention = new Chart(ctx, {
         type: 'line',
-        data: { labels: ['Intro', '25%', '50%', '75%', 'End'], datasets },
+        data: { labels: ['Intro', '25%', '50%', '75%', 'End'], datasets: datasets },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { boxWidth: 12, padding: 15, font: { size: 10 } } }, tooltip: { backgroundColor: '#1a1a1a', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#333', borderWidth: 1, callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '%' } } },
+          plugins: { legend: { labels: { boxWidth: 12, padding: 15, font: { size: 10 } } }, tooltip: { backgroundColor: '#1a1a1a', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#333', borderWidth: 1, callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } } } },
           scales: {
             x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-            y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => v + '%', font: { size: 10 } } }
+            y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: function(v) { return v + '%'; }, font: { size: 10 } } }
           }
         }
       });
     }
 
     function createOrUpdateEngagementChart(labels, data) {
-      const ctx = document.getElementById('chart-engagement-g4h4').getContext('2d');
+      var ctx = document.getElementById('chart-engagement-g4h4').getContext('2d');
       if (chartInstances.engagement) chartInstances.engagement.destroy();
       chartInstances.engagement = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels,
+          labels: labels,
           datasets: [{
-            data, backgroundColor: ['#ff0000', '#3ea6ff', '#2ba640'],
+            data: data, backgroundColor: ['#ff0000', '#3ea6ff', '#2ba640'],
             borderColor: '#1a1a1a', borderWidth: 3, hoverOffset: 8
           }]
         },
@@ -1716,16 +1856,16 @@ Respond ONLY with this exact JSON structure:
     // DEMO DATA FOR CHARTS
     // ============================================================
     function initChartsWithDemoData() {
-      const viewsData = [];
-      let base = 28000;
-      for (let i = 0; i < 30; i++) {
+      var viewsData = [];
+      var base = 28000;
+      for (var i = 0; i < 30; i++) {
         base += (Math.random() - 0.45) * 4000;
         base = Math.max(15000, Math.min(45000, base));
         viewsData.push(Math.round(base));
       }
-      const viewsLabels = [];
-      for (let i = 29; i >= 0; i--) {
-        const d = new Date(2026, 7, 20);
+      var viewsLabels = [];
+      for (var i = 29; i >= 0; i--) {
+        var d = new Date(2026, 7, 20);
         d.setDate(d.getDate() - i);
         viewsLabels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
       }
@@ -1755,16 +1895,16 @@ Respond ONLY with this exact JSON structure:
     // COUNTER ANIMATION
     // ============================================================
     function animateCounters() {
-      document.querySelectorAll('[data-count]').forEach(el => {
-        const target = parseInt(el.dataset.count);
+      document.querySelectorAll('[data-count]').forEach(function(el) {
+        var target = parseInt(el.dataset.count);
         if (isNaN(target)) return;
-        const duration = 1200;
-        const start = performance.now();
+        var duration = 1200;
+        var start = performance.now();
         el.textContent = '0';
         function update(now) {
-          const elapsed = now - start;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
           el.textContent = Math.round(target * eased).toLocaleString();
           if (progress < 1) requestAnimationFrame(update);
         }
@@ -1778,27 +1918,29 @@ Respond ONLY with this exact JSON structure:
     async function loadLowPerformers() {
       hideDemoModeBanner('lowperformers');
       showTabLoading('lowperformers');
+      addLog('Analyzing channel videos for low performance...', 'info');
       try {
-        const today = new Date().toISOString().split('T')[0];
-        const days = parseInt(document.getElementById('lp-period-i5j5').value) || 90;
-        const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        var today = new Date().toISOString().split('T')[0];
+        var days = parseInt(document.getElementById('lp-period-i5j5').value) || 90;
+        var startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        const data = await ytFetch(
-          `${YT_ANALYTICS}/reports?ids=channel==MINE&startDate=${startDate}&endDate=${today}&metrics=views,averageViewPercentage,likes,comments,estimatedMinutesWatched&dimensions=video&sort=views&maxResults=15`
+        var data = await ytFetch(
+          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + startDate + '&endDate=' + today + '&metrics=views,averageViewPercentage,likes,comments,estimatedMinutesWatched&dimensions=video&sort=views&maxResults=15'
         );
 
         if (!data?.rows?.length) {
           state.lowPerformers = [];
+          addLog('Found 0 below-average videos', 'info');
           renderLowPerformers();
           return;
         }
 
-        const videoIds = data.rows.map(r => r[0]).join(',');
-        const videoDetails = await ytFetch(`${YT_API}/videos?part=snippet,statistics&id=${videoIds}`);
-        const avgViews = data.rows.reduce((s, r) => s + r[1], 0) / data.rows.length;
+        var videoIds = data.rows.map(function(r) { return r[0]; }).join(',');
+        var videoDetails = await ytFetch(YT_API + '/videos?part=snippet,statistics&id=' + videoIds);
+        var avgViews = data.rows.reduce(function(s, r) { return s + r[1]; }, 0) / data.rows.length;
 
-        state.lowPerformers = data.rows.map(row => {
-          const detail = videoDetails?.items?.find(v => v.id === row[0]);
+        state.lowPerformers = data.rows.map(function(row) {
+          var detail = videoDetails?.items?.find(function(v) { return v.id === row[0]; });
           return {
             id: row[0],
             title: detail?.snippet?.title || 'Unknown Video',
@@ -1811,8 +1953,9 @@ Respond ONLY with this exact JSON structure:
             watchMinutes: row[5],
             channelAvgViews: Math.round(avgViews)
           };
-        }).filter(v => v.views < avgViews);
+        }).filter(function(v) { return v.views < avgViews; });
 
+        addLog('Found ' + state.lowPerformers.length + ' below-average videos', state.lowPerformers.length > 0 ? 'warning' : 'info');
         renderLowPerformers();
       } catch (e) {
         showNotification('Could not load low performers — showing demo data.', 'warning');
@@ -1825,74 +1968,73 @@ Respond ONLY with this exact JSON structure:
     }
 
     function renderLowPerformers() {
-      const grid = document.getElementById('lp-grid-o8p8');
-      const items = state.lowPerformers;
+      var grid = document.getElementById('lp-grid-o8p8');
+      var items = state.lowPerformers;
 
-      const sortBy = document.getElementById('lp-sort-k6l6').value;
-      if (sortBy === 'retention') items.sort((a, b) => a.retention - b.retention);
-      else if (sortBy === 'likes') items.sort((a, b) => a.likes - b.likes);
-      else items.sort((a, b) => a.views - b.views);
+      var sortBy = document.getElementById('lp-sort-k6l6').value;
+      if (sortBy === 'retention') items.sort(function(a, b) { return a.retention - b.retention; });
+      else if (sortBy === 'likes') items.sort(function(a, b) { return a.likes - b.likes; });
+      else items.sort(function(a, b) { return a.views - b.views; });
 
       if (items.length === 0) {
         grid.innerHTML = '<div class="col-span-2 text-center py-12"><p class="text-yt-muted">No low-performing videos found.</p></div>';
         return;
       }
 
-      grid.innerHTML = items.map(lp => {
-        const retColor = lp.retention < 25 ? 'bg-red-500' : lp.retention < 35 ? 'bg-orange-500' : 'bg-yellow-500';
-        const viewBadge = lp.views < 1000 ? 'bg-red-500/20 text-red-400' : 'bg-yt-card text-yt-muted';
-        const dateStr = lp.publishedAt ? formatDate(lp.publishedAt) : (lp.date || '');
-        const wt = lp.watchMinutes ? formatDuration(lp.watchMinutes) : (lp.watchTime || '');
-        const thumbStyle = lp.thumbnail ? `background-image:url(${lp.thumbnail});background-size:cover;background-position:center;` : '';
-        return `
-        <div class="bg-yt-surface rounded-xl p-4 border border-yt-border card-lift" data-lp-id="${lp.id}" id="lp-card-${lp.id}">
-          <div class="flex gap-4">
-            <div class="w-36 h-20 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center shrink-0" style="${thumbStyle}">
-              ${!lp.thumbnail ? '<i data-lucide="play-circle" class="w-8 h-8 text-gray-500"></i>' : ''}
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold text-white truncate">${lp.title}</p>
-              <p class="text-xs text-yt-dimmed mt-0.5">Published ${dateStr}</p>
-              <div class="flex flex-wrap gap-2 mt-2">
-                <span class="text-xs px-2 py-0.5 rounded ${viewBadge} tabular-nums">${lp.views.toLocaleString()} views</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-yt-card text-yt-muted tabular-nums">${lp.likes} likes</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-yt-card text-yt-muted tabular-nums">${wt} avg</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs text-yt-dimmed">Retention vs. channel avg</span>
-              <span class="text-xs font-semibold ${lp.retention < 30 ? 'text-red-400' : 'text-yellow-400'} tabular-nums">${lp.retention}%</span>
-            </div>
-            <div class="retention-bar">
-              <div class="retention-bar-fill ${retColor}" style="width: ${lp.retention}%"></div>
-            </div>
-          </div>
-          <div id="lp-status-${lp.id}" class="hidden mt-2 text-xs text-green-400 font-medium"></div>
-          <div class="flex gap-2 mt-3">
-            <button class="lp-delete-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-red-500/40 text-red-400 text-xs font-medium hover:bg-red-500/10 btn-press transition-colors" data-lpid="${lp.id}">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Video
-            </button>
-            <button class="lp-remove-pl-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-yt-border text-yt-muted text-xs font-medium hover:bg-yt-hover btn-press transition-colors" data-lpid="${lp.id}">
-              <i data-lucide="list-x" class="w-3.5 h-3.5"></i> Remove from Playlists
-            </button>
-          </div>
-        </div>`;
+      grid.innerHTML = items.map(function(lp) {
+        var retColor = lp.retention < 25 ? 'bg-red-500' : lp.retention < 35 ? 'bg-orange-500' : 'bg-yellow-500';
+        var viewBadge = lp.views < 1000 ? 'bg-red-500/20 text-red-400' : 'bg-yt-card text-yt-muted';
+        var dateStr = lp.publishedAt ? formatDate(lp.publishedAt) : (lp.date || '');
+        var wt = lp.watchMinutes ? formatDuration(lp.watchMinutes) : (lp.watchTime || '');
+        var thumbStyle = lp.thumbnail ? 'background-image:url(' + lp.thumbnail + ');background-size:cover;background-position:center;' : '';
+        return '<div class="bg-yt-surface rounded-xl p-4 border border-yt-border card-lift" data-lp-id="' + lp.id + '" id="lp-card-' + lp.id + '">' +
+          '<div class="flex gap-4">' +
+            '<div class="w-36 h-20 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center shrink-0" style="' + thumbStyle + '">' +
+              (!lp.thumbnail ? '<i data-lucide="play-circle" class="w-8 h-8 text-gray-500"></i>' : '') +
+            '</div>' +
+            '<div class="flex-1 min-w-0">' +
+              '<p class="text-sm font-semibold text-white truncate">' + lp.title + '</p>' +
+              '<p class="text-xs text-yt-dimmed mt-0.5">Published ' + dateStr + '</p>' +
+              '<div class="flex flex-wrap gap-2 mt-2">' +
+                '<span class="text-xs px-2 py-0.5 rounded ' + viewBadge + ' tabular-nums">' + lp.views.toLocaleString() + ' views</span>' +
+                '<span class="text-xs px-2 py-0.5 rounded bg-yt-card text-yt-muted tabular-nums">' + lp.likes + ' likes</span>' +
+                '<span class="text-xs px-2 py-0.5 rounded bg-yt-card text-yt-muted tabular-nums">' + wt + ' avg</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-3">' +
+            '<div class="flex items-center justify-between mb-1">' +
+              '<span class="text-xs text-yt-dimmed">Retention vs. channel avg</span>' +
+              '<span class="text-xs font-semibold ' + (lp.retention < 30 ? 'text-red-400' : 'text-yellow-400') + ' tabular-nums">' + lp.retention + '%</span>' +
+            '</div>' +
+            '<div class="retention-bar">' +
+              '<div class="retention-bar-fill ' + retColor + '" style="width: ' + lp.retention + '%"></div>' +
+            '</div>' +
+          '</div>' +
+          '<div id="lp-status-' + lp.id + '" class="hidden mt-2 text-xs text-green-400 font-medium"></div>' +
+          '<div class="flex gap-2 mt-3">' +
+            '<button class="lp-delete-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-red-500/40 text-red-400 text-xs font-medium hover:bg-red-500/10 btn-press transition-colors" data-lpid="' + lp.id + '">' +
+              '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Video' +
+            '</button>' +
+            '<button class="lp-remove-pl-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-yt-border text-yt-muted text-xs font-medium hover:bg-yt-hover btn-press transition-colors" data-lpid="' + lp.id + '">' +
+              '<i data-lucide="list-x" class="w-3.5 h-3.5"></i> Remove from Playlists' +
+            '</button>' +
+          '</div>' +
+        '</div>';
       }).join('');
 
-      grid.querySelectorAll('.lp-delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
+      grid.querySelectorAll('.lp-delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
           deleteTargetId = btn.dataset.lpid;
           deleteTargetCard = document.getElementById('lp-card-' + deleteTargetId);
-          const lp = state.lowPerformers.find(l => l.id === deleteTargetId);
-          document.getElementById('delete-modal-msg').textContent = `Are you sure you want to permanently delete "${lp?.title || 'this video'}"? This cannot be undone.`;
+          var lp = state.lowPerformers.find(function(l) { return l.id === deleteTargetId; });
+          document.getElementById('delete-modal-msg').textContent = 'Are you sure you want to permanently delete "' + (lp?.title || 'this video') + '"? This cannot be undone.';
           document.getElementById('delete-modal-c5d5').classList.remove('hidden');
         });
       });
 
-      grid.querySelectorAll('.lp-remove-pl-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
+      grid.querySelectorAll('.lp-remove-pl-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
           playlistRemoveTargetId = btn.dataset.lpid;
           openPlaylistRemoveModal(playlistRemoveTargetId);
         });
@@ -1905,47 +2047,52 @@ Respond ONLY with this exact JSON structure:
     // DELETE VIDEO (REAL API)
     // ============================================================
     async function deleteVideoAPI(videoId, cardElement) {
+      addLog('Deleting video: "' + videoId + '"...', 'warning');
       try {
         cardElement.style.opacity = '0.5';
-        const res = await fetch(`${YT_API}/videos?id=${videoId}`, {
+        var res = await fetch(YT_API + '/videos?id=' + videoId, {
           method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${state.token}` }
+          headers: { 'Authorization': 'Bearer ' + state.token }
         });
         if (res.status === 204 || res.ok) {
           cardElement.style.transition = 'all 0.4s ease';
           cardElement.style.opacity = '0';
           cardElement.style.transform = 'scale(0.9)';
-          setTimeout(() => cardElement.remove(), 400);
-          state.lowPerformers = state.lowPerformers.filter(v => v.id !== videoId);
+          setTimeout(function() { cardElement.remove(); }, 400);
+          state.lowPerformers = state.lowPerformers.filter(function(v) { return v.id !== videoId; });
+          addLog('Video deleted successfully', 'success');
           showNotification('Video deleted successfully.', 'success');
         } else {
           throw new Error('Delete failed: ' + res.status);
         }
       } catch (e) {
+        addLog('Delete failed: ' + e.message, 'error');
         cardElement.style.opacity = '1';
         cardElement.classList.add('fade-out');
-        setTimeout(() => {
-          state.lowPerformers = state.lowPerformers.filter(v => v.id !== videoId);
+        setTimeout(function() {
+          state.lowPerformers = state.lowPerformers.filter(function(v) { return v.id !== videoId; });
           renderLowPerformers();
         }, 400);
         showNotification('Deleted locally (demo mode).', 'info');
       }
     }
 
-    document.getElementById('delete-cancel-e6f6').addEventListener('click', () => {
+    document.getElementById('delete-cancel-e6f6').addEventListener('click', function() {
       document.getElementById('delete-modal-c5d5').classList.add('hidden');
       deleteTargetId = null;
       deleteTargetCard = null;
     });
-    document.getElementById('delete-confirm-g7h7').addEventListener('click', () => {
+    document.getElementById('delete-confirm-g7h7').addEventListener('click', function() {
       document.getElementById('delete-modal-c5d5').classList.add('hidden');
       if (deleteTargetId && deleteTargetCard) {
         if (state.isConnected) {
           deleteVideoAPI(deleteTargetId, deleteTargetCard);
         } else {
+          addLog('Deleting video: "' + deleteTargetId + '"...', 'warning');
           deleteTargetCard.classList.add('fade-out');
-          setTimeout(() => {
-            state.lowPerformers = state.lowPerformers.filter(l => l.id !== deleteTargetId);
+          setTimeout(function() {
+            state.lowPerformers = state.lowPerformers.filter(function(l) { return l.id !== deleteTargetId; });
+            addLog('Video deleted successfully', 'success');
             renderLowPerformers();
             deleteTargetId = null;
             deleteTargetCard = null;
@@ -1958,8 +2105,8 @@ Respond ONLY with this exact JSON structure:
     // PLAYLIST REMOVE MODAL
     // ============================================================
     async function openPlaylistRemoveModal(videoId) {
-      const listEl = document.getElementById('playlist-remove-list-k9l9');
-      const loadingEl = document.getElementById('pr-loading');
+      var listEl = document.getElementById('playlist-remove-list-k9l9');
+      var loadingEl = document.getElementById('pr-loading');
 
       if (state.isConnected) {
         listEl.innerHTML = '';
@@ -1972,12 +2119,12 @@ Respond ONLY with this exact JSON structure:
           if (playlistRemoveMemberships.length === 0) {
             listEl.innerHTML = '<p class="text-sm text-yt-muted">This video is not in any playlists.</p>';
           } else {
-            listEl.innerHTML = playlistRemoveMemberships.map(m => `
-              <label class="flex items-center gap-3 cursor-pointer">
-                <input type="checkbox" checked class="w-4 h-4 accent-red-500 rounded" data-pi-id="${m.playlistItemId}" />
-                <span class="text-sm text-white">${m.playlist.snippet?.title || 'Untitled'}</span>
-              </label>
-            `).join('');
+            listEl.innerHTML = playlistRemoveMemberships.map(function(m) {
+              return '<label class="flex items-center gap-3 cursor-pointer">' +
+                '<input type="checkbox" checked class="w-4 h-4 accent-red-500 rounded" data-pi-id="' + m.playlistItemId + '" />' +
+                '<span class="text-sm text-white">' + (m.playlist.snippet?.title || 'Untitled') + '</span>' +
+              '</label>';
+            }).join('');
           }
         } catch (e) {
           loadingEl.classList.add('hidden');
@@ -1985,54 +2132,58 @@ Respond ONLY with this exact JSON structure:
         }
       } else {
         loadingEl.classList.add('hidden');
-        const lp = state.lowPerformers.find(l => l.id === videoId);
-        const plNames = lp?._playlists || ['Vlogs'];
-        listEl.innerHTML = plNames.map((pl, i) => `
-          <label class="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" checked class="w-4 h-4 accent-red-500 rounded" data-pl-name="${pl}" />
-            <span class="text-sm text-white">${pl}</span>
-          </label>
-        `).join('');
+        var lp = state.lowPerformers.find(function(l) { return l.id === videoId; });
+        var plNames = lp?._playlists || ['Vlogs'];
+        listEl.innerHTML = plNames.map(function(pl) {
+          return '<label class="flex items-center gap-3 cursor-pointer">' +
+            '<input type="checkbox" checked class="w-4 h-4 accent-red-500 rounded" data-pl-name="' + pl + '" />' +
+            '<span class="text-sm text-white">' + pl + '</span>' +
+          '</label>';
+        }).join('');
         document.getElementById('playlist-remove-modal-i8j8').classList.remove('hidden');
       }
     }
 
     async function getVideoPlaylistMemberships(videoId) {
-      const memberships = [];
-      for (const pl of state.playlists) {
+      var memberships = [];
+      for (var i = 0; i < state.playlists.length; i++) {
+        var pl = state.playlists[i];
         try {
-          const plId = pl.id;
-          const items = await ytFetch(`${YT_API}/playlistItems?part=snippet&playlistId=${plId}&videoId=${videoId}&maxResults=5`);
+          var plId = pl.id;
+          var items = await ytFetch(YT_API + '/playlistItems?part=snippet&playlistId=' + plId + '&videoId=' + videoId + '&maxResults=5');
           if (items?.items?.length) {
             memberships.push({ playlist: pl, playlistItemId: items.items[0].id });
           }
-        } catch { /* skip */ }
+        } catch (e) { /* skip */ }
       }
       return memberships;
     }
 
     async function removeVideoFromPlaylist(playlistItemId) {
-      await fetch(`${YT_API}/playlistItems?id=${playlistItemId}`, {
+      addLog('Removing video from playlist...', 'info');
+      await fetch(YT_API + '/playlistItems?id=' + playlistItemId, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${state.token}` }
+        headers: { 'Authorization': 'Bearer ' + state.token }
       });
+      addLog('Video removed from playlist', 'success');
     }
 
-    document.getElementById('pr-cancel-m0n0').addEventListener('click', () => {
+    document.getElementById('pr-cancel-m0n0').addEventListener('click', function() {
       document.getElementById('playlist-remove-modal-i8j8').classList.add('hidden');
       playlistRemoveTargetId = null;
       playlistRemoveMemberships = [];
     });
 
-    document.getElementById('pr-confirm-o1p1').addEventListener('click', async () => {
-      const modal = document.getElementById('playlist-remove-modal-i8j8');
+    document.getElementById('pr-confirm-o1p1').addEventListener('click', async function() {
+      var modal = document.getElementById('playlist-remove-modal-i8j8');
 
       if (state.isConnected && playlistRemoveMemberships.length) {
-        const checkboxes = modal.querySelectorAll('input[type="checkbox"]:checked');
-        for (const cb of checkboxes) {
-          const piId = cb.dataset.piId;
+        var checkboxes = modal.querySelectorAll('input[type="checkbox"]:checked');
+        for (var i = 0; i < checkboxes.length; i++) {
+          var cb = checkboxes[i];
+          var piId = cb.dataset.piId;
           if (piId) {
-            try { await removeVideoFromPlaylist(piId); } catch { /* skip */ }
+            try { await removeVideoFromPlaylist(piId); } catch (e) { /* skip */ }
           }
         }
         showNotification('Removed from selected playlists.', 'success');
@@ -2042,7 +2193,7 @@ Respond ONLY with this exact JSON structure:
 
       modal.classList.add('hidden');
       if (playlistRemoveTargetId) {
-        const statusEl = document.getElementById('lp-status-' + playlistRemoveTargetId);
+        var statusEl = document.getElementById('lp-status-' + playlistRemoveTargetId);
         if (statusEl) {
           statusEl.classList.remove('hidden');
           statusEl.textContent = '✓ Removed from playlists';
@@ -2052,15 +2203,15 @@ Respond ONLY with this exact JSON structure:
       playlistRemoveMemberships = [];
     });
 
-    document.getElementById('analyze-btn-m7n7').addEventListener('click', () => {
+    document.getElementById('analyze-btn-m7n7').addEventListener('click', function() {
       if (state.isConnected) {
         loadLowPerformers();
       } else {
-        const btn = document.getElementById('analyze-btn-m7n7');
-        const origHTML = btn.innerHTML;
+        var btn = document.getElementById('analyze-btn-m7n7');
+        var origHTML = btn.innerHTML;
         btn.innerHTML = '<span class="spinner"></span> Analyzing...';
         btn.disabled = true;
-        setTimeout(() => {
+        setTimeout(function() {
           btn.innerHTML = origHTML;
           btn.disabled = false;
           if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
@@ -2077,16 +2228,18 @@ Respond ONLY with this exact JSON structure:
     async function loadPlaylists() {
       hideDemoModeBanner('playlists');
       showTabLoading('playlists');
+      addLog('Loading playlists from YouTube...', 'info');
       try {
-        let nextPageToken = '';
+        var nextPageToken = '';
         state.playlists = [];
         do {
-          const data = await ytFetch(`${YT_API}/playlists?part=snippet,contentDetails,status&mine=true&maxResults=50${nextPageToken ? '&pageToken=' + nextPageToken : ''}`);
+          var data = await ytFetch(YT_API + '/playlists?part=snippet,contentDetails,status&mine=true&maxResults=50' + (nextPageToken ? '&pageToken=' + nextPageToken : ''));
           if (!data) break;
-          state.playlists.push(...(data.items || []));
+          state.playlists.push.apply(state.playlists, data.items || []);
           nextPageToken = data.nextPageToken || '';
         } while (nextPageToken);
 
+        addLog('Loaded ' + state.playlists.length + ' playlists', 'success');
         renderPlaylists();
         populatePlaylistDropdown(state.playlists);
       } catch (e) {
@@ -2100,47 +2253,46 @@ Respond ONLY with this exact JSON structure:
     }
 
     function renderPlaylists() {
-      const grid = document.getElementById('playlist-grid-s0t0');
-      const gradients = ['from-red-600 to-orange-500', 'from-blue-600 to-cyan-500', 'from-green-600 to-emerald-500', 'from-purple-600 to-pink-500', 'from-yellow-600 to-amber-500', 'from-indigo-600 to-violet-500', 'from-teal-600 to-cyan-500', 'from-rose-600 to-pink-500'];
+      var grid = document.getElementById('playlist-grid-s0t0');
+      var gradients = ['from-red-600 to-orange-500', 'from-blue-600 to-cyan-500', 'from-green-600 to-emerald-500', 'from-purple-600 to-pink-500', 'from-yellow-600 to-amber-500', 'from-indigo-600 to-violet-500', 'from-teal-600 to-cyan-500', 'from-rose-600 to-pink-500'];
 
       if (state.playlists.length === 0) {
         grid.innerHTML = '<div class="col-span-3 text-center py-12"><p class="text-yt-muted">No playlists found. Create one to get started!</p></div>';
         return;
       }
 
-      grid.innerHTML = state.playlists.map((pl, idx) => {
-        const title = pl.snippet?.title || pl.name || 'Untitled';
-        const count = pl.contentDetails?.itemCount ?? pl.count ?? 0;
-        const thumb = pl.snippet?.thumbnails?.medium?.url;
-        const gradient = pl._gradient || gradients[idx % gradients.length];
-        const views = pl._views;
-        const bgStyle = thumb ? `background-image:url(${thumb});background-size:cover;background-position:center;` : '';
-        return `
-        <div class="bg-yt-surface rounded-xl border border-yt-border overflow-hidden card-lift" data-pl-card="${pl.id}">
-          <div class="h-28 bg-gradient-to-br ${gradient} flex items-center justify-center relative" style="${bgStyle}">
-            ${!thumb ? '<i data-lucide="list-video" class="w-10 h-10 text-white/60"></i>' : ''}
-            <span class="absolute bottom-2 right-3 text-xs bg-black/50 text-white px-2 py-0.5 rounded tabular-nums">${count} videos</span>
-          </div>
-          <div class="p-4">
-            <h4 class="text-sm font-semibold text-white">${title}</h4>
-            ${views !== undefined ? `<p class="text-xs text-yt-muted mt-1 tabular-nums">${parseInt(views).toLocaleString()} total views</p>` : `<p class="text-xs text-yt-muted mt-1">${pl.status?.privacyStatus || 'public'}</p>`}
-            <button class="pl-edit-btn mt-3 w-full text-center text-xs font-medium text-yt-blue hover:text-white border border-yt-border rounded-lg py-2 btn-press transition-colors" data-plid="${pl.id}">
-              <span class="pl-edit-text">Edit Playlist</span>
-            </button>
-          </div>
-          <div class="pl-expand hidden border-t border-yt-border p-4" data-expand="${pl.id}">
-            <div class="flex flex-wrap gap-2 pl-items-container" data-chips="${pl.id}">
-              <div class="text-xs text-yt-dimmed">Loading videos...</div>
-            </div>
-          </div>
-        </div>`;
+      grid.innerHTML = state.playlists.map(function(pl, idx) {
+        var title = pl.snippet?.title || pl.name || 'Untitled';
+        var count = pl.contentDetails?.itemCount ?? pl.count ?? 0;
+        var thumb = pl.snippet?.thumbnails?.medium?.url;
+        var gradient = pl._gradient || gradients[idx % gradients.length];
+        var views = pl._views;
+        var bgStyle = thumb ? 'background-image:url(' + thumb + ');background-size:cover;background-position:center;' : '';
+        return '<div class="bg-yt-surface rounded-xl border border-yt-border overflow-hidden card-lift" data-pl-card="' + pl.id + '">' +
+          '<div class="h-28 bg-gradient-to-br ' + gradient + ' flex items-center justify-center relative" style="' + bgStyle + '">' +
+            (!thumb ? '<i data-lucide="list-video" class="w-10 h-10 text-white/60"></i>' : '') +
+            '<span class="absolute bottom-2 right-3 text-xs bg-black/50 text-white px-2 py-0.5 rounded tabular-nums">' + count + ' videos</span>' +
+          '</div>' +
+          '<div class="p-4">' +
+            '<h4 class="text-sm font-semibold text-white">' + title + '</h4>' +
+            (views !== undefined ? '<p class="text-xs text-yt-muted mt-1 tabular-nums">' + parseInt(views).toLocaleString() + ' total views</p>' : '<p class="text-xs text-yt-muted mt-1">' + (pl.status?.privacyStatus || 'public') + '</p>') +
+            '<button class="pl-edit-btn mt-3 w-full text-center text-xs font-medium text-yt-blue hover:text-white border border-yt-border rounded-lg py-2 btn-press transition-colors" data-plid="' + pl.id + '">' +
+              '<span class="pl-edit-text">Edit Playlist</span>' +
+            '</button>' +
+          '</div>' +
+          '<div class="pl-expand hidden border-t border-yt-border p-4" data-expand="' + pl.id + '">' +
+            '<div class="flex flex-wrap gap-2 pl-items-container" data-chips="' + pl.id + '">' +
+              '<div class="text-xs text-yt-dimmed">Loading videos...</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
       }).join('');
 
-      grid.querySelectorAll('.pl-edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const plid = btn.dataset.plid;
-          const expand = grid.querySelector(`[data-expand="${plid}"]`);
-          const textEl = btn.querySelector('.pl-edit-text');
+      grid.querySelectorAll('.pl-edit-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var plid = btn.dataset.plid;
+          var expand = grid.querySelector('[data-expand="' + plid + '"]');
+          var textEl = btn.querySelector('.pl-edit-text');
           if (expand.classList.contains('hidden')) {
             expand.classList.remove('hidden');
             textEl.textContent = 'Close';
@@ -2156,20 +2308,20 @@ Respond ONLY with this exact JSON structure:
     }
 
     async function loadPlaylistItemsForCard(playlistId) {
-      const container = document.querySelector(`[data-chips="${playlistId}"]`);
+      var container = document.querySelector('[data-chips="' + playlistId + '"]');
       if (!container) return;
 
-      const pl = state.playlists.find(p => p.id === playlistId);
+      var pl = state.playlists.find(function(p) { return p.id === playlistId; });
 
       if (pl?._videos) {
-        container.innerHTML = pl._videos.map(v => `
-          <span class="playlist-chip">
-            <span class="text-white text-xs">${v}</span>
-            <button class="chip-remove text-yt-dimmed hover:text-red-400 transition-colors" data-plid="${playlistId}" data-video="${v}">
-              <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-          </span>
-        `).join('');
+        container.innerHTML = pl._videos.map(function(v) {
+          return '<span class="playlist-chip">' +
+            '<span class="text-white text-xs">' + v + '</span>' +
+            '<button class="chip-remove text-yt-dimmed hover:text-red-400 transition-colors" data-plid="' + playlistId + '" data-video="' + v + '">' +
+              '<i data-lucide="x" class="w-3 h-3"></i>' +
+            '</button>' +
+          '</span>';
+        }).join('');
         bindChipRemoveButtons(container, playlistId);
         if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
         return;
@@ -2177,20 +2329,20 @@ Respond ONLY with this exact JSON structure:
 
       if (state.isConnected) {
         try {
-          const data = await ytFetch(`${YT_API}/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=20`);
-          const items = data?.items || [];
+          var data = await ytFetch(YT_API + '/playlistItems?part=snippet&playlistId=' + playlistId + '&maxResults=20');
+          var items = data?.items || [];
           if (items.length === 0) {
             container.innerHTML = '<span class="text-xs text-yt-dimmed">No videos in this playlist.</span>';
             return;
           }
-          container.innerHTML = items.map(item => `
-            <span class="playlist-chip">
-              <span class="text-white text-xs">${item.snippet?.title || 'Untitled'}</span>
-              <button class="chip-remove-api text-yt-dimmed hover:text-red-400 transition-colors" data-plid="${playlistId}" data-pi-id="${item.id}">
-                <i data-lucide="x" class="w-3 h-3"></i>
-              </button>
-            </span>
-          `).join('');
+          container.innerHTML = items.map(function(item) {
+            return '<span class="playlist-chip">' +
+              '<span class="text-white text-xs">' + (item.snippet?.title || 'Untitled') + '</span>' +
+              '<button class="chip-remove-api text-yt-dimmed hover:text-red-400 transition-colors" data-plid="' + playlistId + '" data-pi-id="' + item.id + '">' +
+                '<i data-lucide="x" class="w-3 h-3"></i>' +
+              '</button>' +
+            '</span>';
+          }).join('');
           bindChipRemoveAPIButtons(container);
           if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
         } catch (e) {
@@ -2202,12 +2354,12 @@ Respond ONLY with this exact JSON structure:
     }
 
     function bindChipRemoveButtons(container, playlistId) {
-      container.querySelectorAll('.chip-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const video = btn.dataset.video;
-          const pl = state.playlists.find(p => p.id === playlistId);
+      container.querySelectorAll('.chip-remove').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var video = btn.dataset.video;
+          var pl = state.playlists.find(function(p) { return p.id === playlistId; });
           if (pl?._videos) {
-            const vidIdx = pl._videos.indexOf(video);
+            var vidIdx = pl._videos.indexOf(video);
             if (vidIdx > -1) {
               pl._videos.splice(vidIdx, 1);
               if (pl.contentDetails) pl.contentDetails.itemCount = Math.max(0, (pl.contentDetails.itemCount || 1) - 1);
@@ -2219,11 +2371,10 @@ Respond ONLY with this exact JSON structure:
     }
 
     function bindChipRemoveAPIButtons(container) {
-      container.querySelectorAll('.chip-remove-api').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const piId = btn.dataset.piId;
-          const plid = btn.dataset.plid;
-          const chip = btn.closest('.playlist-chip');
+      container.querySelectorAll('.chip-remove-api').forEach(function(btn) {
+        btn.addEventListener('click', async function() {
+          var piId = btn.dataset.piId;
+          var chip = btn.closest('.playlist-chip');
           chip.style.opacity = '0.5';
           try {
             await removeVideoFromPlaylist(piId);
@@ -2240,21 +2391,23 @@ Respond ONLY with this exact JSON structure:
     // ============================================================
     // CREATE PLAYLIST
     // ============================================================
-    document.getElementById('create-playlist-btn-q9r9').addEventListener('click', () => {
+    document.getElementById('create-playlist-btn-q9r9').addEventListener('click', function() {
       document.getElementById('new-pl-name-s3t3').value = '';
       document.getElementById('create-pl-modal-q2r2').classList.remove('hidden');
     });
-    document.getElementById('cpl-cancel-u4v4').addEventListener('click', () => {
+    document.getElementById('cpl-cancel-u4v4').addEventListener('click', function() {
       document.getElementById('create-pl-modal-q2r2').classList.add('hidden');
     });
-    document.getElementById('cpl-create-w5x5').addEventListener('click', async () => {
-      const name = document.getElementById('new-pl-name-s3t3').value.trim();
+    document.getElementById('cpl-create-w5x5').addEventListener('click', async function() {
+      var name = document.getElementById('new-pl-name-s3t3').value.trim();
       if (!name) { showNotification('Please enter a playlist name.', 'warning'); return; }
-      const privacy = document.getElementById('new-pl-privacy').value;
+      var privacy = document.getElementById('new-pl-privacy').value;
+
+      addLog('Creating playlist: "' + name + '"...', 'info');
 
       if (state.isConnected) {
         try {
-          const data = await ytFetch(`${YT_API}/playlists?part=snippet,status,contentDetails`, {
+          var data = await ytFetch(YT_API + '/playlists?part=snippet,status,contentDetails', {
             method: 'POST',
             body: JSON.stringify({
               snippet: { title: name, description: '' },
@@ -2265,13 +2418,14 @@ Respond ONLY with this exact JSON structure:
             state.playlists.unshift(data);
             renderPlaylists();
             populatePlaylistDropdown(state.playlists);
-            showNotification(`Playlist "${name}" created!`, 'success');
+            addLog('Playlist "' + name + '" created successfully', 'success');
+            showNotification('Playlist "' + name + '" created!', 'success');
           }
         } catch (e) {
           showNotification('Create failed: ' + e.message, 'error');
         }
       } else {
-        const gradients = ['from-teal-600 to-cyan-500', 'from-rose-600 to-pink-500', 'from-lime-600 to-green-500', 'from-fuchsia-600 to-purple-500'];
+        var gradients = ['from-teal-600 to-cyan-500', 'from-rose-600 to-pink-500', 'from-lime-600 to-green-500', 'from-fuchsia-600 to-purple-500'];
         state.playlists.push({
           id: 'pl' + Date.now(),
           snippet: { title: name, thumbnails: { medium: { url: '' } } },
@@ -2283,7 +2437,8 @@ Respond ONLY with this exact JSON structure:
         });
         renderPlaylists();
         populatePlaylistDropdown(state.playlists);
-        showNotification(`Playlist "${name}" created (demo mode).`, 'success');
+        addLog('Playlist "' + name + '" created successfully', 'success');
+        showNotification('Playlist "' + name + '" created (demo mode).', 'success');
       }
       document.getElementById('create-pl-modal-q2r2').classList.add('hidden');
     });
@@ -2291,24 +2446,24 @@ Respond ONLY with this exact JSON structure:
     // ============================================================
     // CONNECT API MODAL
     // ============================================================
-    document.getElementById('connect-api-btn-k1l2').addEventListener('click', () => {
+    document.getElementById('connect-api-btn-k1l2').addEventListener('click', function() {
       if (state.isConnected || state.token) return;
       // Restore saved Gemini key into the input
-      const savedGeminiKey = localStorage.getItem('gemini_api_key');
+      var savedGeminiKey = localStorage.getItem('gemini_api_key');
       if (savedGeminiKey && document.getElementById('gemini-key-input')) {
         document.getElementById('gemini-key-input').value = savedGeminiKey;
       }
       document.getElementById('api-modal-u1v1').classList.remove('hidden');
     });
-    document.getElementById('api-modal-close-w2x2').addEventListener('click', () => {
+    document.getElementById('api-modal-close-w2x2').addEventListener('click', function() {
       document.getElementById('api-modal-u1v1').classList.add('hidden');
     });
 
-    document.getElementById('authorize-btn-a4b4').addEventListener('click', () => {
-      const clientId = document.getElementById('client-id-input-y3z3').value.trim();
+    document.getElementById('authorize-btn-a4b4').addEventListener('click', function() {
+      var clientId = document.getElementById('client-id-input-y3z3').value.trim();
 
       // Save Gemini key regardless of whether YouTube client ID is provided
-      const geminiKey = document.getElementById('gemini-key-input')?.value?.trim();
+      var geminiKey = document.getElementById('gemini-key-input')?.value?.trim();
       if (geminiKey) {
         localStorage.setItem('gemini_api_key', geminiKey);
         showNotification('Gemini API key saved.', 'success');
@@ -2325,29 +2480,29 @@ Respond ONLY with this exact JSON structure:
         return;
       }
 
-      const apiKey = document.getElementById('api-key-input').value.trim();
+      var apiKey = document.getElementById('api-key-input').value.trim();
       localStorage.setItem('yt_client_id', clientId);
       if (apiKey) localStorage.setItem('yt_api_key', apiKey);
 
-      const redirectUri = window.location.origin + window.location.pathname;
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-        `client_id=${encodeURIComponent(clientId)}&` +
-        `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-        `response_type=token&` +
-        `scope=${encodeURIComponent(SCOPES)}&` +
-        `include_granted_scopes=true`;
+      var redirectUri = window.location.origin + window.location.pathname;
+      var authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+        'client_id=' + encodeURIComponent(clientId) + '&' +
+        'redirect_uri=' + encodeURIComponent(redirectUri) + '&' +
+        'response_type=token&' +
+        'scope=' + encodeURIComponent(SCOPES) + '&' +
+        'include_granted_scopes=true';
       window.location.href = authUrl;
     });
 
-    ['demo-connect-perf', 'demo-connect-lp', 'demo-connect-pl'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('click', () => {
+    ['demo-connect-perf', 'demo-connect-lp', 'demo-connect-pl'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('click', function() {
         document.getElementById('api-modal-u1v1').classList.remove('hidden');
       });
     });
 
-    ['api-modal-u1v1', 'delete-modal-c5d5', 'playlist-remove-modal-i8j8', 'create-pl-modal-q2r2'].forEach(modalId => {
-      document.getElementById(modalId).addEventListener('click', (e) => {
+    ['api-modal-u1v1', 'delete-modal-c5d5', 'playlist-remove-modal-i8j8', 'create-pl-modal-q2r2'].forEach(function(modalId) {
+      document.getElementById(modalId).addEventListener('click', function(e) {
         if (e.target.id === modalId) {
           document.getElementById(modalId).classList.add('hidden');
         }
@@ -2374,9 +2529,17 @@ Respond ONLY with this exact JSON structure:
       checkAIKeyBanner();
 
       // Restore saved Gemini key into input if modal opens
-      const savedGeminiKey = localStorage.getItem('gemini_api_key');
+      var savedGeminiKey = localStorage.getItem('gemini_api_key');
       if (savedGeminiKey && document.getElementById('gemini-key-input')) {
         document.getElementById('gemini-key-input').value = savedGeminiKey;
+      }
+
+      // Initial log entries
+      addLog('YouTube Studio Manager initialized', 'info');
+      if (state.token) {
+        addLog('Restored session from localStorage', 'success');
+      } else {
+        addLog('No active session — connect your YouTube account to begin', 'info');
       }
     })();
   </script>
