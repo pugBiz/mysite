@@ -1012,6 +1012,52 @@
     }
 
     // ============================================================
+    // FRAME PIXEL ANALYSIS (local canvas-based color/brightness)
+    // ============================================================
+    function analyzeFramePixels(dataUrl) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = 64; // downsample for speed
+          canvas.height = 36;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, 64, 36);
+          const data = ctx.getImageData(0, 0, 64, 36).data;
+
+          let r = 0, g = 0, b = 0, brightness = 0;
+          const total = 64 * 36;
+          for (let i = 0; i < data.length; i += 4) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+            brightness += (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+          }
+          r = Math.round(r / total);
+          g = Math.round(g / total);
+          b = Math.round(b / total);
+          brightness = Math.round(brightness / total);
+
+          // Classify dominant color tone
+          let colorTone = 'neutral';
+          if (r > g + 40 && r > b + 40) colorTone = 'warm/red-dominant (possibly indoor, fire, sunset)';
+          else if (g > r + 30 && g > b + 20) colorTone = 'green-dominant (possibly outdoor, nature, plants)';
+          else if (b > r + 30 && b > g + 20) colorTone = 'blue-dominant (possibly sky, water, tech/screen)';
+          else if (r > 180 && g > 180 && b > 180) colorTone = 'very bright/white (possibly screen recording, whiteboard, bright studio)';
+          else if (r < 60 && g < 60 && b < 60) colorTone = 'very dark (possibly night scene, dark studio, cinematic)';
+          else if (r > 150 && g > 120 && b < 80) colorTone = 'warm golden (possibly vlog, lifestyle, food, cooking)';
+
+          // Brightness label
+          let brightnessLabel = brightness < 60 ? 'dark/low-light' : brightness < 130 ? 'medium-lit' : 'bright/well-lit';
+
+          resolve(`Color tone: ${colorTone}. Brightness: ${brightnessLabel} (avg ${brightness}/255). RGB avg: (${r},${g},${b}).`);
+        };
+        img.onerror = () => resolve('Frame analysis unavailable.');
+        img.src = dataUrl;
+      });
+    }
+
+    // ============================================================
     // FRAME STRIP PREVIEW
     // ============================================================
     function renderFrameStrip(frames) {
@@ -1056,7 +1102,7 @@
     }
 
     // ============================================================
-    // AI GENERATION — VIDEO FRAME EXTRACTION + VISION PIPELINE
+    // AI GENERATION — VIDEO FRAME EXTRACTION + LOCAL ANALYSIS PIPELINE
     // ============================================================
     const aiBtn = document.getElementById('ai-gen-btn-q3r4');
     aiBtn.addEventListener('click', async () => {
@@ -1082,66 +1128,70 @@
           throw frameErr;
         }
 
-        showNotification(`Captured ${frames.length} frames — sending to AI vision...`, 'info');
+        showNotification(`Captured ${frames.length} frames — analyzing visuals...`, 'info');
 
-        // Update button text for AI analysis phase
+        // --- STEP 2: Show frame strip preview ---
+        renderFrameStrip(frames);
+
+        // --- STEP 3: Analyze each frame's pixels locally ---
+        aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Analyzing frames...';
+        const frameDescriptions = await Promise.all(frames.map((f, i) =>
+          analyzeFramePixels(f).then(desc => `Frame ${i+1} (at ${Math.round((0.10 + i * 0.15) * 100)}% of video): ${desc}`)
+        ));
+
+        const frameReport = frameDescriptions.join('\n');
+        const filename = window.selectedVideoFile ? window.selectedVideoFile.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') : 'unknown video';
+        const playlistNames = state.playlists.map(p => p.snippet?.title || p.name || '').filter(Boolean);
+        const playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
+
+        // --- STEP 4: Call AppSDK.ai.chat() with a PLAIN STRING for content ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> AI analyzing video...';
 
-        // --- STEP 2: Build multimodal message with frames ---
-        const playlistNames = state.playlists.map(p => p.snippet?.title || p.name || '').filter(Boolean);
-        const playlistList = playlistNames.length ? playlistNames : ['Tech Tutorials', 'Vlogs', 'Product Reviews', 'How-To Guides', 'Gaming', 'Lifestyle', 'Finance Tips', 'Fitness'];
-
-        const contentArray = [
-          {
-            type: 'text',
-            text: `You are a YouTube SEO expert. Analyze the following ${frames.length} frames sampled evenly throughout a video and generate optimized YouTube metadata.
-
-Based ONLY on what you can visually observe in these frames (subject matter, setting, activities, people, objects, text visible on screen, overall theme), generate:
-
-1. An engaging YouTube title (max 60 chars, front-load the main keyword)
-2. A compelling description (3 paragraphs: hook paragraph, detailed what-you'll-learn/see paragraph, CTA paragraph — include 5+ relevant hashtags at the very end)
-3. 10 highly specific SEO-optimized tags (comma separated, mix of broad and long-tail)
-4. The single most appropriate playlist from this list: ${JSON.stringify(playlistList)}
-
-Respond ONLY in valid JSON with exactly these keys:
-{"title": "...", "description": "...", "tags": "...", "playlist": "..."}`
-          },
-          ...frames.map((dataUrl, i) => ({
-            type: 'image_url',
-            image_url: {
-              url: dataUrl,
-              detail: 'low'
-            }
-          }))
-        ];
-
-        // --- STEP 3: Send to AI vision ---
         const response = await AppSDK.ai.chat({
           messages: [
             {
+              role: 'system',
+              content: 'You are a YouTube SEO expert. You will be given a video filename and a visual analysis of frames sampled throughout the video (color tones, brightness, scene characteristics). Use these signals to infer the video topic and generate optimized YouTube metadata. Always respond with valid JSON only — no markdown, no explanation, no code fences.'
+            },
+            {
               role: 'user',
-              content: contentArray
+              content: `Video filename: "${filename}"
+
+Visual frame analysis (6 frames sampled evenly throughout the video):
+${frameReport}
+
+Based on the filename and visual characteristics above, generate:
+1. An engaging YouTube title (max 60 chars, front-load the main keyword)
+2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)
+3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)
+4. The single most appropriate playlist from: [${playlistList}]
+
+Respond ONLY with this exact JSON structure:
+{"title": "...", "description": "...", "tags": "...", "playlist": "..."}`
             }
           ]
         });
 
-        // --- STEP 4: Parse and populate fields ---
-        let jsonStr = response;
-        if (typeof response === 'object' && response.content) jsonStr = response.content;
-        if (typeof jsonStr === 'string') {
-          jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-        }
+        // --- STEP 5: Parse response.content (not response directly) ---
+        let rawText = (response && response.content) ? response.content : String(response);
+
+        // Strip any accidental markdown code fences
+        rawText = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
         let parsed;
         try {
-          parsed = JSON.parse(jsonStr);
+          parsed = JSON.parse(rawText);
         } catch (e) {
-          const match = jsonStr.match(/\{[\s\S]*\}/);
-          if (match) parsed = JSON.parse(match[0]);
-          else throw new Error('AI returned an unexpected format. Try again.');
+          // Try to extract a JSON object from within the string
+          const match = rawText.match(/\{[\s\S]*\}/);
+          if (match) {
+            parsed = JSON.parse(match[0]);
+          } else {
+            throw new Error('AI returned unexpected format. Please try again.');
+          }
         }
 
-        // Populate form fields
+        // --- STEP 6: Populate form fields ---
         const titleEl = document.getElementById('vid-title-y5z6');
         const descEl = document.getElementById('vid-desc-a7b8');
         const tagsEl = document.getElementById('vid-tags-c9d0');
@@ -1160,9 +1210,6 @@ Respond ONLY in valid JSON with exactly these keys:
           );
           if (matchOpt) playlistEl.value = matchOpt.value;
         }
-
-        // --- STEP 5: Show frame strip preview under the upload zone ---
-        renderFrameStrip(frames);
 
         showNotification('AI generated your video metadata from visual content!', 'success');
 
