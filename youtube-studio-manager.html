@@ -126,6 +126,11 @@
     .log-msg.warning { color: #f0b400; }
     .log-msg.info { color: #3ea6ff; }
 
+    .quick-pick-btn { padding: 4px 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 6px; color: #aaa; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+    .quick-pick-btn:hover { border-color: #ff0000; color: #fff; }
+    .best-time-btn { padding: 4px 10px; background: #1a2a1a; border: 1px solid #2ba640; border-radius: 6px; color: #2ba640; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+    .best-time-btn:hover { background: #2ba640; color: #fff; }
+
     @media (max-width: 767px) {
       .sidebar { transform: translateX(-100%); position: fixed; z-index: 40; }
       .sidebar.open { transform: translateX(0); }
@@ -298,262 +303,286 @@
               <label data-id="77" class="block text-sm font-medium text-yt-muted mb-1.5">Description</label>
               <textarea data-id="78" id="vid-desc-a7b8" rows="4" placeholder="Enter video description..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors resize-none"></textarea>
             </div>
-            <div data-id="79">
-              <label data-id="80" class="block text-sm font-medium text-yt-muted mb-1.5">Tags</label>
-              <input data-id="81" id="vid-tags-c9d0" type="text" placeholder="tag1, tag2, tag3..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors" />
+            <!-- Auto-Add Links -->
+            <div data-id="79" style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+              <button data-id="80" type="button" id="auto-links-btn" style="
+                display:flex; align-items:center; gap:6px; padding:7px 14px;
+                background:#1a1f2a; border:1px solid #3ea6ff; border-radius:8px;
+                color:#3ea6ff; font-size:12px; font-weight:500; cursor:pointer;
+                transition:all 0.2s;
+              ">
+                🔗 Auto-Add Links
+              </button>
+              <span data-id="81" style="color:#717171; font-size:11px;">Finds links from similar videos in your channel and appends them to description</span>
             </div>
-            <div data-id="82" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div data-id="83">
-                <label data-id="84" class="block text-sm font-medium text-yt-muted mb-1.5">Playlist</label>
-                <select data-id="85" id="vid-playlist-e1f2" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors appearance-none cursor-pointer">
-                  <option data-id="86" value="">Select playlist...</option>
+            <div data-id="82" id="auto-links-result" style="display:none; margin-top:8px; background:#1a1f2a; border:1px solid #3ea6ff; border-radius:8px; padding:10px 14px; font-size:12px; color:#ccc;"></div>
+            <div data-id="83">
+              <label data-id="84" class="block text-sm font-medium text-yt-muted mb-1.5">Tags</label>
+              <input data-id="85" id="vid-tags-c9d0" type="text" placeholder="tag1, tag2, tag3..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors" />
+            </div>
+            <div data-id="86" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div data-id="87">
+                <label data-id="88" class="block text-sm font-medium text-yt-muted mb-1.5">Playlist</label>
+                <select data-id="89" id="vid-playlist-e1f2" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors appearance-none cursor-pointer">
+                  <option data-id="90" value="">Select playlist...</option>
                 </select>
               </div>
-              <div data-id="87">
-                <label data-id="88" class="block text-sm font-medium text-yt-muted mb-1.5">Schedule</label>
-                <div data-id="89" class="flex items-center gap-3">
-                  <div data-id="90" id="schedule-toggle-g3h4" class="toggle-switch" role="switch" aria-checked="false" tabindex="0"></div>
-                  <span data-id="91" id="schedule-label-i5j6" class="text-sm text-yt-muted">Publish Immediately</span>
+              <div data-id="91">
+                <label data-id="92" class="block text-sm font-medium text-yt-muted mb-1.5">Schedule</label>
+                <div data-id="93" class="flex items-center gap-3">
+                  <div data-id="94" id="schedule-toggle-g3h4" class="toggle-switch" role="switch" aria-checked="false" tabindex="0"></div>
+                  <span data-id="95" id="schedule-label-i5j6" class="text-sm text-yt-muted">Publish Immediately</span>
                 </div>
-                <div data-id="92" id="schedule-picker-k7l8" class="hidden mt-3 flex flex-col sm:flex-row gap-2">
-                  <input data-id="93" id="schedule-date-m9n0" type="date" value="2026-08-22" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
-                  <input data-id="94" id="schedule-time-o1p2" type="time" value="12:00" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
+                <div data-id="96" id="schedule-picker-k7l8" class="hidden mt-3 flex flex-col gap-2">
+                  <!-- Quick Pick Buttons -->
+                  <div data-id="97" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+                    <span data-id="98" style="color:#717171; font-size:11px; align-self:center; margin-right:2px;">Quick pick:</span>
+                    <button data-id="99" type="button" id="quick-pick-3" class="quick-pick-btn">+3 days</button>
+                    <button data-id="100" type="button" id="quick-pick-7" class="quick-pick-btn">+7 days</button>
+                    <button data-id="101" type="button" id="quick-pick-14" class="quick-pick-btn">+14 days</button>
+                    <button data-id="102" type="button" id="quick-pick-best" class="best-time-btn">⚡ Best Time</button>
+                  </div>
+                  <div data-id="103" id="schedule-suggestion" style="display:none; background:#1a2a1a; border:1px solid #2ba640; border-radius:6px; padding:7px 10px; margin-bottom:8px; font-size:11px; color:#2ba640;"></div>
+                  <div data-id="104" class="flex flex-col sm:flex-row gap-2">
+                    <input data-id="105" id="schedule-date-m9n0" type="date" value="2026-08-22" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
+                    <input data-id="106" id="schedule-time-o1p2" type="time" value="12:00" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <!-- Action Buttons -->
-          <div data-id="95" class="flex flex-col sm:flex-row gap-3 mt-6">
-            <button data-id="96" id="ai-gen-btn-q3r4" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
-              <span data-id="97">✨</span> Generate with AI
+          <div data-id="107" class="flex flex-col sm:flex-row gap-3 mt-6">
+            <button data-id="108" id="ai-gen-btn-q3r4" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
+              <span data-id="109">✨</span> Generate with AI
             </button>
-            <button data-id="98" id="add-queue-btn-s5t6" class="bg-yt-blue hover:opacity-90 text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
-              <i data-id="99" data-lucide="plus" class="w-4 h-4"></i> Add to Queue
+            <button data-id="110" id="add-queue-btn-s5t6" class="bg-yt-blue hover:opacity-90 text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
+              <i data-id="111" data-lucide="plus" class="w-4 h-4"></i> Add to Queue
             </button>
           </div>
         </div>
 
         <!-- Upload Queue -->
-        <div data-id="100" class="bg-yt-surface rounded-xl p-5 md:p-6 border border-yt-border">
-          <h3 data-id="101" class="text-base font-semibold text-white mb-4 flex items-center gap-2">
-            <i data-id="102" data-lucide="list-ordered" class="w-5 h-5 text-yt-blue"></i>
+        <div data-id="112" class="bg-yt-surface rounded-xl p-5 md:p-6 border border-yt-border">
+          <h3 data-id="113" class="text-base font-semibold text-white mb-4 flex items-center gap-2">
+            <i data-id="114" data-lucide="list-ordered" class="w-5 h-5 text-yt-blue"></i>
             Upload Queue
-            <span data-id="103" id="queue-count-u7v8" class="text-xs bg-yt-card text-yt-muted px-2 py-0.5 rounded-full">0 videos</span>
+            <span data-id="115" id="queue-count-u7v8" class="text-xs bg-yt-card text-yt-muted px-2 py-0.5 rounded-full">0 videos</span>
           </h3>
-          <div data-id="104" id="queue-list-w9x0" class="space-y-3">
+          <div data-id="116" id="queue-list-w9x0" class="space-y-3">
           </div>
         </div>
       </div>
 
       <!-- TAB 2: PERFORMANCE -->
-      <div data-id="105" id="tab-performance" class="tab-content relative">
-        <div data-id="106" id="perf-demo-banner" class="demo-banner hidden">
-          <span data-id="107">⚠️</span>
-          <span data-id="108">Demo Mode — <button data-id="109" id="demo-connect-perf" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+      <div data-id="117" id="tab-performance" class="tab-content relative">
+        <div data-id="118" id="perf-demo-banner" class="demo-banner hidden">
+          <span data-id="119">⚠️</span>
+          <span data-id="120">Demo Mode — <button data-id="121" id="demo-connect-perf" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
         </div>
         <!-- Stats Row -->
-        <div data-id="110" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div data-id="111" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="112" class="flex items-center gap-3 mb-2">
-              <div data-id="113" class="w-10 h-10 rounded-lg bg-yt-red/15 flex items-center justify-center"><i data-id="114" data-lucide="eye" class="w-5 h-5 text-yt-red"></i></div>
+        <div data-id="122" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div data-id="123" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="124" class="flex items-center gap-3 mb-2">
+              <div data-id="125" class="w-10 h-10 rounded-lg bg-yt-red/15 flex items-center justify-center"><i data-id="126" data-lucide="eye" class="w-5 h-5 text-yt-red"></i></div>
             </div>
-            <p data-id="115" id="stat-views" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="847293">0</p>
-            <p data-id="116" class="text-xs text-yt-muted mt-1">Total Views</p>
-            <div data-id="117" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="118" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="119" id="stat-views-trend">+12.4%</span> this month</div>
+            <p data-id="127" id="stat-views" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="847293">0</p>
+            <p data-id="128" class="text-xs text-yt-muted mt-1">Total Views</p>
+            <div data-id="129" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="130" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="131" id="stat-views-trend">+12.4%</span> this month</div>
           </div>
-          <div data-id="120" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="121" class="flex items-center gap-3 mb-2">
-              <div data-id="122" class="w-10 h-10 rounded-lg bg-yt-blue/15 flex items-center justify-center"><i data-id="123" data-lucide="clock" class="w-5 h-5 text-yt-blue"></i></div>
+          <div data-id="132" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="133" class="flex items-center gap-3 mb-2">
+              <div data-id="134" class="w-10 h-10 rounded-lg bg-yt-blue/15 flex items-center justify-center"><i data-id="135" data-lucide="clock" class="w-5 h-5 text-yt-blue"></i></div>
             </div>
-            <p data-id="124" id="stat-watchtime" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="42180">0</p>
-            <p data-id="125" class="text-xs text-yt-muted mt-1">Watch Time (hrs)</p>
-            <div data-id="126" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="127" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="128" id="stat-wt-trend">+8.1%</span> this month</div>
+            <p data-id="136" id="stat-watchtime" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="42180">0</p>
+            <p data-id="137" class="text-xs text-yt-muted mt-1">Watch Time (hrs)</p>
+            <div data-id="138" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="139" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="140" id="stat-wt-trend">+8.1%</span> this month</div>
           </div>
-          <div data-id="129" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="130" class="flex items-center gap-3 mb-2">
-              <div data-id="131" class="w-10 h-10 rounded-lg bg-yt-green/15 flex items-center justify-center"><i data-id="132" data-lucide="thumbs-up" class="w-5 h-5 text-yt-green"></i></div>
+          <div data-id="141" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="142" class="flex items-center gap-3 mb-2">
+              <div data-id="143" class="w-10 h-10 rounded-lg bg-yt-green/15 flex items-center justify-center"><i data-id="144" data-lucide="thumbs-up" class="w-5 h-5 text-yt-green"></i></div>
             </div>
-            <p data-id="133" id="stat-likes" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="23841">0</p>
-            <p data-id="134" class="text-xs text-yt-muted mt-1">Likes</p>
-            <div data-id="135" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="136" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="137" id="stat-likes-trend">+15.2%</span> this month</div>
+            <p data-id="145" id="stat-likes" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="23841">0</p>
+            <p data-id="146" class="text-xs text-yt-muted mt-1">Likes</p>
+            <div data-id="147" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="148" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="149" id="stat-likes-trend">+15.2%</span> this month</div>
           </div>
-          <div data-id="138" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="139" class="flex items-center gap-3 mb-2">
-              <div data-id="140" class="w-10 h-10 rounded-lg bg-yt-yellow/15 flex items-center justify-center"><i data-id="141" data-lucide="message-circle" class="w-5 h-5 text-yt-yellow"></i></div>
+          <div data-id="150" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="151" class="flex items-center gap-3 mb-2">
+              <div data-id="152" class="w-10 h-10 rounded-lg bg-yt-yellow/15 flex items-center justify-center"><i data-id="153" data-lucide="message-circle" class="w-5 h-5 text-yt-yellow"></i></div>
             </div>
-            <p data-id="142" id="stat-comments" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="4729">0</p>
-            <p data-id="143" class="text-xs text-yt-muted mt-1">Comments</p>
-            <div data-id="144" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="145" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="146" id="stat-comments-trend">+6.8%</span> this month</div>
+            <p data-id="154" id="stat-comments" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="4729">0</p>
+            <p data-id="155" class="text-xs text-yt-muted mt-1">Comments</p>
+            <div data-id="156" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="157" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="158" id="stat-comments-trend">+6.8%</span> this month</div>
           </div>
         </div>
 
         <!-- Charts Row 1 -->
-        <div data-id="147" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-          <div data-id="148" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="149" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="150" data-lucide="activity" class="w-4 h-4 text-yt-red"></i> Views Over Time (30 Days)
+        <div data-id="159" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <div data-id="160" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="161" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="162" data-lucide="activity" class="w-4 h-4 text-yt-red"></i> Views Over Time (30 Days)
             </h3>
-            <div data-id="151" class="relative h-56 md:h-64"><canvas data-id="152" id="chart-views-a1b1"></canvas></div>
+            <div data-id="163" class="relative h-56 md:h-64"><canvas data-id="164" id="chart-views-a1b1"></canvas></div>
           </div>
-          <div data-id="153" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="154" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="155" data-lucide="bar-chart-horizontal" class="w-4 h-4 text-yt-orange"></i> Top Videos by Views
+          <div data-id="165" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="166" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="167" data-lucide="bar-chart-horizontal" class="w-4 h-4 text-yt-orange"></i> Top Videos by Views
             </h3>
-            <div data-id="156" class="relative h-56 md:h-64"><canvas data-id="157" id="chart-topvids-c2d2"></canvas></div>
+            <div data-id="168" class="relative h-56 md:h-64"><canvas data-id="169" id="chart-topvids-c2d2"></canvas></div>
           </div>
         </div>
 
         <!-- Charts Row 2 -->
-        <div data-id="158" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div data-id="159" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="160" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="161" data-lucide="users" class="w-4 h-4 text-yt-blue"></i> Audience Retention
+        <div data-id="170" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div data-id="171" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="172" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="173" data-lucide="users" class="w-4 h-4 text-yt-blue"></i> Audience Retention
             </h3>
-            <div data-id="162" class="relative h-56 md:h-64"><canvas data-id="163" id="chart-retention-e3f3"></canvas></div>
+            <div data-id="174" class="relative h-56 md:h-64"><canvas data-id="175" id="chart-retention-e3f3"></canvas></div>
           </div>
-          <div data-id="164" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="165" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="166" data-lucide="pie-chart" class="w-4 h-4 text-yt-green"></i> Engagement Breakdown
+          <div data-id="176" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="177" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="178" data-lucide="pie-chart" class="w-4 h-4 text-yt-green"></i> Engagement Breakdown
             </h3>
-            <div data-id="167" class="relative h-56 md:h-64"><canvas data-id="168" id="chart-engagement-g4h4"></canvas></div>
+            <div data-id="179" class="relative h-56 md:h-64"><canvas data-id="180" id="chart-engagement-g4h4"></canvas></div>
           </div>
         </div>
       </div>
 
       <!-- TAB 3: LOW PERFORMERS -->
-      <div data-id="169" id="tab-lowperformers" class="tab-content relative">
-        <div data-id="170" id="lp-demo-banner" class="demo-banner hidden">
-          <span data-id="171">⚠️</span>
-          <span data-id="172">Demo Mode — <button data-id="173" id="demo-connect-lp" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+      <div data-id="181" id="tab-lowperformers" class="tab-content relative">
+        <div data-id="182" id="lp-demo-banner" class="demo-banner hidden">
+          <span data-id="183">⚠️</span>
+          <span data-id="184">Demo Mode — <button data-id="185" id="demo-connect-lp" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
         </div>
         <!-- Header -->
-        <div data-id="174" class="mb-6">
-          <h2 data-id="175" class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">⚠️ Low-Performing Videos</h2>
-          <p data-id="176" class="text-sm text-yt-muted">Videos underperforming compared to your channel average</p>
+        <div data-id="186" class="mb-6">
+          <h2 data-id="187" class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">⚠️ Low-Performing Videos</h2>
+          <p data-id="188" class="text-sm text-yt-muted">Videos underperforming compared to your channel average</p>
         </div>
 
         <!-- Filter Bar -->
-        <div data-id="177" class="bg-yt-surface rounded-xl p-4 mb-6 border border-yt-border flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <select data-id="178" id="lp-period-i5j5" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-            <option data-id="179" value="30">Last 30 days</option>
-            <option data-id="180" value="60">Last 60 days</option>
-            <option data-id="181" value="90">Last 90 days</option>
+        <div data-id="189" class="bg-yt-surface rounded-xl p-4 mb-6 border border-yt-border flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <select data-id="190" id="lp-period-i5j5" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
+            <option data-id="191" value="30">Last 30 days</option>
+            <option data-id="192" value="60">Last 60 days</option>
+            <option data-id="193" value="90">Last 90 days</option>
           </select>
-          <select data-id="182" id="lp-sort-k6l6" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-            <option data-id="183" value="views">Sort by Views</option>
-            <option data-id="184" value="retention">Sort by Retention</option>
-            <option data-id="185" value="likes">Sort by Likes</option>
+          <select data-id="194" id="lp-sort-k6l6" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
+            <option data-id="195" value="views">Sort by Views</option>
+            <option data-id="196" value="retention">Sort by Retention</option>
+            <option data-id="197" value="likes">Sort by Likes</option>
           </select>
-          <button data-id="186" id="analyze-btn-m7n7" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-4 py-2 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
-            <i data-id="187" data-lucide="scan-search" class="w-4 h-4"></i> Analyze Channel
+          <button data-id="198" id="analyze-btn-m7n7" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-4 py-2 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
+            <i data-id="199" data-lucide="scan-search" class="w-4 h-4"></i> Analyze Channel
           </button>
         </div>
 
         <!-- Low Performer Cards -->
-        <div data-id="188" id="lp-grid-o8p8" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div data-id="200" id="lp-grid-o8p8" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         </div>
       </div>
 
       <!-- TAB 4: PLAYLISTS -->
-      <div data-id="189" id="tab-playlists" class="tab-content relative">
-        <div data-id="190" id="pl-demo-banner" class="demo-banner hidden">
-          <span data-id="191">⚠️</span>
-          <span data-id="192">Demo Mode — <button data-id="193" id="demo-connect-pl" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+      <div data-id="201" id="tab-playlists" class="tab-content relative">
+        <div data-id="202" id="pl-demo-banner" class="demo-banner hidden">
+          <span data-id="203">⚠️</span>
+          <span data-id="204">Demo Mode — <button data-id="205" id="demo-connect-pl" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
         </div>
-        <div data-id="194" class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
-          <div data-id="195">
-            <h2 data-id="196" class="text-xl md:text-2xl font-bold text-white">Playlists</h2>
-            <p data-id="197" class="text-sm text-yt-muted">Manage your channel playlists</p>
+        <div data-id="206" class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+          <div data-id="207">
+            <h2 data-id="208" class="text-xl md:text-2xl font-bold text-white">Playlists</h2>
+            <p data-id="209" class="text-sm text-yt-muted">Manage your channel playlists</p>
           </div>
-          <button data-id="198" id="create-playlist-btn-q9r9" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-5 py-2.5 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
-            <i data-id="199" data-lucide="plus" class="w-4 h-4"></i> Create Playlist
+          <button data-id="210" id="create-playlist-btn-q9r9" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-5 py-2.5 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
+            <i data-id="211" data-lucide="plus" class="w-4 h-4"></i> Create Playlist
           </button>
         </div>
-        <div data-id="200" id="playlist-grid-s0t0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div data-id="212" id="playlist-grid-s0t0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         </div>
       </div>
 
     </main>
 
-    <footer data-id="201" class="border-t border-yt-border px-8 py-5 text-center text-xs text-yt-dimmed">
+    <footer data-id="213" class="border-t border-yt-border px-8 py-5 text-center text-xs text-yt-dimmed">
       Made by Copilot
     </footer>
   </div>
 
   <!-- Connect YouTube API Modal -->
-  <div data-id="202" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="203" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
-      <button data-id="204" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
-        <i data-id="205" data-lucide="x" class="w-5 h-5"></i>
+  <div data-id="214" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="215" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
+      <button data-id="216" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
+        <i data-id="217" data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <div data-id="206" class="text-center mb-6">
-        <div data-id="207" class="w-14 h-14 rounded-full bg-yt-red/15 flex items-center justify-center mx-auto mb-4">
-          <i data-id="208" data-lucide="youtube" class="w-7 h-7 text-yt-red"></i>
+      <div data-id="218" class="text-center mb-6">
+        <div data-id="219" class="w-14 h-14 rounded-full bg-yt-red/15 flex items-center justify-center mx-auto mb-4">
+          <i data-id="220" data-lucide="youtube" class="w-7 h-7 text-yt-red"></i>
         </div>
-        <h3 data-id="209" class="text-xl font-bold text-white">Connect Your YouTube Channel</h3>
-        <p data-id="210" class="text-sm text-yt-muted mt-1">Follow these steps to connect your API</p>
+        <h3 data-id="221" class="text-xl font-bold text-white">Connect Your YouTube Channel</h3>
+        <p data-id="222" class="text-sm text-yt-muted mt-1">Follow these steps to connect your API</p>
       </div>
-      <div data-id="211" class="space-y-3 mb-6">
-        <div data-id="212" class="flex gap-3 items-start">
-          <span data-id="213" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-          <p data-id="214" class="text-sm text-yt-muted">Go to Google Cloud Console and create a project</p>
+      <div data-id="223" class="space-y-3 mb-6">
+        <div data-id="224" class="flex gap-3 items-start">
+          <span data-id="225" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+          <p data-id="226" class="text-sm text-yt-muted">Go to Google Cloud Console and create a project</p>
         </div>
-        <div data-id="215" class="flex gap-3 items-start">
-          <span data-id="216" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-          <p data-id="217" class="text-sm text-yt-muted">Enable YouTube Data API v3 &amp; YouTube Analytics API</p>
+        <div data-id="227" class="flex gap-3 items-start">
+          <span data-id="228" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+          <p data-id="229" class="text-sm text-yt-muted">Enable YouTube Data API v3 &amp; YouTube Analytics API</p>
         </div>
-        <div data-id="218" class="flex gap-3 items-start">
-          <span data-id="219" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-          <p data-id="220" class="text-sm text-yt-muted">Create OAuth 2.0 credentials</p>
+        <div data-id="230" class="flex gap-3 items-start">
+          <span data-id="231" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+          <p data-id="232" class="text-sm text-yt-muted">Create OAuth 2.0 credentials</p>
         </div>
-        <div data-id="221" class="flex gap-3 items-start">
-          <span data-id="222" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
-          <p data-id="223" class="text-sm text-yt-muted">Paste your Client ID and (optional) API Key below</p>
+        <div data-id="233" class="flex gap-3 items-start">
+          <span data-id="234" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
+          <p data-id="235" class="text-sm text-yt-muted">Paste your Client ID and (optional) API Key below</p>
         </div>
       </div>
-      <input data-id="224" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <input data-id="225" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
+      <input data-id="236" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <input data-id="237" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
 
-      <button data-id="226" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
-        <i data-id="227" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
+      <button data-id="238" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
+        <i data-id="239" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
       </button>
     </div>
   </div>
 
   <!-- Gemini API Key Modal -->
-  <div data-id="228" id="gemini-key-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center modal-overlay p-4">
-    <div data-id="229" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:420px; max-width:90vw;">
-      <div data-id="230" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 data-id="231" style="font-size:17px; font-weight:700;">🔑 Gemini API Key</h3>
-        <button data-id="232" id="gemini-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
+  <div data-id="240" id="gemini-key-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center modal-overlay p-4">
+    <div data-id="241" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:420px; max-width:90vw;">
+      <div data-id="242" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h3 data-id="243" style="font-size:17px; font-weight:700;">🔑 Gemini API Key</h3>
+        <button data-id="244" id="gemini-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
       </div>
-      <p data-id="233" style="color:#aaa; font-size:13px; margin-bottom:16px;">Enter your Google AI Studio API key to enable AI-powered video metadata generation.</p>
-      <label data-id="234" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">API Key</label>
-      <input data-id="235" type="password" id="gemini-key-modal-input" placeholder="AIza..." style="
+      <p data-id="245" style="color:#aaa; font-size:13px; margin-bottom:16px;">Enter your Google AI Studio API key to enable AI-powered video metadata generation.</p>
+      <label data-id="246" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">API Key</label>
+      <input data-id="247" type="password" id="gemini-key-modal-input" placeholder="AIza..." style="
         width:100%; padding:10px 12px; background:#2a2a2a; border:1px solid #444;
         border-radius:8px; color:#fff; font-size:14px; margin-bottom:6px; box-sizing:border-box;
       "/>
-      <p data-id="236" style="color:#717171; font-size:11px; margin-bottom:20px;">
-        Get your free key at <strong data-id="237" style="color:#3ea6ff;">aistudio.google.com</strong> → Get API Key. Stored in localStorage only — never sent to any server.
+      <p data-id="248" style="color:#717171; font-size:11px; margin-bottom:20px;">
+        Get your free key at <strong data-id="249" style="color:#3ea6ff;">aistudio.google.com</strong> → Get API Key. Stored in localStorage only — never sent to any server.
       </p>
 
-      <label data-id="238" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">Gemini Model</label>
-      <select data-id="239" id="gemini-model-select" style="
+      <label data-id="250" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">Gemini Model</label>
+      <select data-id="251" id="gemini-model-select" style="
         width:100%; padding:10px 12px; background:#2a2a2a; border:1px solid #444;
         border-radius:8px; color:#fff; font-size:14px; margin-bottom:20px; cursor:pointer; box-sizing:border-box;
       ">
-        <option data-id="240" value="gemini-3.7-flash">gemini-3.7-flash</option>
-        <option data-id="241" value="gemini-3.6-flash">gemini-3.6-flash</option>
-        <option data-id="242" value="gemini-3.5-flash">gemini-3.5-flash</option>
-        <option data-id="243" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
+        <option data-id="252" value="gemini-3.7-flash">gemini-3.7-flash</option>
+        <option data-id="253" value="gemini-3.6-flash">gemini-3.6-flash</option>
+        <option data-id="254" value="gemini-3.5-flash">gemini-3.5-flash</option>
+        <option data-id="255" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
       </select>
 
-      <div data-id="244" style="display:flex; gap:10px;">
-        <button data-id="245" id="gemini-save-btn" style="
+      <div data-id="256" style="display:flex; gap:10px;">
+        <button data-id="257" id="gemini-save-btn" style="
           flex:1; padding:10px; background:#ff0000; border:none; border-radius:8px;
           color:#fff; font-size:14px; font-weight:600; cursor:pointer; transition:background 0.2s;
         ">Save Key</button>
-        <button data-id="246" id="gemini-clear-btn" style="
+        <button data-id="258" id="gemini-clear-btn" style="
           padding:10px 16px; background:#2a2a2a; border:1px solid #444; border-radius:8px;
           color:#aaa; font-size:14px; cursor:pointer;
         ">Clear</button>
@@ -562,89 +591,89 @@
   </div>
 
   <!-- Delete Confirmation Modal -->
-  <div data-id="247" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="248" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <div data-id="249" class="flex items-center gap-3 mb-4">
-        <div data-id="250" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
-          <i data-id="251" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
+  <div data-id="259" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="260" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <div data-id="261" class="flex items-center gap-3 mb-4">
+        <div data-id="262" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
+          <i data-id="263" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
         </div>
-        <h3 data-id="252" class="text-lg font-bold text-white">Delete Video?</h3>
+        <h3 data-id="264" class="text-lg font-bold text-white">Delete Video?</h3>
       </div>
-      <p data-id="253" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
-      <div data-id="254" class="flex gap-3 justify-end">
-        <button data-id="255" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="256" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
+      <p data-id="265" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
+      <div data-id="266" class="flex gap-3 justify-end">
+        <button data-id="267" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="268" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
       </div>
     </div>
   </div>
 
   <!-- Playlist Remove Modal -->
-  <div data-id="257" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="258" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="259" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
-      <div data-id="260" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
+  <div data-id="269" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="270" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="271" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
+      <div data-id="272" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
       </div>
-      <div data-id="261" id="pr-loading" class="hidden text-center py-4"><span data-id="262" class="spinner spinner-red"></span><span data-id="263" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
-      <div data-id="264" class="flex gap-3 justify-end">
-        <button data-id="265" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="266" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
+      <div data-id="273" id="pr-loading" class="hidden text-center py-4"><span data-id="274" class="spinner spinner-red"></span><span data-id="275" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
+      <div data-id="276" class="flex gap-3 justify-end">
+        <button data-id="277" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="278" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
       </div>
     </div>
   </div>
 
   <!-- Create Playlist Modal -->
-  <div data-id="267" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="268" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="269" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
-      <input data-id="270" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <select data-id="271" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-        <option data-id="272" value="public">Public</option>
-        <option data-id="273" value="unlisted">Unlisted</option>
-        <option data-id="274" value="private">Private</option>
+  <div data-id="279" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="280" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="281" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
+      <input data-id="282" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <select data-id="283" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
+        <option data-id="284" value="public">Public</option>
+        <option data-id="285" value="unlisted">Unlisted</option>
+        <option data-id="286" value="private">Private</option>
       </select>
-      <div data-id="275" class="flex gap-3 justify-end">
-        <button data-id="276" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="277" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
+      <div data-id="287" class="flex gap-3 justify-end">
+        <button data-id="288" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="289" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
       </div>
     </div>
   </div>
 
   <!-- Activity Log Panel -->
-  <div data-id="278" id="log-panel" style="
+  <div data-id="290" id="log-panel" style="
     position: fixed; bottom: 0; left: 220px; right: 0; z-index: 999;
     background: #0a0a0a; border-top: 1px solid #333;
     transition: height 0.3s ease; height: 216px; overflow: hidden;
     font-family: 'Inter', monospace; font-size: 12px;
   ">
     <!-- Log Header / Toggle Bar -->
-    <div data-id="279" id="log-toggle" style="
+    <div data-id="291" id="log-toggle" style="
       height: 36px; display: flex; align-items: center; gap: 10px;
       padding: 0 16px; cursor: pointer; user-select: none;
       border-bottom: 1px solid #2a2a2a; background: #111;
     ">
-      <span data-id="280" style="color:#ff4444; font-size:10px;">●</span>
-      <span data-id="281" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
-      <span data-id="282" id="log-count-badge" style="
+      <span data-id="292" style="color:#ff4444; font-size:10px;">●</span>
+      <span data-id="293" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
+      <span data-id="294" id="log-count-badge" style="
         background:#333; color:#aaa; border-radius:10px;
         padding:1px 7px; font-size:10px; min-width:20px; text-align:center;
       ">0</span>
-      <div data-id="283" style="flex:1"></div>
-      <button data-id="284" id="copy-log-btn" style="
+      <div data-id="295" style="flex:1"></div>
+      <button data-id="296" id="copy-log-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s; margin-right:4px;
       ">Copy</button>
-      <button data-id="285" id="log-clear-btn" style="
+      <button data-id="297" id="log-clear-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s;
       ">Clear</button>
-      <span data-id="286" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
+      <span data-id="298" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
     </div>
     <!-- Log Body -->
-    <div data-id="287" id="log-body" style="
+    <div data-id="299" id="log-body" style="
       height: 180px; overflow-y: auto; padding: 8px 16px;
       display: flex; flex-direction: column; gap: 3px;
     ">
-      <div data-id="288" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
+      <div data-id="300" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
     </div>
   </div>
 
@@ -1486,6 +1515,257 @@
     });
 
     // ============================================================
+    // FEATURE 1: AUTO-SCHEDULE QUICK PICKS
+    // ============================================================
+    function setScheduleDays(days) {
+      // Activate the toggle if not already on
+      var toggle = document.getElementById('schedule-toggle-g3h4');
+      var picker = document.getElementById('schedule-picker-k7l8');
+      var label = document.getElementById('schedule-label-i5j6');
+      if (toggle && !toggle.classList.contains('active')) {
+        toggle.classList.add('active');
+        toggle.setAttribute('aria-checked', 'true');
+        if (picker) picker.classList.remove('hidden');
+        if (label) label.textContent = 'Scheduled';
+      }
+
+      var target = new Date();
+      target.setDate(target.getDate() + days);
+      // Set to 12:00 PM by default
+      target.setHours(12, 0, 0, 0);
+
+      var dateInput = document.getElementById('schedule-date-m9n0');
+      var timeInput = document.getElementById('schedule-time-o1p2');
+
+      if (dateInput) {
+        var y = target.getFullYear();
+        var m = String(target.getMonth() + 1).padStart(2, '0');
+        var d = String(target.getDate()).padStart(2, '0');
+        dateInput.value = y + '-' + m + '-' + d;
+      }
+      if (timeInput) timeInput.value = '12:00';
+
+      // Hide best-time suggestion if visible
+      var suggestion = document.getElementById('schedule-suggestion');
+      if (suggestion) suggestion.style.display = 'none';
+
+      addLog('Schedule set to +' + days + ' days: ' + target.toDateString() + ' at 12:00 PM', 'success');
+      showNotification('Scheduled for ' + target.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ' at 12:00 PM', 'success');
+    }
+
+    function setScheduleBestTime() {
+      // Best time heuristic: Tuesday or Thursday, 2 PM or 8 PM
+      // Find the next Tuesday or Thursday from today
+      var toggle = document.getElementById('schedule-toggle-g3h4');
+      var picker = document.getElementById('schedule-picker-k7l8');
+      var label = document.getElementById('schedule-label-i5j6');
+      if (toggle && !toggle.classList.contains('active')) {
+        toggle.classList.add('active');
+        toggle.setAttribute('aria-checked', 'true');
+        if (picker) picker.classList.remove('hidden');
+        if (label) label.textContent = 'Scheduled';
+      }
+
+      var now = new Date();
+      var target = new Date(now);
+      // Find next Tuesday (2) or Thursday (4), whichever comes first
+      var daysUntil = [2, 4].map(function(d) {
+        var diff = (d - now.getDay() + 7) % 7;
+        return diff === 0 ? 7 : diff; // if today, go to next week
+      });
+      var minDiff = Math.min.apply(null, daysUntil);
+      target.setDate(target.getDate() + minDiff);
+      target.setHours(14, 0, 0, 0); // 2 PM
+
+      var dateInput = document.getElementById('schedule-date-m9n0');
+      var timeInput = document.getElementById('schedule-time-o1p2');
+
+      if (dateInput) {
+        var y = target.getFullYear();
+        var m = String(target.getMonth() + 1).padStart(2, '0');
+        var d2 = String(target.getDate()).padStart(2, '0');
+        dateInput.value = y + '-' + m + '-' + d2;
+      }
+      if (timeInput) timeInput.value = '14:00';
+
+      var dayName = target.toLocaleDateString('en-US', { weekday: 'long' });
+      var suggestion = document.getElementById('schedule-suggestion');
+      if (suggestion) {
+        suggestion.style.display = 'block';
+        suggestion.innerHTML = '⚡ <strong>Best time suggested:</strong> ' + dayName + ' ' + target.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at 2:00 PM — Tuesday & Thursday afternoons have the highest YouTube engagement rates.';
+      }
+
+      addLog('Best time set: ' + dayName + ' ' + target.toDateString() + ' at 2:00 PM', 'success');
+      showNotification('Best time: ' + dayName + ' at 2:00 PM', 'success');
+    }
+
+    // Quick pick button event listeners
+    document.getElementById('quick-pick-3').addEventListener('click', function() { setScheduleDays(3); });
+    document.getElementById('quick-pick-7').addEventListener('click', function() { setScheduleDays(7); });
+    document.getElementById('quick-pick-14').addEventListener('click', function() { setScheduleDays(14); });
+    document.getElementById('quick-pick-best').addEventListener('click', function() { setScheduleBestTime(); });
+
+    // ============================================================
+    // FEATURE 2: AUTO-ADD LINKS FROM SIMILAR CHANNEL VIDEOS
+    // ============================================================
+    async function autoAddLinks() {
+      var btn = document.getElementById('auto-links-btn');
+      var resultDiv = document.getElementById('auto-links-result');
+      var titleEl = document.getElementById('vid-title-y5z6');
+      var descEl = document.getElementById('vid-desc-a7b8');
+
+      if (!state.token) {
+        showNotification('Please connect your YouTube account first.', 'error');
+        addLog('Auto-Add Links: no YouTube account connected', 'error');
+        return;
+      }
+
+      var videoTitle = titleEl ? titleEl.value.trim() : '';
+      if (!videoTitle) {
+        showNotification('Please generate or enter a video title first.', 'warning');
+        addLog('Auto-Add Links: no title to search with', 'warning');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Searching similar videos...';
+      addLog('Auto-Add Links: searching channel for videos similar to "' + videoTitle + '"', 'info');
+
+      try {
+        // Step 1: Extract key search terms from title (first 4-5 words or keywords)
+        var searchQuery = videoTitle.split(' ').slice(0, 5).join(' ');
+        addLog('Search query: "' + searchQuery + '"', 'info');
+
+        // Step 2: Search channel videos matching the title keywords
+        var searchRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&type=video&q=' +
+          encodeURIComponent(searchQuery) + '&maxResults=10&order=relevance'
+        );
+
+        var items = (searchRes && searchRes.items) ? searchRes.items : [];
+        addLog('Found ' + items.length + ' similar videos in channel', items.length > 0 ? 'success' : 'warning');
+
+        if (!items.length) {
+          showNotification('No similar videos found in your channel.', 'warning');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        // Step 3: Fetch full video details (description) for each result
+        var videoIds = items.map(function(it) {
+          return it.id && it.id.videoId ? it.id.videoId : null;
+        }).filter(Boolean);
+
+        addLog('Fetching descriptions for ' + videoIds.length + ' videos...', 'info');
+
+        var detailRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + videoIds.join(',')
+        );
+        var detailItems = (detailRes && detailRes.items) ? detailRes.items : [];
+
+        // Step 4: Parse all URLs from descriptions
+        var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>]+/g;
+        var foundLinks = [];
+        var seenUrls = new Set();
+
+        detailItems.forEach(function(video) {
+          var desc = (video.snippet && video.snippet.description) ? video.snippet.description : '';
+          var videoTitle2 = (video.snippet && video.snippet.title) ? video.snippet.title : video.id;
+          var urls = desc.match(urlRegex) || [];
+
+          urls.forEach(function(url) {
+            // Clean trailing punctuation
+            url = url.replace(/[.,;!?]+$/, '');
+            if (seenUrls.has(url)) return;
+            // Skip yt image/thumbnail URLs
+            if (url.includes('ytimg.com') || url.includes('ggpht.com')) return;
+            seenUrls.add(url);
+            foundLinks.push({ url: url, source: videoTitle2 });
+          });
+        });
+
+        addLog('Extracted ' + foundLinks.length + ' unique links from ' + detailItems.length + ' video descriptions', 'success');
+
+        if (!foundLinks.length) {
+          showNotification('No links found in similar video descriptions.', 'warning');
+          addLog('No URLs found in any of the similar video descriptions', 'warning');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        // Step 5: Show preview of found links with checkboxes
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML =
+          '<p style="color:#3ea6ff;font-weight:600;margin-bottom:8px;">🔗 ' + foundLinks.length + ' links found — select which to add:</p>' +
+          '<div id="links-checklist" style="display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;margin-bottom:10px;">' +
+          foundLinks.map(function(link, i) {
+            var shortUrl = link.url.length > 60 ? link.url.substring(0, 60) + '…' : link.url;
+            return '<label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:4px 0;">' +
+              '<input type="checkbox" data-url="' + link.url.replace(/"/g, '&quot;') + '" checked style="margin-top:2px;accent-color:#3ea6ff;" />' +
+              '<span style="flex:1;">' +
+                '<span style="color:#ccc;font-size:11px;display:block;">' + shortUrl + '</span>' +
+                '<span style="color:#717171;font-size:10px;">from: ' + link.source + '</span>' +
+              '</span>' +
+            '</label>';
+          }).join('') +
+          '</div>' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button id="append-links-confirm-btn" style="padding:7px 16px;background:#3ea6ff;border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">✓ Add Selected to Description</button>' +
+            '<button id="append-links-cancel-btn" style="padding:7px 12px;background:#2a2a2a;border:1px solid #444;border-radius:7px;color:#aaa;font-size:12px;cursor:pointer;">Cancel</button>' +
+          '</div>';
+
+        // Bind the confirm and cancel buttons via addEventListener
+        document.getElementById('append-links-confirm-btn').addEventListener('click', function() {
+          appendSelectedLinks();
+        });
+        document.getElementById('append-links-cancel-btn').addEventListener('click', function() {
+          document.getElementById('auto-links-result').style.display = 'none';
+        });
+
+        addLog('Link preview ready — select links to append to description', 'info');
+
+      } catch (e) {
+        addLog('Auto-Add Links error: ' + e.message, 'error');
+        showNotification('Error fetching similar videos: ' + e.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔗 Auto-Add Links';
+      }
+    }
+
+    function appendSelectedLinks() {
+      var descEl = document.getElementById('vid-desc-a7b8');
+      var checkboxes = document.querySelectorAll('#links-checklist input[type="checkbox"]:checked');
+      var selected = Array.from(checkboxes).map(function(cb) { return cb.getAttribute('data-url'); });
+
+      if (!selected.length) {
+        showNotification('No links selected.', 'warning');
+        return;
+      }
+
+      var current = descEl ? descEl.value.trim() : '';
+      var linksBlock = '\n\n🔗 Related Resources:\n' + selected.map(function(u) { return '• ' + u; }).join('\n');
+      if (descEl) descEl.value = current + linksBlock;
+
+      document.getElementById('auto-links-result').style.display = 'none';
+      addLog('Added ' + selected.length + ' links to description', 'success');
+      showNotification(selected.length + ' link(s) added to description!', 'success');
+    }
+
+    // Auto-Add Links button event listener
+    document.getElementById('auto-links-btn').addEventListener('click', function() {
+      autoAddLinks();
+    });
+    document.getElementById('auto-links-btn').addEventListener('mouseover', function() {
+      this.style.background = 'rgba(62,166,255,0.15)';
+    });
+    document.getElementById('auto-links-btn').addEventListener('mouseout', function() {
+      this.style.background = '#1a1f2a';
+    });
+
+    // ============================================================
     // TAB DATA LOADING
     // ============================================================
     function loadTabData(tab) {
@@ -1656,6 +1936,11 @@
       scheduleToggle.setAttribute('aria-checked', isActive);
       schedulePicker.classList.toggle('hidden', !isActive);
       scheduleLabel.textContent = isActive ? 'Scheduled' : 'Publish Immediately';
+      // Hide suggestion when toggling off
+      if (!isActive) {
+        var suggestion = document.getElementById('schedule-suggestion');
+        if (suggestion) suggestion.style.display = 'none';
+      }
     });
 
     // ============================================================
