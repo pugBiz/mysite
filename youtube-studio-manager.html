@@ -644,62 +644,70 @@
 
       <div data-id="290" id="relist-video-info" style="background:#212121; border-radius:10px; padding:12px; margin-bottom:16px; font-size:13px; color:#aaa;"></div>
 
-      <div data-id="291" style="background:#2a1515; border:1px solid #cc0000; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:12px; color:#ffaaaa;">
-        ⚠️ <strong data-id="292">This will permanently delete the original video</strong> from YouTube and remove it from all playlists. A new upload will be prepared in the Upload tab with fresh AI-generated metadata and a new scheduled publish date.
+      <div data-id="291" style="background:#2a1515; border:1px solid #cc0000; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:12px; color:#ffaaaa;">
+        <p data-id="292" style="font-weight:700; font-size:13px; margin-bottom:8px;">⚠️ This will permanently delete the original video from YouTube.</p>
+        <p data-id="293" style="margin-bottom:10px; color:#ffbbbb;">The YouTube API cannot download videos. <strong data-id="294">You must manually save the original file before proceeding</strong> — otherwise it will be gone forever.</p>
+        <a data-id="295" id="relist-studio-link" href="https://studio.youtube.com" target="_blank" style="display:inline-flex; align-items:center; gap:6px; padding:7px 12px; background:#cc0000; border-radius:7px; color:#fff; font-size:12px; font-weight:600; text-decoration:none; margin-bottom:12px; transition:background 0.2s;">
+          📥 Open YouTube Studio to Download Video First →
+        </a>
+        <label data-id="296" style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; color:#ffcccc;">
+          <input data-id="297" type="checkbox" id="relist-confirm-saved" style="margin-top:2px; accent-color:#ff4444; flex-shrink:0;" />
+          <span data-id="298">I have already downloaded and saved the original video file to my computer</span>
+        </label>
       </div>
 
-      <div data-id="293" style="margin-bottom:16px;">
-        <label data-id="294" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">New scheduled date</label>
-        <div data-id="295" style="display:flex; gap:8px; align-items:center;">
-          <input data-id="296" type="date" id="relist-date-input" style="flex:1; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
-          <input data-id="297" type="time" id="relist-time-input" value="12:00" style="width:100px; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
-          <button data-id="298" id="relist-best-time-btn" style="padding:8px 12px; background:#1a2a1a; border:1px solid #2ba640; border-radius:8px; color:#2ba640; font-size:11px; cursor:pointer;">⚡ Best</button>
+      <div data-id="299" style="margin-bottom:16px;">
+        <label data-id="300" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">New scheduled date</label>
+        <div data-id="301" style="display:flex; gap:8px; align-items:center;">
+          <input data-id="302" type="date" id="relist-date-input" style="flex:1; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
+          <input data-id="303" type="time" id="relist-time-input" value="12:00" style="width:100px; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
+          <button data-id="304" id="relist-best-time-btn" style="padding:8px 12px; background:#1a2a1a; border:1px solid #2ba640; border-radius:8px; color:#2ba640; font-size:11px; cursor:pointer;">⚡ Best</button>
         </div>
       </div>
 
-      <div data-id="299" style="display:flex; gap:10px;">
-        <button data-id="300" id="relist-confirm-btn" style="flex:1; padding:11px; background:#ff0000; border:none; border-radius:8px; color:#fff; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s;">🔁 Delete & Relist</button>
-        <button data-id="301" id="relist-cancel-btn" style="padding:11px 18px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#aaa; font-size:14px; cursor:pointer;">Cancel</button>
+      <div data-id="305" style="display:flex; gap:10px;">
+        <button data-id="306" id="relist-confirm-btn" style="flex:1; padding:11px; background:#ff0000; border:none; border-radius:8px; color:#fff; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s;">🔁 Delete & Relist</button>
+        <button data-id="307" id="relist-cancel-btn" style="padding:11px 18px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#aaa; font-size:14px; cursor:pointer;">Cancel</button>
       </div>
     </div>
   </div>
 
   <!-- Activity Log Panel -->
-  <div data-id="302" id="log-panel" style="
+  <div data-id="308" id="log-panel" style="
     position: fixed; bottom: 0; left: 220px; right: 0; z-index: 999;
     background: #0a0a0a; border-top: 1px solid #333;
     transition: height 0.3s ease; height: 216px; overflow: hidden;
     font-family: 'Inter', monospace; font-size: 12px;
   ">
     <!-- Log Header / Toggle Bar -->
-    <div data-id="303" id="log-toggle" style="
+    <div data-id="309" id="log-toggle" style="
       height: 36px; display: flex; align-items: center; gap: 10px;
       padding: 0 16px; cursor: pointer; user-select: none;
       border-bottom: 1px solid #2a2a2a; background: #111;
     ">
-      <span data-id="304" style="color:#ff4444; font-size:10px;">●</span>
-      <span data-id="305" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
-      <span data-id="306" id="log-count-badge" style="
+      <span data-id="310" style="color:#ff4444; font-size:10px;">●</span>
+      <span data-id="311" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
+      <span data-id="312" id="log-count-badge" style="
         background:#333; color:#aaa; border-radius:10px;
         padding:1px 7px; font-size:10px; min-width:20px; text-align:center;
       ">0</span>
-      <div data-id="307" style="flex:1"></div>
-      <button data-id="308" id="copy-log-btn" style="
+      <div data-id="313" style="flex:1"></div>
+      <button data-id="314" id="copy-log-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s; margin-right:4px;
       ">Copy</button>
-      <button data-id="309" id="log-clear-btn" style="
+      <button data-id="315" id="log-clear-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s;
       ">Clear</button>
-      <span data-id="310" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
+      <span data-id="316" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
     </div>
     <!-- Log Body -->
-    <div data-id="311" id="log-body" style="
+    <div data-id="317" id="log-body" style="
       height: 180px; overflow-y: auto; padding: 8px 16px;
       display: flex; flex-direction: column; gap: 3px;
     ">
-      <div data-id="312" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
+      <div data-id="318" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
     </div>
   </div>
 
@@ -3039,6 +3047,18 @@
       relistTargetVideoId = videoId;
       relistTargetVideo = video;
 
+      // Update the Studio download link to go directly to the video's edit page
+      var studioLink = document.getElementById('relist-studio-link');
+      if (studioLink) {
+        studioLink.href = 'https://studio.youtube.com/video/' + videoId + '/edit';
+        studioLink.textContent = '';
+        studioLink.innerHTML = '📥 Download Original Video in YouTube Studio →';
+      }
+
+      // Uncheck the confirmation checkbox each time
+      var savedCheck = document.getElementById('relist-confirm-saved');
+      if (savedCheck) savedCheck.checked = false;
+
       var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
       var views = parseInt((video.statistics && video.statistics.viewCount) || '0', 10);
       var thumb = (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.medium)
@@ -3102,6 +3122,18 @@
     }
 
     async function executeRelist() {
+      // Check that the user has confirmed they saved the video
+      var savedCheck = document.getElementById('relist-confirm-saved');
+      if (!savedCheck || !savedCheck.checked) {
+        showNotification('Please confirm you have saved the original video file first.', 'warning');
+        // Flash the checkbox red briefly
+        if (savedCheck) {
+          savedCheck.style.outline = '2px solid #ff4444';
+          setTimeout(function() { savedCheck.style.outline = ''; }, 2000);
+        }
+        return;
+      }
+
       if (!relistTargetVideoId || !relistTargetVideo) return;
 
       var btn = document.getElementById('relist-confirm-btn');
@@ -3117,8 +3149,6 @@
 
       try {
         // Step 1: Remove from all playlists
-        // Use getVideoPlaylistMemberships() which correctly loops through each playlist
-        // since the API requires playlistId alongside videoId
         addLog('Fetching playlist memberships for video ' + videoId + '...', 'info');
         var memberships = [];
         try {
@@ -3224,6 +3254,14 @@
     });
     document.getElementById('relist-modal').addEventListener('click', function(e) {
       if (e.target === this) this.style.display = 'none';
+    });
+
+    // Relist studio link hover (CSP-safe)
+    document.getElementById('relist-studio-link').addEventListener('mouseover', function() {
+      this.style.background = '#aa0000';
+    });
+    document.getElementById('relist-studio-link').addEventListener('mouseout', function() {
+      this.style.background = '#cc0000';
     });
 
     // ============================================================
