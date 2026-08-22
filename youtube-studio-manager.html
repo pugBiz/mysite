@@ -313,7 +313,7 @@
               ">
                 🔗 Auto-Add Links
               </button>
-              <span data-id="81" style="color:#717171; font-size:11px;">Finds links from similar videos in your channel and appends them to description</span>
+              <span data-id="81" style="color:#717171; font-size:11px;">Pulls links from the first video in your selected playlist and appends them to the description</span>
             </div>
             <div data-id="82" id="auto-links-result" style="display:none; margin-top:8px; background:#1a1f2a; border:1px solid #3ea6ff; border-radius:8px; padding:10px 14px; font-size:12px; color:#ccc;"></div>
             <div data-id="83">
@@ -1606,12 +1606,11 @@
     document.getElementById('quick-pick-best').addEventListener('click', function() { setScheduleBestTime(); });
 
     // ============================================================
-    // FEATURE 2: AUTO-ADD LINKS FROM SIMILAR CHANNEL VIDEOS
+    // FEATURE 2: AUTO-ADD LINKS FROM SELECTED PLAYLIST'S FIRST VIDEO
     // ============================================================
     async function autoAddLinks() {
       var btn = document.getElementById('auto-links-btn');
       var resultDiv = document.getElementById('auto-links-result');
-      var titleEl = document.getElementById('vid-title-y5z6');
       var descEl = document.getElementById('vid-desc-a7b8');
 
       if (!state.token) {
@@ -1620,100 +1619,125 @@
         return;
       }
 
-      var videoTitle = titleEl ? titleEl.value.trim() : '';
-      if (!videoTitle) {
-        showNotification('Please generate or enter a video title first.', 'warning');
-        addLog('Auto-Add Links: no title to search with', 'warning');
+      // Get the selected playlist ID from the playlist select dropdown
+      var playlistSelect = document.getElementById('vid-playlist-e1f2');
+      var selectedPlaylistId = playlistSelect ? playlistSelect.value : '';
+      var selectedPlaylistName = playlistSelect ? (playlistSelect.options[playlistSelect.selectedIndex] ? playlistSelect.options[playlistSelect.selectedIndex].text : '') : '';
+
+      // Fallback: check state for selected playlist
+      if (!selectedPlaylistId && state.selectedPlaylist) {
+        selectedPlaylistId = state.selectedPlaylist;
+      }
+
+      if (!selectedPlaylistId) {
+        showNotification('Please select a playlist first — links will be pulled from that playlist\'s first video.', 'warning');
+        addLog('Auto-Add Links: no playlist selected', 'warning');
         return;
       }
 
       btn.disabled = true;
-      btn.innerHTML = '⏳ Searching similar videos...';
-      addLog('Auto-Add Links: searching channel for videos similar to "' + videoTitle + '"', 'info');
+      btn.innerHTML = '⏳ Fetching playlist...';
+      addLog('Auto-Add Links: using playlist "' + (selectedPlaylistName || selectedPlaylistId) + '"', 'info');
+
+      if (resultDiv) resultDiv.style.display = 'none';
 
       try {
-        // Step 1: Extract key search terms from title (first 4-5 words or keywords)
-        var searchQuery = videoTitle.split(' ').slice(0, 5).join(' ');
-        addLog('Search query: "' + searchQuery + '"', 'info');
+        // Step 1: Get the first video in the playlist
+        btn.innerHTML = '⏳ Getting first video...';
+        addLog('Fetching first video from playlist...', 'info');
 
-        // Step 2: Search channel videos matching the title keywords
-        var searchRes = await ytFetch(
-          'https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&type=video&q=' +
-          encodeURIComponent(searchQuery) + '&maxResults=10&order=relevance'
+        var playlistRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/playlistItems' +
+          '?part=snippet&playlistId=' + encodeURIComponent(selectedPlaylistId) +
+          '&maxResults=1&order=position'
         );
 
-        var items = (searchRes && searchRes.items) ? searchRes.items : [];
-        addLog('Found ' + items.length + ' similar videos in channel', items.length > 0 ? 'success' : 'warning');
+        var items = (playlistRes && playlistRes.items) ? playlistRes.items : [];
 
         if (!items.length) {
-          showNotification('No similar videos found in your channel.', 'warning');
+          showNotification('This playlist has no existing videos to pull links from.', 'warning');
+          addLog('Playlist "' + (selectedPlaylistName || selectedPlaylistId) + '" has no videos', 'warning');
           btn.disabled = false;
           btn.innerHTML = '🔗 Auto-Add Links';
           return;
         }
 
-        // Step 3: Fetch full video details (description) for each result
-        var videoIds = items.map(function(it) {
-          return it.id && it.id.videoId ? it.id.videoId : null;
-        }).filter(Boolean);
+        var firstItem = items[0];
+        var firstVideoId = firstItem.snippet && firstItem.snippet.resourceId ? firstItem.snippet.resourceId.videoId : null;
+        var firstVideoTitle = firstItem.snippet ? firstItem.snippet.title : 'Unknown';
 
-        addLog('Fetching descriptions for ' + videoIds.length + ' videos...', 'info');
+        if (!firstVideoId) {
+          showNotification('Could not read video ID from playlist.', 'error');
+          addLog('Could not extract videoId from playlist item', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
 
-        var detailRes = await ytFetch(
-          'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + videoIds.join(',')
+        addLog('First video in playlist: "' + firstVideoTitle + '" (' + firstVideoId + ')', 'success');
+
+        // Step 2: Fetch full video details to get description
+        btn.innerHTML = '⏳ Reading description...';
+        addLog('Fetching full description for: "' + firstVideoTitle + '"', 'info');
+
+        var videoRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + firstVideoId
         );
-        var detailItems = (detailRes && detailRes.items) ? detailRes.items : [];
 
-        // Step 4: Parse all URLs from descriptions
-        var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>]+/g;
+        var videoItems = (videoRes && videoRes.items) ? videoRes.items : [];
+        if (!videoItems.length) {
+          showNotification('Could not fetch video description.', 'error');
+          addLog('No video data returned for ID: ' + firstVideoId, 'error');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        var description = (videoItems[0].snippet && videoItems[0].snippet.description) ? videoItems[0].snippet.description : '';
+        addLog('Description fetched (' + description.length + ' chars)', 'info');
+
+        // Step 3: Extract all URLs from the description
+        var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>\n]+/g;
+        var rawUrls = description.match(urlRegex) || [];
+
+        // Clean and deduplicate
+        var seen = new Set();
         var foundLinks = [];
-        var seenUrls = new Set();
-
-        detailItems.forEach(function(video) {
-          var desc = (video.snippet && video.snippet.description) ? video.snippet.description : '';
-          var videoTitle2 = (video.snippet && video.snippet.title) ? video.snippet.title : video.id;
-          var urls = desc.match(urlRegex) || [];
-
-          urls.forEach(function(url) {
-            // Clean trailing punctuation
-            url = url.replace(/[.,;!?]+$/, '');
-            if (seenUrls.has(url)) return;
-            // Skip yt image/thumbnail URLs
-            if (url.includes('ytimg.com') || url.includes('ggpht.com')) return;
-            seenUrls.add(url);
-            foundLinks.push({ url: url, source: videoTitle2 });
-          });
+        rawUrls.forEach(function(url) {
+          url = url.replace(/[.,;!?:]+$/, ''); // strip trailing punctuation
+          if (!url || seen.has(url)) return;
+          if (url.includes('ytimg.com') || url.includes('ggpht.com')) return; // skip thumbnails
+          seen.add(url);
+          foundLinks.push(url);
         });
 
-        addLog('Extracted ' + foundLinks.length + ' unique links from ' + detailItems.length + ' video descriptions', 'success');
+        addLog('Found ' + foundLinks.length + ' unique links in "' + firstVideoTitle + '"', foundLinks.length > 0 ? 'success' : 'warning');
 
         if (!foundLinks.length) {
-          showNotification('No links found in similar video descriptions.', 'warning');
-          addLog('No URLs found in any of the similar video descriptions', 'warning');
+          showNotification('No links found in the first playlist video\'s description.', 'warning');
+          addLog('Description contained no URLs', 'warning');
           btn.disabled = false;
           btn.innerHTML = '🔗 Auto-Add Links';
           return;
         }
 
-        // Step 5: Show preview of found links with checkboxes
+        // Step 4: Show checklist preview
         resultDiv.style.display = 'block';
         resultDiv.innerHTML =
-          '<p style="color:#3ea6ff;font-weight:600;margin-bottom:8px;">🔗 ' + foundLinks.length + ' links found — select which to add:</p>' +
-          '<div id="links-checklist" style="display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;margin-bottom:10px;">' +
-          foundLinks.map(function(link, i) {
-            var shortUrl = link.url.length > 60 ? link.url.substring(0, 60) + '…' : link.url;
-            return '<label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:4px 0;">' +
-              '<input type="checkbox" data-url="' + link.url.replace(/"/g, '&quot;') + '" checked style="margin-top:2px;accent-color:#3ea6ff;" />' +
-              '<span style="flex:1;">' +
-                '<span style="color:#ccc;font-size:11px;display:block;">' + shortUrl + '</span>' +
-                '<span style="color:#717171;font-size:10px;">from: ' + link.source + '</span>' +
-              '</span>' +
+          '<p style="color:#3ea6ff; font-weight:600; margin-bottom:4px;">🔗 ' + foundLinks.length + ' link(s) from: <em style="font-weight:400;">' + firstVideoTitle + '</em></p>' +
+          '<p style="color:#717171; font-size:10px; margin-bottom:8px;">Playlist: ' + (selectedPlaylistName || selectedPlaylistId) + '</p>' +
+          '<div id="links-checklist" style="display:flex; flex-direction:column; gap:5px; max-height:200px; overflow-y:auto; margin-bottom:10px;">' +
+          foundLinks.map(function(url) {
+            var shortUrl = url.length > 70 ? url.substring(0, 70) + '…' : url;
+            return '<label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:3px 0;">' +
+              '<input type="checkbox" data-url="' + url.replace(/"/g, '&quot;') + '" checked style="margin-top:2px; accent-color:#3ea6ff; flex-shrink:0;" />' +
+              '<span style="color:#ccc; font-size:11px; word-break:break-all;">' + shortUrl + '</span>' +
             '</label>';
           }).join('') +
           '</div>' +
-          '<div style="display:flex;gap:8px;">' +
-            '<button id="append-links-confirm-btn" style="padding:7px 16px;background:#3ea6ff;border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">✓ Add Selected to Description</button>' +
-            '<button id="append-links-cancel-btn" style="padding:7px 12px;background:#2a2a2a;border:1px solid #444;border-radius:7px;color:#aaa;font-size:12px;cursor:pointer;">Cancel</button>' +
+          '<div style="display:flex; gap:8px;">' +
+            '<button id="append-links-confirm-btn" style="padding:7px 16px; background:#3ea6ff; border:none; border-radius:7px; color:#fff; font-size:12px; font-weight:600; cursor:pointer;">✓ Add Selected to Description</button>' +
+            '<button id="append-links-cancel-btn" style="padding:7px 12px; background:#2a2a2a; border:1px solid #444; border-radius:7px; color:#aaa; font-size:12px; cursor:pointer;">Cancel</button>' +
           '</div>';
 
         // Bind the confirm and cancel buttons via addEventListener
@@ -1726,9 +1750,9 @@
 
         addLog('Link preview ready — select links to append to description', 'info');
 
-      } catch (e) {
+      } catch(e) {
         addLog('Auto-Add Links error: ' + e.message, 'error');
-        showNotification('Error fetching similar videos: ' + e.message, 'error');
+        showNotification('Error: ' + e.message, 'error');
       } finally {
         btn.disabled = false;
         btn.innerHTML = '🔗 Auto-Add Links';
@@ -1746,11 +1770,11 @@
       }
 
       var current = descEl ? descEl.value.trim() : '';
-      var linksBlock = '\n\n🔗 Related Resources:\n' + selected.map(function(u) { return '• ' + u; }).join('\n');
+      var linksBlock = '\n\n🔗 Related Links:\n' + selected.map(function(u) { return '• ' + u; }).join('\n');
       if (descEl) descEl.value = current + linksBlock;
 
       document.getElementById('auto-links-result').style.display = 'none';
-      addLog('Added ' + selected.length + ' links to description', 'success');
+      addLog('Appended ' + selected.length + ' link(s) to description', 'success');
       showNotification(selected.length + ' link(s) added to description!', 'success');
     }
 
