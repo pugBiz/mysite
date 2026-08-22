@@ -859,8 +859,18 @@
             contents: [{ parts: [{ text: combinedPrompt }] }],
             generationConfig: {
               temperature: 0.7,
-              maxOutputTokens: 1200,
-              responseMimeType: 'application/json'
+              maxOutputTokens: 2048,
+              responseMimeType: 'application/json',
+              responseSchema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', description: 'YouTube video title, max 60 characters, SEO optimized' },
+                  description: { type: 'string', description: '3-paragraph YouTube description with hook, detail, CTA and 5+ hashtags at the end' },
+                  tags: { type: 'string', description: '10 comma-separated SEO tags mixing broad and long-tail keywords' },
+                  playlist: { type: 'string', description: 'Single most appropriate playlist name' }
+                },
+                required: ['title', 'description', 'tags', 'playlist']
+              }
             }
           })
         }
@@ -1351,7 +1361,7 @@
     // VIDEO FRAME EXTRACTION
     // ============================================================
     async function extractFramesFromVideo(file, frameCount) {
-      frameCount = frameCount || 6;
+      frameCount = frameCount || 20;
       return new Promise(function(resolve, reject) {
         var video = document.getElementById('frame-extractor');
         var canvas = document.getElementById('frame-canvas');
@@ -1370,7 +1380,7 @@
           }
 
           var timestamps = Array.from({ length: frameCount }, function(_, i) {
-            return duration * (0.10 + i * ((0.85 - 0.10) / (frameCount - 1)));
+            return duration * (0.05 + i * ((0.95 - 0.05) / (frameCount - 1)));
           });
 
           var idx = 0;
@@ -1500,7 +1510,7 @@
 
       // Update button to loading state
       aiBtn.disabled = true;
-      aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Extracting frames...';
+      aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Extracting 20 frames...';
 
       try {
         // --- STEP 1: Extract frames ---
@@ -1508,7 +1518,7 @@
         showNotification('Extracting frames from your video...', 'info');
         var frames;
         try {
-          frames = await extractFramesFromVideo(file, 6);
+          frames = await extractFramesFromVideo(file, 20);
         } catch (frameErr) {
           showNotification('Frame extraction failed: ' + frameErr.message, 'error');
           throw frameErr;
@@ -1524,7 +1534,7 @@
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Analyzing frames...';
         var frameDescriptions = await Promise.all(frames.map(function(f, i) {
           return analyzeFramePixels(f, i).then(function(desc) {
-            return 'Frame ' + (i+1) + ' (at ' + Math.round((0.10 + i * 0.15) * 100) + '% of video): ' + desc;
+            return 'Frame ' + (i+1) + ' (at ' + Math.round((0.05 + i * (0.90 / 19)) * 100) + '% of video): ' + desc;
           });
         }));
 
@@ -1541,11 +1551,11 @@
         var rawText_result = await aiChat([
           {
             role: 'system',
-            content: 'You are a YouTube SEO expert. Analyze the provided video information and return ONLY a raw JSON object with no markdown, no code fences, no explanation, no preamble. The response must start with { and end with }. Never wrap in backticks. Never add any text before or after the JSON.'
+            content: 'You are a YouTube SEO expert. You MUST return a JSON object with ALL four fields fully populated: title, description, tags, and playlist. The description field MUST contain at least 3 full paragraphs of text plus hashtags — never leave it empty or short. The tags field MUST contain exactly 10 comma-separated tags — never leave it empty. Return ONLY valid JSON. No markdown. No code fences. No explanations.'
           },
           {
             role: 'user',
-            content: 'Video filename: "' + filename + '"\n\nVisual frame analysis (6 frames sampled evenly throughout the video):\n' + frameReport + '\n\nBased on the filename and visual characteristics above, generate:\n1. An engaging YouTube title (max 60 chars, front-load the main keyword)\n2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)\n3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)\n4. The single most appropriate playlist from: [' + playlistList + ']\n\nReturn ONLY this exact raw JSON (no markdown, no code fences, no extra text):\n{"title": "...", "description": "...", "tags": "...", "playlist": "..."}'
+            content: 'Video filename: "' + filename + '"\n\nVisual frame analysis (20 frames sampled evenly throughout the video):\n' + frameReport + '\n\nBased on the filename and visual characteristics above, generate:\n1. An engaging YouTube title (max 60 chars, front-load the main keyword)\n2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)\n3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)\n4. The single most appropriate playlist from: [' + playlistList + ']\n\nYou MUST fill ALL four fields completely. The description must be 3 full paragraphs minimum. The tags must be exactly 10 comma-separated keywords. Return ONLY valid JSON:\n{"title": "A complete title here", "description": "Full paragraph 1.\\n\\nFull paragraph 2.\\n\\nFull paragraph 3 with CTA.\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5", "tags": "tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10", "playlist": "PlaylistName"}'
           }
         ]);
 
@@ -1557,6 +1567,13 @@
 
         var parsed = null;
         var rawText = rawText_result.trim();
+
+        // Pre-process: escape any literal newlines inside JSON string values
+        // This handles Gemini returning unescaped newlines within description field
+        rawText = rawText.replace(/:\s*"([\s\S]*?)"/g, function(match, val) {
+          var escaped = val.replace(/\n/g, '\\n').replace(/\r/g, '');
+          return match.replace(val, escaped);
+        });
 
         // Strategy 1: Direct JSON parse on the raw string
         try {
@@ -1624,6 +1641,12 @@
         }
 
         addLog('JSON parsed successfully', 'success');
+
+        // Log each parsed field value for debugging
+        addLog('Title: ' + (parsed.title || '(empty)'), parsed.title ? 'success' : 'warning');
+        addLog('Description length: ' + (parsed.description ? parsed.description.length + ' chars' : '(empty)'), parsed.description ? 'success' : 'warning');
+        addLog('Tags: ' + (parsed.tags || '(empty)'), parsed.tags ? 'success' : 'warning');
+        addLog('Playlist: ' + (parsed.playlist || '(empty)'), parsed.playlist ? 'success' : 'warning');
 
         // --- STEP 6: Populate form fields ---
         var titleEl = document.getElementById('vid-title-y5z6');
