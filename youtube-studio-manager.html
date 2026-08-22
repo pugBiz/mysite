@@ -126,6 +126,11 @@
     .log-msg.warning { color: #f0b400; }
     .log-msg.info { color: #3ea6ff; }
 
+    .quick-pick-btn { padding: 4px 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 6px; color: #aaa; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+    .quick-pick-btn:hover { border-color: #ff0000; color: #fff; }
+    .best-time-btn { padding: 4px 10px; background: #1a2a1a; border: 1px solid #2ba640; border-radius: 6px; color: #2ba640; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+    .best-time-btn:hover { background: #2ba640; color: #fff; }
+
     @media (max-width: 767px) {
       .sidebar { transform: translateX(-100%); position: fixed; z-index: 40; }
       .sidebar.open { transform: translateX(0); }
@@ -213,311 +218,367 @@
         </button>
       </div>
       <div data-id="39" class="flex items-center gap-2">
-        <button data-id="40" id="gemini-key-btn" class="flex items-center gap-1.5 px-3 py-2 bg-yt-surface border border-yt-border rounded-lg text-yt-muted text-xs font-medium transition-all hover:border-yt-yellow hover:text-yt-yellow cursor-pointer whitespace-nowrap">
+        <!-- Account Switcher -->
+        <div data-id="40" id="account-switcher-wrapper" style="position:relative; display:none;">
+          <button data-id="41" id="account-switcher-btn" style="
+            display:flex; align-items:center; gap:8px; padding:6px 12px;
+            background:#1a1a1a; border:1px solid #333; border-radius:8px;
+            color:#fff; font-size:13px; font-weight:500; cursor:pointer;
+            transition:all 0.2s; max-width:200px;
+          ">
+            <img data-id="42" id="account-avatar" src="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;display:none;" />
+            <span data-id="43" id="account-label" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px;">Account</span>
+            <span data-id="44" style="color:#717171;font-size:10px;">▼</span>
+          </button>
+
+          <!-- Dropdown -->
+          <div data-id="45" id="account-dropdown" style="
+            display:none; position:absolute; top:calc(100% + 8px); right:0;
+            background:#1a1a1a; border:1px solid #333; border-radius:12px;
+            min-width:280px; z-index:5000; box-shadow:0 8px 32px rgba(0,0,0,0.6);
+            overflow:hidden;
+          ">
+            <div data-id="46" style="padding:10px 14px 6px; border-bottom:1px solid #2a2a2a;">
+              <p data-id="47" style="color:#717171;font-size:11px;font-weight:600;letter-spacing:0.05em;">YOUTUBE ACCOUNTS</p>
+            </div>
+            <div data-id="48" id="account-list" style="max-height:240px;overflow-y:auto;padding:6px 0;"></div>
+            <div data-id="49" style="border-top:1px solid #2a2a2a;padding:8px;">
+              <button data-id="50" id="add-another-account-btn" style="
+                width:100%;padding:9px;background:none;border:1px dashed #444;
+                border-radius:8px;color:#3ea6ff;font-size:13px;cursor:pointer;
+                transition:all 0.2s;
+              ">
+                + Add Another Account
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button data-id="51" id="gemini-key-btn" class="flex items-center gap-1.5 px-3 py-2 bg-yt-surface border border-yt-border rounded-lg text-yt-muted text-xs font-medium transition-all hover:border-yt-yellow hover:text-yt-yellow cursor-pointer whitespace-nowrap">
           🔑 Gemini Key
         </button>
-        <button data-id="41" id="connect-api-btn-k1l2" class="bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold px-4 py-2 rounded-lg btn-press flex items-center gap-2 transition-colors">
-          <i data-id="42" data-lucide="link" class="w-4 h-4"></i>
-          <span data-id="43" class="hidden sm:inline" id="connect-btn-text">Connect YouTube API</span>
+        <button data-id="52" id="connect-api-btn-k1l2" class="bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold px-4 py-2 rounded-lg btn-press flex items-center gap-2 transition-colors">
+          <i data-id="53" data-lucide="link" class="w-4 h-4"></i>
+          <span data-id="54" class="hidden sm:inline" id="connect-btn-text">Connect YouTube API</span>
         </button>
       </div>
     </header>
 
-    <main data-id="44" class="p-4 md:p-8 max-w-7xl">
+    <main data-id="55" class="p-4 md:p-8 max-w-7xl">
 
       <!-- TAB 1: UPLOAD & QUEUE -->
-      <div data-id="45" id="tab-upload" class="tab-content active relative">
+      <div data-id="56" id="tab-upload" class="tab-content active relative">
         <!-- Upload Zone -->
-        <div data-id="46" id="upload-zone-m3n4" class="upload-zone rounded-xl p-8 md:p-12 text-center mb-6 cursor-pointer">
-          <div data-id="47" class="flex flex-col items-center gap-4">
-            <div data-id="48" class="w-16 h-16 rounded-full bg-yt-card flex items-center justify-center">
-              <i data-id="49" data-lucide="cloud-upload" class="w-8 h-8 text-yt-muted"></i>
+        <div data-id="57" id="upload-zone-m3n4" class="upload-zone rounded-xl p-8 md:p-12 text-center mb-6 cursor-pointer">
+          <div data-id="58" class="flex flex-col items-center gap-4">
+            <div data-id="59" class="w-16 h-16 rounded-full bg-yt-card flex items-center justify-center">
+              <i data-id="60" data-lucide="cloud-upload" class="w-8 h-8 text-yt-muted"></i>
             </div>
-            <div data-id="50">
-              <p data-id="51" class="text-lg font-semibold text-white mb-1">Drag & drop your video here</p>
-              <p data-id="52" class="text-sm text-yt-muted">or click to browse files. Supports MP4, MOV, AVI, MKV</p>
+            <div data-id="61">
+              <p data-id="62" class="text-lg font-semibold text-white mb-1">Drag & drop your video here</p>
+              <p data-id="63" class="text-sm text-yt-muted">or click to browse files. Supports MP4, MOV, AVI, MKV</p>
             </div>
-            <button data-id="53" id="browse-btn-o5p6" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors">
+            <button data-id="64" id="browse-btn-o5p6" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors">
               Browse Files
             </button>
-            <input data-id="54" type="file" id="file-input-q7r8" accept="video/*" class="hidden" />
-            <div data-id="55" id="file-info-s9t0" class="hidden text-sm text-yt-muted mt-2">
-              <span data-id="56" id="file-name-u1v2" class="text-white font-medium"></span> · <span data-id="57" id="file-size-w3x4"></span>
+            <input data-id="65" type="file" id="file-input-q7r8" accept="video/*" class="hidden" />
+            <div data-id="66" id="file-info-s9t0" class="hidden text-sm text-yt-muted mt-2">
+              <span data-id="67" id="file-name-u1v2" class="text-white font-medium"></span> · <span data-id="68" id="file-size-w3x4"></span>
             </div>
           </div>
         </div>
 
         <!-- Upload Form -->
-        <div data-id="58" class="bg-yt-surface rounded-xl p-5 md:p-6 mb-6 border border-yt-border">
-          <h3 data-id="59" class="text-base font-semibold text-white mb-5 flex items-center gap-2">
-            <i data-id="60" data-lucide="file-video" class="w-5 h-5 text-yt-red"></i>
+        <div data-id="69" class="bg-yt-surface rounded-xl p-5 md:p-6 mb-6 border border-yt-border">
+          <h3 data-id="70" class="text-base font-semibold text-white mb-5 flex items-center gap-2">
+            <i data-id="71" data-lucide="file-video" class="w-5 h-5 text-yt-red"></i>
             Video Details
           </h3>
-          <div data-id="61" class="space-y-4">
-            <div data-id="62">
-              <label data-id="63" class="block text-sm font-medium text-yt-muted mb-1.5">Title</label>
-              <input data-id="64" id="vid-title-y5z6" type="text" placeholder="Enter video title..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors" />
+          <div data-id="72" class="space-y-4">
+            <div data-id="73">
+              <label data-id="74" class="block text-sm font-medium text-yt-muted mb-1.5">Title</label>
+              <input data-id="75" id="vid-title-y5z6" type="text" placeholder="Enter video title..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors" />
             </div>
-            <div data-id="65">
-              <label data-id="66" class="block text-sm font-medium text-yt-muted mb-1.5">Description</label>
-              <textarea data-id="67" id="vid-desc-a7b8" rows="4" placeholder="Enter video description..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors resize-none"></textarea>
+            <div data-id="76">
+              <label data-id="77" class="block text-sm font-medium text-yt-muted mb-1.5">Description</label>
+              <textarea data-id="78" id="vid-desc-a7b8" rows="4" placeholder="Enter video description..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors resize-none"></textarea>
             </div>
-            <div data-id="68">
-              <label data-id="69" class="block text-sm font-medium text-yt-muted mb-1.5">Tags</label>
-              <input data-id="70" id="vid-tags-c9d0" type="text" placeholder="tag1, tag2, tag3..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors" />
+            <!-- Auto-Add Links -->
+            <div data-id="79" style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+              <button data-id="80" type="button" id="auto-links-btn" style="
+                display:flex; align-items:center; gap:6px; padding:7px 14px;
+                background:#1a1f2a; border:1px solid #3ea6ff; border-radius:8px;
+                color:#3ea6ff; font-size:12px; font-weight:500; cursor:pointer;
+                transition:all 0.2s;
+              ">
+                🔗 Auto-Add Links
+              </button>
+              <span data-id="81" style="color:#717171; font-size:11px;">Pulls links from the first video in your selected playlist and appends them to the description</span>
             </div>
-            <div data-id="71" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div data-id="72">
-                <label data-id="73" class="block text-sm font-medium text-yt-muted mb-1.5">Playlist</label>
-                <select data-id="74" id="vid-playlist-e1f2" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors appearance-none cursor-pointer">
-                  <option data-id="75" value="">Select playlist...</option>
+            <div data-id="82" id="auto-links-result" style="display:none; margin-top:8px; background:#1a1f2a; border:1px solid #3ea6ff; border-radius:8px; padding:10px 14px; font-size:12px; color:#ccc;"></div>
+            <div data-id="83">
+              <label data-id="84" class="block text-sm font-medium text-yt-muted mb-1.5">Tags</label>
+              <input data-id="85" id="vid-tags-c9d0" type="text" placeholder="tag1, tag2, tag3..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors" />
+            </div>
+            <div data-id="86" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div data-id="87">
+                <label data-id="88" class="block text-sm font-medium text-yt-muted mb-1.5">Playlist</label>
+                <select data-id="89" id="vid-playlist-e1f2" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-yt-red transition-colors appearance-none cursor-pointer">
+                  <option data-id="90" value="">Select playlist...</option>
                 </select>
               </div>
-              <div data-id="76">
-                <label data-id="77" class="block text-sm font-medium text-yt-muted mb-1.5">Schedule</label>
-                <div data-id="78" class="flex items-center gap-3">
-                  <div data-id="79" id="schedule-toggle-g3h4" class="toggle-switch" role="switch" aria-checked="false" tabindex="0"></div>
-                  <span data-id="80" id="schedule-label-i5j6" class="text-sm text-yt-muted">Publish Immediately</span>
+              <div data-id="91">
+                <label data-id="92" class="block text-sm font-medium text-yt-muted mb-1.5">Schedule</label>
+                <div data-id="93" class="flex items-center gap-3">
+                  <div data-id="94" id="schedule-toggle-g3h4" class="toggle-switch" role="switch" aria-checked="false" tabindex="0"></div>
+                  <span data-id="95" id="schedule-label-i5j6" class="text-sm text-yt-muted">Publish Immediately</span>
                 </div>
-                <div data-id="81" id="schedule-picker-k7l8" class="hidden mt-3 flex flex-col sm:flex-row gap-2">
-                  <input data-id="82" id="schedule-date-m9n0" type="date" value="2026-08-20" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
-                  <input data-id="83" id="schedule-time-o1p2" type="time" value="12:00" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
+                <div data-id="96" id="schedule-picker-k7l8" class="hidden mt-3 flex flex-col gap-2">
+                  <!-- Quick Pick Buttons -->
+                  <div data-id="97" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+                    <span data-id="98" style="color:#717171; font-size:11px; align-self:center; margin-right:2px;">Quick pick:</span>
+                    <button data-id="99" type="button" id="quick-pick-3" class="quick-pick-btn">+3 days</button>
+                    <button data-id="100" type="button" id="quick-pick-7" class="quick-pick-btn">+7 days</button>
+                    <button data-id="101" type="button" id="quick-pick-14" class="quick-pick-btn">+14 days</button>
+                    <button data-id="102" type="button" id="quick-pick-best" class="best-time-btn">⚡ Best Time</button>
+                  </div>
+                  <div data-id="103" id="schedule-suggestion" style="display:none; background:#1a2a1a; border:1px solid #2ba640; border-radius:6px; padding:7px 10px; margin-bottom:8px; font-size:11px; color:#2ba640;"></div>
+                  <div data-id="104" class="flex flex-col sm:flex-row gap-2">
+                    <input data-id="105" id="schedule-date-m9n0" type="date" value="2026-08-22" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
+                    <input data-id="106" id="schedule-time-o1p2" type="time" value="12:00" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <!-- Action Buttons -->
-          <div data-id="84" class="flex flex-col sm:flex-row gap-3 mt-6">
-            <button data-id="85" id="ai-gen-btn-q3r4" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
-              <span data-id="86">✨</span> Generate with AI
+          <div data-id="107" class="flex flex-col sm:flex-row gap-3 mt-6">
+            <button data-id="108" id="ai-gen-btn-q3r4" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
+              <span data-id="109">✨</span> Generate with AI
             </button>
-            <button data-id="87" id="add-queue-btn-s5t6" class="bg-yt-blue hover:opacity-90 text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
-              <i data-id="88" data-lucide="plus" class="w-4 h-4"></i> Add to Queue
+            <button data-id="110" id="add-queue-btn-s5t6" class="bg-yt-blue hover:opacity-90 text-white font-semibold px-6 py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2">
+              <i data-id="111" data-lucide="plus" class="w-4 h-4"></i> Add to Queue
             </button>
           </div>
         </div>
 
         <!-- Upload Queue -->
-        <div data-id="89" class="bg-yt-surface rounded-xl p-5 md:p-6 border border-yt-border">
-          <h3 data-id="90" class="text-base font-semibold text-white mb-4 flex items-center gap-2">
-            <i data-id="91" data-lucide="list-ordered" class="w-5 h-5 text-yt-blue"></i>
+        <div data-id="112" class="bg-yt-surface rounded-xl p-5 md:p-6 border border-yt-border">
+          <h3 data-id="113" class="text-base font-semibold text-white mb-4 flex items-center gap-2">
+            <i data-id="114" data-lucide="list-ordered" class="w-5 h-5 text-yt-blue"></i>
             Upload Queue
-            <span data-id="92" id="queue-count-u7v8" class="text-xs bg-yt-card text-yt-muted px-2 py-0.5 rounded-full">0 videos</span>
+            <span data-id="115" id="queue-count-u7v8" class="text-xs bg-yt-card text-yt-muted px-2 py-0.5 rounded-full">0 videos</span>
           </h3>
-          <div data-id="93" id="queue-list-w9x0" class="space-y-3">
+          <div data-id="116" id="queue-list-w9x0" class="space-y-3">
           </div>
         </div>
       </div>
 
       <!-- TAB 2: PERFORMANCE -->
-      <div data-id="94" id="tab-performance" class="tab-content relative">
-        <div data-id="95" id="perf-demo-banner" class="demo-banner hidden">
-          <span data-id="96">⚠️</span>
-          <span data-id="97">Demo Mode — <button data-id="98" id="demo-connect-perf" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+      <div data-id="117" id="tab-performance" class="tab-content relative">
+        <div data-id="118" id="perf-demo-banner" class="demo-banner hidden">
+          <span data-id="119">⚠️</span>
+          <span data-id="120">Demo Mode — <button data-id="121" id="demo-connect-perf" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
         </div>
         <!-- Stats Row -->
-        <div data-id="99" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div data-id="100" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="101" class="flex items-center gap-3 mb-2">
-              <div data-id="102" class="w-10 h-10 rounded-lg bg-yt-red/15 flex items-center justify-center"><i data-id="103" data-lucide="eye" class="w-5 h-5 text-yt-red"></i></div>
+        <div data-id="122" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div data-id="123" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="124" class="flex items-center gap-3 mb-2">
+              <div data-id="125" class="w-10 h-10 rounded-lg bg-yt-red/15 flex items-center justify-center"><i data-id="126" data-lucide="eye" class="w-5 h-5 text-yt-red"></i></div>
             </div>
-            <p data-id="104" id="stat-views" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="847293">0</p>
-            <p data-id="105" class="text-xs text-yt-muted mt-1">Total Views</p>
-            <div data-id="106" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="107" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="108" id="stat-views-trend">+12.4%</span> this month</div>
+            <p data-id="127" id="stat-views" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="847293">0</p>
+            <p data-id="128" class="text-xs text-yt-muted mt-1">Total Views</p>
+            <div data-id="129" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="130" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="131" id="stat-views-trend">+12.4%</span> this month</div>
           </div>
-          <div data-id="109" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="110" class="flex items-center gap-3 mb-2">
-              <div data-id="111" class="w-10 h-10 rounded-lg bg-yt-blue/15 flex items-center justify-center"><i data-id="112" data-lucide="clock" class="w-5 h-5 text-yt-blue"></i></div>
+          <div data-id="132" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="133" class="flex items-center gap-3 mb-2">
+              <div data-id="134" class="w-10 h-10 rounded-lg bg-yt-blue/15 flex items-center justify-center"><i data-id="135" data-lucide="clock" class="w-5 h-5 text-yt-blue"></i></div>
             </div>
-            <p data-id="113" id="stat-watchtime" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="42180">0</p>
-            <p data-id="114" class="text-xs text-yt-muted mt-1">Watch Time (hrs)</p>
-            <div data-id="115" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="116" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="117" id="stat-wt-trend">+8.1%</span> this month</div>
+            <p data-id="136" id="stat-watchtime" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="42180">0</p>
+            <p data-id="137" class="text-xs text-yt-muted mt-1">Watch Time (hrs)</p>
+            <div data-id="138" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="139" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="140" id="stat-wt-trend">+8.1%</span> this month</div>
           </div>
-          <div data-id="118" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="119" class="flex items-center gap-3 mb-2">
-              <div data-id="120" class="w-10 h-10 rounded-lg bg-yt-green/15 flex items-center justify-center"><i data-id="121" data-lucide="thumbs-up" class="w-5 h-5 text-yt-green"></i></div>
+          <div data-id="141" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="142" class="flex items-center gap-3 mb-2">
+              <div data-id="143" class="w-10 h-10 rounded-lg bg-yt-green/15 flex items-center justify-center"><i data-id="144" data-lucide="thumbs-up" class="w-5 h-5 text-yt-green"></i></div>
             </div>
-            <p data-id="122" id="stat-likes" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="23841">0</p>
-            <p data-id="123" class="text-xs text-yt-muted mt-1">Likes</p>
-            <div data-id="124" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="125" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="126" id="stat-likes-trend">+15.2%</span> this month</div>
+            <p data-id="145" id="stat-likes" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="23841">0</p>
+            <p data-id="146" class="text-xs text-yt-muted mt-1">Likes</p>
+            <div data-id="147" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="148" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="149" id="stat-likes-trend">+15.2%</span> this month</div>
           </div>
-          <div data-id="127" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
-            <div data-id="128" class="flex items-center gap-3 mb-2">
-              <div data-id="129" class="w-10 h-10 rounded-lg bg-yt-yellow/15 flex items-center justify-center"><i data-id="130" data-lucide="message-circle" class="w-5 h-5 text-yt-yellow"></i></div>
+          <div data-id="150" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border card-lift">
+            <div data-id="151" class="flex items-center gap-3 mb-2">
+              <div data-id="152" class="w-10 h-10 rounded-lg bg-yt-yellow/15 flex items-center justify-center"><i data-id="153" data-lucide="message-circle" class="w-5 h-5 text-yt-yellow"></i></div>
             </div>
-            <p data-id="131" id="stat-comments" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="4729">0</p>
-            <p data-id="132" class="text-xs text-yt-muted mt-1">Comments</p>
-            <div data-id="133" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="134" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="135" id="stat-comments-trend">+6.8%</span> this month</div>
+            <p data-id="154" id="stat-comments" class="text-2xl md:text-3xl font-bold text-white tabular-nums" data-count="4729">0</p>
+            <p data-id="155" class="text-xs text-yt-muted mt-1">Comments</p>
+            <div data-id="156" class="flex items-center gap-1 mt-2 text-yt-green text-xs font-medium"><i data-id="157" data-lucide="trending-up" class="w-3 h-3"></i> <span data-id="158" id="stat-comments-trend">+6.8%</span> this month</div>
           </div>
         </div>
 
         <!-- Charts Row 1 -->
-        <div data-id="136" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-          <div data-id="137" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="138" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="139" data-lucide="activity" class="w-4 h-4 text-yt-red"></i> Views Over Time (30 Days)
+        <div data-id="159" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <div data-id="160" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="161" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="162" data-lucide="activity" class="w-4 h-4 text-yt-red"></i> Views Over Time (30 Days)
             </h3>
-            <div data-id="140" class="relative h-56 md:h-64"><canvas data-id="141" id="chart-views-a1b1"></canvas></div>
+            <div data-id="163" class="relative h-56 md:h-64"><canvas data-id="164" id="chart-views-a1b1"></canvas></div>
           </div>
-          <div data-id="142" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="143" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="144" data-lucide="bar-chart-horizontal" class="w-4 h-4 text-yt-orange"></i> Top Videos by Views
+          <div data-id="165" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="166" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="167" data-lucide="bar-chart-horizontal" class="w-4 h-4 text-yt-orange"></i> Top Videos by Views
             </h3>
-            <div data-id="145" class="relative h-56 md:h-64"><canvas data-id="146" id="chart-topvids-c2d2"></canvas></div>
+            <div data-id="168" class="relative h-56 md:h-64"><canvas data-id="169" id="chart-topvids-c2d2"></canvas></div>
           </div>
         </div>
 
         <!-- Charts Row 2 -->
-        <div data-id="147" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div data-id="148" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="149" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="150" data-lucide="users" class="w-4 h-4 text-yt-blue"></i> Audience Retention
+        <div data-id="170" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div data-id="171" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="172" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="173" data-lucide="users" class="w-4 h-4 text-yt-blue"></i> Audience Retention
             </h3>
-            <div data-id="151" class="relative h-56 md:h-64"><canvas data-id="152" id="chart-retention-e3f3"></canvas></div>
+            <div data-id="174" class="relative h-56 md:h-64"><canvas data-id="175" id="chart-retention-e3f3"></canvas></div>
           </div>
-          <div data-id="153" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
-            <h3 data-id="154" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-              <i data-id="155" data-lucide="pie-chart" class="w-4 h-4 text-yt-green"></i> Engagement Breakdown
+          <div data-id="176" class="bg-yt-surface rounded-xl p-4 md:p-5 border border-yt-border">
+            <h3 data-id="177" class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <i data-id="178" data-lucide="pie-chart" class="w-4 h-4 text-yt-green"></i> Engagement Breakdown
             </h3>
-            <div data-id="156" class="relative h-56 md:h-64"><canvas data-id="157" id="chart-engagement-g4h4"></canvas></div>
+            <div data-id="179" class="relative h-56 md:h-64"><canvas data-id="180" id="chart-engagement-g4h4"></canvas></div>
           </div>
         </div>
       </div>
 
       <!-- TAB 3: LOW PERFORMERS -->
-      <div data-id="158" id="tab-lowperformers" class="tab-content relative">
-        <div data-id="159" id="lp-demo-banner" class="demo-banner hidden">
-          <span data-id="160">⚠️</span>
-          <span data-id="161">Demo Mode — <button data-id="162" id="demo-connect-lp" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
-        </div>
+      <div data-id="181" id="tab-lowperformers" class="tab-content relative">
         <!-- Header -->
-        <div data-id="163" class="mb-6">
-          <h2 data-id="164" class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">⚠️ Low-Performing Videos</h2>
-          <p data-id="165" class="text-sm text-yt-muted">Videos underperforming compared to your channel average</p>
+        <div data-id="182" class="mb-6">
+          <h2 data-id="183" class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">⚠️ Low-Performing Videos</h2>
+          <p data-id="184" class="text-sm text-yt-muted">Videos with fewer than <span data-id="185" id="lp-threshold-display">100</span> views — relist them with fresh AI metadata and a new publish date</p>
         </div>
 
-        <!-- Filter Bar -->
-        <div data-id="166" class="bg-yt-surface rounded-xl p-4 mb-6 border border-yt-border flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <select data-id="167" id="lp-period-i5j5" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-            <option data-id="168" value="30">Last 30 days</option>
-            <option data-id="169" value="60">Last 60 days</option>
-            <option data-id="170" value="90">Last 90 days</option>
-          </select>
-          <select data-id="171" id="lp-sort-k6l6" class="bg-yt-card border border-yt-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-            <option data-id="172" value="views">Sort by Views</option>
-            <option data-id="173" value="retention">Sort by Retention</option>
-            <option data-id="174" value="likes">Sort by Likes</option>
-          </select>
-          <button data-id="175" id="analyze-btn-m7n7" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-4 py-2 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
-            <i data-id="176" data-lucide="scan-search" class="w-4 h-4"></i> Analyze Channel
+        <!-- Threshold Controls -->
+        <div data-id="186" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+          <div data-id="187" style="display:flex; align-items:center; gap:8px; background:#1a1a1a; border:1px solid #333; border-radius:8px; padding:6px 12px;">
+            <span data-id="188" style="color:#aaa; font-size:12px;">View threshold:</span>
+            <span data-id="189" style="color:#ff4444; font-size:13px; font-weight:700;">&lt;</span>
+            <input data-id="190" type="number" id="lp-threshold-input" value="100" min="0" max="100000" step="10"
+              style="width:70px; background:#2a2a2a; border:1px solid #444; border-radius:6px; color:#fff; font-size:13px; font-weight:600; padding:3px 8px; text-align:center;"
+            />
+            <span data-id="191" style="color:#aaa; font-size:12px;">views</span>
+          </div>
+          <button data-id="192" id="lp-refresh-list-btn" style="display:flex; align-items:center; gap:6px; padding:8px 16px; background:#212121; border:1px solid #333; border-radius:8px; color:#aaa; font-size:13px; cursor:pointer; transition:all 0.2s;">
+            🔄 Refresh List
           </button>
+          <span data-id="193" id="lp-count-label" style="color:#717171; font-size:12px;"></span>
         </div>
 
-        <!-- Low Performer Cards -->
-        <div data-id="177" id="lp-grid-o8p8" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Low View Video List -->
+        <div data-id="194" id="lp-video-list" style="display:flex; flex-direction:column; gap:10px;">
+          <div data-id="195" style="text-align:center; padding:40px; color:#444;">Click Refresh List to scan your channel for low-view videos.</div>
         </div>
       </div>
 
       <!-- TAB 4: PLAYLISTS -->
-      <div data-id="178" id="tab-playlists" class="tab-content relative">
-        <div data-id="179" id="pl-demo-banner" class="demo-banner hidden">
-          <span data-id="180">⚠️</span>
-          <span data-id="181">Demo Mode — <button data-id="182" id="demo-connect-pl" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+      <div data-id="196" id="tab-playlists" class="tab-content relative">
+        <div data-id="197" id="pl-demo-banner" class="demo-banner hidden">
+          <span data-id="198">⚠️</span>
+          <span data-id="199">Demo Mode — <button data-id="200" id="demo-connect-pl" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
         </div>
-        <div data-id="183" class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
-          <div data-id="184">
-            <h2 data-id="185" class="text-xl md:text-2xl font-bold text-white">Playlists</h2>
-            <p data-id="186" class="text-sm text-yt-muted">Manage your channel playlists</p>
+        <div data-id="201" class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+          <div data-id="202">
+            <h2 data-id="203" class="text-xl md:text-2xl font-bold text-white">Playlists</h2>
+            <p data-id="204" class="text-sm text-yt-muted">Manage your channel playlists</p>
           </div>
-          <button data-id="187" id="create-playlist-btn-q9r9" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-5 py-2.5 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
-            <i data-id="188" data-lucide="plus" class="w-4 h-4"></i> Create Playlist
+          <button data-id="205" id="create-playlist-btn-q9r9" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-5 py-2.5 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
+            <i data-id="206" data-lucide="plus" class="w-4 h-4"></i> Create Playlist
           </button>
         </div>
-        <div data-id="189" id="playlist-grid-s0t0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div data-id="207" id="playlist-grid-s0t0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         </div>
       </div>
 
     </main>
 
-    <footer data-id="190" class="border-t border-yt-border px-8 py-5 text-center text-xs text-yt-dimmed">
+    <footer data-id="208" class="border-t border-yt-border px-8 py-5 text-center text-xs text-yt-dimmed">
       Made by Copilot
     </footer>
   </div>
 
   <!-- Connect YouTube API Modal -->
-  <div data-id="191" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="192" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
-      <button data-id="193" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
-        <i data-id="194" data-lucide="x" class="w-5 h-5"></i>
+  <div data-id="209" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="210" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
+      <button data-id="211" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
+        <i data-id="212" data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <div data-id="195" class="text-center mb-6">
-        <div data-id="196" class="w-14 h-14 rounded-full bg-yt-red/15 flex items-center justify-center mx-auto mb-4">
-          <i data-id="197" data-lucide="youtube" class="w-7 h-7 text-yt-red"></i>
+      <div data-id="213" class="text-center mb-6">
+        <div data-id="214" class="w-14 h-14 rounded-full bg-yt-red/15 flex items-center justify-center mx-auto mb-4">
+          <i data-id="215" data-lucide="youtube" class="w-7 h-7 text-yt-red"></i>
         </div>
-        <h3 data-id="198" class="text-xl font-bold text-white">Connect Your YouTube Channel</h3>
-        <p data-id="199" class="text-sm text-yt-muted mt-1">Follow these steps to connect your API</p>
+        <h3 data-id="216" class="text-xl font-bold text-white">Connect Your YouTube Channel</h3>
+        <p data-id="217" class="text-sm text-yt-muted mt-1">Follow these steps to connect your API</p>
       </div>
-      <div data-id="200" class="space-y-3 mb-6">
-        <div data-id="201" class="flex gap-3 items-start">
-          <span data-id="202" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-          <p data-id="203" class="text-sm text-yt-muted">Go to Google Cloud Console and create a project</p>
+      <div data-id="218" class="space-y-3 mb-6">
+        <div data-id="219" class="flex gap-3 items-start">
+          <span data-id="220" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+          <p data-id="221" class="text-sm text-yt-muted">Go to Google Cloud Console and create a project</p>
         </div>
-        <div data-id="204" class="flex gap-3 items-start">
-          <span data-id="205" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-          <p data-id="206" class="text-sm text-yt-muted">Enable YouTube Data API v3 &amp; YouTube Analytics API</p>
+        <div data-id="222" class="flex gap-3 items-start">
+          <span data-id="223" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+          <p data-id="224" class="text-sm text-yt-muted">Enable YouTube Data API v3 &amp; YouTube Analytics API</p>
         </div>
-        <div data-id="207" class="flex gap-3 items-start">
-          <span data-id="208" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-          <p data-id="209" class="text-sm text-yt-muted">Create OAuth 2.0 credentials</p>
+        <div data-id="225" class="flex gap-3 items-start">
+          <span data-id="226" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+          <p data-id="227" class="text-sm text-yt-muted">Create OAuth 2.0 credentials</p>
         </div>
-        <div data-id="210" class="flex gap-3 items-start">
-          <span data-id="211" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
-          <p data-id="212" class="text-sm text-yt-muted">Paste your Client ID and (optional) API Key below</p>
+        <div data-id="228" class="flex gap-3 items-start">
+          <span data-id="229" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
+          <p data-id="230" class="text-sm text-yt-muted">Paste your Client ID and (optional) API Key below</p>
         </div>
       </div>
-      <input data-id="213" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <input data-id="214" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
+      <input data-id="231" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <input data-id="232" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
 
-      <button data-id="215" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
-        <i data-id="216" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
+      <button data-id="233" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
+        <i data-id="234" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
       </button>
     </div>
   </div>
 
   <!-- Gemini API Key Modal -->
-  <div data-id="217" id="gemini-key-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center modal-overlay p-4">
-    <div data-id="218" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:420px; max-width:90vw;">
-      <div data-id="219" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 data-id="220" style="font-size:17px; font-weight:700;">🔑 Gemini API Key</h3>
-        <button data-id="221" id="gemini-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
+  <div data-id="235" id="gemini-key-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center modal-overlay p-4">
+    <div data-id="236" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:420px; max-width:90vw;">
+      <div data-id="237" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h3 data-id="238" style="font-size:17px; font-weight:700;">🔑 Gemini API Key</h3>
+        <button data-id="239" id="gemini-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
       </div>
-      <p data-id="222" style="color:#aaa; font-size:13px; margin-bottom:16px;">Enter your Google AI Studio API key to enable AI-powered video metadata generation.</p>
-      <label data-id="223" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">API Key</label>
-      <input data-id="224" type="password" id="gemini-key-modal-input" placeholder="AIza..." style="
+      <p data-id="240" style="color:#aaa; font-size:13px; margin-bottom:16px;">Enter your Google AI Studio API key to enable AI-powered video metadata generation.</p>
+      <label data-id="241" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">API Key</label>
+      <input data-id="242" type="password" id="gemini-key-modal-input" placeholder="AIza..." style="
         width:100%; padding:10px 12px; background:#2a2a2a; border:1px solid #444;
         border-radius:8px; color:#fff; font-size:14px; margin-bottom:6px; box-sizing:border-box;
       "/>
-      <p data-id="225" style="color:#717171; font-size:11px; margin-bottom:20px;">
-        Get your free key at <strong data-id="226" style="color:#3ea6ff;">aistudio.google.com</strong> → Get API Key. Stored in localStorage only — never sent to any server.
+      <p data-id="243" style="color:#717171; font-size:11px; margin-bottom:20px;">
+        Get your free key at <strong data-id="244" style="color:#3ea6ff;">aistudio.google.com</strong> → Get API Key. Stored in localStorage only — never sent to any server.
       </p>
 
-      <label data-id="227" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">Gemini Model</label>
-      <select data-id="228" id="gemini-model-select" style="
+      <label data-id="245" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">Gemini Model</label>
+      <select data-id="246" id="gemini-model-select" style="
         width:100%; padding:10px 12px; background:#2a2a2a; border:1px solid #444;
         border-radius:8px; color:#fff; font-size:14px; margin-bottom:20px; cursor:pointer; box-sizing:border-box;
       ">
-        <option data-id="229" value="gemini-3.7-flash">gemini-3.7-flash</option>
-        <option data-id="230" value="gemini-3.6-flash">gemini-3.6-flash</option>
-        <option data-id="231" value="gemini-3.5-flash">gemini-3.5-flash</option>
-        <option data-id="232" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
+        <option data-id="247" value="gemini-3.7-flash">gemini-3.7-flash</option>
+        <option data-id="248" value="gemini-3.6-flash">gemini-3.6-flash</option>
+        <option data-id="249" value="gemini-3.5-flash">gemini-3.5-flash</option>
+        <option data-id="250" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
       </select>
 
-      <div data-id="233" style="display:flex; gap:10px;">
-        <button data-id="234" id="gemini-save-btn" style="
+      <div data-id="251" style="display:flex; gap:10px;">
+        <button data-id="252" id="gemini-save-btn" style="
           flex:1; padding:10px; background:#ff0000; border:none; border-radius:8px;
           color:#fff; font-size:14px; font-weight:600; cursor:pointer; transition:background 0.2s;
         ">Save Key</button>
-        <button data-id="235" id="gemini-clear-btn" style="
+        <button data-id="253" id="gemini-clear-btn" style="
           padding:10px 16px; background:#2a2a2a; border:1px solid #444; border-radius:8px;
           color:#aaa; font-size:14px; cursor:pointer;
         ">Clear</button>
@@ -526,89 +587,119 @@
   </div>
 
   <!-- Delete Confirmation Modal -->
-  <div data-id="236" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="237" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <div data-id="238" class="flex items-center gap-3 mb-4">
-        <div data-id="239" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
-          <i data-id="240" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
+  <div data-id="254" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="255" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <div data-id="256" class="flex items-center gap-3 mb-4">
+        <div data-id="257" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
+          <i data-id="258" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
         </div>
-        <h3 data-id="241" class="text-lg font-bold text-white">Delete Video?</h3>
+        <h3 data-id="259" class="text-lg font-bold text-white">Delete Video?</h3>
       </div>
-      <p data-id="242" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
-      <div data-id="243" class="flex gap-3 justify-end">
-        <button data-id="244" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="245" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
+      <p data-id="260" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
+      <div data-id="261" class="flex gap-3 justify-end">
+        <button data-id="262" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="263" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
       </div>
     </div>
   </div>
 
   <!-- Playlist Remove Modal -->
-  <div data-id="246" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="247" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="248" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
-      <div data-id="249" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
+  <div data-id="264" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="265" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="266" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
+      <div data-id="267" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
       </div>
-      <div data-id="250" id="pr-loading" class="hidden text-center py-4"><span data-id="251" class="spinner spinner-red"></span><span data-id="252" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
-      <div data-id="253" class="flex gap-3 justify-end">
-        <button data-id="254" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="255" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
+      <div data-id="268" id="pr-loading" class="hidden text-center py-4"><span data-id="269" class="spinner spinner-red"></span><span data-id="270" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
+      <div data-id="271" class="flex gap-3 justify-end">
+        <button data-id="272" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="273" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
       </div>
     </div>
   </div>
 
   <!-- Create Playlist Modal -->
-  <div data-id="256" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="257" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="258" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
-      <input data-id="259" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <select data-id="260" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-        <option data-id="261" value="public">Public</option>
-        <option data-id="262" value="unlisted">Unlisted</option>
-        <option data-id="263" value="private">Private</option>
+  <div data-id="274" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="275" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="276" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
+      <input data-id="277" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <select data-id="278" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
+        <option data-id="279" value="public">Public</option>
+        <option data-id="280" value="unlisted">Unlisted</option>
+        <option data-id="281" value="private">Private</option>
       </select>
-      <div data-id="264" class="flex gap-3 justify-end">
-        <button data-id="265" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="266" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
+      <div data-id="282" class="flex gap-3 justify-end">
+        <button data-id="283" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="284" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Relist Confirmation Modal -->
+  <div data-id="285" id="relist-modal" style="display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center;" class="modal-overlay">
+    <div data-id="286" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:460px; max-width:90vw;">
+      <div data-id="287" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 data-id="288" style="font-size:17px; font-weight:700;">🔁 Relist Video</h3>
+        <button data-id="289" id="relist-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
+      </div>
+
+      <div data-id="290" id="relist-video-info" style="background:#212121; border-radius:10px; padding:12px; margin-bottom:16px; font-size:13px; color:#aaa;"></div>
+
+      <div data-id="291" style="background:#2a1515; border:1px solid #cc0000; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:12px; color:#ffaaaa;">
+        ⚠️ <strong data-id="292">This will permanently delete the original video</strong> from YouTube and remove it from all playlists. A new upload will be prepared in the Upload tab with fresh AI-generated metadata and a new scheduled publish date.
+      </div>
+
+      <div data-id="293" style="margin-bottom:16px;">
+        <label data-id="294" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">New scheduled date</label>
+        <div data-id="295" style="display:flex; gap:8px; align-items:center;">
+          <input data-id="296" type="date" id="relist-date-input" style="flex:1; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
+          <input data-id="297" type="time" id="relist-time-input" value="12:00" style="width:100px; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
+          <button data-id="298" id="relist-best-time-btn" style="padding:8px 12px; background:#1a2a1a; border:1px solid #2ba640; border-radius:8px; color:#2ba640; font-size:11px; cursor:pointer;">⚡ Best</button>
+        </div>
+      </div>
+
+      <div data-id="299" style="display:flex; gap:10px;">
+        <button data-id="300" id="relist-confirm-btn" style="flex:1; padding:11px; background:#ff0000; border:none; border-radius:8px; color:#fff; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s;">🔁 Delete & Relist</button>
+        <button data-id="301" id="relist-cancel-btn" style="padding:11px 18px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#aaa; font-size:14px; cursor:pointer;">Cancel</button>
       </div>
     </div>
   </div>
 
   <!-- Activity Log Panel -->
-  <div data-id="267" id="log-panel" style="
+  <div data-id="302" id="log-panel" style="
     position: fixed; bottom: 0; left: 220px; right: 0; z-index: 999;
     background: #0a0a0a; border-top: 1px solid #333;
     transition: height 0.3s ease; height: 216px; overflow: hidden;
     font-family: 'Inter', monospace; font-size: 12px;
   ">
     <!-- Log Header / Toggle Bar -->
-    <div data-id="268" id="log-toggle" style="
+    <div data-id="303" id="log-toggle" style="
       height: 36px; display: flex; align-items: center; gap: 10px;
       padding: 0 16px; cursor: pointer; user-select: none;
       border-bottom: 1px solid #2a2a2a; background: #111;
     ">
-      <span data-id="269" style="color:#ff4444; font-size:10px;">●</span>
-      <span data-id="270" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
-      <span data-id="271" id="log-count-badge" style="
+      <span data-id="304" style="color:#ff4444; font-size:10px;">●</span>
+      <span data-id="305" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
+      <span data-id="306" id="log-count-badge" style="
         background:#333; color:#aaa; border-radius:10px;
         padding:1px 7px; font-size:10px; min-width:20px; text-align:center;
       ">0</span>
-      <div data-id="272" style="flex:1"></div>
-      <button data-id="273" id="copy-log-btn" style="
+      <div data-id="307" style="flex:1"></div>
+      <button data-id="308" id="copy-log-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s; margin-right:4px;
       ">Copy</button>
-      <button data-id="274" id="log-clear-btn" style="
+      <button data-id="309" id="log-clear-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s;
       ">Clear</button>
-      <span data-id="275" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
+      <span data-id="310" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
     </div>
     <!-- Log Body -->
-    <div data-id="276" id="log-body" style="
+    <div data-id="311" id="log-body" style="
       height: 180px; overflow-y: auto; padding: 8px 16px;
       display: flex; flex-direction: column; gap: 3px;
     ">
-      <div data-id="277" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
+      <div data-id="312" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
     </div>
   </div>
 
@@ -618,6 +709,24 @@
     // ============================================================
     if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
       lucide.createIcons();
+    }
+
+    // ============================================================
+    // MULTI-ACCOUNT HELPERS
+    // ============================================================
+    function getAccounts() {
+      try { return JSON.parse(localStorage.getItem('yt_accounts') || '[]'); } catch(e) { return []; }
+    }
+    function saveAccounts(accounts) {
+      localStorage.setItem('yt_accounts', JSON.stringify(accounts));
+    }
+    function getActiveAccount() {
+      var accounts = getAccounts();
+      var activeId = localStorage.getItem('yt_active_account');
+      return accounts.find(function(a) { return a.id === activeId; }) || accounts[0] || null;
+    }
+    function setActiveAccount(id) {
+      localStorage.setItem('yt_active_account', id);
     }
 
     // ============================================================
@@ -958,15 +1067,6 @@
       { id: 'pl6', snippet: { title: 'Gaming', thumbnails: { medium: { url: '' } } }, contentDetails: { itemCount: 22 }, status: { privacyStatus: 'public' }, _views: 321900, _gradient: 'from-indigo-600 to-violet-500', _videos: ['Best Games of 2026', 'Gaming Setup Tour', 'Speedrun Challenge', 'Retro Gaming Night', 'Co-op Stream Highlights'] },
     ];
 
-    const MOCK_LOW_PERFORMERS = [
-      { id: 'lp1', title: 'My First Vlog Ever', publishedAt: '2024-01-12T00:00:00Z', views: 234, likes: 45, watchMinutes: 80, retention: 22, _playlists: ['Vlogs'] },
-      { id: 'lp2', title: 'Random Day in My Life', publishedAt: '2024-03-05T00:00:00Z', views: 567, likes: 89, watchMinutes: 130, retention: 31, _playlists: ['Vlogs', 'Lifestyle'] },
-      { id: 'lp3', title: 'Old Product Review 2022', publishedAt: '2022-11-20T00:00:00Z', views: 189, likes: 12, watchMinutes: 58, retention: 18, _playlists: ['Product Reviews'] },
-      { id: 'lp4', title: 'Testing New Mic Setup', publishedAt: '2025-07-08T00:00:00Z', views: 445, likes: 67, watchMinutes: 105, retention: 29, _playlists: ['Tech Tutorials'] },
-      { id: 'lp5', title: 'Live Stream Highlights #2', publishedAt: '2025-09-14T00:00:00Z', views: 312, likes: 23, watchMinutes: 182, retention: 35, _playlists: ['Gaming', 'Vlogs'] },
-      { id: 'lp6', title: 'Behind the Scenes Raw Cut', publishedAt: '2025-12-01T00:00:00Z', views: 678, likes: 102, watchMinutes: 150, retention: 38, _playlists: ['Vlogs', 'Lifestyle'] },
-    ];
-
     // ============================================================
     // NOTIFICATION / TOAST SYSTEM
     // ============================================================
@@ -1012,14 +1112,14 @@
     }
 
     function showDemoModeBanner(tabName) {
-      const bannerMap = { performance: 'perf-demo-banner', lowperformers: 'lp-demo-banner', playlists: 'pl-demo-banner' };
+      const bannerMap = { performance: 'perf-demo-banner', playlists: 'pl-demo-banner' };
       const banner = document.getElementById(bannerMap[tabName]);
       if (banner) banner.classList.remove('hidden');
       state.demoMode[tabName] = true;
     }
 
     function hideDemoModeBanner(tabName) {
-      const bannerMap = { performance: 'perf-demo-banner', lowperformers: 'lp-demo-banner', playlists: 'pl-demo-banner' };
+      const bannerMap = { performance: 'perf-demo-banner', playlists: 'pl-demo-banner' };
       const banner = document.getElementById(bannerMap[tabName]);
       if (banner) banner.classList.add('hidden');
       state.demoMode[tabName] = false;
@@ -1031,18 +1131,35 @@
     async function ytFetch(url, options) {
       options = options || {};
       if (!state.token) throw new Error('Not authenticated');
-      const res = await fetch(url, {
-        ...options,
+      var fetchOptions = {
         headers: {
           'Authorization': 'Bearer ' + state.token,
-          'Content-Type': 'application/json',
-          ...(options.headers || {})
+          'Content-Type': 'application/json'
         }
-      });
+      };
+      if (options.method) fetchOptions.method = options.method;
+      if (options.body) fetchOptions.body = options.body;
+      if (options.headers) {
+        Object.keys(options.headers).forEach(function(k) {
+          fetchOptions.headers[k] = options.headers[k];
+        });
+      }
+      const res = await fetch(url, fetchOptions);
+      if (res.status === 204) return null;
       if (res.status === 401) {
         state.token = null;
         localStorage.removeItem('yt_access_token');
-        addLog('Session expired — token is invalid (401). Please reconnect.', 'error');
+
+        var accounts = getAccounts();
+        var activeId = localStorage.getItem('yt_active_account');
+        var idx = accounts.findIndex(function(a) { return a.id === activeId; });
+        if (idx >= 0) {
+          accounts[idx].expired = true;
+          saveAccounts(accounts);
+          updateAccountSwitcher();
+        }
+        addLog('Token expired for active account — please reconnect.', 'error');
+
         showNotification('Session expired. Please reconnect.', 'error');
         updateConnectionUI(false);
         return null;
@@ -1075,6 +1192,15 @@
     }
 
     function restoreSession() {
+      var activeAcc = getActiveAccount();
+      if (activeAcc && activeAcc.token && !activeAcc.expired) {
+        state.token = activeAcc.token;
+        state.clientId = activeAcc.clientId;
+        state.apiKey = localStorage.getItem('yt_api_key') || null;
+        initConnectedState();
+        return;
+      }
+
       const token = localStorage.getItem('yt_access_token');
       const clientId = localStorage.getItem('yt_client_id');
       if (token && clientId) {
@@ -1098,6 +1224,29 @@
         state.channelAvatar = ch.snippet.thumbnails?.default?.url;
         state.isConnected = true;
         updateChannelUI(ch);
+
+        var accounts = getAccounts();
+        var existingIdx = accounts.findIndex(function(a) { return a.channelId === ch.id; });
+        var accountObj = {
+          id: existingIdx >= 0 ? accounts[existingIdx].id : ('acc_' + Date.now()),
+          label: ch.snippet.title,
+          channelId: ch.id,
+          thumbnail: (ch.snippet.thumbnails && ch.snippet.thumbnails.default) ? ch.snippet.thumbnails.default.url : '',
+          token: state.token,
+          clientId: state.clientId || localStorage.getItem('yt_client_id') || '',
+          addedAt: Date.now(),
+          expired: false
+        };
+        if (existingIdx >= 0) {
+          accounts[existingIdx] = accountObj;
+        } else {
+          accounts.push(accountObj);
+        }
+        saveAccounts(accounts);
+        setActiveAccount(accountObj.id);
+        updateAccountSwitcher();
+        addLog('Account saved: ' + ch.snippet.title + ' (' + ch.id + ')', 'success');
+
         addLog('Connected to channel: ' + ch.snippet.title, 'success');
         addLog('Channel ID: ' + ch.id, 'info');
         const subCount = parseInt(ch.statistics?.subscriberCount || 0);
@@ -1109,6 +1258,7 @@
         state.isConnected = false;
         showNotification('API unavailable — running in Demo Mode. Deploy this app to use live YouTube data.', 'warning');
         updateConnectionUI(false);
+        updateAccountSwitcher();
         loadDemoData();
       }
     }
@@ -1155,6 +1305,7 @@
       localStorage.removeItem('yt_client_id');
       localStorage.removeItem('yt_api_key');
       updateConnectionUI(false);
+      updateAccountSwitcher();
       document.getElementById('sidebar-avatar').innerHTML = 'A';
       document.getElementById('sidebar-channel-name').textContent = 'Aidaluu';
       document.getElementById('sidebar-channel-sub').textContent = 'Creator Studio';
@@ -1165,11 +1316,514 @@
     function loadDemoData() {
       populatePlaylistDropdown(MOCK_PLAYLISTS);
       state.playlists = [...MOCK_PLAYLISTS];
-      state.lowPerformers = [...MOCK_LOW_PERFORMERS];
+      // Low performers now uses real Data API - no demo fallback needed
+      state.lowPerformers = [];
       if (activeTab === 'performance') { initChartsWithDemoData(); showDemoModeBanner('performance'); }
-      if (activeTab === 'lowperformers') { renderLowPerformers(); showDemoModeBanner('lowperformers'); }
       if (activeTab === 'playlists') { renderPlaylists(); showDemoModeBanner('playlists'); }
     }
+
+    // ============================================================
+    // ACCOUNT SWITCHER SYSTEM
+    // ============================================================
+    function toggleAccountDropdown() {
+      var dd = document.getElementById('account-dropdown');
+      var isOpen = dd.style.display === 'block';
+      dd.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) renderAccountList();
+    }
+
+    document.addEventListener('click', function(e) {
+      var wrapper = document.getElementById('account-switcher-wrapper');
+      if (wrapper && !wrapper.contains(e.target)) {
+        var dd = document.getElementById('account-dropdown');
+        if (dd) dd.style.display = 'none';
+      }
+    });
+
+    function renderAccountList() {
+      var list = document.getElementById('account-list');
+      if (!list) return;
+      var accounts = getAccounts();
+      var activeId = localStorage.getItem('yt_active_account');
+
+      if (!accounts.length) {
+        list.innerHTML = '<p style="color:#717171;font-size:12px;padding:10px 14px;">No accounts saved yet.</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+      accounts.forEach(function(acc) {
+        var isActive = acc.id === activeId;
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;background:' + (isActive ? 'rgba(62,166,255,0.1)' : 'none') + ';transition:background 0.15s;';
+        row.addEventListener('mouseover', function() {
+          row.style.background = isActive ? 'rgba(62,166,255,0.15)' : 'rgba(255,255,255,0.05)';
+        });
+        row.addEventListener('mouseout', function() {
+          row.style.background = isActive ? 'rgba(62,166,255,0.1)' : 'none';
+        });
+        row.addEventListener('click', function() {
+          switchToAccount(acc.id);
+        });
+
+        if (acc.thumbnail) {
+          var img = document.createElement('img');
+          img.src = acc.thumbnail;
+          img.style.cssText = 'width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid ' + (isActive ? '#3ea6ff' : 'transparent') + ';';
+          row.appendChild(img);
+        } else {
+          var placeholder = document.createElement('div');
+          placeholder.style.cssText = 'width:32px;height:32px;border-radius:50%;background:#333;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;';
+          placeholder.textContent = '📺';
+          row.appendChild(placeholder);
+        }
+
+        var info = document.createElement('div');
+        info.style.cssText = 'flex:1;overflow:hidden;';
+        var nameP = document.createElement('p');
+        nameP.style.cssText = 'color:' + (isActive ? '#3ea6ff' : '#fff') + ';font-size:13px;font-weight:' + (isActive ? '600' : '400') + ';overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+        nameP.textContent = acc.label;
+        var idP = document.createElement('p');
+        idP.style.cssText = 'color:#717171;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+        idP.textContent = acc.channelId;
+        info.appendChild(nameP);
+        info.appendChild(idP);
+        row.appendChild(info);
+
+        if (acc.expired) {
+          var expBadge = document.createElement('span');
+          expBadge.style.cssText = 'color:#f0b400;font-size:10px;font-weight:600;white-space:nowrap;';
+          expBadge.textContent = '⚠ Expired';
+          row.appendChild(expBadge);
+        }
+
+        if (isActive && !acc.expired) {
+          var activeBadge = document.createElement('span');
+          activeBadge.style.cssText = 'color:#3ea6ff;font-size:11px;font-weight:600;white-space:nowrap;';
+          activeBadge.textContent = '✓ Active';
+          row.appendChild(activeBadge);
+        }
+
+        var removeBtn = document.createElement('button');
+        removeBtn.style.cssText = 'background:none;border:none;color:#444;cursor:pointer;font-size:14px;padding:2px 4px;flex-shrink:0;';
+        removeBtn.textContent = '✕';
+        removeBtn.addEventListener('mouseover', function() { removeBtn.style.color = '#ff4444'; });
+        removeBtn.addEventListener('mouseout', function() { removeBtn.style.color = '#444'; });
+        removeBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          removeAccount(acc.id);
+        });
+        row.appendChild(removeBtn);
+
+        list.appendChild(row);
+      });
+    }
+
+    function switchToAccount(id) {
+      var accounts = getAccounts();
+      var acc = accounts.find(function(a) { return a.id === id; });
+      if (!acc) return;
+
+      document.getElementById('account-dropdown').style.display = 'none';
+
+      state.token = acc.token;
+      state.clientId = acc.clientId;
+      localStorage.setItem('yt_access_token', acc.token);
+      if (acc.clientId) localStorage.setItem('yt_client_id', acc.clientId);
+      setActiveAccount(id);
+
+      addLog('Switching to account: ' + acc.label, 'info');
+      showNotification('Switching to ' + acc.label + '...', 'info');
+
+      initConnectedState().then(function() {
+        addLog('Switched to: ' + acc.label, 'success');
+        showNotification('Now using: ' + acc.label, 'success');
+        updateAccountSwitcher();
+      }).catch(function(e) {
+        addLog('Switch failed — token may be expired. Please reconnect this account.', 'error');
+        showNotification('Token expired. Please reconnect this account.', 'error');
+      });
+    }
+
+    function removeAccount(id) {
+      var accounts = getAccounts();
+      var acc = accounts.find(function(a) { return a.id === id; });
+      if (!acc) return;
+      if (!confirm('Remove account "' + acc.label + '" from the list?')) return;
+
+      var filtered = accounts.filter(function(a) { return a.id !== id; });
+      saveAccounts(filtered);
+
+      var activeId = localStorage.getItem('yt_active_account');
+      if (activeId === id) {
+        if (filtered.length > 0) {
+          switchToAccount(filtered[0].id);
+        } else {
+          localStorage.removeItem('yt_active_account');
+          localStorage.removeItem('yt_access_token');
+          state.token = null;
+          disconnect();
+        }
+      }
+      addLog('Removed account: ' + acc.label, 'warning');
+      renderAccountList();
+      updateAccountSwitcher();
+    }
+
+    function addAnotherAccount() {
+      document.getElementById('account-dropdown').style.display = 'none';
+      addLog('Opening connect modal to add another account...', 'info');
+      document.getElementById('api-modal-u1v1').classList.remove('hidden');
+    }
+
+    function updateAccountSwitcher() {
+      var wrapper = document.getElementById('account-switcher-wrapper');
+      var avatar = document.getElementById('account-avatar');
+      var label = document.getElementById('account-label');
+      var accounts = getAccounts();
+
+      if (!wrapper) return;
+
+      if (accounts.length === 0) {
+        wrapper.style.display = 'none';
+        return;
+      }
+
+      wrapper.style.display = 'block';
+      var active = getActiveAccount();
+      if (active) {
+        if (avatar) {
+          avatar.src = active.thumbnail || '';
+          avatar.style.display = active.thumbnail ? 'block' : 'none';
+        }
+        if (label) label.textContent = active.label || 'My Channel';
+      }
+    }
+
+    document.getElementById('account-switcher-btn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleAccountDropdown();
+    });
+    document.getElementById('account-switcher-btn').addEventListener('mouseover', function() {
+      this.style.borderColor = '#3ea6ff';
+    });
+    document.getElementById('account-switcher-btn').addEventListener('mouseout', function() {
+      this.style.borderColor = '#333';
+    });
+
+    document.getElementById('add-another-account-btn').addEventListener('click', function() {
+      addAnotherAccount();
+    });
+    document.getElementById('add-another-account-btn').addEventListener('mouseover', function() {
+      this.style.background = 'rgba(62,166,255,0.08)';
+    });
+    document.getElementById('add-another-account-btn').addEventListener('mouseout', function() {
+      this.style.background = 'none';
+    });
+
+    // ============================================================
+    // FEATURE 1: AUTO-SCHEDULE QUICK PICKS
+    // ============================================================
+    function setScheduleDays(days) {
+      var toggle = document.getElementById('schedule-toggle-g3h4');
+      var picker = document.getElementById('schedule-picker-k7l8');
+      var label = document.getElementById('schedule-label-i5j6');
+      if (toggle && !toggle.classList.contains('active')) {
+        toggle.classList.add('active');
+        toggle.setAttribute('aria-checked', 'true');
+        if (picker) picker.classList.remove('hidden');
+        if (label) label.textContent = 'Scheduled';
+      }
+
+      var target = new Date();
+      target.setDate(target.getDate() + days);
+      target.setHours(12, 0, 0, 0);
+
+      var dateInput = document.getElementById('schedule-date-m9n0');
+      var timeInput = document.getElementById('schedule-time-o1p2');
+
+      if (dateInput) {
+        var y = target.getFullYear();
+        var m = String(target.getMonth() + 1).padStart(2, '0');
+        var d = String(target.getDate()).padStart(2, '0');
+        dateInput.value = y + '-' + m + '-' + d;
+      }
+      if (timeInput) timeInput.value = '12:00';
+
+      var suggestion = document.getElementById('schedule-suggestion');
+      if (suggestion) suggestion.style.display = 'none';
+
+      addLog('Schedule set to +' + days + ' days: ' + target.toDateString() + ' at 12:00 PM', 'success');
+      showNotification('Scheduled for ' + target.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ' at 12:00 PM', 'success');
+    }
+
+    function setScheduleBestTime() {
+      var toggle = document.getElementById('schedule-toggle-g3h4');
+      var picker = document.getElementById('schedule-picker-k7l8');
+      var label = document.getElementById('schedule-label-i5j6');
+      if (toggle && !toggle.classList.contains('active')) {
+        toggle.classList.add('active');
+        toggle.setAttribute('aria-checked', 'true');
+        if (picker) picker.classList.remove('hidden');
+        if (label) label.textContent = 'Scheduled';
+      }
+
+      var bestDays = [2, 3, 4, 6];
+      var bestHours = [11, 12, 13, 14, 15, 16, 18, 20];
+      var bestMinutes = [0, 30];
+
+      var dayLabels = { 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 6: 'Saturday' };
+      var dayReasons = {
+        2: 'Tuesday has the highest mid-week engagement — viewers are settled into the work week.',
+        3: 'Wednesday afternoon hits a strong mid-week traffic peak.',
+        4: 'Thursday drives high pre-weekend watch time.',
+        6: 'Saturday mornings reach weekend binge-viewers before they plan their day.'
+      };
+      var hourReasons = {
+        11: '11 AM catches early lunch-break viewers.',
+        12: 'Noon is peak lunch-break watching time.',
+        13: '1 PM extends the lunch-hour audience.',
+        14: '2 PM hits the post-lunch engagement window.',
+        15: '3 PM catches school-out and afternoon break viewers.',
+        16: '4 PM reaches the after-work early crowd.',
+        18: '6 PM is prime post-work / pre-dinner watch time.',
+        20: '8 PM is peak evening prime time for YouTube.'
+      };
+
+      var rotIdx = parseInt(localStorage.getItem('yt_schedule_rotation_index') || '0', 10);
+      localStorage.setItem('yt_schedule_rotation_index', String(rotIdx + 1));
+
+      var pickedDayOfWeek = bestDays[rotIdx % bestDays.length];
+      var pickedHour = bestHours[Math.floor(rotIdx / bestDays.length) % bestHours.length];
+      var pickedMinute = bestMinutes[rotIdx % bestMinutes.length];
+
+      var now = new Date();
+      var minDate = new Date(now);
+      minDate.setDate(minDate.getDate() + 2);
+
+      var target = new Date(minDate);
+      while (target.getDay() !== pickedDayOfWeek) {
+        target.setDate(target.getDate() + 1);
+      }
+      target.setHours(pickedHour, pickedMinute, 0, 0);
+
+      var diffMs = target - now;
+      if (diffMs < 2 * 24 * 60 * 60 * 1000) {
+        target.setDate(target.getDate() + 7);
+      }
+
+      var dateInput = document.getElementById('schedule-date-m9n0');
+      var timeInput = document.getElementById('schedule-time-o1p2');
+
+      if (dateInput) {
+        var y = target.getFullYear();
+        var mo = String(target.getMonth() + 1).padStart(2, '0');
+        var d = String(target.getDate()).padStart(2, '0');
+        dateInput.value = y + '-' + mo + '-' + d;
+      }
+      if (timeInput) {
+        var hh = String(pickedHour).padStart(2, '0');
+        var mm = String(pickedMinute).padStart(2, '0');
+        timeInput.value = hh + ':' + mm;
+      }
+
+      var ampm = pickedHour >= 12 ? 'PM' : 'AM';
+      var displayHour = pickedHour > 12 ? pickedHour - 12 : (pickedHour === 0 ? 12 : pickedHour);
+      var displayTime = displayHour + ':' + String(pickedMinute).padStart(2, '0') + ' ' + ampm;
+      var displayDate = target.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+      var suggestion = document.getElementById('schedule-suggestion');
+      if (suggestion) {
+        suggestion.style.display = 'block';
+        suggestion.innerHTML =
+          '⚡ <strong>' + displayDate + ' at ' + displayTime + '</strong> &nbsp;·&nbsp; ' +
+          '<span style="color:#aaa;">' + dayReasons[pickedDayOfWeek] + ' ' + hourReasons[pickedHour] + '</span>' +
+          '<span style="color:#555; font-size:10px; display:block; margin-top:3px;">Slot #' + (rotIdx + 1) + ' — varies each pick to spread your uploads.</span>';
+      }
+
+      addLog('Best time slot #' + (rotIdx + 1) + ': ' + displayDate + ' at ' + displayTime, 'success');
+      showNotification('Scheduled: ' + displayDate + ' at ' + displayTime, 'success');
+    }
+
+    document.getElementById('quick-pick-3').addEventListener('click', function() { setScheduleDays(3); });
+    document.getElementById('quick-pick-7').addEventListener('click', function() { setScheduleDays(7); });
+    document.getElementById('quick-pick-14').addEventListener('click', function() { setScheduleDays(14); });
+    document.getElementById('quick-pick-best').addEventListener('click', function() { setScheduleBestTime(); });
+
+    // ============================================================
+    // FEATURE 2: AUTO-ADD LINKS FROM SELECTED PLAYLIST'S FIRST VIDEO
+    // ============================================================
+    async function autoAddLinks() {
+      var btn = document.getElementById('auto-links-btn');
+      var resultDiv = document.getElementById('auto-links-result');
+      var descEl = document.getElementById('vid-desc-a7b8');
+
+      if (!state.token) {
+        showNotification('Please connect your YouTube account first.', 'error');
+        addLog('Auto-Add Links: no YouTube account connected', 'error');
+        return;
+      }
+
+      var playlistSelect = document.getElementById('vid-playlist-e1f2');
+      var selectedPlaylistId = playlistSelect ? playlistSelect.value : '';
+      var selectedPlaylistName = playlistSelect ? (playlistSelect.options[playlistSelect.selectedIndex] ? playlistSelect.options[playlistSelect.selectedIndex].text : '') : '';
+
+      if (!selectedPlaylistId && state.selectedPlaylist) {
+        selectedPlaylistId = state.selectedPlaylist;
+      }
+
+      if (!selectedPlaylistId) {
+        showNotification('Please select a playlist first — links will be pulled from that playlist\'s first video.', 'warning');
+        addLog('Auto-Add Links: no playlist selected', 'warning');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Fetching playlist...';
+      addLog('Auto-Add Links: using playlist "' + (selectedPlaylistName || selectedPlaylistId) + '"', 'info');
+
+      if (resultDiv) resultDiv.style.display = 'none';
+
+      try {
+        btn.innerHTML = '⏳ Getting first video...';
+        addLog('Fetching first video from playlist...', 'info');
+
+        var playlistRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/playlistItems' +
+          '?part=snippet&playlistId=' + encodeURIComponent(selectedPlaylistId) +
+          '&maxResults=1&order=position'
+        );
+
+        var items = (playlistRes && playlistRes.items) ? playlistRes.items : [];
+
+        if (!items.length) {
+          showNotification('This playlist has no existing videos to pull links from.', 'warning');
+          addLog('Playlist "' + (selectedPlaylistName || selectedPlaylistId) + '" has no videos', 'warning');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        var firstItem = items[0];
+        var firstVideoId = firstItem.snippet && firstItem.snippet.resourceId ? firstItem.snippet.resourceId.videoId : null;
+        var firstVideoTitle = firstItem.snippet ? firstItem.snippet.title : 'Unknown';
+
+        if (!firstVideoId) {
+          showNotification('Could not read video ID from playlist.', 'error');
+          addLog('Could not extract videoId from playlist item', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        addLog('First video in playlist: "' + firstVideoTitle + '" (' + firstVideoId + ')', 'success');
+
+        btn.innerHTML = '⏳ Reading description...';
+        addLog('Fetching full description for: "' + firstVideoTitle + '"', 'info');
+
+        var videoRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + firstVideoId
+        );
+
+        var videoItems = (videoRes && videoRes.items) ? videoRes.items : [];
+        if (!videoItems.length) {
+          showNotification('Could not fetch video description.', 'error');
+          addLog('No video data returned for ID: ' + firstVideoId, 'error');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        var description = (videoItems[0].snippet && videoItems[0].snippet.description) ? videoItems[0].snippet.description : '';
+        addLog('Description fetched (' + description.length + ' chars)', 'info');
+
+        var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>\n]+/g;
+        var rawUrls = description.match(urlRegex) || [];
+
+        var seen = new Set();
+        var foundLinks = [];
+        rawUrls.forEach(function(url) {
+          url = url.replace(/[.,;!?:]+$/, '');
+          if (!url || seen.has(url)) return;
+          if (url.includes('ytimg.com') || url.includes('ggpht.com')) return;
+          seen.add(url);
+          foundLinks.push(url);
+        });
+
+        addLog('Found ' + foundLinks.length + ' unique links in "' + firstVideoTitle + '"', foundLinks.length > 0 ? 'success' : 'warning');
+
+        if (!foundLinks.length) {
+          showNotification('No links found in the first playlist video\'s description.', 'warning');
+          addLog('Description contained no URLs', 'warning');
+          btn.disabled = false;
+          btn.innerHTML = '🔗 Auto-Add Links';
+          return;
+        }
+
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML =
+          '<p style="color:#3ea6ff; font-weight:600; margin-bottom:4px;">🔗 ' + foundLinks.length + ' link(s) from: <em style="font-weight:400;">' + firstVideoTitle + '</em></p>' +
+          '<p style="color:#717171; font-size:10px; margin-bottom:8px;">Playlist: ' + (selectedPlaylistName || selectedPlaylistId) + '</p>' +
+          '<div id="links-checklist" style="display:flex; flex-direction:column; gap:5px; max-height:200px; overflow-y:auto; margin-bottom:10px;">' +
+          foundLinks.map(function(url) {
+            var shortUrl = url.length > 70 ? url.substring(0, 70) + '…' : url;
+            return '<label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:3px 0;">' +
+              '<input type="checkbox" data-url="' + url.replace(/"/g, '&quot;') + '" checked style="margin-top:2px; accent-color:#3ea6ff; flex-shrink:0;" />' +
+              '<span style="color:#ccc; font-size:11px; word-break:break-all;">' + shortUrl + '</span>' +
+            '</label>';
+          }).join('') +
+          '</div>' +
+          '<div style="display:flex; gap:8px;">' +
+            '<button id="append-links-confirm-btn" style="padding:7px 16px; background:#3ea6ff; border:none; border-radius:7px; color:#fff; font-size:12px; font-weight:600; cursor:pointer;">✓ Add Selected to Description</button>' +
+            '<button id="append-links-cancel-btn" style="padding:7px 12px; background:#2a2a2a; border:1px solid #444; border-radius:7px; color:#aaa; font-size:12px; cursor:pointer;">Cancel</button>' +
+          '</div>';
+
+        document.getElementById('append-links-confirm-btn').addEventListener('click', function() {
+          appendSelectedLinks();
+        });
+        document.getElementById('append-links-cancel-btn').addEventListener('click', function() {
+          document.getElementById('auto-links-result').style.display = 'none';
+        });
+
+        addLog('Link preview ready — select links to append to description', 'info');
+
+      } catch(e) {
+        addLog('Auto-Add Links error: ' + e.message, 'error');
+        showNotification('Error: ' + e.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔗 Auto-Add Links';
+      }
+    }
+
+    function appendSelectedLinks() {
+      var descEl = document.getElementById('vid-desc-a7b8');
+      var checkboxes = document.querySelectorAll('#links-checklist input[type="checkbox"]:checked');
+      var selected = Array.from(checkboxes).map(function(cb) { return cb.getAttribute('data-url'); });
+
+      if (!selected.length) {
+        showNotification('No links selected.', 'warning');
+        return;
+      }
+
+      var current = descEl ? descEl.value.trim() : '';
+      var linksBlock = '\n\n🔗 Related Links:\n' + selected.map(function(u) { return '• ' + u; }).join('\n');
+      if (descEl) descEl.value = current + linksBlock;
+
+      document.getElementById('auto-links-result').style.display = 'none';
+      addLog('Appended ' + selected.length + ' link(s) to description', 'success');
+      showNotification(selected.length + ' link(s) added to description!', 'success');
+    }
+
+    document.getElementById('auto-links-btn').addEventListener('click', function() {
+      autoAddLinks();
+    });
+    document.getElementById('auto-links-btn').addEventListener('mouseover', function() {
+      this.style.background = 'rgba(62,166,255,0.15)';
+    });
+    document.getElementById('auto-links-btn').addEventListener('mouseout', function() {
+      this.style.background = '#1a1f2a';
+    });
 
     // ============================================================
     // TAB DATA LOADING
@@ -1177,7 +1831,7 @@
     function loadTabData(tab) {
       if (state.isConnected) {
         if (tab === 'performance') loadPerformanceData();
-        else if (tab === 'lowperformers') loadLowPerformers();
+        else if (tab === 'lowperformers') { /* user clicks Refresh List manually */ }
         else if (tab === 'playlists') loadPlaylists();
         else if (tab === 'upload') loadUserPlaylists();
       } else {
@@ -1188,7 +1842,6 @@
 
     function loadDemoForTab(tab) {
       if (tab === 'performance') { initChartsWithDemoData(); showDemoModeBanner('performance'); }
-      else if (tab === 'lowperformers') { renderLowPerformers(); showDemoModeBanner('lowperformers'); }
       else if (tab === 'playlists') { state.playlists = [...MOCK_PLAYLISTS]; renderPlaylists(); showDemoModeBanner('playlists'); }
       else if (tab === 'upload') { populatePlaylistDropdown(MOCK_PLAYLISTS); }
     }
@@ -1213,6 +1866,13 @@
       const h = Math.floor(minutes / 60);
       const m = Math.round(minutes % 60);
       return h > 0 ? h + 'h ' + m + 'm' : m + 'm';
+    }
+
+    function formatDurationSeconds(seconds) {
+      var s = Math.round(seconds);
+      var m = Math.floor(s / 60);
+      var rem = s % 60;
+      return m + 'm ' + rem + 's';
     }
 
     function formatDate(isoStr) {
@@ -1342,6 +2002,10 @@
       scheduleToggle.setAttribute('aria-checked', isActive);
       schedulePicker.classList.toggle('hidden', !isActive);
       scheduleLabel.textContent = isActive ? 'Scheduled' : 'Publish Immediately';
+      if (!isActive) {
+        var suggestion = document.getElementById('schedule-suggestion');
+        if (suggestion) suggestion.style.display = 'none';
+      }
     });
 
     // ============================================================
@@ -1449,12 +2113,10 @@
         return;
       }
 
-      // Update button to loading state
       aiBtn.disabled = true;
       aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Extracting 20 frames...';
 
       try {
-        // --- STEP 1: Extract frames ---
         addLog('Starting frame extraction from video...', 'info');
         showNotification('Extracting frames from your video...', 'info');
         var frames;
@@ -1469,10 +2131,8 @@
         showNotification('Captured ' + frames.length + ' frames — sending to Gemini Vision...', 'info');
         addLog('Frame extraction complete: ' + frames.length + ' frames captured at 320px JPEG 0.55 quality', 'success');
 
-        // --- STEP 2: Show frame strip preview ---
         renderFrameStrip(frames);
 
-        // --- STEP 3: Build multimodal Gemini request with real frame images ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> Sending frames to Gemini...';
         addLog('Building multimodal request with ' + frames.length + ' real frame images...', 'info');
 
@@ -1486,14 +2146,12 @@
         var playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
         var filename = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
 
-        // Build parts array: text instruction first, then one inline_data part per frame
         var parts = [
           {
             text: 'You are a YouTube SEO expert. I am giving you ' + frames.length + ' frames extracted evenly from a video file named "' + filename + '". Look carefully at ALL the frames to understand the full video content, topic, people, activities, setting, and theme.\n\nBased ONLY on what you can actually see in these frames, generate optimized YouTube metadata.\n\nYou MUST fully populate ALL four fields. The description must be 3 full paragraphs minimum. Tags must be exactly 10 comma-separated keywords.\n\nAvailable playlists: [' + playlistList + ']\n\nReturn ONLY valid JSON with no markdown, no code fences, no explanation:\n{"title": "engaging title max 60 chars", "description": "paragraph 1\\n\\nparagraph 2\\n\\nparagraph 3 with CTA\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5", "tags": "tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10", "playlist": "PlaylistName"}'
           }
         ];
 
-        // Add each frame as an inline_data image part (strip the data:image/jpeg;base64, prefix)
         frames.forEach(function(dataUrl, i) {
           var base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
           parts.push({
@@ -1543,33 +2201,29 @@
         }
 
         var geminiData = await geminiRes.json();
-        var rawText_result = (geminiData.candidates && geminiData.candidates[0] && geminiData.candidates[0].content && geminiData.candidates[0].content.parts && geminiData.candidates[0].content.parts[0]) 
-          ? geminiData.candidates[0].content.parts[0].text 
+        var rawText_result = (geminiData.candidates && geminiData.candidates[0] && geminiData.candidates[0].content && geminiData.candidates[0].content.parts && geminiData.candidates[0].content.parts[0])
+          ? geminiData.candidates[0].content.parts[0].text
           : '';
 
         addLog('Gemini response received (' + rawText_result.length + ' chars) — parsing...', 'info');
         addLog('Raw: ' + rawText_result.substring(0, 250) + (rawText_result.length > 250 ? '…' : ''), 'info');
 
-        // --- STEP 4: Parse response with robust multi-strategy parser ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⚙️</span> Parsing response...';
 
         var parsed = null;
         var rawText = rawText_result.trim();
 
-        // Pre-process: escape any literal newlines inside JSON string values
         rawText = rawText.replace(/:\s*"([\s\S]*?)"/g, function(match, val) {
           var escaped = val.replace(/\n/g, '\\n').replace(/\r/g, '');
           return match.replace(val, escaped);
         });
 
-        // Strategy 1: Direct JSON parse on the raw string
         try {
           parsed = JSON.parse(rawText);
         } catch (e1) {
           addLog('Strategy 1 (direct parse) failed — trying alternatives...', 'warning');
         }
 
-        // Strategy 2: Strip markdown code fences then parse
         if (!parsed) {
           try {
             var stripped = rawText
@@ -1581,7 +2235,6 @@
           } catch (e2) { /* continue */ }
         }
 
-        // Strategy 3: Extract first {...} block via regex
         if (!parsed) {
           try {
             var match = rawText.match(/\{[\s\S]*\}/);
@@ -1589,7 +2242,6 @@
           } catch (e3) { /* continue */ }
         }
 
-        // Strategy 4: Extract and fix common issues (single quotes, trailing commas)
         if (!parsed) {
           try {
             var cleaned = rawText
@@ -1602,7 +2254,6 @@
           } catch (e4) { /* continue */ }
         }
 
-        // Strategy 5: Build object manually from key: "value" pattern
         if (!parsed) {
           try {
             var extractedTitle = rawText.match(/"title"\s*:\s*"([^"]+)"/)?.[1] || '';
@@ -1621,7 +2272,6 @@
           throw new Error('AI returned unexpected format — check the log for the raw response.');
         }
 
-        // Validate required fields exist
         if (!parsed.title && !parsed.tags) {
           addLog('Parsed object missing required fields: ' + JSON.stringify(parsed).substring(0, 200), 'error');
           throw new Error('AI response parsed but missing required fields (title, tags).');
@@ -1629,13 +2279,11 @@
 
         addLog('JSON parsed successfully', 'success');
 
-        // Log each parsed field value for debugging
         addLog('Title: ' + (parsed.title || '(empty)'), parsed.title ? 'success' : 'warning');
         addLog('Description length: ' + (parsed.description ? parsed.description.length + ' chars' : '(empty)'), parsed.description ? 'success' : 'warning');
         addLog('Tags: ' + (parsed.tags || '(empty)'), parsed.tags ? 'success' : 'warning');
         addLog('Playlist: ' + (parsed.playlist || '(empty)'), parsed.playlist ? 'success' : 'warning');
 
-        // --- STEP 5: Populate form fields ---
         var titleEl = document.getElementById('vid-title-y5z6');
         var descEl = document.getElementById('vid-desc-a7b8');
         var tagsEl = document.getElementById('vid-tags-c9d0');
@@ -1800,7 +2448,6 @@
       renderQueue();
       showNotification('"' + title + '" added to queue.', 'success');
 
-      // Clear form
       document.getElementById('vid-title-y5z6').value = '';
       document.getElementById('vid-desc-a7b8').value = '';
       document.getElementById('vid-tags-c9d0').value = '';
@@ -1930,10 +2577,9 @@
               views: acc.views + row[1],
               watchMinutes: acc.watchMinutes + row[2],
               likes: acc.likes + row[3],
-              comments: acc.comments + row[4],
-              shares: acc.shares + row[5]
+              comments: acc.comments + row[4]
             };
-          }, { views: 0, watchMinutes: 0, likes: 0, comments: 0, shares: 0 });
+          }, { views: 0, watchMinutes: 0, likes: 0, comments: 0 });
 
           updateStatCards(totals);
           updateViewsChart(analyticsViews.rows);
@@ -1960,6 +2606,8 @@
         animateCounters();
       } catch (e) {
         showNotification('Analytics error — showing demo data.', 'warning');
+        addLog('Analytics query failed: ' + (e && e.message ? e.message : String(e)), 'error');
+        addLog('Falling back to demo data for charts', 'warning');
         showDemoModeBanner('performance');
         initChartsWithDemoData();
       } finally {
@@ -1993,11 +2641,14 @@
       var datasets = rows.map(function(row, i) {
         var detail = details.find(function(d) { return d.id === row[0]; });
         var title = detail?.snippet?.title?.substring(0, 20) || ('Video ' + (i + 1));
-        var pct = row[1];
+        var avgDurationSec = Math.round(row[3]);
+        var formattedDuration = formatDurationSeconds(avgDurationSec);
         var colors = ['#ff0000', '#3ea6ff', '#2ba640'];
+
+        var retentionPct = Math.min(100, Math.round((avgDurationSec / 600) * 100));
         return {
-          label: title,
-          data: [100, Math.round(pct * 0.75), Math.round(pct * 0.6), Math.round(pct * 0.45), Math.round(pct * 0.3)],
+          label: title + ' (Avg: ' + formattedDuration + ')',
+          data: [100, Math.round(retentionPct * 0.85), Math.round(retentionPct * 0.65), Math.round(retentionPct * 0.45), Math.round(retentionPct * 0.3)],
           borderColor: colors[i % 3],
           backgroundColor: colors[i % 3].replace(')', ',0.08)').replace('rgb', 'rgba').replace('#', ''),
           fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2
@@ -2007,14 +2658,13 @@
     }
 
     function updateEngagementFromTotals(totals) {
-      var total = totals.likes + totals.comments + totals.shares;
+      var total = totals.likes + totals.comments;
       if (total === 0) return;
       var likesPct = Math.round((totals.likes / total) * 100);
-      var sharesPct = Math.round((totals.shares / total) * 100);
-      var commentsPct = 100 - likesPct - sharesPct;
+      var commentsPct = 100 - likesPct;
       createOrUpdateEngagementChart(
-        ['Likes (' + likesPct + '%)', 'Shares (' + sharesPct + '%)', 'Comments (' + commentsPct + '%)'],
-        [likesPct, sharesPct, commentsPct]
+        ['Likes (' + likesPct + '%)', 'Comments (' + commentsPct + '%)'],
+        [likesPct, commentsPct]
       );
     }
 
@@ -2096,12 +2746,13 @@
     function createOrUpdateEngagementChart(labels, data) {
       var ctx = document.getElementById('chart-engagement-g4h4').getContext('2d');
       if (chartInstances.engagement) chartInstances.engagement.destroy();
+      var colors = ['#ff0000', '#3ea6ff', '#2ba640'];
       chartInstances.engagement = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels: labels,
           datasets: [{
-            data: data, backgroundColor: ['#ff0000', '#3ea6ff', '#2ba640'],
+            data: data, backgroundColor: colors.slice(0, data.length),
             borderColor: '#1a1a1a', borderWidth: 3, hoverOffset: 8
           }]
         },
@@ -2128,7 +2779,7 @@
       }
       var viewsLabels = [];
       for (var i = 29; i >= 0; i--) {
-        var d = new Date(2026, 7, 20);
+        var d = new Date(2026, 7, 22);
         d.setDate(d.getDate() - i);
         viewsLabels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
       }
@@ -2140,9 +2791,9 @@
       );
 
       createOrUpdateRetentionChart([
-        { label: 'Complete Python Course', data: [100, 72, 58, 44, 31], borderColor: '#ff0000', backgroundColor: 'rgba(255,0,0,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#ff0000', borderWidth: 2 },
-        { label: 'iPhone 17 Review', data: [100, 68, 52, 38, 25], borderColor: '#3ea6ff', backgroundColor: 'rgba(62,166,255,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3ea6ff', borderWidth: 2 },
-        { label: 'SEO Secrets 2026', data: [100, 78, 63, 50, 36], borderColor: '#2ba640', backgroundColor: 'rgba(43,166,64,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#2ba640', borderWidth: 2 },
+        { label: 'Complete Python Course (Avg: 8m 24s)', data: [100, 72, 58, 44, 31], borderColor: '#ff0000', backgroundColor: 'rgba(255,0,0,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#ff0000', borderWidth: 2 },
+        { label: 'iPhone 17 Review (Avg: 6m 12s)', data: [100, 68, 52, 38, 25], borderColor: '#3ea6ff', backgroundColor: 'rgba(62,166,255,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3ea6ff', borderWidth: 2 },
+        { label: 'SEO Secrets 2026 (Avg: 9m 45s)', data: [100, 78, 63, 50, 36], borderColor: '#2ba640', backgroundColor: 'rgba(43,166,64,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#2ba640', borderWidth: 2 },
       ]);
 
       createOrUpdateEngagementChart(['Likes (52%)', 'Shares (30%)', 'Comments (18%)'], [52, 30, 18]);
@@ -2176,135 +2827,395 @@
     }
 
     // ============================================================
-    // LOW PERFORMERS
+    // LOW PERFORMERS — NEW DATA API APPROACH
     // ============================================================
     async function loadLowPerformers() {
-      hideDemoModeBanner('lowperformers');
-      showTabLoading('lowperformers');
-      addLog('Analyzing channel videos for low performance...', 'info');
+      if (!state.token) {
+        showNotification('Please connect your YouTube account first.', 'error');
+        return;
+      }
+
+      var threshold = parseInt(document.getElementById('lp-threshold-input')?.value || '100', 10);
+      var listEl = document.getElementById('lp-video-list');
+      var countLabel = document.getElementById('lp-count-label');
+
+      if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#aaa;font-size:13px;">⏳ Scanning channel videos...</div>';
+      if (countLabel) countLabel.textContent = '';
+
+      addLog('Scanning channel for videos with fewer than ' + threshold + ' views...', 'info');
+
       try {
-        var today = new Date().toISOString().split('T')[0];
-        var days = parseInt(document.getElementById('lp-period-i5j5').value) || 90;
-        var startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-        var data = await ytFetch(
-          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + startDate + '&endDate=' + today + '&metrics=views,likes,comments,estimatedMinutesWatched&dimensions=video&sort=views&maxResults=15'
+        // Step 1: Fetch up to 50 most recent channel videos using Data API
+        var searchRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&type=video&maxResults=50&order=date'
         );
+        var items = (searchRes && searchRes.items) ? searchRes.items : [];
 
-        if (!data?.rows?.length) {
-          state.lowPerformers = [];
-          addLog('Found 0 below-average videos', 'info');
-          renderLowPerformers();
+        if (!items.length) {
+          if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#717171;">No videos found on this channel.</div>';
+          addLog('No channel videos found', 'warning');
           return;
         }
 
-        var videoIds = data.rows.map(function(r) { return r[0]; }).join(',');
-        var videoDetails = await ytFetch(YT_API + '/videos?part=snippet,statistics&id=' + videoIds);
-        var avgViews = data.rows.reduce(function(s, r) { return s + r[1]; }, 0) / data.rows.length;
+        addLog('Found ' + items.length + ' videos — fetching view counts...', 'info');
 
-        state.lowPerformers = data.rows.map(function(row) {
-          var detail = videoDetails?.items?.find(function(v) { return v.id === row[0]; });
-          return {
-            id: row[0],
-            title: detail?.snippet?.title || 'Unknown Video',
-            thumbnail: detail?.snippet?.thumbnails?.medium?.url,
-            publishedAt: detail?.snippet?.publishedAt,
-            views: row[1],
-            retention: Math.round(row[2]),
-            likes: row[3],
-            comments: row[4],
-            watchMinutes: row[5],
-            channelAvgViews: Math.round(avgViews)
-          };
-        }).filter(function(v) { return v.views < avgViews; });
+        // Step 2: Get video statistics for all videos
+        var videoIds = items.map(function(it) { return it.id && it.id.videoId ? it.id.videoId : null; }).filter(Boolean);
+        var statsRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,status&id=' + videoIds.join(',')
+        );
+        var videos = (statsRes && statsRes.items) ? statsRes.items : [];
 
-        addLog('Found ' + state.lowPerformers.length + ' below-average videos', state.lowPerformers.length > 0 ? 'warning' : 'info');
+        // Step 3: Filter by threshold
+        var lowView = videos.filter(function(v) {
+          var views = parseInt((v.statistics && v.statistics.viewCount) || '0', 10);
+          return views < threshold;
+        }).sort(function(a, b) {
+          return parseInt(a.statistics.viewCount || 0) - parseInt(b.statistics.viewCount || 0);
+        });
+
+        addLog('Found ' + lowView.length + ' videos with fewer than ' + threshold + ' views', lowView.length > 0 ? 'warning' : 'success');
+        if (countLabel) countLabel.textContent = lowView.length + ' video' + (lowView.length !== 1 ? 's' : '') + ' found';
+
+        state.lowPerformers = lowView;
+
+        if (!lowView.length) {
+          if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:48px 20px;"><p style="color:#2ba640;font-size:24px;margin-bottom:8px;">✓</p><p style="color:#aaa;font-size:14px;">All your videos have ' + threshold + '+ views!</p></div>';
+          return;
+        }
+
         renderLowPerformers();
-      } catch (e) {
-        showNotification('Could not load low performers — showing demo data.', 'warning');
-        state.lowPerformers = [...MOCK_LOW_PERFORMERS];
-        showDemoModeBanner('lowperformers');
-        renderLowPerformers();
-      } finally {
-        hideTabLoading('lowperformers');
+
+      } catch(e) {
+        addLog('Low performers scan failed: ' + e.message, 'error');
+        showNotification('Could not scan videos: ' + e.message, 'error');
+        if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#ff4444;">Error: ' + e.message + '</div>';
       }
     }
 
     function renderLowPerformers() {
-      var grid = document.getElementById('lp-grid-o8p8');
-      var items = state.lowPerformers;
+      var listEl = document.getElementById('lp-video-list');
+      if (!listEl) return;
+      var items = state.lowPerformers || [];
 
-      var sortBy = document.getElementById('lp-sort-k6l6').value;
-      if (sortBy === 'retention') items.sort(function(a, b) { return a.retention - b.retention; });
-      else if (sortBy === 'likes') items.sort(function(a, b) { return a.likes - b.likes; });
-      else items.sort(function(a, b) { return a.views - b.views; });
-
-      if (items.length === 0) {
-        grid.innerHTML = '<div class="col-span-2 text-center py-12"><p class="text-yt-muted">No low-performing videos found.</p></div>';
+      if (!items.length) {
+        listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#717171;">No low-view videos found.</div>';
         return;
       }
 
-      grid.innerHTML = items.map(function(lp) {
-        var retColor = lp.retention < 25 ? 'bg-red-500' : lp.retention < 35 ? 'bg-orange-500' : 'bg-yellow-500';
-        var viewBadge = lp.views < 1000 ? 'bg-red-500/20 text-red-400' : 'bg-yt-card text-yt-muted';
-        var dateStr = lp.publishedAt ? formatDate(lp.publishedAt) : (lp.date || '');
-        var wt = lp.watchMinutes ? formatDuration(lp.watchMinutes) : (lp.watchTime || '');
-        var thumbStyle = lp.thumbnail ? 'background-image:url(' + lp.thumbnail + ');background-size:cover;background-position:center;' : '';
-        return '<div class="bg-yt-surface rounded-xl p-4 border border-yt-border card-lift" data-lp-id="' + lp.id + '" id="lp-card-' + lp.id + '">' +
-          '<div class="flex gap-4">' +
-            '<div class="w-36 h-20 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center shrink-0" style="' + thumbStyle + '">' +
-              (!lp.thumbnail ? '<i data-lucide="play-circle" class="w-8 h-8 text-gray-500"></i>' : '') +
-            '</div>' +
-            '<div class="flex-1 min-w-0">' +
-              '<p class="text-sm font-semibold text-white truncate">' + lp.title + '</p>' +
-              '<p class="text-xs text-yt-dimmed mt-0.5">Published ' + dateStr + '</p>' +
-              '<div class="flex flex-wrap gap-2 mt-2">' +
-                '<span class="text-xs px-2 py-0.5 rounded ' + viewBadge + ' tabular-nums">' + lp.views.toLocaleString() + ' views</span>' +
-                '<span class="text-xs px-2 py-0.5 rounded bg-yt-card text-yt-muted tabular-nums">' + lp.likes + ' likes</span>' +
-                '<span class="text-xs px-2 py-0.5 rounded bg-yt-card text-yt-muted tabular-nums">' + wt + ' avg</span>' +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="mt-3">' +
-            '<div class="flex items-center justify-between mb-1">' +
-              '<span class="text-xs text-yt-dimmed">Retention vs. channel avg</span>' +
-              '<span class="text-xs font-semibold ' + (lp.retention < 30 ? 'text-red-400' : 'text-yellow-400') + ' tabular-nums">' + lp.retention + '%</span>' +
-            '</div>' +
-            '<div class="retention-bar">' +
-              '<div class="retention-bar-fill ' + retColor + '" style="width: ' + lp.retention + '%"></div>' +
-            '</div>' +
-          '</div>' +
-          '<div id="lp-status-' + lp.id + '" class="hidden mt-2 text-xs text-green-400 font-medium"></div>' +
-          '<div class="flex gap-2 mt-3">' +
-            '<button class="lp-delete-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-red-500/40 text-red-400 text-xs font-medium hover:bg-red-500/10 btn-press transition-colors" data-lpid="' + lp.id + '">' +
-              '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete Video' +
-            '</button>' +
-            '<button class="lp-remove-pl-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-yt-border text-yt-muted text-xs font-medium hover:bg-yt-hover btn-press transition-colors" data-lpid="' + lp.id + '">' +
-              '<i data-lucide="list-x" class="w-3.5 h-3.5"></i> Remove from Playlists' +
-            '</button>' +
-          '</div>' +
-        '</div>';
-      }).join('');
+      listEl.innerHTML = '';
 
-      grid.querySelectorAll('.lp-delete-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          deleteTargetId = btn.dataset.lpid;
-          deleteTargetCard = document.getElementById('lp-card-' + deleteTargetId);
-          var lp = state.lowPerformers.find(function(l) { return l.id === deleteTargetId; });
-          document.getElementById('delete-modal-msg').textContent = 'Are you sure you want to permanently delete "' + (lp?.title || 'this video') + '"? This cannot be undone.';
-          document.getElementById('delete-modal-c5d5').classList.remove('hidden');
-        });
+      items.forEach(function(video) {
+        var views = parseInt((video.statistics && video.statistics.viewCount) || '0', 10);
+        var likes = parseInt((video.statistics && video.statistics.likeCount) || '0', 10);
+        var comments = parseInt((video.statistics && video.statistics.commentCount) || '0', 10);
+        var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
+        var thumb = (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.medium)
+          ? video.snippet.thumbnails.medium.url
+          : (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.default)
+          ? video.snippet.thumbnails.default.url : '';
+        var publishedAt = (video.snippet && video.snippet.publishedAt)
+          ? new Date(video.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          : '';
+        var privacy = (video.status && video.status.privacyStatus) ? video.status.privacyStatus : '';
+        var vid = video.id;
+
+        var row = document.createElement('div');
+        row.id = 'lp-row-' + vid;
+        row.style.cssText = 'display:flex; align-items:center; gap:14px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:12px; padding:12px 16px; transition:border-color 0.2s;';
+        row.addEventListener('mouseover', function() { row.style.borderColor = '#444'; });
+        row.addEventListener('mouseout', function() { row.style.borderColor = '#2a2a2a'; });
+
+        // Thumbnail
+        if (thumb) {
+          var img = document.createElement('img');
+          img.src = thumb;
+          img.style.cssText = 'width:96px; height:54px; object-fit:cover; border-radius:6px; flex-shrink:0;';
+          row.appendChild(img);
+        } else {
+          var placeholder = document.createElement('div');
+          placeholder.style.cssText = 'width:96px;height:54px;background:#2a2a2a;border-radius:6px;flex-shrink:0;';
+          row.appendChild(placeholder);
+        }
+
+        // Info
+        var infoDiv = document.createElement('div');
+        infoDiv.style.cssText = 'flex:1; overflow:hidden;';
+
+        var titleP = document.createElement('p');
+        titleP.style.cssText = 'color:#fff; font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:4px;';
+        titleP.textContent = title;
+        infoDiv.appendChild(titleP);
+
+        var statsDiv = document.createElement('div');
+        statsDiv.style.cssText = 'display:flex; align-items:center; gap:12px; flex-wrap:wrap;';
+
+        var viewsSpan = document.createElement('span');
+        viewsSpan.style.cssText = 'color:#ff4444; font-size:12px; font-weight:700;';
+        viewsSpan.textContent = '👁 ' + views.toLocaleString() + ' views';
+        statsDiv.appendChild(viewsSpan);
+
+        var likesSpan = document.createElement('span');
+        likesSpan.style.cssText = 'color:#717171; font-size:11px;';
+        likesSpan.textContent = '👍 ' + likes.toLocaleString();
+        statsDiv.appendChild(likesSpan);
+
+        var commentsSpan = document.createElement('span');
+        commentsSpan.style.cssText = 'color:#717171; font-size:11px;';
+        commentsSpan.textContent = '💬 ' + comments.toLocaleString();
+        statsDiv.appendChild(commentsSpan);
+
+        if (publishedAt) {
+          var dateSpan = document.createElement('span');
+          dateSpan.style.cssText = 'color:#555; font-size:11px;';
+          dateSpan.textContent = '📅 ' + publishedAt;
+          statsDiv.appendChild(dateSpan);
+        }
+
+        if (privacy) {
+          var privSpan = document.createElement('span');
+          privSpan.style.cssText = 'color:#555; font-size:10px; background:#2a2a2a; padding:1px 6px; border-radius:4px;';
+          privSpan.textContent = privacy;
+          statsDiv.appendChild(privSpan);
+        }
+
+        infoDiv.appendChild(statsDiv);
+        row.appendChild(infoDiv);
+
+        // Actions
+        var actionsDiv = document.createElement('div');
+        actionsDiv.style.cssText = 'display:flex; gap:8px; flex-shrink:0;';
+
+        var watchLink = document.createElement('a');
+        watchLink.href = 'https://youtube.com/watch?v=' + vid;
+        watchLink.target = '_blank';
+        watchLink.style.cssText = 'padding:6px 10px; background:#2a2a2a; border:1px solid #333; border-radius:7px; color:#aaa; font-size:11px; cursor:pointer; text-decoration:none; transition:all 0.2s;';
+        watchLink.textContent = 'Watch';
+        watchLink.addEventListener('mouseover', function() { watchLink.style.color = '#fff'; });
+        watchLink.addEventListener('mouseout', function() { watchLink.style.color = '#aaa'; });
+        actionsDiv.appendChild(watchLink);
+
+        var relistBtn = document.createElement('button');
+        relistBtn.style.cssText = 'padding:6px 14px; background:#ff0000; border:none; border-radius:7px; color:#fff; font-size:12px; font-weight:600; cursor:pointer; transition:background 0.2s;';
+        relistBtn.textContent = '🔁 Relist';
+        relistBtn.addEventListener('mouseover', function() { relistBtn.style.background = '#cc0000'; });
+        relistBtn.addEventListener('mouseout', function() { relistBtn.style.background = '#ff0000'; });
+        relistBtn.addEventListener('click', function() { confirmRelist(vid); });
+        actionsDiv.appendChild(relistBtn);
+
+        row.appendChild(actionsDiv);
+        listEl.appendChild(row);
       });
-
-      grid.querySelectorAll('.lp-remove-pl-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          playlistRemoveTargetId = btn.dataset.lpid;
-          openPlaylistRemoveModal(playlistRemoveTargetId);
-        });
-      });
-
-      if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
     }
+
+    // Low performers threshold input — sync with display
+    document.getElementById('lp-threshold-input').addEventListener('change', function() {
+      document.getElementById('lp-threshold-display').textContent = this.value;
+    });
+
+    // Low performers refresh button
+    document.getElementById('lp-refresh-list-btn').addEventListener('click', function() {
+      loadLowPerformers();
+    });
+    document.getElementById('lp-refresh-list-btn').addEventListener('mouseover', function() {
+      this.style.borderColor = '#ff0000';
+      this.style.color = '#fff';
+    });
+    document.getElementById('lp-refresh-list-btn').addEventListener('mouseout', function() {
+      this.style.borderColor = '#333';
+      this.style.color = '#aaa';
+    });
+
+    // ============================================================
+    // RELIST SYSTEM
+    // ============================================================
+    var relistTargetVideoId = null;
+    var relistTargetVideo = null;
+
+    function confirmRelist(videoId) {
+      var video = (state.lowPerformers || []).find(function(v) { return v.id === videoId; });
+      if (!video) return;
+
+      relistTargetVideoId = videoId;
+      relistTargetVideo = video;
+
+      var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
+      var views = parseInt((video.statistics && video.statistics.viewCount) || '0', 10);
+      var thumb = (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.medium)
+        ? video.snippet.thumbnails.medium.url : '';
+
+      var infoEl = document.getElementById('relist-video-info');
+      if (infoEl) {
+        infoEl.innerHTML = '';
+        var infoWrapper = document.createElement('div');
+        infoWrapper.style.cssText = 'display:flex;gap:10px;align-items:center;';
+        if (thumb) {
+          var thumbImg = document.createElement('img');
+          thumbImg.src = thumb;
+          thumbImg.style.cssText = 'width:80px;height:45px;object-fit:cover;border-radius:5px;flex-shrink:0;';
+          infoWrapper.appendChild(thumbImg);
+        }
+        var textDiv = document.createElement('div');
+        var titleP = document.createElement('p');
+        titleP.style.cssText = 'color:#fff;font-size:13px;font-weight:500;margin-bottom:3px;';
+        titleP.textContent = title;
+        var viewsP = document.createElement('p');
+        viewsP.style.cssText = 'color:#ff4444;font-size:12px;';
+        viewsP.textContent = '👁 ' + views.toLocaleString() + ' views';
+        textDiv.appendChild(titleP);
+        textDiv.appendChild(viewsP);
+        infoWrapper.appendChild(textDiv);
+        infoEl.appendChild(infoWrapper);
+      }
+
+      // Pre-fill a best time for the relist date
+      setRelistBestTime();
+
+      var modal = document.getElementById('relist-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function setRelistBestTime() {
+      var bestDays = [2, 3, 4, 6];
+      var bestHours = [11, 12, 13, 14, 15, 16, 18, 20];
+      var rotIdx = parseInt(localStorage.getItem('yt_schedule_rotation_index') || '0', 10);
+      localStorage.setItem('yt_schedule_rotation_index', String(rotIdx + 1));
+
+      var pickedDay = bestDays[rotIdx % bestDays.length];
+      var pickedHour = bestHours[Math.floor(rotIdx / bestDays.length) % bestHours.length];
+      var pickedMinute = (rotIdx % 2 === 0) ? 0 : 30;
+
+      var target = new Date();
+      target.setDate(target.getDate() + 2);
+      while (target.getDay() !== pickedDay) target.setDate(target.getDate() + 1);
+      target.setHours(pickedHour, pickedMinute, 0, 0);
+
+      var dateIn = document.getElementById('relist-date-input');
+      var timeIn = document.getElementById('relist-time-input');
+      if (dateIn) {
+        var y = target.getFullYear();
+        var m = String(target.getMonth()+1).padStart(2,'0');
+        var d = String(target.getDate()).padStart(2,'0');
+        dateIn.value = y + '-' + m + '-' + d;
+      }
+      if (timeIn) timeIn.value = String(pickedHour).padStart(2,'0') + ':' + String(pickedMinute).padStart(2,'0');
+    }
+
+    async function executeRelist() {
+      if (!relistTargetVideoId || !relistTargetVideo) return;
+
+      var btn = document.getElementById('relist-confirm-btn');
+      var videoId = relistTargetVideoId;
+      var video = relistTargetVideo;
+      var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
+      var scheduledDate = document.getElementById('relist-date-input')?.value;
+      var scheduledTime = document.getElementById('relist-time-input')?.value || '12:00';
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Step 1/3: Removing from playlists...';
+      addLog('Relist started for: "' + title + '"', 'info');
+
+      try {
+        // Step 1: Remove from all playlists
+        addLog('Fetching playlist memberships for video ' + videoId + '...', 'info');
+        var plRes = await ytFetch(
+          'https://www.googleapis.com/youtube/v3/playlistItems?part=id,snippet&maxResults=50&videoId=' + videoId
+        );
+        var plItems = (plRes && plRes.items) ? plRes.items : [];
+        addLog('Found in ' + plItems.length + ' playlist(s)', 'info');
+
+        for (var i = 0; i < plItems.length; i++) {
+          var itemId = plItems[i].id;
+          var plName = (plItems[i].snippet && plItems[i].snippet.playlistId) ? plItems[i].snippet.playlistId : itemId;
+          await ytFetch('https://www.googleapis.com/youtube/v3/playlistItems?id=' + itemId, { method: 'DELETE' });
+          addLog('Removed from playlist item: ' + plName, 'success');
+        }
+
+        // Step 2: Delete the video
+        btn.textContent = '⏳ Step 2/3: Deleting original video...';
+        addLog('Deleting original video: ' + videoId, 'warning');
+        await ytFetch('https://www.googleapis.com/youtube/v3/videos?id=' + videoId, { method: 'DELETE' });
+        addLog('Original video deleted: ' + videoId, 'success');
+
+        // Step 3: Remove from local state
+        state.lowPerformers = (state.lowPerformers || []).filter(function(v) { return v.id !== videoId; });
+        var row = document.getElementById('lp-row-' + videoId);
+        if (row) row.style.opacity = '0.3';
+
+        // Step 4: Close modal and switch to upload tab with pre-filled metadata
+        btn.textContent = '⏳ Step 3/3: Preparing upload...';
+        addLog('Preparing upload tab with AI metadata for re-listing...', 'info');
+
+        document.getElementById('relist-modal').style.display = 'none';
+
+        // Switch to upload tab
+        switchTab('upload');
+
+        // Pre-fill title field with original title so AI has context
+        var titleEl = document.getElementById('vid-title-y5z6');
+        if (titleEl) titleEl.value = title + ' [RELIST]';
+
+        // Pre-fill scheduled date if schedule toggle exists
+        var schedToggle = document.getElementById('schedule-toggle-g3h4');
+        var schedPicker = document.getElementById('schedule-picker-k7l8');
+        var schedLabel = document.getElementById('schedule-label-i5j6');
+        var schedDateIn = document.getElementById('schedule-date-m9n0');
+        var schedTimeIn = document.getElementById('schedule-time-o1p2');
+
+        if (schedToggle && !schedToggle.classList.contains('active')) {
+          schedToggle.classList.add('active');
+          schedToggle.setAttribute('aria-checked', 'true');
+          if (schedPicker) schedPicker.classList.remove('hidden');
+          if (schedLabel) schedLabel.textContent = 'Scheduled';
+        }
+        if (schedDateIn && scheduledDate) schedDateIn.value = scheduledDate;
+        if (schedTimeIn) schedTimeIn.value = scheduledTime;
+
+        addLog('✓ Relist complete! Upload tab is ready. Drop in the video file and click Generate AI Metadata.', 'success');
+        showNotification('Relist ready! Now upload the new video file.', 'success');
+
+        // Refresh low performers list
+        renderLowPerformers();
+
+      } catch(e) {
+        addLog('Relist failed: ' + e.message, 'error');
+        showNotification('Relist error: ' + e.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔁 Delete & Relist';
+      }
+    }
+
+    // Relist modal event listeners
+    document.getElementById('relist-modal-close-btn').addEventListener('click', function() {
+      document.getElementById('relist-modal').style.display = 'none';
+    });
+    document.getElementById('relist-cancel-btn').addEventListener('click', function() {
+      document.getElementById('relist-modal').style.display = 'none';
+    });
+    document.getElementById('relist-confirm-btn').addEventListener('click', function() {
+      executeRelist();
+    });
+    document.getElementById('relist-confirm-btn').addEventListener('mouseover', function() {
+      this.style.background = '#cc0000';
+    });
+    document.getElementById('relist-confirm-btn').addEventListener('mouseout', function() {
+      this.style.background = '#ff0000';
+    });
+    document.getElementById('relist-best-time-btn').addEventListener('click', function() {
+      setRelistBestTime();
+    });
+    document.getElementById('relist-best-time-btn').addEventListener('mouseover', function() {
+      this.style.background = '#2ba640';
+      this.style.color = '#fff';
+    });
+    document.getElementById('relist-best-time-btn').addEventListener('mouseout', function() {
+      this.style.background = '#1a2a1a';
+      this.style.color = '#2ba640';
+    });
+    document.getElementById('relist-modal').addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
 
     // ============================================================
     // DELETE VIDEO (REAL API)
@@ -2395,14 +3306,7 @@
         }
       } else {
         loadingEl.classList.add('hidden');
-        var lp = state.lowPerformers.find(function(l) { return l.id === videoId; });
-        var plNames = lp?._playlists || ['Vlogs'];
-        listEl.innerHTML = plNames.map(function(pl) {
-          return '<label class="flex items-center gap-3 cursor-pointer">' +
-            '<input type="checkbox" checked class="w-4 h-4 accent-red-500 rounded" data-pl-name="' + pl + '" />' +
-            '<span class="text-sm text-white">' + pl + '</span>' +
-          '</label>';
-        }).join('');
+        listEl.innerHTML = '<p class="text-sm text-yt-muted">Connect to manage playlist memberships.</p>';
         document.getElementById('playlist-remove-modal-i8j8').classList.remove('hidden');
       }
     }
@@ -2465,25 +3369,6 @@
       playlistRemoveTargetId = null;
       playlistRemoveMemberships = [];
     });
-
-    document.getElementById('analyze-btn-m7n7').addEventListener('click', function() {
-      if (state.isConnected) {
-        loadLowPerformers();
-      } else {
-        var btn = document.getElementById('analyze-btn-m7n7');
-        var origHTML = btn.innerHTML;
-        btn.innerHTML = '<span class="spinner"></span> Analyzing...';
-        btn.disabled = true;
-        setTimeout(function() {
-          btn.innerHTML = origHTML;
-          btn.disabled = false;
-          if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
-          showNotification('Analysis complete (demo mode).', 'info');
-        }, 1500);
-      }
-    });
-
-    document.getElementById('lp-sort-k6l6').addEventListener('change', renderLowPerformers);
 
     // ============================================================
     // PLAYLISTS TAB
@@ -2739,7 +3624,7 @@
       window.location.href = authUrl;
     });
 
-    ['demo-connect-perf', 'demo-connect-lp', 'demo-connect-pl'].forEach(function(id) {
+    ['demo-connect-perf', 'demo-connect-pl'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) el.addEventListener('click', function() {
         document.getElementById('api-modal-u1v1').classList.remove('hidden');
@@ -2767,12 +3652,14 @@
       if (!state.token) {
         populatePlaylistDropdown(MOCK_PLAYLISTS);
         state.playlists = [...MOCK_PLAYLISTS];
-        state.lowPerformers = [...MOCK_LOW_PERFORMERS];
+        // Low performers now uses real Data API - no demo fallback needed
+        state.lowPerformers = [];
       }
 
       renderQueue();
       checkAIKeyBanner();
       updateGeminiKeyBtn();
+      updateAccountSwitcher();
 
       // Initial log entries
       addLog('YouTube Studio Manager initialized', 'info');
@@ -2780,6 +3667,11 @@
         addLog('Restored session from localStorage', 'success');
       } else {
         addLog('No active session — connect your YouTube account to begin', 'info');
+      }
+
+      var accounts = getAccounts();
+      if (accounts.length > 0) {
+        addLog(accounts.length + ' saved account(s) found', 'info');
       }
     })();
   </script>
