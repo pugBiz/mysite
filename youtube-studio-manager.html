@@ -444,7 +444,7 @@
     </footer>
   </div>
 
-  <!-- Connect YouTube API Modal (Gemini key section removed) -->
+  <!-- Connect YouTube API Modal -->
   <div data-id="191" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
     <div data-id="192" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
       <button data-id="193" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
@@ -508,8 +508,8 @@
       ">
         <option data-id="229" value="gemini-3.7-flash">gemini-3.7-flash</option>
         <option data-id="230" value="gemini-3.6-flash">gemini-3.6-flash</option>
-        <option data-id="231" value="gemini-3.5-flash" selected>gemini-3.5-flash</option>
-        <option data-id="232" value="gemini-2.5-flash">gemini-2.5-flash (stable)</option>
+        <option data-id="231" value="gemini-3.5-flash">gemini-3.5-flash</option>
+        <option data-id="232" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
       </select>
 
       <div data-id="233" style="display:flex; gap:10px;">
@@ -702,7 +702,6 @@
 
     // Log toggle & clear & copy via addEventListener (CSP-safe)
     document.getElementById('log-toggle').addEventListener('click', function(e) {
-      // Don't toggle if the clear or copy button was clicked
       if (e.target.id === 'log-clear-btn' || e.target.id === 'copy-log-btn') return;
       toggleLog();
     });
@@ -715,12 +714,10 @@
       copyLog();
     });
 
-    // Hover effects for copy button (CSP-safe)
     document.getElementById('copy-log-btn').addEventListener('mouseover', function() {
       this.style.color = '#fff';
     });
     document.getElementById('copy-log-btn').addEventListener('mouseout', function() {
-      // Only reset if not in "Copied!" state
       if (this.textContent !== 'Copied!') {
         this.style.color = '#717171';
       }
@@ -745,7 +742,7 @@
       var savedKey = localStorage.getItem('gemini_api_key') || '';
       var input = document.getElementById('gemini-key-modal-input');
       if (savedKey) input.value = savedKey;
-      var savedModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash';
+      var savedModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
       var select = document.getElementById('gemini-model-select');
       if (select) select.value = savedModel;
     }
@@ -767,9 +764,8 @@
       if (model) localStorage.setItem('gemini_model', model);
       closeGeminiKeyModal();
       updateGeminiKeyBtn();
-      addLog('Gemini key saved. Model: ' + (model || 'gemini-3.5-flash'), 'success');
+      addLog('Gemini key saved. Model: ' + (model || 'gemini-2.5-flash'), 'success');
       showNotification('Gemini API key saved!', 'success');
-      // Remove warning banner if present
       var banner = document.getElementById('ai-key-banner');
       if (banner) banner.remove();
     }
@@ -783,12 +779,10 @@
       showNotification('Gemini key removed.', 'warning');
     }
 
-    // Gemini key button click
     document.getElementById('gemini-key-btn').addEventListener('click', function() {
       openGeminiKeyModal();
     });
 
-    // Gemini key button hover effects
     document.getElementById('gemini-key-btn').addEventListener('mouseover', function() {
       this.style.borderColor = '#f0b400';
       this.style.color = '#f0b400';
@@ -798,12 +792,10 @@
       this.style.color = '#aaa';
     });
 
-    // Gemini modal close button
     document.getElementById('gemini-modal-close-btn').addEventListener('click', function() {
       closeGeminiKeyModal();
     });
 
-    // Gemini modal save button + hover
     document.getElementById('gemini-save-btn').addEventListener('click', function() {
       saveGeminiKey();
     });
@@ -814,12 +806,10 @@
       this.style.background = '#ff0000';
     });
 
-    // Gemini modal clear button
     document.getElementById('gemini-clear-btn').addEventListener('click', function() {
       clearGeminiKey();
     });
 
-    // Close Gemini modal on overlay click
     document.getElementById('gemini-key-modal').addEventListener('click', function(e) {
       if (e.target === this) closeGeminiKeyModal();
     });
@@ -831,7 +821,6 @@
       // Inside Copilot — use AppSDK
       if (typeof AppSDK !== 'undefined' && AppSDK?.ai?.chat) {
         const result = await AppSDK.ai.chat({ messages });
-        // AppSDK returns { content: string } or a plain string
         return (result && result.content) ? result.content : String(result);
       }
 
@@ -842,10 +831,9 @@
         throw new Error('No Gemini API key found. Please click the 🔑 Gemini Key button in the header and enter your API key.');
       }
 
-      var selectedModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash';
+      var selectedModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
       addLog('Sending to Gemini model: ' + selectedModel + '...', 'info');
 
-      // Merge system + user messages into a single prompt
       const systemMsg = messages.find(m => m.role === 'system');
       const userMsg = messages.find(m => m.role === 'user');
       const combinedPrompt = (systemMsg ? systemMsg.content + '\n\n' : '') + (userMsg ? userMsg.content : '');
@@ -984,7 +972,6 @@
     // ============================================================
     function showNotification(message, type) {
       type = type || 'info';
-      // Also log to the activity log
       addLog(message, type);
 
       const container = document.getElementById('toast-container');
@@ -1395,12 +1382,12 @@
           };
 
           video.addEventListener('seeked', function() {
-            var MAX_W = 640;
+            var MAX_W = 320;
             var scale = Math.min(1, MAX_W / video.videoWidth);
             canvas.width = Math.round(video.videoWidth * scale);
             canvas.height = Math.round(video.videoHeight * scale);
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            frames.push(canvas.toDataURL('image/jpeg', 0.75));
+            frames.push(canvas.toDataURL('image/jpeg', 0.55));
             idx++;
             captureNext();
           });
@@ -1412,52 +1399,6 @@
           URL.revokeObjectURL(objectUrl);
           reject(new Error('Browser could not load this video format.'));
         }, { once: true });
-      });
-    }
-
-    // ============================================================
-    // FRAME PIXEL ANALYSIS
-    // ============================================================
-    function analyzeFramePixels(dataUrl, frameIndex) {
-      return new Promise(function(resolve) {
-        var img = new Image();
-        img.onload = function() {
-          var canvas = document.createElement('canvas');
-          canvas.width = 64;
-          canvas.height = 36;
-          var ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, 64, 36);
-          var data = ctx.getImageData(0, 0, 64, 36).data;
-
-          var r = 0, g = 0, b = 0, brightness = 0;
-          var total = 64 * 36;
-          for (var i = 0; i < data.length; i += 4) {
-            r += data[i];
-            g += data[i + 1];
-            b += data[i + 2];
-            brightness += (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
-          }
-          r = Math.round(r / total);
-          g = Math.round(g / total);
-          b = Math.round(b / total);
-          brightness = Math.round(brightness / total);
-
-          var colorTone = 'neutral';
-          if (r > g + 40 && r > b + 40) colorTone = 'warm/red-dominant (possibly indoor, fire, sunset)';
-          else if (g > r + 30 && g > b + 20) colorTone = 'green-dominant (possibly outdoor, nature, plants)';
-          else if (b > r + 30 && b > g + 20) colorTone = 'blue-dominant (possibly sky, water, tech/screen)';
-          else if (r > 180 && g > 180 && b > 180) colorTone = 'very bright/white (possibly screen recording, whiteboard, bright studio)';
-          else if (r < 60 && g < 60 && b < 60) colorTone = 'very dark (possibly night scene, dark studio, cinematic)';
-          else if (r > 150 && g > 120 && b < 80) colorTone = 'warm golden (possibly vlog, lifestyle, food, cooking)';
-
-          var brightnessLabel = brightness < 60 ? 'dark/low-light' : brightness < 130 ? 'medium-lit' : 'bright/well-lit';
-
-          addLog('Frame ' + (frameIndex + 1) + ': ' + colorTone + ', ' + brightnessLabel, 'info');
-
-          resolve('Color tone: ' + colorTone + '. Brightness: ' + brightnessLabel + ' (avg ' + brightness + '/255). RGB avg: (' + r + ',' + g + ',' + b + ').');
-        };
-        img.onerror = function() { resolve('Frame analysis unavailable.'); };
-        img.src = dataUrl;
       });
     }
 
@@ -1474,7 +1415,7 @@
 
       var label = document.createElement('p');
       label.style.cssText = 'color: #aaa; font-size: 12px; margin-bottom: 6px;';
-      label.textContent = '🎞️ Frames analyzed by AI:';
+      label.textContent = '🎞️ Frames sent to Gemini Vision:';
 
       var wrapper = document.createElement('div');
       wrapper.id = 'frame-strip-wrapper';
@@ -1497,7 +1438,7 @@
     }
 
     // ============================================================
-    // AI GENERATION — VIDEO FRAME EXTRACTION + ANALYSIS PIPELINE
+    // AI GENERATION — VIDEO FRAME EXTRACTION + MULTIMODAL GEMINI VISION
     // ============================================================
     var aiBtn = document.getElementById('ai-gen-btn-q3r4');
     aiBtn.addEventListener('click', async function() {
@@ -1525,51 +1466,97 @@
         }
 
         addLog('Extracted ' + frames.length + ' frames successfully', 'success');
-        showNotification('Captured ' + frames.length + ' frames — analyzing visuals...', 'info');
+        showNotification('Captured ' + frames.length + ' frames — sending to Gemini Vision...', 'info');
+        addLog('Frame extraction complete: ' + frames.length + ' frames captured at 320px JPEG 0.55 quality', 'success');
 
         // --- STEP 2: Show frame strip preview ---
         renderFrameStrip(frames);
 
-        // --- STEP 3: Analyze each frame's pixels locally ---
-        aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Analyzing frames...';
-        var frameDescriptions = await Promise.all(frames.map(function(f, i) {
-          return analyzeFramePixels(f, i).then(function(desc) {
-            return 'Frame ' + (i+1) + ' (at ' + Math.round((0.05 + i * (0.90 / 19)) * 100) + '% of video): ' + desc;
-          });
-        }));
+        // --- STEP 3: Build multimodal Gemini request with real frame images ---
+        aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> Sending frames to Gemini...';
+        addLog('Building multimodal request with ' + frames.length + ' real frame images...', 'info');
 
-        var frameReport = frameDescriptions.join('\n');
-        var filename = window.selectedVideoFile ? window.selectedVideoFile.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') : 'unknown video';
-        var playlistNames = state.playlists.map(function(p) { return p.snippet?.title || p.name || ''; }).filter(Boolean);
+        var apiKey = localStorage.getItem('gemini_api_key');
+        if (!apiKey) {
+          throw new Error('No Gemini API key found. Please click the 🔑 Gemini Key button and enter your key.');
+        }
+
+        var model = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+        var playlistNames = state.playlists ? state.playlists.map(function(p) { return p.snippet && p.snippet.title ? p.snippet.title : (p.name || ''); }).filter(Boolean) : [];
         var playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
+        var filename = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
 
-        // --- STEP 4: Call aiChat() universal wrapper ---
-        var currentModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash';
-        aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> AI analyzing video...';
-        addLog('Sending frame analysis to ' + currentModel + '...', 'info');
-
-        var rawText_result = await aiChat([
+        // Build parts array: text instruction first, then one inline_data part per frame
+        var parts = [
           {
-            role: 'system',
-            content: 'You are a YouTube SEO expert. You MUST return a JSON object with ALL four fields fully populated: title, description, tags, and playlist. The description field MUST contain at least 3 full paragraphs of text plus hashtags — never leave it empty or short. The tags field MUST contain exactly 10 comma-separated tags — never leave it empty. Return ONLY valid JSON. No markdown. No code fences. No explanations.'
-          },
-          {
-            role: 'user',
-            content: 'Video filename: "' + filename + '"\n\nVisual frame analysis (20 frames sampled evenly throughout the video):\n' + frameReport + '\n\nBased on the filename and visual characteristics above, generate:\n1. An engaging YouTube title (max 60 chars, front-load the main keyword)\n2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)\n3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)\n4. The single most appropriate playlist from: [' + playlistList + ']\n\nYou MUST fill ALL four fields completely. The description must be 3 full paragraphs minimum. The tags must be exactly 10 comma-separated keywords. Return ONLY valid JSON:\n{"title": "A complete title here", "description": "Full paragraph 1.\\n\\nFull paragraph 2.\\n\\nFull paragraph 3 with CTA.\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5", "tags": "tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10", "playlist": "PlaylistName"}'
+            text: 'You are a YouTube SEO expert. I am giving you ' + frames.length + ' frames extracted evenly from a video file named "' + filename + '". Look carefully at ALL the frames to understand the full video content, topic, people, activities, setting, and theme.\n\nBased ONLY on what you can actually see in these frames, generate optimized YouTube metadata.\n\nYou MUST fully populate ALL four fields. The description must be 3 full paragraphs minimum. Tags must be exactly 10 comma-separated keywords.\n\nAvailable playlists: [' + playlistList + ']\n\nReturn ONLY valid JSON with no markdown, no code fences, no explanation:\n{"title": "engaging title max 60 chars", "description": "paragraph 1\\n\\nparagraph 2\\n\\nparagraph 3 with CTA\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5", "tags": "tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10", "playlist": "PlaylistName"}'
           }
-        ]);
+        ];
 
-        // --- STEP 5: Parse response with robust multi-strategy parser ---
-        addLog('AI response received — parsing JSON...', 'info');
+        // Add each frame as an inline_data image part (strip the data:image/jpeg;base64, prefix)
+        frames.forEach(function(dataUrl, i) {
+          var base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
+          parts.push({
+            inline_data: {
+              mime_type: 'image/jpeg',
+              data: base64
+            }
+          });
+          if (i === 0 || i === frames.length - 1 || (i + 1) % 5 === 0) {
+            addLog('Frame ' + (i + 1) + '/' + frames.length + ' queued', 'info');
+          }
+        });
 
-        // Log raw response for debugging (truncated to 300 chars)
-        addLog('Raw AI response: ' + rawText_result.substring(0, 300) + (rawText_result.length > 300 ? '…' : ''), 'info');
+        addLog('Sending ' + frames.length + ' frames to Gemini ' + model + '...', 'info');
+
+        var geminiRes = await fetch(
+          'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: parts }],
+              generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: 2048,
+                responseMimeType: 'application/json',
+                responseSchema: {
+                  type: 'object',
+                  properties: {
+                    title:       { type: 'string', description: 'YouTube title max 60 chars SEO optimized' },
+                    description: { type: 'string', description: '3-paragraph description with hook, detail, CTA and 5+ hashtags' },
+                    tags:        { type: 'string', description: '10 comma-separated SEO tags' },
+                    playlist:    { type: 'string', description: 'Most appropriate playlist name' }
+                  },
+                  required: ['title', 'description', 'tags', 'playlist']
+                }
+              }
+            })
+          }
+        );
+
+        if (!geminiRes.ok) {
+          var errData = await geminiRes.json().catch(function() { return {}; });
+          var errMsg = (errData && errData.error && errData.error.message) ? errData.error.message : 'Gemini API error ' + geminiRes.status;
+          addLog('Gemini API error: ' + errMsg, 'error');
+          throw new Error(errMsg);
+        }
+
+        var geminiData = await geminiRes.json();
+        var rawText_result = (geminiData.candidates && geminiData.candidates[0] && geminiData.candidates[0].content && geminiData.candidates[0].content.parts && geminiData.candidates[0].content.parts[0]) 
+          ? geminiData.candidates[0].content.parts[0].text 
+          : '';
+
+        addLog('Gemini response received (' + rawText_result.length + ' chars) — parsing...', 'info');
+        addLog('Raw: ' + rawText_result.substring(0, 250) + (rawText_result.length > 250 ? '…' : ''), 'info');
+
+        // --- STEP 4: Parse response with robust multi-strategy parser ---
+        aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⚙️</span> Parsing response...';
 
         var parsed = null;
         var rawText = rawText_result.trim();
 
         // Pre-process: escape any literal newlines inside JSON string values
-        // This handles Gemini returning unescaped newlines within description field
         rawText = rawText.replace(/:\s*"([\s\S]*?)"/g, function(match, val) {
           var escaped = val.replace(/\n/g, '\\n').replace(/\r/g, '');
           return match.replace(val, escaped);
@@ -1607,8 +1594,8 @@
           try {
             var cleaned = rawText
               .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '')
-              .replace(/'/g, '"')          // single to double quotes
-              .replace(/,\s*([}\]])/g, '$1') // trailing commas
+              .replace(/'/g, '"')
+              .replace(/,\s*([}\]])/g, '$1')
               .trim();
             var match4 = cleaned.match(/\{[\s\S]*\}/);
             if (match4) parsed = JSON.parse(match4[0]);
@@ -1648,7 +1635,7 @@
         addLog('Tags: ' + (parsed.tags || '(empty)'), parsed.tags ? 'success' : 'warning');
         addLog('Playlist: ' + (parsed.playlist || '(empty)'), parsed.playlist ? 'success' : 'warning');
 
-        // --- STEP 6: Populate form fields ---
+        // --- STEP 5: Populate form fields ---
         var titleEl = document.getElementById('vid-title-y5z6');
         var descEl = document.getElementById('vid-desc-a7b8');
         var tagsEl = document.getElementById('vid-tags-c9d0');
