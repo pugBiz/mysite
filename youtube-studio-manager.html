@@ -857,7 +857,11 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{ parts: [{ text: combinedPrompt }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1000 }
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 1200,
+              responseMimeType: 'application/json'
+            }
           })
         }
       );
@@ -1537,30 +1541,89 @@
         var rawText_result = await aiChat([
           {
             role: 'system',
-            content: 'You are a YouTube SEO expert. You will be given a video filename and a visual analysis of frames sampled throughout the video (color tones, brightness, scene characteristics). Use these signals to infer the video topic and generate optimized YouTube metadata. Always respond with valid JSON only — no markdown, no explanation, no code fences.'
+            content: 'You are a YouTube SEO expert. Analyze the provided video information and return ONLY a raw JSON object with no markdown, no code fences, no explanation, no preamble. The response must start with { and end with }. Never wrap in backticks. Never add any text before or after the JSON.'
           },
           {
             role: 'user',
-            content: 'Video filename: "' + filename + '"\n\nVisual frame analysis (6 frames sampled evenly throughout the video):\n' + frameReport + '\n\nBased on the filename and visual characteristics above, generate:\n1. An engaging YouTube title (max 60 chars, front-load the main keyword)\n2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)\n3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)\n4. The single most appropriate playlist from: [' + playlistList + ']\n\nRespond ONLY with this exact JSON structure:\n{"title": "...", "description": "...", "tags": "...", "playlist": "..."}'
+            content: 'Video filename: "' + filename + '"\n\nVisual frame analysis (6 frames sampled evenly throughout the video):\n' + frameReport + '\n\nBased on the filename and visual characteristics above, generate:\n1. An engaging YouTube title (max 60 chars, front-load the main keyword)\n2. A compelling description (3 paragraphs: hook, detail/value, CTA — with 5+ relevant hashtags at the end)\n3. 10 highly specific SEO-optimized tags (comma separated, mix broad and long-tail)\n4. The single most appropriate playlist from: [' + playlistList + ']\n\nReturn ONLY this exact raw JSON (no markdown, no code fences, no extra text):\n{"title": "...", "description": "...", "tags": "...", "playlist": "..."}'
           }
         ]);
 
-        // --- STEP 5: Parse response ---
+        // --- STEP 5: Parse response with robust multi-strategy parser ---
         addLog('AI response received — parsing JSON...', 'info');
-        var rawText = rawText_result.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
-        var parsed;
+        // Log raw response for debugging (truncated to 300 chars)
+        addLog('Raw AI response: ' + rawText_result.substring(0, 300) + (rawText_result.length > 300 ? '…' : ''), 'info');
+
+        var parsed = null;
+        var rawText = rawText_result.trim();
+
+        // Strategy 1: Direct JSON parse on the raw string
         try {
           parsed = JSON.parse(rawText);
-        } catch (e) {
-          addLog('JSON parse failed — attempting regex extraction...', 'warning');
-          var match = rawText.match(/\{[\s\S]*\}/);
-          if (match) {
-            parsed = JSON.parse(match[0]);
-          } else {
-            throw new Error('AI returned unexpected format. Please try again.');
-          }
+        } catch (e1) {
+          addLog('Strategy 1 (direct parse) failed — trying alternatives...', 'warning');
         }
+
+        // Strategy 2: Strip markdown code fences then parse
+        if (!parsed) {
+          try {
+            var stripped = rawText
+              .replace(/^```json\s*/i, '')
+              .replace(/^```\s*/i, '')
+              .replace(/```\s*$/i, '')
+              .trim();
+            parsed = JSON.parse(stripped);
+          } catch (e2) { /* continue */ }
+        }
+
+        // Strategy 3: Extract first {...} block via regex
+        if (!parsed) {
+          try {
+            var match = rawText.match(/\{[\s\S]*\}/);
+            if (match) parsed = JSON.parse(match[0]);
+          } catch (e3) { /* continue */ }
+        }
+
+        // Strategy 4: Extract and fix common issues (single quotes, trailing commas)
+        if (!parsed) {
+          try {
+            var cleaned = rawText
+              .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '')
+              .replace(/'/g, '"')          // single to double quotes
+              .replace(/,\s*([}\]])/g, '$1') // trailing commas
+              .trim();
+            var match4 = cleaned.match(/\{[\s\S]*\}/);
+            if (match4) parsed = JSON.parse(match4[0]);
+          } catch (e4) { /* continue */ }
+        }
+
+        // Strategy 5: Build object manually from key: "value" pattern
+        if (!parsed) {
+          try {
+            var extractedTitle = rawText.match(/"title"\s*:\s*"([^"]+)"/)?.[1] || '';
+            var extractedDescription = rawText.match(/"description"\s*:\s*"([\s\S]+?)(?:",\s*"(?:tags|playlist))/)?.[1] || '';
+            var extractedTags = rawText.match(/"tags"\s*:\s*"([^"]+)"/)?.[1] || '';
+            var extractedPlaylist = rawText.match(/"playlist"\s*:\s*"([^"]+)"/)?.[1] || '';
+            if (extractedTitle || extractedTags) {
+              parsed = { title: extractedTitle, description: extractedDescription, tags: extractedTags, playlist: extractedPlaylist };
+              addLog('Used pattern extraction fallback to recover data', 'warning');
+            }
+          } catch (e5) { /* continue */ }
+        }
+
+        if (!parsed) {
+          addLog('Could not parse AI response. Raw: ' + rawText.substring(0, 200), 'error');
+          throw new Error('AI returned unexpected format — check the log for the raw response.');
+        }
+
+        // Validate required fields exist
+        if (!parsed.title && !parsed.tags) {
+          addLog('Parsed object missing required fields: ' + JSON.stringify(parsed).substring(0, 200), 'error');
+          throw new Error('AI response parsed but missing required fields (title, tags).');
+        }
+
+        addLog('JSON parsed successfully', 'success');
 
         // --- STEP 6: Populate form fields ---
         var titleEl = document.getElementById('vid-title-y5z6');
