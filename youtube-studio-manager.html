@@ -3117,18 +3117,27 @@
 
       try {
         // Step 1: Remove from all playlists
+        // Use getVideoPlaylistMemberships() which correctly loops through each playlist
+        // since the API requires playlistId alongside videoId
         addLog('Fetching playlist memberships for video ' + videoId + '...', 'info');
-        var plRes = await ytFetch(
-          'https://www.googleapis.com/youtube/v3/playlistItems?part=id,snippet&maxResults=50&videoId=' + videoId
-        );
-        var plItems = (plRes && plRes.items) ? plRes.items : [];
-        addLog('Found in ' + plItems.length + ' playlist(s)', 'info');
+        var memberships = [];
+        try {
+          memberships = await getVideoPlaylistMemberships(videoId);
+        } catch(me) {
+          addLog('Could not fetch playlist memberships: ' + me.message + ' — continuing with delete.', 'warning');
+        }
+        addLog('Found in ' + memberships.length + ' playlist(s)', 'info');
 
-        for (var i = 0; i < plItems.length; i++) {
-          var itemId = plItems[i].id;
-          var plName = (plItems[i].snippet && plItems[i].snippet.playlistId) ? plItems[i].snippet.playlistId : itemId;
-          await ytFetch('https://www.googleapis.com/youtube/v3/playlistItems?id=' + itemId, { method: 'DELETE' });
-          addLog('Removed from playlist item: ' + plName, 'success');
+        for (var i = 0; i < memberships.length; i++) {
+          var membership = memberships[i];
+          var itemId = membership.playlistItemId;
+          var plTitle = (membership.playlist && membership.playlist.snippet && membership.playlist.snippet.title) ? membership.playlist.snippet.title : itemId;
+          try {
+            await ytFetch('https://www.googleapis.com/youtube/v3/playlistItems?id=' + itemId, { method: 'DELETE' });
+            addLog('Removed from playlist: ' + plTitle, 'success');
+          } catch(de) {
+            addLog('Could not remove from playlist "' + plTitle + '": ' + de.message, 'warning');
+          }
         }
 
         // Step 2: Delete the video
