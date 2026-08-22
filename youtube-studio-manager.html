@@ -1554,8 +1554,7 @@
     }
 
     function setScheduleBestTime() {
-      // Best time heuristic: Tuesday or Thursday, 2 PM or 8 PM
-      // Find the next Tuesday or Thursday from today
+      // Activate schedule toggle if off
       var toggle = document.getElementById('schedule-toggle-g3h4');
       var picker = document.getElementById('schedule-picker-k7l8');
       var label = document.getElementById('schedule-label-i5j6');
@@ -1566,37 +1565,94 @@
         if (label) label.textContent = 'Scheduled';
       }
 
-      var now = new Date();
-      var target = new Date(now);
-      // Find next Tuesday (2) or Thursday (4), whichever comes first
-      var daysUntil = [2, 4].map(function(d) {
-        var diff = (d - now.getDay() + 7) % 7;
-        return diff === 0 ? 7 : diff; // if today, go to next week
-      });
-      var minDiff = Math.min.apply(null, daysUntil);
-      target.setDate(target.getDate() + minDiff);
-      target.setHours(14, 0, 0, 0); // 2 PM
+      // --- Varied best-time algorithm ---
+      // Best days: Tue=2, Wed=3, Thu=4, Sat=6
+      var bestDays = [2, 3, 4, 6];
+      // Best hours (24h): covers late morning through prime evening
+      var bestHours = [11, 12, 13, 14, 15, 16, 18, 20];
+      // Minute alternatives for spread
+      var bestMinutes = [0, 30];
 
+      // Day labels and reason snippets
+      var dayLabels = { 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 6: 'Saturday' };
+      var dayReasons = {
+        2: 'Tuesday has the highest mid-week engagement — viewers are settled into the work week.',
+        3: 'Wednesday afternoon hits a strong mid-week traffic peak.',
+        4: 'Thursday drives high pre-weekend watch time.',
+        6: 'Saturday mornings reach weekend binge-viewers before they plan their day.'
+      };
+      var hourReasons = {
+        11: '11 AM catches early lunch-break viewers.',
+        12: 'Noon is peak lunch-break watching time.',
+        13: '1 PM extends the lunch-hour audience.',
+        14: '2 PM hits the post-lunch engagement window.',
+        15: '3 PM catches school-out and afternoon break viewers.',
+        16: '4 PM reaches the after-work early crowd.',
+        18: '6 PM is prime post-work / pre-dinner watch time.',
+        20: '8 PM is peak evening prime time for YouTube.'
+      };
+
+      // Get and increment rotation index from localStorage
+      var rotIdx = parseInt(localStorage.getItem('yt_schedule_rotation_index') || '0', 10);
+      localStorage.setItem('yt_schedule_rotation_index', String(rotIdx + 1));
+
+      // Pick day, hour, minute using rotation — each increments independently
+      var pickedDayOfWeek = bestDays[rotIdx % bestDays.length];
+      var pickedHour = bestHours[Math.floor(rotIdx / bestDays.length) % bestHours.length];
+      var pickedMinute = bestMinutes[rotIdx % bestMinutes.length];
+
+      // Find the next occurrence of that day of week, minimum 2 days from now
+      var now = new Date();
+      var minDate = new Date(now);
+      minDate.setDate(minDate.getDate() + 2); // at least 2 days out
+
+      var target = new Date(minDate);
+      // Advance to the next matching weekday
+      while (target.getDay() !== pickedDayOfWeek) {
+        target.setDate(target.getDate() + 1);
+      }
+      target.setHours(pickedHour, pickedMinute, 0, 0);
+
+      // If that slot is still too close (within 2 days), bump by one week
+      var diffMs = target - now;
+      if (diffMs < 2 * 24 * 60 * 60 * 1000) {
+        target.setDate(target.getDate() + 7);
+      }
+
+      // Set the date/time inputs
       var dateInput = document.getElementById('schedule-date-m9n0');
       var timeInput = document.getElementById('schedule-time-o1p2');
 
       if (dateInput) {
         var y = target.getFullYear();
-        var m = String(target.getMonth() + 1).padStart(2, '0');
-        var d2 = String(target.getDate()).padStart(2, '0');
-        dateInput.value = y + '-' + m + '-' + d2;
+        var mo = String(target.getMonth() + 1).padStart(2, '0');
+        var d = String(target.getDate()).padStart(2, '0');
+        dateInput.value = y + '-' + mo + '-' + d;
       }
-      if (timeInput) timeInput.value = '14:00';
+      if (timeInput) {
+        var hh = String(pickedHour).padStart(2, '0');
+        var mm = String(pickedMinute).padStart(2, '0');
+        timeInput.value = hh + ':' + mm;
+      }
 
-      var dayName = target.toLocaleDateString('en-US', { weekday: 'long' });
+      // Format display time
+      var ampm = pickedHour >= 12 ? 'PM' : 'AM';
+      var displayHour = pickedHour > 12 ? pickedHour - 12 : (pickedHour === 0 ? 12 : pickedHour);
+      var displayTime = displayHour + ':' + String(pickedMinute).padStart(2, '0') + ' ' + ampm;
+      var displayDate = target.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+      // Show suggestion banner
       var suggestion = document.getElementById('schedule-suggestion');
       if (suggestion) {
         suggestion.style.display = 'block';
-        suggestion.innerHTML = '⚡ <strong>Best time suggested:</strong> ' + dayName + ' ' + target.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at 2:00 PM — Tuesday & Thursday afternoons have the highest YouTube engagement rates.';
+        suggestion.innerHTML =
+          '⚡ <strong>' + displayDate + ' at ' + displayTime + '</strong> &nbsp;·&nbsp; ' +
+          '<span style="color:#aaa;">' + dayReasons[pickedDayOfWeek] + ' ' + hourReasons[pickedHour] + '</span>' +
+          '<span style="color:#555; font-size:10px; display:block; margin-top:3px;">Slot #' + (rotIdx + 1) + ' — varies each pick to spread your uploads.</span>';
       }
 
-      addLog('Best time set: ' + dayName + ' ' + target.toDateString() + ' at 2:00 PM', 'success');
-      showNotification('Best time: ' + dayName + ' at 2:00 PM', 'success');
+      addLog('Best time slot #' + (rotIdx + 1) + ': ' + displayDate + ' at ' + displayTime, 'success');
+      showNotification('Scheduled: ' + displayDate + ' at ' + displayTime, 'success');
     }
 
     // Quick pick button event listeners
