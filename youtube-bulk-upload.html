@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>YouTube Bulk Upload Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: '#0f0f0f',
+              surface: '#1a1a1a',
+              card: '#212121',
+              border: '#333333',
+              ytred: '#ff0000',
+              ytredh: '#cc0000',
+              muted: '#aaaaaa',
+              dimmed: '#717171',
+              blue: '#3ea6ff',
+              green: '#2ba640',
+              yellow: '#f0b400',
+            },
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Inter', sans-serif; background: #0f0f0f; color: #ffffff; }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: #1a1a1a; }
+      ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+      .modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.2s;
+      }
+      .modal-overlay.active { opacity: 1; pointer-events: all; }
+      .modal-card {
+        background: #212121; border: 1px solid #333; border-radius: 12px;
+        padding: 24px; max-width: 460px; width: 90%; max-height: 90vh; overflow-y: auto;
+      }
+
+      .toast-container {
+        position: fixed; top: 72px; right: 16px; z-index: 200;
+        display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+      }
+      .toast {
+        pointer-events: all; padding: 10px 16px; border-radius: 8px;
+        font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px;
+        animation: slideIn 0.3s ease-out;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      }
+      .toast.info { background: #333; color: #aaa; }
+      .toast.success { background: #1a3a1f; color: #2ba640; border: 1px solid #2ba640; }
+      .toast.error { background: #3a1a1a; color: #ff4444; border: 1px solid #ff4444; }
+      .toast.warning { background: #3a351a; color: #f0b400; border: 1px solid #f0b400; }
+
+      @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+      @keyframes fadeInUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+      .card-enter { animation: fadeInUp 0.35s ease-out; }
+      .pulse-anim { animation: pulse 1.5s infinite; }
+
+      .drop-zone { border: 2px dashed #555; border-radius: 12px; transition: all 0.2s; }
+      .drop-zone.drag-over { border-color: #ff0000; background: rgba(255,0,0,0.06); }
+
+      .progress-bar {
+        height: 4px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 8px;
+      }
+      .progress-bar-fill {
+        height: 100%; background: #3ea6ff; border-radius: 2px; transition: width 0.3s;
+      }
+
+      input[type="text"], input[type="password"], input[type="date"], input[type="time"],
+      input[type="datetime-local"], textarea, select {
+        background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px;
+        padding: 8px 12px; font-family: 'Inter', sans-serif; font-size: 13px;
+        width: 100%; outline: none; transition: border-color 0.2s;
+      }
+      input:focus, textarea:focus, select:focus { border-color: #3ea6ff; }
+
+      .sidebar-section { border-bottom: 1px solid #333; padding-bottom: 14px; margin-bottom: 14px; }
+      .sidebar-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+      .btn { border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none; padding: 8px 14px; transition: all 0.15s; }
+      .btn-red { background: #ff0000; color: #fff; }
+      .btn-red:hover { background: #cc0000; }
+      .btn-green { background: #2ba640; color: #fff; }
+      .btn-green:hover { background: #238a35; }
+      .btn-dark { background: #333; color: #aaa; }
+      .btn-dark:hover { background: #444; color: #fff; }
+      .btn-outline { background: transparent; border: 1px solid #333; color: #aaa; }
+      .btn-outline:hover { border-color: #555; color: #fff; }
+      .btn-blue { background: #3ea6ff; color: #0f0f0f; }
+      .btn-blue:hover { background: #2b8ad9; }
+
+      .badge {
+        font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+        text-transform: uppercase; letter-spacing: 0.5px;
+      }
+      .badge-idle { background: #333; color: #aaa; }
+      .badge-generating { background: rgba(240,180,0,0.2); color: #f0b400; }
+      .badge-done { background: rgba(43,166,64,0.2); color: #2ba640; }
+      .badge-error { background: rgba(255,68,68,0.2); color: #ff4444; }
+      .badge-uploading { background: rgba(62,166,255,0.2); color: #3ea6ff; }
+      .badge-uploaded { background: rgba(43,166,64,0.2); color: #2ba640; }
+
+      .log-entry { font-size: 11px; font-family: 'Inter', monospace; padding: 2px 0; }
+      .log-info { color: #717171; }
+      .log-success { color: #2ba640; }
+      .log-error { color: #ff4444; }
+      .log-warning { color: #f0b400; }
+
+      .radio-group { display: flex; gap: 4px; }
+      .radio-group label {
+        padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
+        cursor: pointer; background: #1a1a1a; color: #aaa; border: 1px solid #333;
+        transition: all 0.15s;
+      }
+      .radio-group input { display: none; }
+      .radio-group input:checked + span {
+        background: #ff0000; color: #fff; border-color: #ff0000;
+      }
+      .radio-group label:has(input:checked) {
+        background: rgba(255,0,0,0.15); border-color: #ff0000; color: #ff0000;
+      }
+
+      .channel-dropdown {
+        position: absolute; top: 100%; right: 0; background: #212121;
+        border: 1px solid #333; border-radius: 8px; padding: 4px;
+        min-width: 180px; z-index: 50; display: none;
+      }
+      .channel-dropdown.show { display: block; }
+      .channel-dropdown button {
+        width: 100%; text-align: left; padding: 8px 12px; border-radius: 6px;
+        background: transparent; border: none; color: #aaa; font-size: 13px;
+        cursor: pointer; font-family: 'Inter', sans-serif;
+      }
+      .channel-dropdown button:hover { background: #333; color: #fff; }
+
+      @media (max-width: 767px) {
+        .main-layout { flex-direction: column !important; }
+        .sidebar-panel { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      }
+    </style>
+</head>
+<body data-id="0" class="min-h-screen bg-bg">
+    <app-icon data-id="1" hidden data-icon="upload" data-palette="Red"></app-icon>
+
+    <!-- Toast Container -->
+    <div data-id="2" id="toast-container-yt7k" class="toast-container"></div>
+
+    <!-- Gemini Key Modal -->
+    <div data-id="3" id="modal-gemini-g3x9" class="modal-overlay">
+      <div data-id="4" class="modal-card">
+        <div data-id="5" class="flex justify-between items-center mb-4">
+          <h3 data-id="6" class="text-base font-semibold">Gemini API Settings</h3>
+          <button data-id="7" id="close-gemini-modal-b2k1" class="text-dimmed hover:text-white"><i data-id="8" data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div data-id="9" class="mb-4">
+          <label data-id="10" class="block text-xs text-muted mb-1">Gemini API Key</label>
+          <div data-id="11" class="relative">
+            <input data-id="12" type="password" id="gemini-key-input-p4r2" placeholder="AIza..." class="pr-10" />
+            <button data-id="13" id="toggle-key-vis-k8m3" class="absolute right-2 top-1/2 -translate-y-1/2 text-dimmed hover:text-white"><i data-id="14" data-lucide="eye" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+        <div data-id="15" class="mb-5">
+          <label data-id="16" class="block text-xs text-muted mb-1">Gemini Model</label>
+          <select data-id="17" id="gemini-model-select-q7w4">
+            <option data-id="18" value="gemini-2.5-flash">gemini-2.5-flash</option>
+            <option data-id="19" value="gemini-2.0-flash">gemini-2.0-flash</option>
+            <option data-id="20" value="gemini-1.5-pro">gemini-1.5-pro</option>
+          </select>
+        </div>
+        <button data-id="21" id="save-gemini-btn-v5n6" class="btn btn-red w-full justify-center">Save Settings</button>
+      </div>
+    </div>
+
+    <!-- Client ID Modal -->
+    <div data-id="22" id="modal-clientid-h8j2" class="modal-overlay">
+      <div data-id="23" class="modal-card">
+        <div data-id="24" class="flex justify-between items-center mb-4">
+          <h3 data-id="25" class="text-base font-semibold">Google OAuth Client ID</h3>
+          <button data-id="26" id="close-clientid-modal-c9p5" class="text-dimmed hover:text-white"><i data-id="27" data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div data-id="28" class="mb-3">
+          <label data-id="29" class="block text-xs text-muted mb-1">Client ID</label>
+          <input data-id="30" type="text" id="clientid-input-r3t7" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" />
+        </div>
+        <div data-id="31" class="bg-surface rounded-lg p-3 mb-5 text-xs text-muted leading-relaxed">
+          <p data-id="32" class="font-semibold text-blue mb-1">Setup Instructions</p>
+          <ol data-id="33" class="list-decimal list-inside space-y-1">
+            <li data-id="34">Go to <span data-id="35" class="text-blue">console.cloud.google.com</span></li>
+            <li data-id="36">Navigate to APIs & Services → Credentials</li>
+            <li data-id="37">Create OAuth 2.0 Client ID (Web application)</li>
+            <li data-id="38">Add your page URL as an authorized redirect URI</li>
+            <li data-id="39">Enable YouTube Data API v3 in your project</li>
+          </ol>
+        </div>
+        <button data-id="40" id="save-clientid-btn-m6k8" class="btn btn-red w-full justify-center">Save Client ID</button>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header data-id="41" id="header-top-a1b2" class="fixed top-0 left-0 right-0 bg-surface border-b border-border z-50 h-14">
+      <div data-id="42" class="flex items-center justify-between h-full px-4 md:px-6">
+        <div data-id="43" class="flex items-center gap-3">
+          <div data-id="44" class="flex items-center gap-1.5">
+            <svg data-id="45" width="28" height="20" viewBox="0 0 28 20" fill="none">
+              <rect data-id="46" width="28" height="20" rx="4" fill="#FF0000"/>
+              <polygon data-id="47" points="11,5 11,15 20,10" fill="#fff"/>
+            </svg>
+            <span data-id="48" class="font-bold text-sm md:text-base tracking-tight">Bulk Upload Manager</span>
+          </div>
+        </div>
+        <div data-id="49" class="flex items-center gap-2">
+          <!-- Mobile menu -->
+          <button data-id="50" id="mobile-menu-btn-x3y4" class="md:hidden p-2 text-muted hover:text-white"><i data-id="51" data-lucide="menu" class="w-5 h-5"></i></button>
+          <!-- Desktop buttons -->
+          <div data-id="52" class="hidden md:flex items-center gap-2">
+            <button data-id="53" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="54" data-lucide="key" class="w-3.5 h-3.5"></i> Gemini Key</button>
+            <div data-id="55" class="relative">
+              <button data-id="56" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="57" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
+              <div data-id="58" id="channel-dropdown-h8i9" class="channel-dropdown">
+                <button data-id="59" id="switch-account-btn-j1k2">Switch Account</button>
+                <button data-id="60" id="disconnect-btn-l3m4">Disconnect</button>
+              </div>
+            </div>
+            <button data-id="61" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="62" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav data-id="63" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
+      <div data-id="64" class="flex justify-between items-center mb-6">
+        <span data-id="65" class="font-bold text-base">Menu</span>
+        <button data-id="66" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="67" data-lucide="x" class="w-6 h-6"></i></button>
+      </div>
+      <div data-id="68" class="flex flex-col gap-3">
+        <button data-id="69" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="70" data-lucide="key" class="w-4 h-4"></i> Gemini Key</button>
+        <button data-id="71" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="72" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
+        <button data-id="73" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="74" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
+        <button data-id="75" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main data-id="76" class="pt-14 min-h-screen">
+      <div data-id="77" class="main-layout flex" style="min-height: calc(100vh - 56px);">
+
+        <!-- Sidebar Settings -->
+        <aside data-id="78" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
+
+          <div data-id="79" class="sidebar-section">
+            <h4 data-id="80" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="81" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
+            <div data-id="82" class="text-xs space-y-1.5">
+              <div data-id="83" class="flex justify-between"><span data-id="84" class="text-dimmed">Model:</span><span data-id="85" id="sidebar-model-d1e2" class="text-muted">gemini-2.5-flash</span></div>
+              <div data-id="86" class="flex justify-between"><span data-id="87" class="text-dimmed">API Key:</span><span data-id="88" id="sidebar-key-status-f3g4" class="text-muted">not set</span></div>
+            </div>
+          </div>
+
+          <div data-id="89" class="sidebar-section">
+            <h4 data-id="90" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="91" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
+            <div data-id="92" class="mb-3">
+              <label data-id="93" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
+              <div data-id="94" class="radio-group" id="privacy-radio-group-h5i6">
+                <label data-id="95"><input data-id="96" type="radio" name="privacy" value="public" /><span data-id="97">Public</span></label>
+                <label data-id="98"><input data-id="99" type="radio" name="privacy" value="unlisted" checked /><span data-id="100">Unlisted</span></label>
+                <label data-id="101"><input data-id="102" type="radio" name="privacy" value="private" /><span data-id="103">Private</span></label>
+              </div>
+            </div>
+            <div data-id="104" class="mb-3 flex items-center justify-between">
+              <label data-id="105" class="text-xs text-dimmed">Made for Kids</label>
+              <label data-id="106" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="107" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
+                <div data-id="108" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
+            </div>
+            <div data-id="109">
+              <label data-id="110" class="block text-xs text-dimmed mb-1.5">Default Language</label>
+              <select data-id="111" id="default-lang-l9m0">
+                <option data-id="112" value="en">English</option>
+                <option data-id="113" value="es">Spanish</option>
+                <option data-id="114" value="fr">French</option>
+                <option data-id="115" value="de">German</option>
+                <option data-id="116" value="pt">Portuguese</option>
+                <option data-id="117" value="ja">Japanese</option>
+                <option data-id="118" value="ko">Korean</option>
+                <option data-id="119" value="zh">Chinese</option>
+                <option data-id="120" value="hi">Hindi</option>
+                <option data-id="121" value="ar">Arabic</option>
+              </select>
+            </div>
+          </div>
+
+          <div data-id="122" class="sidebar-section">
+            <h4 data-id="123" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="124" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
+            <div data-id="125" class="flex items-center justify-between mb-3">
+              <label data-id="126" class="text-xs text-dimmed">Auto-schedule uploads</label>
+              <label data-id="127" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="128" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
+                <div data-id="129" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
+            </div>
+            <div data-id="130" id="schedule-options-p3q4" class="hidden">
+              <label data-id="131" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
+              <div data-id="132" class="flex flex-wrap gap-1.5 mb-2">
+                <button data-id="133" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
+                <button data-id="134" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
+                <button data-id="135" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
+                <button data-id="136" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="137" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
+              </div>
+            </div>
+          </div>
+
+          <div data-id="138" class="sidebar-section">
+            <h4 data-id="139" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="140" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
+            <div data-id="141" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
+              <div data-id="142" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Bulk Upload Work Area -->
+        <section data-id="143" class="flex-1 p-4 md:p-6 overflow-y-auto">
+          <!-- Drop Zone -->
+          <div data-id="144" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
+            <input data-id="145" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
+            <div data-id="146" class="text-4xl mb-3">🎬</div>
+            <p data-id="147" class="text-base font-semibold mb-1">Drop multiple video files here</p>
+            <p data-id="148" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
+          </div>
+
+          <!-- Action Bar -->
+          <div data-id="149" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
+            <span data-id="150" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
+            <div data-id="151" class="flex-1"></div>
+            <button data-id="152" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="153" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
+            <button data-id="154" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="155" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
+            <button data-id="156" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="157" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
+          </div>
+
+          <!-- Video Cards Grid -->
+          <div data-id="158" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
+            <div data-id="159" id="empty-state-l5m6" class="text-center py-16">
+              <div data-id="160" class="text-dimmed mb-2"><i data-id="161" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
+              <p data-id="162" class="text-muted text-sm">Drop video files above to get started</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer data-id="163" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
+      Made by Copilot
+    </footer>
+
+    <script>
+      // ===== ICONS (guarded) =====
+      if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+        lucide.createIcons();
+      }
+
+      // ===== STATE =====
+      var state = { token: null, clientId: null, playlists: [], channelInfo: null };
+      var bulkQueue = [];
+      var activityLog = [];
+      var idCounter = 0;
+
+      // ===== HELPERS =====
+      function $(id) { return document.getElementById(id); }
+      function ls(key, val) {
+        if (val === undefined) return localStorage.getItem(key);
+        if (val === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, val);
+      }
+
+      function showToast(msg, type) {
+        type = type || 'info';
+        var c = $('toast-container-yt7k');
+        var t = document.createElement('div');
+        t.className = 'toast ' + type;
+        t.textContent = msg;
+        c.appendChild(t);
+        setTimeout(function() { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(function() { t.remove(); }, 300); }, 4000);
+      }
+
+      function addLog(msg, type) {
+        type = type || 'info';
+        var now = new Date();
+        var ts = [now.getHours(), now.getMinutes(), now.getSeconds()].map(function(n) { return String(n).padStart(2, '0'); }).join(':');
+        activityLog.unshift({ ts: ts, msg: msg, type: type });
+        if (activityLog.length > 50) activityLog.length = 50;
+        renderLog();
+      }
+
+      function renderLog() {
+        var el = $('activity-log-t7u8');
+        if (activityLog.length === 0) {
+          el.innerHTML = '<div class="text-dimmed text-[11px] text-center py-2">No activity yet</div>';
+          return;
+        }
+        el.innerHTML = activityLog.map(function(e) {
+          return '<div class="log-entry log-' + e.type + '">' + e.ts + ' [' + e.type + '] ' + e.msg + '</div>';
+        }).join('');
+      }
+
+      function recreateIcons() {
+        if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+          lucide.createIcons();
+        }
+      }
+
+      function getDefaultPrivacy() {
+        return ls('yt_default_privacy') || 'unlisted';
+      }
+
+      function isAutoSchedule() {
+        return ls('yt_auto_schedule') === 'true';
+      }
+
+      // ===== BEST TIME ALGORITHM =====
+      var bestTimeDays = [2, 3, 4, 6]; // Tue, Wed, Thu, Sat
+      var bestTimeHours = [11, 12, 13, 14, 15, 16, 18, 20];
+      var bestTimeMinutes = [0, 30];
+
+      function getNextBestTime(baseDate) {
+        var idx = parseInt(ls('yt_schedule_rotation_index') || '0', 10);
+        var totalCombos = bestTimeDays.length * bestTimeHours.length * bestTimeMinutes.length;
+        idx = idx % totalCombos;
+
+        var dayIdx = Math.floor(idx / (bestTimeHours.length * bestTimeMinutes.length)) % bestTimeDays.length;
+        var hourIdx = Math.floor(idx / bestTimeMinutes.length) % bestTimeHours.length;
+        var minIdx = idx % bestTimeMinutes.length;
+
+        var targetDay = bestTimeDays[dayIdx];
+        var targetHour = bestTimeHours[hourIdx];
+        var targetMin = bestTimeMinutes[minIdx];
+
+        var d = new Date(baseDate || Date.now());
+        d.setDate(d.getDate() + 1);
+
+        for (var i = 0; i < 14; i++) {
+          if (d.getDay() === targetDay) {
+            d.setHours(targetHour, targetMin, 0, 0);
+            ls('yt_schedule_rotation_index', String((idx + 1) % totalCombos));
+            return d;
+          }
+          d.setDate(d.getDate() + 1);
+        }
+
+        d.setHours(targetHour, targetMin, 0, 0);
+        ls('yt_schedule_rotation_index', String((idx + 1) % totalCombos));
+        return d;
+      }
+
+      function dateToInputs(d) {
+        var year = d.getFullYear();
+        var month = String(d.getMonth() + 1).padStart(2, '0');
+        var day = String(d.getDate()).padStart(2, '0');
+        var hours = String(d.getHours()).padStart(2, '0');
+        var mins = String(d.getMinutes()).padStart(2, '0');
+        return { date: year + '-' + month + '-' + day, time: hours + ':' + mins };
+      }
+
+      function getPresetDate(daysFromNow) {
+        var d = new Date();
+        d.setDate(d.getDate() + daysFromNow);
+        d.setHours(12, 0, 0, 0);
+        return dateToInputs(d);
+      }
+
+      // ===== SETTINGS PERSISTENCE =====
+      function loadSettings() {
+        var model = ls('gemini_model') || 'gemini-2.5-flash';
+        $('sidebar-model-d1e2').textContent = model;
+        $('gemini-model-select-q7w4').value = model;
+
+        var key = ls('gemini_api_key');
+        $('sidebar-key-status-f3g4').textContent = key ? '●●●●● set' : 'not set';
+        $('sidebar-key-status-f3g4').className = key ? 'text-green' : 'text-ytred';
+        if (key) $('gemini-key-input-p4r2').value = key;
+
+        var privacy = ls('yt_default_privacy') || 'unlisted';
+        var radios = document.querySelectorAll('#privacy-radio-group-h5i6 input[name="privacy"]');
+        radios.forEach(function(r) { r.checked = r.value === privacy; });
+
+        var kids = ls('yt_made_for_kids') === 'true';
+        $('made-for-kids-j7k8').checked = kids;
+
+        var lang = ls('yt_default_language') || 'en';
+        $('default-lang-l9m0').value = lang;
+
+        var autoSched = ls('yt_auto_schedule') === 'true';
+        $('auto-schedule-n1o2').checked = autoSched;
+        $('schedule-options-p3q4').classList.toggle('hidden', !autoSched);
+
+        var clientId = ls('yt_client_id');
+        if (clientId) {
+          state.clientId = clientId;
+          $('clientid-input-r3t7').value = clientId;
+        }
+
+        var token = ls('yt_token');
+        if (token) {
+          state.token = token;
+          initConnectedState();
+        }
+      }
+
+      // ===== MODALS =====
+      function openModal(id) {
+        $(id).classList.add('active');
+      }
+      function closeModal(id) {
+        $(id).classList.remove('active');
+      }
+
+      $('gemini-key-btn-d4e5').addEventListener('click', function() { openModal('modal-gemini-g3x9'); });
+      $('close-gemini-modal-b2k1').addEventListener('click', function() { closeModal('modal-gemini-g3x9'); });
+      $('clientid-btn-n5o6').addEventListener('click', function() { openModal('modal-clientid-h8j2'); });
+      $('close-clientid-modal-c9p5').addEventListener('click', function() { closeModal('modal-clientid-h8j2'); });
+
+      $('mob-gemini-btn-t1u2').addEventListener('click', function() {
+        $('mobile-menu-p7q8').classList.add('hidden');
+        openModal('modal-gemini-g3x9');
+      });
+      $('mob-clientid-btn-x5y6').addEventListener('click', function() {
+        $('mobile-menu-p7q8').classList.add('hidden');
+        openModal('modal-clientid-h8j2');
+      });
+      $('mob-connect-btn-v3w4').addEventListener('click', function() {
+        $('mobile-menu-p7q8').classList.add('hidden');
+        connectYouTube();
+      });
+      $('mob-disconnect-btn-z7a8').addEventListener('click', function() {
+        $('mobile-menu-p7q8').classList.add('hidden');
+        disconnectYouTube();
+      });
+
+      // Close modals on overlay click
+      document.querySelectorAll('.modal-overlay').forEach(function(m) {
+        m.addEventListener('click', function(e) {
+          if (e.target === m) m.classList.remove('active');
+        });
+      });
+
+      // Toggle key visibility
+      $('toggle-key-vis-k8m3').addEventListener('click', function() {
+        var inp = $('gemini-key-input-p4r2');
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+      });
+
+      // Save Gemini
+      $('save-gemini-btn-v5n6').addEventListener('click', function() {
+        var key = $('gemini-key-input-p4r2').value.trim();
+        var model = $('gemini-model-select-q7w4').value;
+        ls('gemini_api_key', key || null);
+        ls('gemini_model', model);
+        $('sidebar-model-d1e2').textContent = model;
+        $('sidebar-key-status-f3g4').textContent = key ? '●●●●● set' : 'not set';
+        $('sidebar-key-status-f3g4').className = key ? 'text-green' : 'text-ytred';
+        closeModal('modal-gemini-g3x9');
+        showToast('Gemini settings saved', 'success');
+        addLog('Gemini settings updated', 'success');
+      });
+
+      // Save Client ID
+      $('save-clientid-btn-m6k8').addEventListener('click', function() {
+        var cid = $('clientid-input-r3t7').value.trim();
+        ls('yt_client_id', cid || null);
+        state.clientId = cid || null;
+        closeModal('modal-clientid-h8j2');
+        showToast('Client ID saved', 'success');
+        addLog('OAuth Client ID updated', 'success');
+      });
+
+      // Privacy radio
+      document.querySelectorAll('#privacy-radio-group-h5i6 input[name="privacy"]').forEach(function(r) {
+        r.addEventListener('change', function() {
+          ls('yt_default_privacy', r.value);
+          addLog('Default privacy: ' + r.value, 'info');
+        });
+      });
+
+      // Made for kids
+      $('made-for-kids-j7k8').addEventListener('change', function() {
+        ls('yt_made_for_kids', this.checked ? 'true' : 'false');
+      });
+
+      // Language
+      $('default-lang-l9m0').addEventListener('change', function() {
+        ls('yt_default_language', this.value);
+      });
+
+      // Auto-schedule toggle
+      $('auto-schedule-n1o2').addEventListener('change', function() {
+        ls('yt_auto_schedule', this.checked ? 'true' : 'false');
+        $('schedule-options-p3q4').classList.toggle('hidden', !this.checked);
+        if (this.checked) addLog('Auto-scheduling enabled', 'info');
+      });
+
+      // Schedule preset buttons
+      document.querySelectorAll('.schedule-preset-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var days = parseInt(btn.dataset.days, 10);
+          showToast('Preset: +' + days + ' days applied to new items', 'info');
+          addLog('Schedule preset +' + days + ' days selected', 'info');
+        });
+      });
+
+      $('best-time-btn-r5s6').addEventListener('click', function() {
+        showToast('Best Time algorithm will auto-assign on next file drop', 'info');
+        addLog('Best Time algorithm activated', 'info');
+      });
+
+      // Mobile menu
+      $('mobile-menu-btn-x3y4').addEventListener('click', function() {
+        $('mobile-menu-p7q8').classList.remove('hidden');
+      });
+      $('mobile-menu-close-r9s0').addEventListener('click', function() {
+        $('mobile-menu-p7q8').classList.add('hidden');
+      });
+
+      // ===== YOUTUBE AUTH =====
+      function connectYouTube() {
+        var clientId = ls('yt_client_id');
+        if (!clientId) {
+          showToast('Set your Client ID first', 'warning');
+          openModal('modal-clientid-h8j2');
+          return;
+        }
+
+        var redirectUri = window.location.origin + window.location.pathname;
+        var scopes = 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.readonly';
+        var authUrl = 'https://accounts.google.com/o/oauth2/v2/auth' +
+          '?client_id=' + encodeURIComponent(clientId) +
+          '&redirect_uri=' + encodeURIComponent(redirectUri) +
+          '&response_type=token' +
+          '&scope=' + encodeURIComponent(scopes) +
+          '&include_granted_scopes=true' +
+          '&prompt=consent';
+
+        var popup = window.open(authUrl, 'ytAuth', 'width=550,height=650');
+
+        var checkInterval = setInterval(function() {
+          try {
+            if (!popup || popup.closed) {
+              clearInterval(checkInterval);
+              return;
+            }
+            var hash = popup.location.hash;
+            if (hash && hash.indexOf('access_token') !== -1) {
+              clearInterval(checkInterval);
+              popup.close();
+              var params = new URLSearchParams(hash.substring(1));
+              var token = params.get('access_token');
+              if (token) {
+                state.token = token;
+                ls('yt_token', token);
+                initConnectedState();
+                showToast('Connected to YouTube!', 'success');
+                addLog('YouTube account connected', 'success');
+              }
+            }
+          } catch (e) { /* cross-origin, keep waiting */ }
+        }, 500);
+      }
+
+      $('connect-yt-btn-f6g7').addEventListener('click', function() {
+        if (state.channelInfo) {
+          var dd = $('channel-dropdown-h8i9');
+          dd.classList.toggle('show');
+          return;
+        }
+        connectYouTube();
+      });
+
+      $('switch-account-btn-j1k2').addEventListener('click', function() {
+        $('channel-dropdown-h8i9').classList.remove('show');
+        connectYouTube();
+      });
+
+      $('disconnect-btn-l3m4').addEventListener('click', function() {
+        $('channel-dropdown-h8i9').classList.remove('show');
+        disconnectYouTube();
+      });
+
+      function disconnectYouTube() {
+        state.token = null;
+        state.channelInfo = null;
+        state.playlists = [];
+        ls('yt_token', null);
+        updateYTButton();
+        showToast('Disconnected from YouTube', 'info');
+        addLog('YouTube disconnected', 'warning');
+        $('mob-disconnect-btn-z7a8').classList.add('hidden');
+        renderBulkGrid();
+      }
+
+      // Close dropdown on outside click
+      document.addEventListener('click', function(e) {
+        var dd = $('channel-dropdown-h8i9');
+        var btn = $('connect-yt-btn-f6g7');
+        if (!dd.contains(e.target) && !btn.contains(e.target)) {
+          dd.classList.remove('show');
+        }
+      });
+
+      async function ytFetch(url, options) {
+        if (!state.token) throw new Error('Not connected');
+        options = options || {};
+        options.headers = options.headers || {};
+        options.headers['Authorization'] = 'Bearer ' + state.token;
+        try {
+          var resp = await fetch(url, options);
+          if (resp.status === 401) {
+            showToast('Token expired — please reconnect', 'error');
+            addLog('Auth token expired', 'error');
+            disconnectYouTube();
+            throw new Error('Token expired');
+          }
+          var data = await resp.json();
+          if (data.error) throw new Error(data.error.message || 'API error');
+          return data;
+        } catch (e) {
+          throw e;
+        }
+      }
+
+      async function initConnectedState() {
+        try {
+          var channelData = await ytFetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true');
+          if (channelData.items && channelData.items.length > 0) {
+            state.channelInfo = channelData.items[0].snippet;
+            updateYTButton();
+            addLog('Channel: ' + state.channelInfo.title, 'success');
+            $('mob-disconnect-btn-z7a8').classList.remove('hidden');
+          }
+
+          var playlistData = await ytFetch('https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&maxResults=50');
+          if (playlistData.items) {
+            state.playlists = playlistData.items.map(function(p) {
+              return { id: p.id, title: p.snippet.title };
+            });
+            addLog('Loaded ' + state.playlists.length + ' playlists', 'info');
+          }
+          renderBulkGrid();
+        } catch (e) {
+          if (e.message !== 'Token expired') {
+            addLog('Connection error: ' + e.message, 'error');
+          }
+        }
+      }
+
+      function updateYTButton() {
+        var btn = $('connect-yt-btn-f6g7');
+        var mobBtn = $('mob-connect-btn-v3w4');
+        if (state.channelInfo) {
+          var thumb = state.channelInfo.thumbnails && state.channelInfo.thumbnails.default ? state.channelInfo.thumbnails.default.url : '';
+          btn.innerHTML = '';
+          if (thumb) {
+            var img = document.createElement('img');
+            img.src = thumb;
+            img.alt = 'Channel avatar';
+            img.className = 'w-5 h-5 rounded-full';
+            img.style.display = 'inline-block';
+            btn.appendChild(img);
+          }
+          var nameSpan = document.createElement('span');
+          nameSpan.textContent = state.channelInfo.title;
+          nameSpan.className = 'text-xs';
+          btn.appendChild(nameSpan);
+          btn.className = 'btn btn-outline text-xs relative';
+          mobBtn.textContent = state.channelInfo.title;
+          mobBtn.className = 'btn btn-outline w-full justify-center';
+        } else {
+          btn.innerHTML = '<i data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube';
+          btn.className = 'btn btn-red text-xs';
+          mobBtn.innerHTML = '<i data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube';
+          mobBtn.className = 'btn btn-red w-full justify-center';
+          recreateIcons();
+        }
+      }
+
+      // ===== DROP ZONE =====
+      var dropZone = $('drop-zone-v9w0');
+      var fileInput = $('file-input-x1y2');
+
+      dropZone.addEventListener('click', function() { fileInput.click(); });
+
+      dropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+      });
+      dropZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+      });
+      dropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        handleBulkDrop(e.dataTransfer.files);
+      });
+      fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) handleBulkDrop(fileInput.files);
+        fileInput.value = '';
+      });
+
+      function handleBulkDrop(files) {
+        var videoTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska', 'video/webm', 'video/avi', 'video/mov'];
+        var added = 0;
+        for (var i = 0; i < files.length; i++) {
+          var f = files[i];
+          if (!f.type.startsWith('video/') && videoTypes.indexOf(f.type) === -1) continue;
+          var objectUrl = URL.createObjectURL(f);
+          var item = {
+            id: ++idCounter,
+            file: f,
+            objectUrl: objectUrl,
+            title: '',
+            desc: '',
+            tags: '',
+            playlist: '',
+            privacy: getDefaultPrivacy(),
+            scheduleDate: '',
+            scheduleTime: '',
+            status: 'idle',
+            uploadProgress: 0,
+            videoId: ''
+          };
+
+          if (isAutoSchedule()) {
+            var bt = getNextBestTime();
+            var dt = dateToInputs(bt);
+            item.scheduleDate = dt.date;
+            item.scheduleTime = dt.time;
+          }
+
+          bulkQueue.push(item);
+          added++;
+        }
+        if (added > 0) {
+          addLog(added + ' video(s) added to queue', 'info');
+          showToast(added + ' video(s) queued', 'success');
+        }
+        renderBulkGrid();
+      }
+
+      // ===== RENDER GRID =====
+      function renderBulkGrid() {
+        var grid = $('bulk-video-grid-j3k4');
+        var actionBar = $('action-bar-z3a4');
+        var emptyState = $('empty-state-l5m6');
+
+        if (bulkQueue.length === 0) {
+          grid.innerHTML = '';
+          grid.appendChild(emptyState);
+          emptyState.classList.remove('hidden');
+          actionBar.classList.add('hidden');
+          recreateIcons();
+          return;
+        }
+
+        if (emptyState.parentNode === grid) grid.removeChild(emptyState);
+        emptyState.classList.add('hidden');
+        actionBar.classList.remove('hidden');
+        $('queue-count-b5c6').textContent = bulkQueue.length + ' video' + (bulkQueue.length > 1 ? 's' : '') + ' queued';
+
+        grid.innerHTML = '';
+        bulkQueue.forEach(function(item) {
+          grid.appendChild(createVideoCard(item));
+        });
+
+        recreateIcons();
+      }
+
+      function createVideoCard(item) {
+        var card = document.createElement('div');
+        card.className = 'card-enter bg-card border border-border rounded-xl p-4 flex flex-col md:flex-row gap-4';
+        card.id = 'card-' + item.id;
+
+        var badgeClass = 'badge badge-' + item.status;
+        var badgeText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+        if (item.status === 'done') badgeText = '✓ Ready';
+        if (item.status === 'uploaded') badgeText = '✓ Uploaded';
+
+        var scheduleHTML = '';
+        if (isAutoSchedule()) {
+          scheduleHTML = '<div class="flex gap-2 mt-1">' +
+            '<input type="date" class="flex-1 text-xs" value="' + (item.scheduleDate || '') + '" data-field="scheduleDate" />' +
+            '<input type="time" class="w-28 text-xs" value="' + (item.scheduleTime || '') + '" data-field="scheduleTime" />' +
+            '</div>';
+        }
+
+        var playlistOptions = '<option value="">— No playlist —</option>';
+        state.playlists.forEach(function(p) {
+          playlistOptions += '<option value="' + p.id + '"' + (item.playlist === p.id ? ' selected' : '') + '>' + escHtml(p.title) + '</option>';
+        });
+
+        var actionButtons = '';
+        if (item.status === 'idle' || item.status === 'error') {
+          actionButtons += '<button class="btn btn-red text-[11px] py-1.5 ai-gen-btn" data-id="' + item.id + '"><i data-lucide="sparkles" class="w-3 h-3"></i> ' + (item.status === 'error' ? 'Retry AI' : 'Generate AI') + '</button>';
+        }
+        if (item.status === 'generating') {
+          actionButtons += '<span class="text-yellow text-xs pulse-anim flex items-center gap-1"><i data-lucide="loader" class="w-3 h-3"></i> Generating...</span>';
+        }
+        if ((item.status === 'done' || item.status === 'idle') && state.token) {
+          actionButtons += '<button class="btn btn-green text-[11px] py-1.5 upload-single-btn" data-id="' + item.id + '"><i data-lucide="upload" class="w-3 h-3"></i> Upload</button>';
+        }
+        if (item.status === 'uploading') {
+          actionButtons += '<span class="text-blue text-xs pulse-anim flex items-center gap-1"><i data-lucide="loader" class="w-3 h-3"></i> Uploading...</span>';
+        }
+        if (item.status === 'uploaded' && item.videoId) {
+          actionButtons += '<a href="https://youtube.com/watch?v=' + item.videoId + '" target="_blank" class="btn btn-outline text-[11px] py-1.5 text-blue"><i data-lucide="external-link" class="w-3 h-3"></i> View</a>';
+        }
+
+        var progressHTML = '';
+        if (item.status === 'uploading') {
+          progressHTML = '<div class="progress-bar"><div class="progress-bar-fill" style="width:' + item.uploadProgress + '%"></div></div>';
+        }
+
+        card.innerHTML =
+          '<div class="flex-shrink-0" style="width:180px">' +
+            '<video src="' + item.objectUrl + '" class="rounded-lg w-full bg-black" style="height:102px;object-fit:cover;" preload="metadata" muted></video>' +
+            '<p class="text-[11px] text-dimmed mt-1 truncate" title="' + escHtml(item.file.name) + '">' + escHtml(item.file.name) + '</p>' +
+            '<p class="text-[10px] text-dimmed">' + formatBytes(item.file.size) + '</p>' +
+          '</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-center justify-between mb-2">' +
+              '<span class="' + badgeClass + '">' + badgeText + '</span>' +
+              '<button class="text-dimmed hover:text-ytred remove-btn" data-id="' + item.id + '"><i data-lucide="x" class="w-4 h-4"></i></button>' +
+            '</div>' +
+            '<input type="text" placeholder="Video title" class="mb-1.5 text-sm font-medium" value="' + escHtml(item.title) + '" data-field="title" data-id="' + item.id + '" />' +
+            '<textarea placeholder="Description" rows="2" class="mb-1.5 text-xs resize-y" data-field="desc" data-id="' + item.id + '">' + escHtml(item.desc) + '</textarea>' +
+            '<input type="text" placeholder="Tags (comma-separated)" class="mb-1.5 text-xs" value="' + escHtml(item.tags) + '" data-field="tags" data-id="' + item.id + '" />' +
+            '<div class="flex gap-2 mb-1.5">' +
+              '<select class="flex-1 text-xs" data-field="playlist" data-id="' + item.id + '">' + playlistOptions + '</select>' +
+              '<select class="w-28 text-xs" data-field="privacy" data-id="' + item.id + '">' +
+                '<option value="public"' + (item.privacy === 'public' ? ' selected' : '') + '>Public</option>' +
+                '<option value="unlisted"' + (item.privacy === 'unlisted' ? ' selected' : '') + '>Unlisted</option>' +
+                '<option value="private"' + (item.privacy === 'private' ? ' selected' : '') + '>Private</option>' +
+              '</select>' +
+            '</div>' +
+            scheduleHTML +
+            progressHTML +
+            '<div class="flex items-center gap-2 mt-2.5">' + actionButtons + '</div>' +
+          '</div>';
+
+        // Attach event listeners
+        setTimeout(function() {
+          var removeBtn = card.querySelector('.remove-btn');
+          if (removeBtn) removeBtn.addEventListener('click', function() { removeItem(item.id); });
+
+          var aiBtn = card.querySelector('.ai-gen-btn');
+          if (aiBtn) aiBtn.addEventListener('click', function() { generateBulkAI(item.id); });
+
+          var uploadBtn = card.querySelector('.upload-single-btn');
+          if (uploadBtn) uploadBtn.addEventListener('click', function() { uploadVideoToYouTube(item.id); });
+
+          // Field change listeners
+          card.querySelectorAll('[data-field]').forEach(function(el) {
+            var eventType = (el.tagName === 'SELECT') ? 'change' : 'input';
+            el.addEventListener(eventType, function() {
+              var itm = bulkQueue.find(function(q) { return q.id === item.id; });
+              if (itm) itm[el.dataset.field] = el.value;
+            });
+          });
+        }, 0);
+
+        return card;
+      }
+
+      function escHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        var k = 1024;
+        var sizes = ['B', 'KB', 'MB', 'GB'];
+        var i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+      }
+
+      function removeItem(id) {
+        var idx = bulkQueue.findIndex(function(q) { return q.id === id; });
+        if (idx !== -1) {
+          URL.revokeObjectURL(bulkQueue[idx].objectUrl);
+          bulkQueue.splice(idx, 1);
+          addLog('Removed video from queue', 'info');
+        }
+        renderBulkGrid();
+      }
+
+      // ===== ACTION BAR BUTTONS =====
+      $('generate-all-btn-d7e8').addEventListener('click', async function() {
+        var items = bulkQueue.filter(function(q) { return q.status === 'idle' || q.status === 'error'; });
+        if (items.length === 0) { showToast('No items to process', 'warning'); return; }
+        addLog('Generating AI metadata for ' + items.length + ' video(s)', 'info');
+        for (var i = 0; i < items.length; i++) {
+          await generateBulkAI(items[i].id);
+          if (i < items.length - 1) await new Promise(function(r) { setTimeout(r, 1500); });
+        }
+      });
+
+      $('upload-all-btn-f9g0').addEventListener('click', async function() {
+        if (!state.token) { showToast('Connect YouTube first', 'warning'); return; }
+        var items = bulkQueue.filter(function(q) { return q.status === 'done'; });
+        if (items.length === 0) { showToast('No ready items to upload', 'warning'); return; }
+        addLog('Uploading ' + items.length + ' video(s)', 'info');
+        for (var i = 0; i < items.length; i++) {
+          await uploadVideoToYouTube(items[i].id);
+        }
+      });
+
+      $('clear-all-btn-h1i2').addEventListener('click', function() {
+        bulkQueue.forEach(function(q) { URL.revokeObjectURL(q.objectUrl); });
+        bulkQueue = [];
+        addLog('Queue cleared', 'warning');
+        showToast('All items cleared', 'info');
+        renderBulkGrid();
+      });
+
+      // ===== FRAME EXTRACTION =====
+      function extractFramesFromVideo(file, frameCount) {
+        return new Promise(function(resolve, reject) {
+          var url = URL.createObjectURL(file);
+          var video = document.createElement('video');
+          video.preload = 'auto';
+          video.muted = true;
+          video.playsInline = true;
+
+          video.addEventListener('loadedmetadata', function() {
+            var duration = video.duration;
+            if (!duration || duration < 1) { URL.revokeObjectURL(url); resolve([]); return; }
+
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var frames = [];
+            var times = [];
+            for (var i = 0; i < frameCount; i++) {
+              times.push(duration * (0.1 + (0.8 * i / (frameCount - 1))));
+            }
+
+            var idx = 0;
+            function seekNext() {
+              if (idx >= times.length) {
+                URL.revokeObjectURL(url);
+                resolve(frames);
+                return;
+              }
+              video.currentTime = times[idx];
+            }
+
+            video.addEventListener('seeked', function() {
+              var w = video.videoWidth;
+              var h = video.videoHeight;
+              var scale = 320 / w;
+              canvas.width = 320;
+              canvas.height = Math.round(h * scale);
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              frames.push(canvas.toDataURL('image/jpeg', 0.55));
+              idx++;
+              seekNext();
+            });
+
+            seekNext();
+          });
+
+          video.addEventListener('error', function() {
+            URL.revokeObjectURL(url);
+            reject(new Error('Failed to load video'));
+          });
+
+          video.src = url;
+        });
+      }
+
+      // ===== AI METADATA GENERATION =====
+      async function generateBulkAI(id) {
+        var item = bulkQueue.find(function(q) { return q.id === id; });
+        if (!item) return;
+
+        var apiKey = ls('gemini_api_key');
+        var model = ls('gemini_model') || 'gemini-2.5-flash';
+
+        if (!apiKey) {
+          showToast('Set your Gemini API key first', 'warning');
+          openModal('modal-gemini-g3x9');
+          return;
+        }
+
+        item.status = 'generating';
+        renderBulkGrid();
+        addLog('Generating metadata: ' + item.file.name, 'info');
+
+        try {
+          var frames = await extractFramesFromVideo(item.file, 20);
+          if (frames.length === 0) throw new Error('Could not extract frames');
+
+          var imageParts = frames.map(function(f) {
+            var base64Data = f.split(',')[1];
+            return { inline_data: { mime_type: 'image/jpeg', data: base64Data } };
+          });
+
+          var playlistSuggestion = '';
+          if (state.playlists.length > 0) {
+            playlistSuggestion = ' Available playlists: ' + state.playlists.map(function(p) { return p.title; }).join(', ') + '. Suggest the best matching playlist title from this list, or empty string if none match.';
+          }
+
+          var requestBody = {
+            contents: [{
+              parts: imageParts.concat([{
+                text: 'These are frames from a video being uploaded to YouTube. Based on these frames, generate optimized YouTube metadata. Create:\n1. An engaging, SEO-optimized title (max 100 chars)\n2. A compelling description (2-3 paragraphs, include relevant keywords)\n3. Relevant tags (10-15 tags, comma-separated)\n4. Best matching playlist name from available options.' + playlistSuggestion + '\n\nRespond in JSON format with keys: title, description, tags, playlist'
+              }])
+            }],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              responseSchema: {
+                type: 'OBJECT',
+                properties: {
+                  title: { type: 'STRING' },
+                  description: { type: 'STRING' },
+                  tags: { type: 'STRING' },
+                  playlist: { type: 'STRING' }
+                },
+                required: ['title', 'description', 'tags']
+              }
+            }
+          };
+
+          var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+          });
+
+          var data = await resp.json();
+
+          if (data.error) throw new Error(data.error.message || 'Gemini API error');
+
+          var text = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+          if (!text) throw new Error('No response from Gemini');
+
+          var parsed = JSON.parse(text);
+          item.title = parsed.title || '';
+          item.desc = parsed.description || '';
+          item.tags = parsed.tags || '';
+
+          if (parsed.playlist && state.playlists.length > 0) {
+            var match = state.playlists.find(function(p) {
+              return p.title.toLowerCase() === parsed.playlist.toLowerCase();
+            });
+            if (match) item.playlist = match.id;
+          }
+
+          item.status = 'done';
+          addLog('AI metadata ready: ' + item.title.substring(0, 40), 'success');
+          showToast('AI metadata generated for ' + item.file.name, 'success');
+
+        } catch (e) {
+          item.status = 'error';
+          addLog('AI error: ' + e.message, 'error');
+          showToast('AI generation failed: ' + e.message, 'error');
+        }
+
+        renderBulkGrid();
+      }
+
+      // ===== YOUTUBE UPLOAD =====
+      async function uploadVideoToYouTube(id) {
+        var item = bulkQueue.find(function(q) { return q.id === id; });
+        if (!item) return;
+
+        if (!state.token) {
+          showToast('Connect YouTube first', 'warning');
+          return;
+        }
+
+        item.status = 'uploading';
+        item.uploadProgress = 0;
+        renderBulkGrid();
+        addLog('Uploading: ' + (item.title || item.file.name), 'info');
+
+        try {
+          var madeForKids = ls('yt_made_for_kids') === 'true';
+          var defaultLang = ls('yt_default_language') || 'en';
+          var privacy = item.privacy || 'unlisted';
+          var tagsArray = item.tags ? item.tags.split(',').map(function(t) { return t.trim(); }).filter(Boolean) : [];
+
+          var statusObj = { privacyStatus: privacy, selfDeclaredMadeForKids: madeForKids };
+
+          if (item.scheduleDate && item.scheduleTime) {
+            var scheduleIso = new Date(item.scheduleDate + 'T' + item.scheduleTime + ':00').toISOString();
+            statusObj.publishAt = scheduleIso;
+            statusObj.privacyStatus = 'private';
+          }
+
+          var metadata = {
+            snippet: {
+              title: item.title || item.file.name.replace(/\.[^.]+$/, ''),
+              description: item.desc || '',
+              tags: tagsArray,
+              categoryId: '22',
+              defaultLanguage: defaultLang
+            },
+            status: statusObj
+          };
+
+          // Step 1: Initiate resumable upload
+          var initResp = await fetch('https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + state.token,
+              'Content-Type': 'application/json; charset=utf-8',
+              'X-Upload-Content-Length': item.file.size,
+              'X-Upload-Content-Type': item.file.type || 'video/mp4'
+            },
+            body: JSON.stringify(metadata)
+          });
+
+          if (initResp.status === 401) {
+            showToast('Token expired — reconnect', 'error');
+            disconnectYouTube();
+            item.status = 'error';
+            renderBulkGrid();
+            return;
+          }
+
+          if (!initResp.ok) {
+            var errText = await initResp.text();
+            throw new Error('Upload init failed: ' + errText);
+          }
+
+          var uploadUrl = initResp.headers.get('Location');
+          if (!uploadUrl) throw new Error('No upload URI returned');
+
+          // Step 2: Upload the file
+          var xhr = new XMLHttpRequest();
+          xhr.open('PUT', uploadUrl, true);
+          xhr.setRequestHeader('Content-Type', item.file.type || 'video/mp4');
+
+          xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+              item.uploadProgress = Math.round((e.loaded / e.total) * 100);
+              var progressEl = document.querySelector('#card-' + item.id + ' .progress-bar-fill');
+              if (progressEl) progressEl.style.width = item.uploadProgress + '%';
+            }
+          });
+
+          await new Promise(function(resolve, reject) {
+            xhr.addEventListener('load', function() {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                  var result = JSON.parse(xhr.responseText);
+                  item.videoId = result.id;
+                  item.status = 'uploaded';
+                  item.uploadProgress = 100;
+                  addLog('Uploaded: ' + item.title + ' → ' + result.id, 'success');
+                  showToast('Upload complete: ' + item.title, 'success');
+
+                  // Add to playlist if selected
+                  if (item.playlist) {
+                    addToPlaylist(result.id, item.playlist);
+                  }
+                } catch (e) {
+                  item.status = 'uploaded';
+                  addLog('Upload complete (parse warning)', 'warning');
+                }
+                resolve();
+              } else {
+                item.status = 'error';
+                addLog('Upload error: HTTP ' + xhr.status, 'error');
+                showToast('Upload failed: HTTP ' + xhr.status, 'error');
+                reject(new Error('Upload failed'));
+              }
+            });
+            xhr.addEventListener('error', function() {
+              item.status = 'error';
+              addLog('Upload network error', 'error');
+              reject(new Error('Network error'));
+            });
+            xhr.send(item.file);
+          });
+
+        } catch (e) {
+          item.status = 'error';
+          addLog('Upload error: ' + e.message, 'error');
+          showToast('Upload failed: ' + e.message, 'error');
+        }
+
+        renderBulkGrid();
+      }
+
+      async function addToPlaylist(videoId, playlistId) {
+        try {
+          await ytFetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              snippet: {
+                playlistId: playlistId,
+                resourceId: { kind: 'youtube#video', videoId: videoId }
+              }
+            })
+          });
+          addLog('Added to playlist', 'success');
+        } catch (e) {
+          addLog('Playlist error: ' + e.message, 'warning');
+        }
+      }
+
+      // ===== INIT =====
+      loadSettings();
+      addLog('Bulk Upload Manager ready', 'info');
+    </script>
+</body>
+</html>
