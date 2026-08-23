@@ -199,6 +199,10 @@
         <i data-id="30" data-lucide="list-video" class="w-5 h-5"></i>
         Playlists
       </button>
+      <button class="nav-item w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-yt-muted" data-tab="bulk">
+        <i data-lucide="layers" class="w-5 h-5"></i>
+        Bulk Upload
+      </button>
     </nav>
 
     <!-- Sidebar Footer -->
@@ -451,134 +455,162 @@
 
       <!-- TAB 3: LOW PERFORMERS -->
       <div data-id="181" id="tab-lowperformers" class="tab-content relative">
+        <div data-id="182" id="lp-demo-banner" class="demo-banner hidden">
+          <span data-id="183">⚠️</span>
+          <span data-id="184">Demo Mode — <button data-id="185" id="demo-connect-lp" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+        </div>
         <!-- Header -->
-        <div data-id="182" class="mb-6">
-          <h2 data-id="183" class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">⚠️ Low-Performing Videos</h2>
-          <p data-id="184" class="text-sm text-yt-muted">Videos with fewer than <span data-id="185" id="lp-threshold-display">100</span> views — relist them with fresh AI metadata and a new publish date</p>
+        <div class="mb-6">
+          <h2 class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">⚠️ Low-View Videos</h2>
+          <p class="text-sm text-yt-muted">Videos with fewer than <span id="lp-threshold-display">100</span> views — preview, then delete if needed</p>
         </div>
 
-        <!-- Threshold Controls -->
-        <div data-id="186" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
-          <div data-id="187" style="display:flex; align-items:center; gap:8px; background:#1a1a1a; border:1px solid #333; border-radius:8px; padding:6px 12px;">
-            <span data-id="188" style="color:#aaa; font-size:12px;">View threshold:</span>
-            <span data-id="189" style="color:#ff4444; font-size:13px; font-weight:700;">&lt;</span>
-            <input data-id="190" type="number" id="lp-threshold-input" value="100" min="0" max="100000" step="10"
-              style="width:70px; background:#2a2a2a; border:1px solid #444; border-radius:6px; color:#fff; font-size:13px; font-weight:600; padding:3px 8px; text-align:center;"
-            />
-            <span data-id="191" style="color:#aaa; font-size:12px;">views</span>
+        <!-- Controls -->
+        <div class="bg-yt-surface rounded-xl p-4 mb-6 border border-yt-border flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-yt-muted">Fewer than</span>
+            <input type="number" id="lp-threshold-input" value="100" min="0" max="999999" step="10"
+              style="width:80px;padding:6px 10px;background:#2a2a2a;border:1px solid #444;border-radius:7px;color:#fff;font-size:13px;font-weight:600;text-align:center;"
+              oninput="document.getElementById('lp-threshold-display').textContent=this.value" />
+            <span class="text-sm text-yt-muted">views</span>
           </div>
-          <button data-id="192" id="lp-refresh-list-btn" style="display:flex; align-items:center; gap:6px; padding:8px 16px; background:#212121; border:1px solid #333; border-radius:8px; color:#aaa; font-size:13px; cursor:pointer; transition:all 0.2s;">
-            🔄 Refresh List
+          <button onclick="loadLowPerformers()" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-4 py-2 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
+            🔍 Scan Channel
           </button>
-          <span data-id="193" id="lp-count-label" style="color:#717171; font-size:12px;"></span>
+          <span id="lp-count-label" class="text-sm text-yt-dimmed"></span>
         </div>
 
-        <!-- Low View Video List -->
-        <div data-id="194" id="lp-video-list" style="display:flex; flex-direction:column; gap:10px;">
-          <div data-id="195" style="text-align:center; padding:40px; color:#444;">Click Refresh List to scan your channel for low-view videos.</div>
+        <!-- Video List -->
+        <div id="lp-video-list" class="flex flex-col gap-3">
+          <div class="text-center py-12 text-yt-dimmed text-sm">Click Scan Channel to find videos below your view threshold.</div>
         </div>
       </div>
 
-      <!-- TAB 4: PLAYLISTS -->
-      <div data-id="196" id="tab-playlists" class="tab-content relative">
-        <div data-id="197" id="pl-demo-banner" class="demo-banner hidden">
-          <span data-id="198">⚠️</span>
-          <span data-id="199">Demo Mode — <button data-id="200" id="demo-connect-pl" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+
+      <!-- TAB: BULK UPLOAD -->
+      <div id="tab-bulk" class="tab-content relative" style="padding:24px;">
+        <div class="mb-6">
+          <h2 class="text-xl md:text-2xl font-bold text-white mb-1 flex items-center gap-2">📦 Bulk Upload</h2>
+          <p class="text-sm text-yt-muted">Drop multiple videos at once — generate AI metadata for each independently then upload</p>
         </div>
-        <div data-id="201" class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
-          <div data-id="202">
-            <h2 data-id="203" class="text-xl md:text-2xl font-bold text-white">Playlists</h2>
-            <p data-id="204" class="text-sm text-yt-muted">Manage your channel playlists</p>
+        <div id="bulk-drop-zone" class="upload-zone rounded-xl p-10 text-center cursor-pointer mb-6"
+          onclick="document.getElementById('bulk-file-input').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="event.preventDefault();this.classList.remove('dragover');handleBulkDrop(event.dataTransfer.files)">
+          <div style="font-size:36px;margin-bottom:10px;">🎬</div>
+          <p class="text-white font-semibold text-base mb-1">Drop multiple video files here</p>
+          <p class="text-yt-muted text-sm">or click to browse — MP4, MOV, AVI, MKV supported</p>
+          <input type="file" id="bulk-file-input" multiple accept="video/*" style="display:none;" onchange="handleBulkDrop(this.files)" />
+        </div>
+        <div id="bulk-action-bar" style="display:none;" class="flex items-center gap-3 flex-wrap mb-5">
+          <span id="bulk-count-label" class="text-sm text-yt-muted"></span>
+          <button onclick="generateAllBulkAI()" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-4 py-2 rounded-lg btn-press text-sm transition-colors">⚡ Generate All AI Metadata</button>
+          <button onclick="clearBulkQueue()" class="bg-yt-card border border-yt-border text-yt-muted px-3 py-2 rounded-lg text-sm hover:text-white transition-colors">🗑 Clear All</button>
+        </div>
+        <div id="bulk-video-grid" class="flex flex-col gap-4"></div>
+      </div>
+
+      <!-- TAB 4: PLAYLISTS -->
+      <div data-id="201" id="tab-playlists" class="tab-content relative">
+        <div data-id="202" id="pl-demo-banner" class="demo-banner hidden">
+          <span data-id="203">⚠️</span>
+          <span data-id="204">Demo Mode — <button data-id="205" id="demo-connect-pl" class="underline hover:text-white transition-colors">Connect your YouTube account</button> to see live data. Showing sample data.</span>
+        </div>
+        <div data-id="206" class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+          <div data-id="207">
+            <h2 data-id="208" class="text-xl md:text-2xl font-bold text-white">Playlists</h2>
+            <p data-id="209" class="text-sm text-yt-muted">Manage your channel playlists</p>
           </div>
-          <button data-id="205" id="create-playlist-btn-q9r9" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-5 py-2.5 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
-            <i data-id="206" data-lucide="plus" class="w-4 h-4"></i> Create Playlist
+          <button data-id="210" id="create-playlist-btn-q9r9" class="bg-yt-red hover:bg-yt-redDark text-white font-semibold px-5 py-2.5 rounded-lg btn-press transition-colors text-sm flex items-center gap-2">
+            <i data-id="211" data-lucide="plus" class="w-4 h-4"></i> Create Playlist
           </button>
         </div>
-        <div data-id="207" id="playlist-grid-s0t0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div data-id="212" id="playlist-grid-s0t0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         </div>
       </div>
 
     </main>
 
-    <footer data-id="208" class="border-t border-yt-border px-8 py-5 text-center text-xs text-yt-dimmed">
+    <footer data-id="213" class="border-t border-yt-border px-8 py-5 text-center text-xs text-yt-dimmed">
       Made by Copilot
     </footer>
   </div>
 
   <!-- Connect YouTube API Modal -->
-  <div data-id="209" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="210" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
-      <button data-id="211" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
-        <i data-id="212" data-lucide="x" class="w-5 h-5"></i>
+  <div data-id="214" id="api-modal-u1v1" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="215" class="bg-yt-surface rounded-2xl p-6 md:p-8 max-w-md w-full border border-yt-border relative max-h-[90vh] overflow-y-auto">
+      <button data-id="216" id="api-modal-close-w2x2" class="absolute top-4 right-4 text-yt-muted hover:text-white transition-colors">
+        <i data-id="217" data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <div data-id="213" class="text-center mb-6">
-        <div data-id="214" class="w-14 h-14 rounded-full bg-yt-red/15 flex items-center justify-center mx-auto mb-4">
-          <i data-id="215" data-lucide="youtube" class="w-7 h-7 text-yt-red"></i>
+      <div data-id="218" class="text-center mb-6">
+        <div data-id="219" class="w-14 h-14 rounded-full bg-yt-red/15 flex items-center justify-center mx-auto mb-4">
+          <i data-id="220" data-lucide="youtube" class="w-7 h-7 text-yt-red"></i>
         </div>
-        <h3 data-id="216" class="text-xl font-bold text-white">Connect Your YouTube Channel</h3>
-        <p data-id="217" class="text-sm text-yt-muted mt-1">Follow these steps to connect your API</p>
+        <h3 data-id="221" class="text-xl font-bold text-white">Connect Your YouTube Channel</h3>
+        <p data-id="222" class="text-sm text-yt-muted mt-1">Follow these steps to connect your API</p>
       </div>
-      <div data-id="218" class="space-y-3 mb-6">
-        <div data-id="219" class="flex gap-3 items-start">
-          <span data-id="220" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-          <p data-id="221" class="text-sm text-yt-muted">Go to Google Cloud Console and create a project</p>
+      <div data-id="223" class="space-y-3 mb-6">
+        <div data-id="224" class="flex gap-3 items-start">
+          <span data-id="225" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+          <p data-id="226" class="text-sm text-yt-muted">Go to Google Cloud Console and create a project</p>
         </div>
-        <div data-id="222" class="flex gap-3 items-start">
-          <span data-id="223" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-          <p data-id="224" class="text-sm text-yt-muted">Enable YouTube Data API v3 &amp; YouTube Analytics API</p>
+        <div data-id="227" class="flex gap-3 items-start">
+          <span data-id="228" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+          <p data-id="229" class="text-sm text-yt-muted">Enable YouTube Data API v3 &amp; YouTube Analytics API</p>
         </div>
-        <div data-id="225" class="flex gap-3 items-start">
-          <span data-id="226" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-          <p data-id="227" class="text-sm text-yt-muted">Create OAuth 2.0 credentials</p>
+        <div data-id="230" class="flex gap-3 items-start">
+          <span data-id="231" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+          <p data-id="232" class="text-sm text-yt-muted">Create OAuth 2.0 credentials</p>
         </div>
-        <div data-id="228" class="flex gap-3 items-start">
-          <span data-id="229" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
-          <p data-id="230" class="text-sm text-yt-muted">Paste your Client ID and (optional) API Key below</p>
+        <div data-id="233" class="flex gap-3 items-start">
+          <span data-id="234" class="w-6 h-6 rounded-full bg-yt-red text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
+          <p data-id="235" class="text-sm text-yt-muted">Paste your Client ID and (optional) API Key below</p>
         </div>
       </div>
-      <input data-id="231" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <input data-id="232" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
+      <input data-id="236" id="client-id-input-y3z3" type="text" placeholder="Enter Client ID..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <input data-id="237" id="api-key-input" type="text" placeholder="API Key (optional)..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red" />
 
-      <button data-id="233" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
-        <i data-id="234" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
+      <button data-id="238" id="authorize-btn-a4b4" class="w-full bg-yt-red hover:bg-yt-redDark text-white font-semibold py-2.5 rounded-lg btn-press transition-colors flex items-center justify-center gap-2 mt-4">
+        <i data-id="239" data-lucide="shield-check" class="w-4 h-4"></i> Authorize with Google
       </button>
     </div>
   </div>
 
   <!-- Gemini API Key Modal -->
-  <div data-id="235" id="gemini-key-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center modal-overlay p-4">
-    <div data-id="236" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:420px; max-width:90vw;">
-      <div data-id="237" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 data-id="238" style="font-size:17px; font-weight:700;">🔑 Gemini API Key</h3>
-        <button data-id="239" id="gemini-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
+  <div data-id="240" id="gemini-key-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center modal-overlay p-4">
+    <div data-id="241" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:420px; max-width:90vw;">
+      <div data-id="242" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h3 data-id="243" style="font-size:17px; font-weight:700;">🔑 Gemini API Key</h3>
+        <button data-id="244" id="gemini-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
       </div>
-      <p data-id="240" style="color:#aaa; font-size:13px; margin-bottom:16px;">Enter your Google AI Studio API key to enable AI-powered video metadata generation.</p>
-      <label data-id="241" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">API Key</label>
-      <input data-id="242" type="password" id="gemini-key-modal-input" placeholder="AIza..." style="
+      <p data-id="245" style="color:#aaa; font-size:13px; margin-bottom:16px;">Enter your Google AI Studio API key to enable AI-powered video metadata generation.</p>
+      <label data-id="246" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">API Key</label>
+      <input data-id="247" type="password" id="gemini-key-modal-input" placeholder="AIza..." style="
         width:100%; padding:10px 12px; background:#2a2a2a; border:1px solid #444;
         border-radius:8px; color:#fff; font-size:14px; margin-bottom:6px; box-sizing:border-box;
       "/>
-      <p data-id="243" style="color:#717171; font-size:11px; margin-bottom:20px;">
-        Get your free key at <strong data-id="244" style="color:#3ea6ff;">aistudio.google.com</strong> → Get API Key. Stored in localStorage only — never sent to any server.
+      <p data-id="248" style="color:#717171; font-size:11px; margin-bottom:20px;">
+        Get your free key at <strong data-id="249" style="color:#3ea6ff;">aistudio.google.com</strong> → Get API Key. Stored in localStorage only — never sent to any server.
       </p>
 
-      <label data-id="245" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">Gemini Model</label>
-      <select data-id="246" id="gemini-model-select" style="
+      <label data-id="250" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">Gemini Model</label>
+      <select data-id="251" id="gemini-model-select" style="
         width:100%; padding:10px 12px; background:#2a2a2a; border:1px solid #444;
         border-radius:8px; color:#fff; font-size:14px; margin-bottom:20px; cursor:pointer; box-sizing:border-box;
       ">
-        <option data-id="247" value="gemini-3.7-flash">gemini-3.7-flash</option>
-        <option data-id="248" value="gemini-3.6-flash">gemini-3.6-flash</option>
-        <option data-id="249" value="gemini-3.5-flash">gemini-3.5-flash</option>
-        <option data-id="250" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
+        <option data-id="252" value="gemini-3.7-flash">gemini-3.7-flash</option>
+        <option data-id="253" value="gemini-3.6-flash">gemini-3.6-flash</option>
+        <option data-id="254" value="gemini-3.5-flash">gemini-3.5-flash</option>
+        <option data-id="255" value="gemini-2.5-flash" selected>gemini-2.5-flash (stable)</option>
       </select>
 
-      <div data-id="251" style="display:flex; gap:10px;">
-        <button data-id="252" id="gemini-save-btn" style="
+      <div data-id="256" style="display:flex; gap:10px;">
+        <button data-id="257" id="gemini-save-btn" style="
           flex:1; padding:10px; background:#ff0000; border:none; border-radius:8px;
           color:#fff; font-size:14px; font-weight:600; cursor:pointer; transition:background 0.2s;
         ">Save Key</button>
-        <button data-id="253" id="gemini-clear-btn" style="
+        <button data-id="258" id="gemini-clear-btn" style="
           padding:10px 16px; background:#2a2a2a; border:1px solid #444; border-radius:8px;
           color:#aaa; font-size:14px; cursor:pointer;
         ">Clear</button>
@@ -587,127 +619,89 @@
   </div>
 
   <!-- Delete Confirmation Modal -->
-  <div data-id="254" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="255" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <div data-id="256" class="flex items-center gap-3 mb-4">
-        <div data-id="257" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
-          <i data-id="258" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
+  <div data-id="259" id="delete-modal-c5d5" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="260" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <div data-id="261" class="flex items-center gap-3 mb-4">
+        <div data-id="262" class="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
+          <i data-id="263" data-lucide="alert-triangle" class="w-5 h-5 text-red-500"></i>
         </div>
-        <h3 data-id="259" class="text-lg font-bold text-white">Delete Video?</h3>
+        <h3 data-id="264" class="text-lg font-bold text-white">Delete Video?</h3>
       </div>
-      <p data-id="260" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
-      <div data-id="261" class="flex gap-3 justify-end">
-        <button data-id="262" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="263" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
+      <p data-id="265" id="delete-modal-msg" class="text-sm text-yt-muted mb-6">Are you sure you want to permanently delete this video and remove it from all playlists?</p>
+      <div data-id="266" class="flex gap-3 justify-end">
+        <button data-id="267" id="delete-cancel-e6f6" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="268" id="delete-confirm-g7h7" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold btn-press transition-colors">Delete</button>
       </div>
     </div>
   </div>
 
   <!-- Playlist Remove Modal -->
-  <div data-id="264" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="265" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="266" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
-      <div data-id="267" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
+  <div data-id="269" id="playlist-remove-modal-i8j8" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="270" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="271" class="text-lg font-bold text-white mb-4">Remove from Playlists</h3>
+      <div data-id="272" id="playlist-remove-list-k9l9" class="space-y-3 mb-6">
       </div>
-      <div data-id="268" id="pr-loading" class="hidden text-center py-4"><span data-id="269" class="spinner spinner-red"></span><span data-id="270" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
-      <div data-id="271" class="flex gap-3 justify-end">
-        <button data-id="272" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="273" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
+      <div data-id="273" id="pr-loading" class="hidden text-center py-4"><span data-id="274" class="spinner spinner-red"></span><span data-id="275" class="text-sm text-yt-muted ml-2">Loading playlists...</span></div>
+      <div data-id="276" class="flex gap-3 justify-end">
+        <button data-id="277" id="pr-cancel-m0n0" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="278" id="pr-confirm-o1p1" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Confirm</button>
       </div>
     </div>
   </div>
 
   <!-- Create Playlist Modal -->
-  <div data-id="274" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
-    <div data-id="275" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
-      <h3 data-id="276" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
-      <input data-id="277" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
-      <select data-id="278" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
-        <option data-id="279" value="public">Public</option>
-        <option data-id="280" value="unlisted">Unlisted</option>
-        <option data-id="281" value="private">Private</option>
+  <div data-id="279" id="create-pl-modal-q2r2" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4">
+    <div data-id="280" class="bg-yt-surface rounded-2xl p-6 max-w-sm w-full border border-yt-border">
+      <h3 data-id="281" class="text-lg font-bold text-white mb-4">Create New Playlist</h3>
+      <input data-id="282" id="new-pl-name-s3t3" type="text" placeholder="Playlist name..." class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-3 focus:outline-none focus:border-yt-red" />
+      <select data-id="283" id="new-pl-privacy" class="w-full bg-yt-card border border-yt-border rounded-lg px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-yt-red appearance-none cursor-pointer">
+        <option data-id="284" value="public">Public</option>
+        <option data-id="285" value="unlisted">Unlisted</option>
+        <option data-id="286" value="private">Private</option>
       </select>
-      <div data-id="282" class="flex gap-3 justify-end">
-        <button data-id="283" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
-        <button data-id="284" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Relist Confirmation Modal -->
-  <div data-id="285" id="relist-modal" style="display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center;" class="modal-overlay">
-    <div data-id="286" style="background:#1a1a1a; border:1px solid #333; border-radius:16px; padding:28px; width:460px; max-width:90vw;">
-      <div data-id="287" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 data-id="288" style="font-size:17px; font-weight:700;">🔁 Relist Video</h3>
-        <button data-id="289" id="relist-modal-close-btn" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
-      </div>
-
-      <div data-id="290" id="relist-video-info" style="background:#212121; border-radius:10px; padding:12px; margin-bottom:16px; font-size:13px; color:#aaa;"></div>
-
-      <div data-id="291" style="background:#2a1515; border:1px solid #cc0000; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:12px; color:#ffaaaa;">
-        <p data-id="292" style="font-weight:700; font-size:13px; margin-bottom:8px;">⚠️ This will permanently delete the original video from YouTube.</p>
-        <p data-id="293" style="margin-bottom:10px; color:#ffbbbb;">The YouTube API cannot download videos. <strong data-id="294">You must manually save the original file before proceeding</strong> — otherwise it will be gone forever.</p>
-        <a data-id="295" id="relist-studio-link" href="https://studio.youtube.com" target="_blank" style="display:inline-flex; align-items:center; gap:6px; padding:7px 12px; background:#cc0000; border-radius:7px; color:#fff; font-size:12px; font-weight:600; text-decoration:none; margin-bottom:12px; transition:background 0.2s;">
-          📥 Open YouTube Studio to Download Video First →
-        </a>
-        <label data-id="296" style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; color:#ffcccc;">
-          <input data-id="297" type="checkbox" id="relist-confirm-saved" style="margin-top:2px; accent-color:#ff4444; flex-shrink:0;" />
-          <span data-id="298">I have already downloaded and saved the original video file to my computer</span>
-        </label>
-      </div>
-
-      <div data-id="299" style="margin-bottom:16px;">
-        <label data-id="300" style="color:#aaa; font-size:12px; display:block; margin-bottom:6px;">New scheduled date</label>
-        <div data-id="301" style="display:flex; gap:8px; align-items:center;">
-          <input data-id="302" type="date" id="relist-date-input" style="flex:1; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
-          <input data-id="303" type="time" id="relist-time-input" value="12:00" style="width:100px; padding:8px 12px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#fff; font-size:13px;" />
-          <button data-id="304" id="relist-best-time-btn" style="padding:8px 12px; background:#1a2a1a; border:1px solid #2ba640; border-radius:8px; color:#2ba640; font-size:11px; cursor:pointer;">⚡ Best</button>
-        </div>
-      </div>
-
-      <div data-id="305" style="display:flex; gap:10px;">
-        <button data-id="306" id="relist-confirm-btn" style="flex:1; padding:11px; background:#ff0000; border:none; border-radius:8px; color:#fff; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s;">🔁 Delete & Relist</button>
-        <button data-id="307" id="relist-cancel-btn" style="padding:11px 18px; background:#2a2a2a; border:1px solid #444; border-radius:8px; color:#aaa; font-size:14px; cursor:pointer;">Cancel</button>
+      <div data-id="287" class="flex gap-3 justify-end">
+        <button data-id="288" id="cpl-cancel-u4v4" class="px-4 py-2 rounded-lg bg-yt-card hover:bg-yt-hover text-white text-sm font-medium btn-press transition-colors">Cancel</button>
+        <button data-id="289" id="cpl-create-w5x5" class="px-4 py-2 rounded-lg bg-yt-red hover:bg-yt-redDark text-white text-sm font-semibold btn-press transition-colors">Create</button>
       </div>
     </div>
   </div>
 
   <!-- Activity Log Panel -->
-  <div data-id="308" id="log-panel" style="
+  <div data-id="290" id="log-panel" style="
     position: fixed; bottom: 0; left: 220px; right: 0; z-index: 999;
     background: #0a0a0a; border-top: 1px solid #333;
     transition: height 0.3s ease; height: 216px; overflow: hidden;
     font-family: 'Inter', monospace; font-size: 12px;
   ">
     <!-- Log Header / Toggle Bar -->
-    <div data-id="309" id="log-toggle" style="
+    <div data-id="291" id="log-toggle" style="
       height: 36px; display: flex; align-items: center; gap: 10px;
       padding: 0 16px; cursor: pointer; user-select: none;
       border-bottom: 1px solid #2a2a2a; background: #111;
     ">
-      <span data-id="310" style="color:#ff4444; font-size:10px;">●</span>
-      <span data-id="311" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
-      <span data-id="312" id="log-count-badge" style="
+      <span data-id="292" style="color:#ff4444; font-size:10px;">●</span>
+      <span data-id="293" style="color:#aaa; font-weight:600; letter-spacing:0.05em; font-size:11px;">ACTIVITY LOG</span>
+      <span data-id="294" id="log-count-badge" style="
         background:#333; color:#aaa; border-radius:10px;
         padding:1px 7px; font-size:10px; min-width:20px; text-align:center;
       ">0</span>
-      <div data-id="313" style="flex:1"></div>
-      <button data-id="314" id="copy-log-btn" style="
+      <div data-id="295" style="flex:1"></div>
+      <button data-id="296" id="copy-log-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s; margin-right:4px;
       ">Copy</button>
-      <button data-id="315" id="log-clear-btn" style="
+      <button data-id="297" id="log-clear-btn" style="
         background:none; border:1px solid #333; color:#717171; border-radius:4px;
         padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s;
       ">Clear</button>
-      <span data-id="316" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
+      <span data-id="298" id="log-chevron" style="color:#717171; font-size:14px; transition:transform 0.3s; transform: rotate(0deg);">▲</span>
     </div>
     <!-- Log Body -->
-    <div data-id="317" id="log-body" style="
+    <div data-id="299" id="log-body" style="
       height: 180px; overflow-y: auto; padding: 8px 16px;
       display: flex; flex-direction: column; gap: 3px;
     ">
-      <div data-id="318" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
+      <div data-id="300" style="color:#444; font-style:italic; font-size:11px; margin-top:4px;">No activity yet. Actions will be logged here.</div>
     </div>
   </div>
 
@@ -1075,6 +1069,15 @@
       { id: 'pl6', snippet: { title: 'Gaming', thumbnails: { medium: { url: '' } } }, contentDetails: { itemCount: 22 }, status: { privacyStatus: 'public' }, _views: 321900, _gradient: 'from-indigo-600 to-violet-500', _videos: ['Best Games of 2026', 'Gaming Setup Tour', 'Speedrun Challenge', 'Retro Gaming Night', 'Co-op Stream Highlights'] },
     ];
 
+    const MOCK_LOW_PERFORMERS = [
+      { id: 'lp1', title: 'My First Vlog Ever', publishedAt: '2024-01-12T00:00:00Z', views: 234, likes: 45, watchMinutes: 80, retention: 22, _playlists: ['Vlogs'] },
+      { id: 'lp2', title: 'Random Day in My Life', publishedAt: '2024-03-05T00:00:00Z', views: 567, likes: 89, watchMinutes: 130, retention: 31, _playlists: ['Vlogs', 'Lifestyle'] },
+      { id: 'lp3', title: 'Old Product Review 2022', publishedAt: '2022-11-20T00:00:00Z', views: 189, likes: 12, watchMinutes: 58, retention: 18, _playlists: ['Product Reviews'] },
+      { id: 'lp4', title: 'Testing New Mic Setup', publishedAt: '2025-07-08T00:00:00Z', views: 445, likes: 67, watchMinutes: 105, retention: 29, _playlists: ['Tech Tutorials'] },
+      { id: 'lp5', title: 'Live Stream Highlights #2', publishedAt: '2025-09-14T00:00:00Z', views: 312, likes: 23, watchMinutes: 182, retention: 35, _playlists: ['Gaming', 'Vlogs'] },
+      { id: 'lp6', title: 'Behind the Scenes Raw Cut', publishedAt: '2025-12-01T00:00:00Z', views: 678, likes: 102, watchMinutes: 150, retention: 38, _playlists: ['Vlogs', 'Lifestyle'] },
+    ];
+
     // ============================================================
     // NOTIFICATION / TOAST SYSTEM
     // ============================================================
@@ -1120,14 +1123,14 @@
     }
 
     function showDemoModeBanner(tabName) {
-      const bannerMap = { performance: 'perf-demo-banner', playlists: 'pl-demo-banner' };
+      const bannerMap = { performance: 'perf-demo-banner', lowperformers: 'lp-demo-banner', playlists: 'pl-demo-banner' };
       const banner = document.getElementById(bannerMap[tabName]);
       if (banner) banner.classList.remove('hidden');
       state.demoMode[tabName] = true;
     }
 
     function hideDemoModeBanner(tabName) {
-      const bannerMap = { performance: 'perf-demo-banner', playlists: 'pl-demo-banner' };
+      const bannerMap = { performance: 'perf-demo-banner', lowperformers: 'lp-demo-banner', playlists: 'pl-demo-banner' };
       const banner = document.getElementById(bannerMap[tabName]);
       if (banner) banner.classList.add('hidden');
       state.demoMode[tabName] = false;
@@ -1139,25 +1142,19 @@
     async function ytFetch(url, options) {
       options = options || {};
       if (!state.token) throw new Error('Not authenticated');
-      var fetchOptions = {
+      const res = await fetch(url, {
+        ...options,
         headers: {
           'Authorization': 'Bearer ' + state.token,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(options.headers || {})
         }
-      };
-      if (options.method) fetchOptions.method = options.method;
-      if (options.body) fetchOptions.body = options.body;
-      if (options.headers) {
-        Object.keys(options.headers).forEach(function(k) {
-          fetchOptions.headers[k] = options.headers[k];
-        });
-      }
-      const res = await fetch(url, fetchOptions);
-      if (res.status === 204) return null;
+      });
       if (res.status === 401) {
         state.token = null;
         localStorage.removeItem('yt_access_token');
 
+        // Mark account as expired in the store
         var accounts = getAccounts();
         var activeId = localStorage.getItem('yt_active_account');
         var idx = accounts.findIndex(function(a) { return a.id === activeId; });
@@ -1200,6 +1197,7 @@
     }
 
     function restoreSession() {
+      // Try to restore from multi-account store first
       var activeAcc = getActiveAccount();
       if (activeAcc && activeAcc.token && !activeAcc.expired) {
         state.token = activeAcc.token;
@@ -1209,6 +1207,7 @@
         return;
       }
 
+      // Fallback to legacy single-account storage
       const token = localStorage.getItem('yt_access_token');
       const clientId = localStorage.getItem('yt_client_id');
       if (token && clientId) {
@@ -1233,6 +1232,7 @@
         state.isConnected = true;
         updateChannelUI(ch);
 
+        // Save/update account in multi-account store
         var accounts = getAccounts();
         var existingIdx = accounts.findIndex(function(a) { return a.channelId === ch.id; });
         var accountObj = {
@@ -1324,9 +1324,9 @@
     function loadDemoData() {
       populatePlaylistDropdown(MOCK_PLAYLISTS);
       state.playlists = [...MOCK_PLAYLISTS];
-      // Low performers now uses real Data API - no demo fallback needed
-      state.lowPerformers = [];
+      state.lowPerformers = [...MOCK_LOW_PERFORMERS];
       if (activeTab === 'performance') { initChartsWithDemoData(); showDemoModeBanner('performance'); }
+      if (activeTab === 'lowperformers') { renderLowPerformers(); showDemoModeBanner('lowperformers'); }
       if (activeTab === 'playlists') { renderPlaylists(); showDemoModeBanner('playlists'); }
     }
 
@@ -1340,6 +1340,7 @@
       if (!isOpen) renderAccountList();
     }
 
+    // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
       var wrapper = document.getElementById('account-switcher-wrapper');
       if (wrapper && !wrapper.contains(e.target)) {
@@ -1374,6 +1375,7 @@
           switchToAccount(acc.id);
         });
 
+        // Avatar
         if (acc.thumbnail) {
           var img = document.createElement('img');
           img.src = acc.thumbnail;
@@ -1386,6 +1388,7 @@
           row.appendChild(placeholder);
         }
 
+        // Info
         var info = document.createElement('div');
         info.style.cssText = 'flex:1;overflow:hidden;';
         var nameP = document.createElement('p');
@@ -1398,6 +1401,7 @@
         info.appendChild(idP);
         row.appendChild(info);
 
+        // Expired badge
         if (acc.expired) {
           var expBadge = document.createElement('span');
           expBadge.style.cssText = 'color:#f0b400;font-size:10px;font-weight:600;white-space:nowrap;';
@@ -1405,6 +1409,7 @@
           row.appendChild(expBadge);
         }
 
+        // Active badge
         if (isActive && !acc.expired) {
           var activeBadge = document.createElement('span');
           activeBadge.style.cssText = 'color:#3ea6ff;font-size:11px;font-weight:600;white-space:nowrap;';
@@ -1412,6 +1417,7 @@
           row.appendChild(activeBadge);
         }
 
+        // Remove button
         var removeBtn = document.createElement('button');
         removeBtn.style.cssText = 'background:none;border:none;color:#444;cursor:pointer;font-size:14px;padding:2px 4px;flex-shrink:0;';
         removeBtn.textContent = '✕';
@@ -1432,8 +1438,10 @@
       var acc = accounts.find(function(a) { return a.id === id; });
       if (!acc) return;
 
+      // Close dropdown
       document.getElementById('account-dropdown').style.display = 'none';
 
+      // Load this account's token and clientId into state
       state.token = acc.token;
       state.clientId = acc.clientId;
       localStorage.setItem('yt_access_token', acc.token);
@@ -1443,6 +1451,7 @@
       addLog('Switching to account: ' + acc.label, 'info');
       showNotification('Switching to ' + acc.label + '...', 'info');
 
+      // Re-init with this account's token
       initConnectedState().then(function() {
         addLog('Switched to: ' + acc.label, 'success');
         showNotification('Now using: ' + acc.label, 'success');
@@ -1464,6 +1473,7 @@
 
       var activeId = localStorage.getItem('yt_active_account');
       if (activeId === id) {
+        // Switch to first remaining account or disconnect
         if (filtered.length > 0) {
           switchToAccount(filtered[0].id);
         } else {
@@ -1479,6 +1489,7 @@
     }
 
     function addAnotherAccount() {
+      // Close dropdown and open the connect modal
       document.getElementById('account-dropdown').style.display = 'none';
       addLog('Opening connect modal to add another account...', 'info');
       document.getElementById('api-modal-u1v1').classList.remove('hidden');
@@ -1508,6 +1519,7 @@
       }
     }
 
+    // Account switcher button event
     document.getElementById('account-switcher-btn').addEventListener('click', function(e) {
       e.stopPropagation();
       toggleAccountDropdown();
@@ -1519,6 +1531,7 @@
       this.style.borderColor = '#333';
     });
 
+    // Add another account button
     document.getElementById('add-another-account-btn').addEventListener('click', function() {
       addAnotherAccount();
     });
@@ -1533,6 +1546,7 @@
     // FEATURE 1: AUTO-SCHEDULE QUICK PICKS
     // ============================================================
     function setScheduleDays(days) {
+      // Activate the toggle if not already on
       var toggle = document.getElementById('schedule-toggle-g3h4');
       var picker = document.getElementById('schedule-picker-k7l8');
       var label = document.getElementById('schedule-label-i5j6');
@@ -1545,6 +1559,7 @@
 
       var target = new Date();
       target.setDate(target.getDate() + days);
+      // Set to 12:00 PM by default
       target.setHours(12, 0, 0, 0);
 
       var dateInput = document.getElementById('schedule-date-m9n0');
@@ -1558,6 +1573,7 @@
       }
       if (timeInput) timeInput.value = '12:00';
 
+      // Hide best-time suggestion if visible
       var suggestion = document.getElementById('schedule-suggestion');
       if (suggestion) suggestion.style.display = 'none';
 
@@ -1566,6 +1582,7 @@
     }
 
     function setScheduleBestTime() {
+      // Activate schedule toggle if off
       var toggle = document.getElementById('schedule-toggle-g3h4');
       var picker = document.getElementById('schedule-picker-k7l8');
       var label = document.getElementById('schedule-label-i5j6');
@@ -1576,10 +1593,15 @@
         if (label) label.textContent = 'Scheduled';
       }
 
+      // --- Varied best-time algorithm ---
+      // Best days: Tue=2, Wed=3, Thu=4, Sat=6
       var bestDays = [2, 3, 4, 6];
+      // Best hours (24h): covers late morning through prime evening
       var bestHours = [11, 12, 13, 14, 15, 16, 18, 20];
+      // Minute alternatives for spread
       var bestMinutes = [0, 30];
 
+      // Day labels and reason snippets
       var dayLabels = { 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 6: 'Saturday' };
       var dayReasons = {
         2: 'Tuesday has the highest mid-week engagement — viewers are settled into the work week.',
@@ -1598,28 +1620,34 @@
         20: '8 PM is peak evening prime time for YouTube.'
       };
 
+      // Get and increment rotation index from localStorage
       var rotIdx = parseInt(localStorage.getItem('yt_schedule_rotation_index') || '0', 10);
       localStorage.setItem('yt_schedule_rotation_index', String(rotIdx + 1));
 
+      // Pick day, hour, minute using rotation — each increments independently
       var pickedDayOfWeek = bestDays[rotIdx % bestDays.length];
       var pickedHour = bestHours[Math.floor(rotIdx / bestDays.length) % bestHours.length];
       var pickedMinute = bestMinutes[rotIdx % bestMinutes.length];
 
+      // Find the next occurrence of that day of week, minimum 2 days from now
       var now = new Date();
       var minDate = new Date(now);
-      minDate.setDate(minDate.getDate() + 2);
+      minDate.setDate(minDate.getDate() + 2); // at least 2 days out
 
       var target = new Date(minDate);
+      // Advance to the next matching weekday
       while (target.getDay() !== pickedDayOfWeek) {
         target.setDate(target.getDate() + 1);
       }
       target.setHours(pickedHour, pickedMinute, 0, 0);
 
+      // If that slot is still too close (within 2 days), bump by one week
       var diffMs = target - now;
       if (diffMs < 2 * 24 * 60 * 60 * 1000) {
         target.setDate(target.getDate() + 7);
       }
 
+      // Set the date/time inputs
       var dateInput = document.getElementById('schedule-date-m9n0');
       var timeInput = document.getElementById('schedule-time-o1p2');
 
@@ -1635,11 +1663,13 @@
         timeInput.value = hh + ':' + mm;
       }
 
+      // Format display time
       var ampm = pickedHour >= 12 ? 'PM' : 'AM';
       var displayHour = pickedHour > 12 ? pickedHour - 12 : (pickedHour === 0 ? 12 : pickedHour);
       var displayTime = displayHour + ':' + String(pickedMinute).padStart(2, '0') + ' ' + ampm;
       var displayDate = target.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 
+      // Show suggestion banner
       var suggestion = document.getElementById('schedule-suggestion');
       if (suggestion) {
         suggestion.style.display = 'block';
@@ -1653,6 +1683,7 @@
       showNotification('Scheduled: ' + displayDate + ' at ' + displayTime, 'success');
     }
 
+    // Quick pick button event listeners
     document.getElementById('quick-pick-3').addEventListener('click', function() { setScheduleDays(3); });
     document.getElementById('quick-pick-7').addEventListener('click', function() { setScheduleDays(7); });
     document.getElementById('quick-pick-14').addEventListener('click', function() { setScheduleDays(14); });
@@ -1672,10 +1703,12 @@
         return;
       }
 
+      // Get the selected playlist ID from the playlist select dropdown
       var playlistSelect = document.getElementById('vid-playlist-e1f2');
       var selectedPlaylistId = playlistSelect ? playlistSelect.value : '';
       var selectedPlaylistName = playlistSelect ? (playlistSelect.options[playlistSelect.selectedIndex] ? playlistSelect.options[playlistSelect.selectedIndex].text : '') : '';
 
+      // Fallback: check state for selected playlist
       if (!selectedPlaylistId && state.selectedPlaylist) {
         selectedPlaylistId = state.selectedPlaylist;
       }
@@ -1693,6 +1726,7 @@
       if (resultDiv) resultDiv.style.display = 'none';
 
       try {
+        // Step 1: Get the first video in the playlist
         btn.innerHTML = '⏳ Getting first video...';
         addLog('Fetching first video from playlist...', 'info');
 
@@ -1726,6 +1760,7 @@
 
         addLog('First video in playlist: "' + firstVideoTitle + '" (' + firstVideoId + ')', 'success');
 
+        // Step 2: Fetch full video details to get description
         btn.innerHTML = '⏳ Reading description...';
         addLog('Fetching full description for: "' + firstVideoTitle + '"', 'info');
 
@@ -1745,15 +1780,17 @@
         var description = (videoItems[0].snippet && videoItems[0].snippet.description) ? videoItems[0].snippet.description : '';
         addLog('Description fetched (' + description.length + ' chars)', 'info');
 
+        // Step 3: Extract all URLs from the description
         var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>\n]+/g;
         var rawUrls = description.match(urlRegex) || [];
 
+        // Clean and deduplicate
         var seen = new Set();
         var foundLinks = [];
         rawUrls.forEach(function(url) {
-          url = url.replace(/[.,;!?:]+$/, '');
+          url = url.replace(/[.,;!?:]+$/, ''); // strip trailing punctuation
           if (!url || seen.has(url)) return;
-          if (url.includes('ytimg.com') || url.includes('ggpht.com')) return;
+          if (url.includes('ytimg.com') || url.includes('ggpht.com')) return; // skip thumbnails
           seen.add(url);
           foundLinks.push(url);
         });
@@ -1768,6 +1805,7 @@
           return;
         }
 
+        // Step 4: Show checklist preview
         resultDiv.style.display = 'block';
         resultDiv.innerHTML =
           '<p style="color:#3ea6ff; font-weight:600; margin-bottom:4px;">🔗 ' + foundLinks.length + ' link(s) from: <em style="font-weight:400;">' + firstVideoTitle + '</em></p>' +
@@ -1786,6 +1824,7 @@
             '<button id="append-links-cancel-btn" style="padding:7px 12px; background:#2a2a2a; border:1px solid #444; border-radius:7px; color:#aaa; font-size:12px; cursor:pointer;">Cancel</button>' +
           '</div>';
 
+        // Bind the confirm and cancel buttons via addEventListener
         document.getElementById('append-links-confirm-btn').addEventListener('click', function() {
           appendSelectedLinks();
         });
@@ -1823,6 +1862,7 @@
       showNotification(selected.length + ' link(s) added to description!', 'success');
     }
 
+    // Auto-Add Links button event listener
     document.getElementById('auto-links-btn').addEventListener('click', function() {
       autoAddLinks();
     });
@@ -1839,7 +1879,7 @@
     function loadTabData(tab) {
       if (state.isConnected) {
         if (tab === 'performance') loadPerformanceData();
-        else if (tab === 'lowperformers') { /* user clicks Refresh List manually */ }
+        else if (tab === 'lowperformers') loadLowPerformers();
         else if (tab === 'playlists') loadPlaylists();
         else if (tab === 'upload') loadUserPlaylists();
       } else {
@@ -1850,6 +1890,8 @@
 
     function loadDemoForTab(tab) {
       if (tab === 'performance') { initChartsWithDemoData(); showDemoModeBanner('performance'); }
+      else if (tab === 'lowperformers') { renderLowPerformers(); showDemoModeBanner('lowperformers'); }
+        else if (tab === 'bulk') { /* bulk tab loaded on demand */ }
       else if (tab === 'playlists') { state.playlists = [...MOCK_PLAYLISTS]; renderPlaylists(); showDemoModeBanner('playlists'); }
       else if (tab === 'upload') { populatePlaylistDropdown(MOCK_PLAYLISTS); }
     }
@@ -1874,13 +1916,6 @@
       const h = Math.floor(minutes / 60);
       const m = Math.round(minutes % 60);
       return h > 0 ? h + 'h ' + m + 'm' : m + 'm';
-    }
-
-    function formatDurationSeconds(seconds) {
-      var s = Math.round(seconds);
-      var m = Math.floor(s / 60);
-      var rem = s % 60;
-      return m + 'm ' + rem + 's';
     }
 
     function formatDate(isoStr) {
@@ -2010,6 +2045,7 @@
       scheduleToggle.setAttribute('aria-checked', isActive);
       schedulePicker.classList.toggle('hidden', !isActive);
       scheduleLabel.textContent = isActive ? 'Scheduled' : 'Publish Immediately';
+      // Hide suggestion when toggling off
       if (!isActive) {
         var suggestion = document.getElementById('schedule-suggestion');
         if (suggestion) suggestion.style.display = 'none';
@@ -2121,10 +2157,12 @@
         return;
       }
 
+      // Update button to loading state
       aiBtn.disabled = true;
       aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⏳</span> Extracting 20 frames...';
 
       try {
+        // --- STEP 1: Extract frames ---
         addLog('Starting frame extraction from video...', 'info');
         showNotification('Extracting frames from your video...', 'info');
         var frames;
@@ -2139,8 +2177,10 @@
         showNotification('Captured ' + frames.length + ' frames — sending to Gemini Vision...', 'info');
         addLog('Frame extraction complete: ' + frames.length + ' frames captured at 320px JPEG 0.55 quality', 'success');
 
+        // --- STEP 2: Show frame strip preview ---
         renderFrameStrip(frames);
 
+        // --- STEP 3: Build multimodal Gemini request with real frame images ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">🤖</span> Sending frames to Gemini...';
         addLog('Building multimodal request with ' + frames.length + ' real frame images...', 'info');
 
@@ -2154,12 +2194,14 @@
         var playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To Guides, Gaming, Lifestyle, Finance Tips, Fitness';
         var filename = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
 
+        // Build parts array: text instruction first, then one inline_data part per frame
         var parts = [
           {
             text: 'You are a YouTube SEO expert. I am giving you ' + frames.length + ' frames extracted evenly from a video file named "' + filename + '". Look carefully at ALL the frames to understand the full video content, topic, people, activities, setting, and theme.\n\nBased ONLY on what you can actually see in these frames, generate optimized YouTube metadata.\n\nYou MUST fully populate ALL four fields. The description must be 3 full paragraphs minimum. Tags must be exactly 10 comma-separated keywords.\n\nAvailable playlists: [' + playlistList + ']\n\nReturn ONLY valid JSON with no markdown, no code fences, no explanation:\n{"title": "engaging title max 60 chars", "description": "paragraph 1\\n\\nparagraph 2\\n\\nparagraph 3 with CTA\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5", "tags": "tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10", "playlist": "PlaylistName"}'
           }
         ];
 
+        // Add each frame as an inline_data image part (strip the data:image/jpeg;base64, prefix)
         frames.forEach(function(dataUrl, i) {
           var base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
           parts.push({
@@ -2209,29 +2251,33 @@
         }
 
         var geminiData = await geminiRes.json();
-        var rawText_result = (geminiData.candidates && geminiData.candidates[0] && geminiData.candidates[0].content && geminiData.candidates[0].content.parts && geminiData.candidates[0].content.parts[0])
-          ? geminiData.candidates[0].content.parts[0].text
+        var rawText_result = (geminiData.candidates && geminiData.candidates[0] && geminiData.candidates[0].content && geminiData.candidates[0].content.parts && geminiData.candidates[0].content.parts[0]) 
+          ? geminiData.candidates[0].content.parts[0].text 
           : '';
 
         addLog('Gemini response received (' + rawText_result.length + ' chars) — parsing...', 'info');
         addLog('Raw: ' + rawText_result.substring(0, 250) + (rawText_result.length > 250 ? '…' : ''), 'info');
 
+        // --- STEP 4: Parse response with robust multi-strategy parser ---
         aiBtn.innerHTML = '<span style="display:inline-block;animation:spin 0.6s linear infinite;margin-right:6px;">⚙️</span> Parsing response...';
 
         var parsed = null;
         var rawText = rawText_result.trim();
 
+        // Pre-process: escape any literal newlines inside JSON string values
         rawText = rawText.replace(/:\s*"([\s\S]*?)"/g, function(match, val) {
           var escaped = val.replace(/\n/g, '\\n').replace(/\r/g, '');
           return match.replace(val, escaped);
         });
 
+        // Strategy 1: Direct JSON parse on the raw string
         try {
           parsed = JSON.parse(rawText);
         } catch (e1) {
           addLog('Strategy 1 (direct parse) failed — trying alternatives...', 'warning');
         }
 
+        // Strategy 2: Strip markdown code fences then parse
         if (!parsed) {
           try {
             var stripped = rawText
@@ -2243,6 +2289,7 @@
           } catch (e2) { /* continue */ }
         }
 
+        // Strategy 3: Extract first {...} block via regex
         if (!parsed) {
           try {
             var match = rawText.match(/\{[\s\S]*\}/);
@@ -2250,6 +2297,7 @@
           } catch (e3) { /* continue */ }
         }
 
+        // Strategy 4: Extract and fix common issues (single quotes, trailing commas)
         if (!parsed) {
           try {
             var cleaned = rawText
@@ -2262,6 +2310,7 @@
           } catch (e4) { /* continue */ }
         }
 
+        // Strategy 5: Build object manually from key: "value" pattern
         if (!parsed) {
           try {
             var extractedTitle = rawText.match(/"title"\s*:\s*"([^"]+)"/)?.[1] || '';
@@ -2280,6 +2329,7 @@
           throw new Error('AI returned unexpected format — check the log for the raw response.');
         }
 
+        // Validate required fields exist
         if (!parsed.title && !parsed.tags) {
           addLog('Parsed object missing required fields: ' + JSON.stringify(parsed).substring(0, 200), 'error');
           throw new Error('AI response parsed but missing required fields (title, tags).');
@@ -2287,11 +2337,13 @@
 
         addLog('JSON parsed successfully', 'success');
 
+        // Log each parsed field value for debugging
         addLog('Title: ' + (parsed.title || '(empty)'), parsed.title ? 'success' : 'warning');
         addLog('Description length: ' + (parsed.description ? parsed.description.length + ' chars' : '(empty)'), parsed.description ? 'success' : 'warning');
         addLog('Tags: ' + (parsed.tags || '(empty)'), parsed.tags ? 'success' : 'warning');
         addLog('Playlist: ' + (parsed.playlist || '(empty)'), parsed.playlist ? 'success' : 'warning');
 
+        // --- STEP 5: Populate form fields ---
         var titleEl = document.getElementById('vid-title-y5z6');
         var descEl = document.getElementById('vid-desc-a7b8');
         var tagsEl = document.getElementById('vid-tags-c9d0');
@@ -2456,6 +2508,7 @@
       renderQueue();
       showNotification('"' + title + '" added to queue.', 'success');
 
+      // Clear form
       document.getElementById('vid-title-y5z6').value = '';
       document.getElementById('vid-desc-a7b8').value = '';
       document.getElementById('vid-tags-c9d0').value = '';
@@ -2576,7 +2629,7 @@
         addLog('Fetching 30-day analytics from YouTube Analytics API...', 'info');
 
         var analyticsViews = await ytFetch(
-          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + thirtyAgo + '&endDate=' + today + '&metrics=views,estimatedMinutesWatched,likes,comments&dimensions=day&sort=day'
+          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + thirtyAgo + '&endDate=' + today + '&metrics=views,estimatedMinutesWatched,likes,comments,shares&dimensions=day&sort=day'
         );
 
         if (analyticsViews?.rows?.length) {
@@ -2585,9 +2638,10 @@
               views: acc.views + row[1],
               watchMinutes: acc.watchMinutes + row[2],
               likes: acc.likes + row[3],
-              comments: acc.comments + row[4]
+              comments: acc.comments + row[4],
+              shares: acc.shares + row[5]
             };
-          }, { views: 0, watchMinutes: 0, likes: 0, comments: 0 });
+          }, { views: 0, watchMinutes: 0, likes: 0, comments: 0, shares: 0 });
 
           updateStatCards(totals);
           updateViewsChart(analyticsViews.rows);
@@ -2602,7 +2656,7 @@
         }
 
         var retentionData = await ytFetch(
-          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + thirtyAgo + '&endDate=' + today + '&metrics=views,estimatedMinutesWatched,averageViewDuration&dimensions=video&sort=-estimatedMinutesWatched&maxResults=3'
+          YT_ANALYTICS + '/reports?ids=channel==MINE&startDate=' + thirtyAgo + '&endDate=' + today + '&metrics=averageViewPercentage,averageViewDuration&dimensions=video&sort=-averageViewPercentage&maxResults=3'
         );
         if (retentionData?.rows?.length) {
           var retVideoIds = retentionData.rows.map(function(r) { return r[0]; }).join(',');
@@ -2614,8 +2668,6 @@
         animateCounters();
       } catch (e) {
         showNotification('Analytics error — showing demo data.', 'warning');
-        addLog('Analytics query failed: ' + (e && e.message ? e.message : String(e)), 'error');
-        addLog('Falling back to demo data for charts', 'warning');
         showDemoModeBanner('performance');
         initChartsWithDemoData();
       } finally {
@@ -2649,14 +2701,11 @@
       var datasets = rows.map(function(row, i) {
         var detail = details.find(function(d) { return d.id === row[0]; });
         var title = detail?.snippet?.title?.substring(0, 20) || ('Video ' + (i + 1));
-        var avgDurationSec = Math.round(row[3]);
-        var formattedDuration = formatDurationSeconds(avgDurationSec);
+        var pct = row[1];
         var colors = ['#ff0000', '#3ea6ff', '#2ba640'];
-
-        var retentionPct = Math.min(100, Math.round((avgDurationSec / 600) * 100));
         return {
-          label: title + ' (Avg: ' + formattedDuration + ')',
-          data: [100, Math.round(retentionPct * 0.85), Math.round(retentionPct * 0.65), Math.round(retentionPct * 0.45), Math.round(retentionPct * 0.3)],
+          label: title,
+          data: [100, Math.round(pct * 0.75), Math.round(pct * 0.6), Math.round(pct * 0.45), Math.round(pct * 0.3)],
           borderColor: colors[i % 3],
           backgroundColor: colors[i % 3].replace(')', ',0.08)').replace('rgb', 'rgba').replace('#', ''),
           fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2
@@ -2666,13 +2715,14 @@
     }
 
     function updateEngagementFromTotals(totals) {
-      var total = totals.likes + totals.comments;
+      var total = totals.likes + totals.comments + totals.shares;
       if (total === 0) return;
       var likesPct = Math.round((totals.likes / total) * 100);
-      var commentsPct = 100 - likesPct;
+      var sharesPct = Math.round((totals.shares / total) * 100);
+      var commentsPct = 100 - likesPct - sharesPct;
       createOrUpdateEngagementChart(
-        ['Likes (' + likesPct + '%)', 'Comments (' + commentsPct + '%)'],
-        [likesPct, commentsPct]
+        ['Likes (' + likesPct + '%)', 'Shares (' + sharesPct + '%)', 'Comments (' + commentsPct + '%)'],
+        [likesPct, sharesPct, commentsPct]
       );
     }
 
@@ -2754,13 +2804,12 @@
     function createOrUpdateEngagementChart(labels, data) {
       var ctx = document.getElementById('chart-engagement-g4h4').getContext('2d');
       if (chartInstances.engagement) chartInstances.engagement.destroy();
-      var colors = ['#ff0000', '#3ea6ff', '#2ba640'];
       chartInstances.engagement = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels: labels,
           datasets: [{
-            data: data, backgroundColor: colors.slice(0, data.length),
+            data: data, backgroundColor: ['#ff0000', '#3ea6ff', '#2ba640'],
             borderColor: '#1a1a1a', borderWidth: 3, hoverOffset: 8
           }]
         },
@@ -2799,9 +2848,9 @@
       );
 
       createOrUpdateRetentionChart([
-        { label: 'Complete Python Course (Avg: 8m 24s)', data: [100, 72, 58, 44, 31], borderColor: '#ff0000', backgroundColor: 'rgba(255,0,0,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#ff0000', borderWidth: 2 },
-        { label: 'iPhone 17 Review (Avg: 6m 12s)', data: [100, 68, 52, 38, 25], borderColor: '#3ea6ff', backgroundColor: 'rgba(62,166,255,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3ea6ff', borderWidth: 2 },
-        { label: 'SEO Secrets 2026 (Avg: 9m 45s)', data: [100, 78, 63, 50, 36], borderColor: '#2ba640', backgroundColor: 'rgba(43,166,64,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#2ba640', borderWidth: 2 },
+        { label: 'Complete Python Course', data: [100, 72, 58, 44, 31], borderColor: '#ff0000', backgroundColor: 'rgba(255,0,0,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#ff0000', borderWidth: 2 },
+        { label: 'iPhone 17 Review', data: [100, 68, 52, 38, 25], borderColor: '#3ea6ff', backgroundColor: 'rgba(62,166,255,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3ea6ff', borderWidth: 2 },
+        { label: 'SEO Secrets 2026', data: [100, 78, 63, 50, 36], borderColor: '#2ba640', backgroundColor: 'rgba(43,166,64,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#2ba640', borderWidth: 2 },
       ]);
 
       createOrUpdateEngagementChart(['Likes (52%)', 'Shares (30%)', 'Comments (18%)'], [52, 30, 18]);
@@ -2835,672 +2884,42 @@
     }
 
     // ============================================================
-    // LOW PERFORMERS — NEW DATA API APPROACH
+    // LOW PERFORMERS
     // ============================================================
     async function loadLowPerformers() {
-      if (!state.token) {
-        showNotification('Please connect your YouTube account first.', 'error');
-        return;
-      }
-
+      if (!state.token) { showNotification('Please connect your YouTube account first.', 'error'); return; }
       var threshold = parseInt(document.getElementById('lp-threshold-input')?.value || '100', 10);
       var listEl = document.getElementById('lp-video-list');
       var countLabel = document.getElementById('lp-count-label');
-
-      if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#aaa;font-size:13px;">⏳ Scanning channel videos...</div>';
+      if (listEl) listEl.innerHTML = '<div class="text-center py-12 text-yt-muted text-sm">⏳ Scanning channel videos...</div>';
       if (countLabel) countLabel.textContent = '';
-
-      addLog('Scanning channel for videos with fewer than ' + threshold + ' views...', 'info');
-
+      hideDemoModeBanner('lowperformers');
+      addLog('Scanning for videos with fewer than ' + threshold + ' views...', 'info');
       try {
-        // Step 1: Fetch up to 50 most recent channel videos using Data API
-        var searchRes = await ytFetch(
-          'https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&type=video&maxResults=50&order=date'
-        );
+        var searchRes = await ytFetch('https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&type=video&maxResults=50&order=date');
         var items = (searchRes && searchRes.items) ? searchRes.items : [];
-
-        if (!items.length) {
-          if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#717171;">No videos found on this channel.</div>';
-          addLog('No channel videos found', 'warning');
-          return;
-        }
-
-        addLog('Found ' + items.length + ' videos — fetching view counts...', 'info');
-
-        // Step 2: Get video statistics for all videos
+        if (!items.length) { if (listEl) listEl.innerHTML = '<div class="text-center py-12 text-yt-dimmed text-sm">No videos found on this channel.</div>'; return; }
         var videoIds = items.map(function(it) { return it.id && it.id.videoId ? it.id.videoId : null; }).filter(Boolean);
-        var statsRes = await ytFetch(
-          'https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,status&id=' + videoIds.join(',')
-        );
+        var statsRes = await ytFetch('https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,status&id=' + videoIds.join(','));
         var videos = (statsRes && statsRes.items) ? statsRes.items : [];
-
-        // Step 3: Filter by threshold
         var lowView = videos.filter(function(v) {
-          var views = parseInt((v.statistics && v.statistics.viewCount) || '0', 10);
-          return views < threshold;
-        }).sort(function(a, b) {
-          return parseInt(a.statistics.viewCount || 0) - parseInt(b.statistics.viewCount || 0);
-        });
-
-        addLog('Found ' + lowView.length + ' videos with fewer than ' + threshold + ' views', lowView.length > 0 ? 'warning' : 'success');
+          return parseInt((v.statistics && v.statistics.viewCount) || '0', 10) < threshold;
+        }).sort(function(a,b){ return parseInt(a.statistics.viewCount||0)-parseInt(b.statistics.viewCount||0); });
+        addLog('Found ' + lowView.length + ' videos under ' + threshold + ' views', lowView.length > 0 ? 'warning' : 'success');
         if (countLabel) countLabel.textContent = lowView.length + ' video' + (lowView.length !== 1 ? 's' : '') + ' found';
-
         state.lowPerformers = lowView;
-
         if (!lowView.length) {
-          if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:48px 20px;"><p style="color:#2ba640;font-size:24px;margin-bottom:8px;">✓</p><p style="color:#aaa;font-size:14px;">All your videos have ' + threshold + '+ views!</p></div>';
+          if (listEl) listEl.innerHTML = '<div class="text-center py-12"><p style="color:#2ba640;font-size:24px;">✓</p><p class="text-yt-muted text-sm mt-2">All your videos have ' + threshold + '+ views!</p></div>';
           return;
         }
-
         renderLowPerformers();
-
       } catch(e) {
-        addLog('Low performers scan failed: ' + e.message, 'error');
+        addLog('Scan failed: ' + e.message, 'error');
         showNotification('Could not scan videos: ' + e.message, 'error');
-        if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#ff4444;">Error: ' + e.message + '</div>';
+        if (listEl) listEl.innerHTML = '<div class="text-center py-12 text-red-400 text-sm">Error: ' + e.message + '</div>';
       }
     }
 
-    function renderLowPerformers() {
-      var listEl = document.getElementById('lp-video-list');
-      if (!listEl) return;
-      var items = state.lowPerformers || [];
-
-      if (!items.length) {
-        listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#717171;">No low-view videos found.</div>';
-        return;
-      }
-
-      listEl.innerHTML = '';
-
-      items.forEach(function(video) {
-        var views = parseInt((video.statistics && video.statistics.viewCount) || '0', 10);
-        var likes = parseInt((video.statistics && video.statistics.likeCount) || '0', 10);
-        var comments = parseInt((video.statistics && video.statistics.commentCount) || '0', 10);
-        var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
-        var thumb = (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.medium)
-          ? video.snippet.thumbnails.medium.url
-          : (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.default)
-          ? video.snippet.thumbnails.default.url : '';
-        var publishedAt = (video.snippet && video.snippet.publishedAt)
-          ? new Date(video.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-          : '';
-        var privacy = (video.status && video.status.privacyStatus) ? video.status.privacyStatus : '';
-        var vid = video.id;
-
-        var row = document.createElement('div');
-        row.id = 'lp-row-' + vid;
-        row.style.cssText = 'display:flex; align-items:center; gap:14px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:12px; padding:12px 16px; transition:border-color 0.2s;';
-        row.addEventListener('mouseover', function() { row.style.borderColor = '#444'; });
-        row.addEventListener('mouseout', function() { row.style.borderColor = '#2a2a2a'; });
-
-        // Thumbnail
-        if (thumb) {
-          var img = document.createElement('img');
-          img.src = thumb;
-          img.style.cssText = 'width:96px; height:54px; object-fit:cover; border-radius:6px; flex-shrink:0;';
-          row.appendChild(img);
-        } else {
-          var placeholder = document.createElement('div');
-          placeholder.style.cssText = 'width:96px;height:54px;background:#2a2a2a;border-radius:6px;flex-shrink:0;';
-          row.appendChild(placeholder);
-        }
-
-        // Info
-        var infoDiv = document.createElement('div');
-        infoDiv.style.cssText = 'flex:1; overflow:hidden;';
-
-        var titleP = document.createElement('p');
-        titleP.style.cssText = 'color:#fff; font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:4px;';
-        titleP.textContent = title;
-        infoDiv.appendChild(titleP);
-
-        var statsDiv = document.createElement('div');
-        statsDiv.style.cssText = 'display:flex; align-items:center; gap:12px; flex-wrap:wrap;';
-
-        var viewsSpan = document.createElement('span');
-        viewsSpan.style.cssText = 'color:#ff4444; font-size:12px; font-weight:700;';
-        viewsSpan.textContent = '👁 ' + views.toLocaleString() + ' views';
-        statsDiv.appendChild(viewsSpan);
-
-        var likesSpan = document.createElement('span');
-        likesSpan.style.cssText = 'color:#717171; font-size:11px;';
-        likesSpan.textContent = '👍 ' + likes.toLocaleString();
-        statsDiv.appendChild(likesSpan);
-
-        var commentsSpan = document.createElement('span');
-        commentsSpan.style.cssText = 'color:#717171; font-size:11px;';
-        commentsSpan.textContent = '💬 ' + comments.toLocaleString();
-        statsDiv.appendChild(commentsSpan);
-
-        if (publishedAt) {
-          var dateSpan = document.createElement('span');
-          dateSpan.style.cssText = 'color:#555; font-size:11px;';
-          dateSpan.textContent = '📅 ' + publishedAt;
-          statsDiv.appendChild(dateSpan);
-        }
-
-        if (privacy) {
-          var privSpan = document.createElement('span');
-          privSpan.style.cssText = 'color:#555; font-size:10px; background:#2a2a2a; padding:1px 6px; border-radius:4px;';
-          privSpan.textContent = privacy;
-          statsDiv.appendChild(privSpan);
-        }
-
-        infoDiv.appendChild(statsDiv);
-        row.appendChild(infoDiv);
-
-        // Actions
-        var actionsDiv = document.createElement('div');
-        actionsDiv.style.cssText = 'display:flex; gap:8px; flex-shrink:0;';
-
-        var watchLink = document.createElement('a');
-        watchLink.href = 'https://youtube.com/watch?v=' + vid;
-        watchLink.target = '_blank';
-        watchLink.style.cssText = 'padding:6px 10px; background:#2a2a2a; border:1px solid #333; border-radius:7px; color:#aaa; font-size:11px; cursor:pointer; text-decoration:none; transition:all 0.2s;';
-        watchLink.textContent = 'Watch';
-        watchLink.addEventListener('mouseover', function() { watchLink.style.color = '#fff'; });
-        watchLink.addEventListener('mouseout', function() { watchLink.style.color = '#aaa'; });
-        actionsDiv.appendChild(watchLink);
-
-        var relistBtn = document.createElement('button');
-        relistBtn.style.cssText = 'padding:6px 14px; background:#ff0000; border:none; border-radius:7px; color:#fff; font-size:12px; font-weight:600; cursor:pointer; transition:background 0.2s;';
-        relistBtn.textContent = '🔁 Relist';
-        relistBtn.addEventListener('mouseover', function() { relistBtn.style.background = '#cc0000'; });
-        relistBtn.addEventListener('mouseout', function() { relistBtn.style.background = '#ff0000'; });
-        relistBtn.addEventListener('click', function() { confirmRelist(vid); });
-        actionsDiv.appendChild(relistBtn);
-
-        row.appendChild(actionsDiv);
-        listEl.appendChild(row);
-      });
-    }
-
-    // Low performers threshold input — sync with display
-    document.getElementById('lp-threshold-input').addEventListener('change', function() {
-      document.getElementById('lp-threshold-display').textContent = this.value;
-    });
-
-    // Low performers refresh button
-    document.getElementById('lp-refresh-list-btn').addEventListener('click', function() {
-      loadLowPerformers();
-    });
-    document.getElementById('lp-refresh-list-btn').addEventListener('mouseover', function() {
-      this.style.borderColor = '#ff0000';
-      this.style.color = '#fff';
-    });
-    document.getElementById('lp-refresh-list-btn').addEventListener('mouseout', function() {
-      this.style.borderColor = '#333';
-      this.style.color = '#aaa';
-    });
-
-    // ============================================================
-    // RELIST SYSTEM
-    // ============================================================
-    var relistTargetVideoId = null;
-    var relistTargetVideo = null;
-
-    function confirmRelist(videoId) {
-      var video = (state.lowPerformers || []).find(function(v) { return v.id === videoId; });
-      if (!video) return;
-
-      relistTargetVideoId = videoId;
-      relistTargetVideo = video;
-
-      // Update the Studio download link to go directly to the video's edit page
-      var studioLink = document.getElementById('relist-studio-link');
-      if (studioLink) {
-        studioLink.href = 'https://studio.youtube.com/video/' + videoId + '/edit';
-        studioLink.textContent = '';
-        studioLink.innerHTML = '📥 Download Original Video in YouTube Studio →';
-      }
-
-      // Uncheck the confirmation checkbox each time
-      var savedCheck = document.getElementById('relist-confirm-saved');
-      if (savedCheck) savedCheck.checked = false;
-
-      var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
-      var views = parseInt((video.statistics && video.statistics.viewCount) || '0', 10);
-      var thumb = (video.snippet && video.snippet.thumbnails && video.snippet.thumbnails.medium)
-        ? video.snippet.thumbnails.medium.url : '';
-
-      var infoEl = document.getElementById('relist-video-info');
-      if (infoEl) {
-        infoEl.innerHTML = '';
-        var infoWrapper = document.createElement('div');
-        infoWrapper.style.cssText = 'display:flex;gap:10px;align-items:center;';
-        if (thumb) {
-          var thumbImg = document.createElement('img');
-          thumbImg.src = thumb;
-          thumbImg.style.cssText = 'width:80px;height:45px;object-fit:cover;border-radius:5px;flex-shrink:0;';
-          infoWrapper.appendChild(thumbImg);
-        }
-        var textDiv = document.createElement('div');
-        var titleP = document.createElement('p');
-        titleP.style.cssText = 'color:#fff;font-size:13px;font-weight:500;margin-bottom:3px;';
-        titleP.textContent = title;
-        var viewsP = document.createElement('p');
-        viewsP.style.cssText = 'color:#ff4444;font-size:12px;';
-        viewsP.textContent = '👁 ' + views.toLocaleString() + ' views';
-        textDiv.appendChild(titleP);
-        textDiv.appendChild(viewsP);
-        infoWrapper.appendChild(textDiv);
-        infoEl.appendChild(infoWrapper);
-      }
-
-      // Pre-fill a best time for the relist date
-      setRelistBestTime();
-
-      var modal = document.getElementById('relist-modal');
-      if (modal) modal.style.display = 'flex';
-    }
-
-    function setRelistBestTime() {
-      var bestDays = [2, 3, 4, 6];
-      var bestHours = [11, 12, 13, 14, 15, 16, 18, 20];
-      var rotIdx = parseInt(localStorage.getItem('yt_schedule_rotation_index') || '0', 10);
-      localStorage.setItem('yt_schedule_rotation_index', String(rotIdx + 1));
-
-      var pickedDay = bestDays[rotIdx % bestDays.length];
-      var pickedHour = bestHours[Math.floor(rotIdx / bestDays.length) % bestHours.length];
-      var pickedMinute = (rotIdx % 2 === 0) ? 0 : 30;
-
-      var target = new Date();
-      target.setDate(target.getDate() + 2);
-      while (target.getDay() !== pickedDay) target.setDate(target.getDate() + 1);
-      target.setHours(pickedHour, pickedMinute, 0, 0);
-
-      var dateIn = document.getElementById('relist-date-input');
-      var timeIn = document.getElementById('relist-time-input');
-      if (dateIn) {
-        var y = target.getFullYear();
-        var m = String(target.getMonth()+1).padStart(2,'0');
-        var d = String(target.getDate()).padStart(2,'0');
-        dateIn.value = y + '-' + m + '-' + d;
-      }
-      if (timeIn) timeIn.value = String(pickedHour).padStart(2,'0') + ':' + String(pickedMinute).padStart(2,'0');
-    }
-
-    async function executeRelist() {
-      // Check that the user has confirmed they saved the video
-      var savedCheck = document.getElementById('relist-confirm-saved');
-      if (!savedCheck || !savedCheck.checked) {
-        showNotification('Please confirm you have saved the original video file first.', 'warning');
-        // Flash the checkbox red briefly
-        if (savedCheck) {
-          savedCheck.style.outline = '2px solid #ff4444';
-          setTimeout(function() { savedCheck.style.outline = ''; }, 2000);
-        }
-        return;
-      }
-
-      if (!relistTargetVideoId || !relistTargetVideo) return;
-
-      var btn = document.getElementById('relist-confirm-btn');
-      var videoId = relistTargetVideoId;
-      var video = relistTargetVideo;
-      var title = (video.snippet && video.snippet.title) ? video.snippet.title : 'Untitled';
-      var scheduledDate = document.getElementById('relist-date-input')?.value;
-      var scheduledTime = document.getElementById('relist-time-input')?.value || '12:00';
-
-      btn.disabled = true;
-      btn.textContent = '⏳ Step 1/3: Removing from playlists...';
-      addLog('Relist started for: "' + title + '"', 'info');
-
-      try {
-        // Step 1: Remove from all playlists
-        addLog('Fetching playlist memberships for video ' + videoId + '...', 'info');
-        var memberships = [];
-        try {
-          memberships = await getVideoPlaylistMemberships(videoId);
-        } catch(me) {
-          addLog('Could not fetch playlist memberships: ' + me.message + ' — continuing with delete.', 'warning');
-        }
-        addLog('Found in ' + memberships.length + ' playlist(s)', 'info');
-
-        for (var i = 0; i < memberships.length; i++) {
-          var membership = memberships[i];
-          var itemId = membership.playlistItemId;
-          var plTitle = (membership.playlist && membership.playlist.snippet && membership.playlist.snippet.title) ? membership.playlist.snippet.title : itemId;
-          try {
-            await ytFetch('https://www.googleapis.com/youtube/v3/playlistItems?id=' + itemId, { method: 'DELETE' });
-            addLog('Removed from playlist: ' + plTitle, 'success');
-          } catch(de) {
-            addLog('Could not remove from playlist "' + plTitle + '": ' + de.message, 'warning');
-          }
-        }
-
-        // Step 2: Delete the video
-        btn.textContent = '⏳ Step 2/3: Deleting original video...';
-        addLog('Deleting original video: ' + videoId, 'warning');
-        await ytFetch('https://www.googleapis.com/youtube/v3/videos?id=' + videoId, { method: 'DELETE' });
-        addLog('Original video deleted: ' + videoId, 'success');
-
-        // Step 3: Remove from local state
-        state.lowPerformers = (state.lowPerformers || []).filter(function(v) { return v.id !== videoId; });
-        var row = document.getElementById('lp-row-' + videoId);
-        if (row) row.style.opacity = '0.3';
-
-        // Step 4: Close modal and switch to upload tab with pre-filled metadata
-        btn.textContent = '⏳ Step 3/3: Preparing upload...';
-        addLog('Preparing upload tab with AI metadata for re-listing...', 'info');
-
-        document.getElementById('relist-modal').style.display = 'none';
-
-        // Switch to upload tab
-        switchTab('upload');
-
-        // Pre-fill title field with original title so AI has context
-        var titleEl = document.getElementById('vid-title-y5z6');
-        if (titleEl) titleEl.value = title + ' [RELIST]';
-
-        // Pre-fill scheduled date if schedule toggle exists
-        var schedToggle = document.getElementById('schedule-toggle-g3h4');
-        var schedPicker = document.getElementById('schedule-picker-k7l8');
-        var schedLabel = document.getElementById('schedule-label-i5j6');
-        var schedDateIn = document.getElementById('schedule-date-m9n0');
-        var schedTimeIn = document.getElementById('schedule-time-o1p2');
-
-        if (schedToggle && !schedToggle.classList.contains('active')) {
-          schedToggle.classList.add('active');
-          schedToggle.setAttribute('aria-checked', 'true');
-          if (schedPicker) schedPicker.classList.remove('hidden');
-          if (schedLabel) schedLabel.textContent = 'Scheduled';
-        }
-        if (schedDateIn && scheduledDate) schedDateIn.value = scheduledDate;
-        if (schedTimeIn) schedTimeIn.value = scheduledTime;
-
-        addLog('✓ Relist complete! Upload tab is ready. Drop in the video file and click Generate AI Metadata.', 'success');
-        showNotification('Relist ready! Now upload the new video file.', 'success');
-
-        // Refresh low performers list
-        renderLowPerformers();
-
-      } catch(e) {
-        addLog('Relist failed: ' + e.message, 'error');
-        showNotification('Relist error: ' + e.message, 'error');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '🔁 Delete & Relist';
-      }
-    }
-
-    // Relist modal event listeners
-    document.getElementById('relist-modal-close-btn').addEventListener('click', function() {
-      document.getElementById('relist-modal').style.display = 'none';
-    });
-    document.getElementById('relist-cancel-btn').addEventListener('click', function() {
-      document.getElementById('relist-modal').style.display = 'none';
-    });
-    document.getElementById('relist-confirm-btn').addEventListener('click', function() {
-      executeRelist();
-    });
-    document.getElementById('relist-confirm-btn').addEventListener('mouseover', function() {
-      this.style.background = '#cc0000';
-    });
-    document.getElementById('relist-confirm-btn').addEventListener('mouseout', function() {
-      this.style.background = '#ff0000';
-    });
-    document.getElementById('relist-best-time-btn').addEventListener('click', function() {
-      setRelistBestTime();
-    });
-    document.getElementById('relist-best-time-btn').addEventListener('mouseover', function() {
-      this.style.background = '#2ba640';
-      this.style.color = '#fff';
-    });
-    document.getElementById('relist-best-time-btn').addEventListener('mouseout', function() {
-      this.style.background = '#1a2a1a';
-      this.style.color = '#2ba640';
-    });
-    document.getElementById('relist-modal').addEventListener('click', function(e) {
-      if (e.target === this) this.style.display = 'none';
-    });
-
-    // Relist studio link hover (CSP-safe)
-    document.getElementById('relist-studio-link').addEventListener('mouseover', function() {
-      this.style.background = '#aa0000';
-    });
-    document.getElementById('relist-studio-link').addEventListener('mouseout', function() {
-      this.style.background = '#cc0000';
-    });
-
-    // ============================================================
-    // DELETE VIDEO (REAL API)
-    // ============================================================
-    async function deleteVideoAPI(videoId, cardElement) {
-      addLog('Deleting video: "' + videoId + '"...', 'warning');
-      try {
-        cardElement.style.opacity = '0.5';
-        var res = await fetch(YT_API + '/videos?id=' + videoId, {
-          method: 'DELETE',
-          headers: { 'Authorization': 'Bearer ' + state.token }
-        });
-        if (res.status === 204 || res.ok) {
-          cardElement.style.transition = 'all 0.4s ease';
-          cardElement.style.opacity = '0';
-          cardElement.style.transform = 'scale(0.9)';
-          setTimeout(function() { cardElement.remove(); }, 400);
-          state.lowPerformers = state.lowPerformers.filter(function(v) { return v.id !== videoId; });
-          addLog('Video deleted successfully', 'success');
-          showNotification('Video deleted successfully.', 'success');
-        } else {
-          throw new Error('Delete failed: ' + res.status);
-        }
-      } catch (e) {
-        addLog('Delete failed: ' + e.message, 'error');
-        cardElement.style.opacity = '1';
-        cardElement.classList.add('fade-out');
-        setTimeout(function() {
-          state.lowPerformers = state.lowPerformers.filter(function(v) { return v.id !== videoId; });
-          renderLowPerformers();
-        }, 400);
-        showNotification('Deleted locally (demo mode).', 'info');
-      }
-    }
-
-    document.getElementById('delete-cancel-e6f6').addEventListener('click', function() {
-      document.getElementById('delete-modal-c5d5').classList.add('hidden');
-      deleteTargetId = null;
-      deleteTargetCard = null;
-    });
-    document.getElementById('delete-confirm-g7h7').addEventListener('click', function() {
-      document.getElementById('delete-modal-c5d5').classList.add('hidden');
-      if (deleteTargetId && deleteTargetCard) {
-        if (state.isConnected) {
-          deleteVideoAPI(deleteTargetId, deleteTargetCard);
-        } else {
-          addLog('Deleting video: "' + deleteTargetId + '"...', 'warning');
-          deleteTargetCard.classList.add('fade-out');
-          setTimeout(function() {
-            state.lowPerformers = state.lowPerformers.filter(function(l) { return l.id !== deleteTargetId; });
-            addLog('Video deleted successfully', 'success');
-            renderLowPerformers();
-            deleteTargetId = null;
-            deleteTargetCard = null;
-          }, 400);
-        }
-      }
-    });
-
-    // ============================================================
-    // PLAYLIST REMOVE MODAL
-    // ============================================================
-    async function openPlaylistRemoveModal(videoId) {
-      var listEl = document.getElementById('playlist-remove-list-k9l9');
-      var loadingEl = document.getElementById('pr-loading');
-
-      if (state.isConnected) {
-        listEl.innerHTML = '';
-        loadingEl.classList.remove('hidden');
-        document.getElementById('playlist-remove-modal-i8j8').classList.remove('hidden');
-
-        try {
-          playlistRemoveMemberships = await getVideoPlaylistMemberships(videoId);
-          loadingEl.classList.add('hidden');
-          if (playlistRemoveMemberships.length === 0) {
-            listEl.innerHTML = '<p class="text-sm text-yt-muted">This video is not in any playlists.</p>';
-          } else {
-            listEl.innerHTML = playlistRemoveMemberships.map(function(m) {
-              return '<label class="flex items-center gap-3 cursor-pointer">' +
-                '<input type="checkbox" checked class="w-4 h-4 accent-red-500 rounded" data-pi-id="' + m.playlistItemId + '" />' +
-                '<span class="text-sm text-white">' + (m.playlist.snippet?.title || 'Untitled') + '</span>' +
-              '</label>';
-            }).join('');
-          }
-        } catch (e) {
-          loadingEl.classList.add('hidden');
-          listEl.innerHTML = '<p class="text-sm text-red-400">Could not load playlists.</p>';
-        }
-      } else {
-        loadingEl.classList.add('hidden');
-        listEl.innerHTML = '<p class="text-sm text-yt-muted">Connect to manage playlist memberships.</p>';
-        document.getElementById('playlist-remove-modal-i8j8').classList.remove('hidden');
-      }
-    }
-
-    async function getVideoPlaylistMemberships(videoId) {
-      var memberships = [];
-      for (var i = 0; i < state.playlists.length; i++) {
-        var pl = state.playlists[i];
-        try {
-          var plId = pl.id;
-          var items = await ytFetch(YT_API + '/playlistItems?part=snippet&playlistId=' + plId + '&videoId=' + videoId + '&maxResults=5');
-          if (items?.items?.length) {
-            memberships.push({ playlist: pl, playlistItemId: items.items[0].id });
-          }
-        } catch (e) { /* skip */ }
-      }
-      return memberships;
-    }
-
-    async function removeVideoFromPlaylist(playlistItemId) {
-      addLog('Removing video from playlist...', 'info');
-      await fetch(YT_API + '/playlistItems?id=' + playlistItemId, {
-        method: 'DELETE',
-        headers: { 'Authorization': 'Bearer ' + state.token }
-      });
-      addLog('Video removed from playlist', 'success');
-    }
-
-    document.getElementById('pr-cancel-m0n0').addEventListener('click', function() {
-      document.getElementById('playlist-remove-modal-i8j8').classList.add('hidden');
-      playlistRemoveTargetId = null;
-      playlistRemoveMemberships = [];
-    });
-
-    document.getElementById('pr-confirm-o1p1').addEventListener('click', async function() {
-      var modal = document.getElementById('playlist-remove-modal-i8j8');
-
-      if (state.isConnected && playlistRemoveMemberships.length) {
-        var checkboxes = modal.querySelectorAll('input[type="checkbox"]:checked');
-        for (var i = 0; i < checkboxes.length; i++) {
-          var cb = checkboxes[i];
-          var piId = cb.dataset.piId;
-          if (piId) {
-            try { await removeVideoFromPlaylist(piId); } catch (e) { /* skip */ }
-          }
-        }
-        showNotification('Removed from selected playlists.', 'success');
-      } else {
-        showNotification('Removed from playlists (demo mode).', 'info');
-      }
-
-      modal.classList.add('hidden');
-      if (playlistRemoveTargetId) {
-        var statusEl = document.getElementById('lp-status-' + playlistRemoveTargetId);
-        if (statusEl) {
-          statusEl.classList.remove('hidden');
-          statusEl.textContent = '✓ Removed from playlists';
-        }
-      }
-      playlistRemoveTargetId = null;
-      playlistRemoveMemberships = [];
-    });
-
-    // ============================================================
-    // PLAYLISTS TAB
-    // ============================================================
-    async function loadPlaylists() {
-      hideDemoModeBanner('playlists');
-      showTabLoading('playlists');
-      addLog('Loading playlists from YouTube...', 'info');
-      try {
-        var nextPageToken = '';
-        state.playlists = [];
-        do {
-          var data = await ytFetch(YT_API + '/playlists?part=snippet,contentDetails,status&mine=true&maxResults=50' + (nextPageToken ? '&pageToken=' + nextPageToken : ''));
-          if (!data) break;
-          state.playlists.push.apply(state.playlists, data.items || []);
-          nextPageToken = data.nextPageToken || '';
-        } while (nextPageToken);
-
-        addLog('Loaded ' + state.playlists.length + ' playlists', 'success');
-        renderPlaylists();
-        populatePlaylistDropdown(state.playlists);
-      } catch (e) {
-        showNotification('Could not load playlists — showing demo data.', 'warning');
-        state.playlists = [...MOCK_PLAYLISTS];
-        showDemoModeBanner('playlists');
-        renderPlaylists();
-      } finally {
-        hideTabLoading('playlists');
-      }
-    }
-
-    function renderPlaylists() {
-      var grid = document.getElementById('playlist-grid-s0t0');
-      var gradients = ['from-red-600 to-orange-500', 'from-blue-600 to-cyan-500', 'from-green-600 to-emerald-500', 'from-purple-600 to-pink-500', 'from-yellow-600 to-amber-500', 'from-indigo-600 to-violet-500', 'from-teal-600 to-cyan-500', 'from-rose-600 to-pink-500'];
-
-      if (state.playlists.length === 0) {
-        grid.innerHTML = '<div class="col-span-3 text-center py-12"><p class="text-yt-muted">No playlists found. Create one to get started!</p></div>';
-        return;
-      }
-
-      grid.innerHTML = state.playlists.map(function(pl, idx) {
-        var title = pl.snippet?.title || pl.name || 'Untitled';
-        var count = pl.contentDetails?.itemCount ?? pl.count ?? 0;
-        var thumb = pl.snippet?.thumbnails?.medium?.url;
-        var gradient = pl._gradient || gradients[idx % gradients.length];
-        var views = pl._views;
-        var bgStyle = thumb ? 'background-image:url(' + thumb + ');background-size:cover;background-position:center;' : '';
-        return '<div class="bg-yt-surface rounded-xl border border-yt-border overflow-hidden card-lift" data-pl-card="' + pl.id + '">' +
-          '<div class="h-28 bg-gradient-to-br ' + gradient + ' flex items-center justify-center relative" style="' + bgStyle + '">' +
-            (!thumb ? '<i data-lucide="list-video" class="w-10 h-10 text-white/60"></i>' : '') +
-            '<span class="absolute bottom-2 right-3 text-xs bg-black/50 text-white px-2 py-0.5 rounded tabular-nums">' + count + ' videos</span>' +
-          '</div>' +
-          '<div class="p-4">' +
-            '<h4 class="text-sm font-semibold text-white">' + title + '</h4>' +
-            (views !== undefined ? '<p class="text-xs text-yt-muted mt-1 tabular-nums">' + parseInt(views).toLocaleString() + ' total views</p>' : '<p class="text-xs text-yt-muted mt-1">' + (pl.status?.privacyStatus || 'public') + '</p>') +
-            '<button class="pl-edit-btn mt-3 w-full text-center text-xs font-medium text-yt-blue hover:text-white border border-yt-border rounded-lg py-2 btn-press transition-colors" data-plid="' + pl.id + '">' +
-              '<span class="pl-edit-text">Edit Playlist</span>' +
-            '</button>' +
-          '</div>' +
-          '<div class="pl-expand hidden border-t border-yt-border p-4" data-expand="' + pl.id + '">' +
-            '<div class="flex flex-wrap gap-2 pl-items-container" data-chips="' + pl.id + '">' +
-              '<div class="text-xs text-yt-dimmed">Loading videos...</div>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-
-      grid.querySelectorAll('.pl-edit-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var plid = btn.dataset.plid;
-          var expand = grid.querySelector('[data-expand="' + plid + '"]');
-          var textEl = btn.querySelector('.pl-edit-text');
-          if (expand.classList.contains('hidden')) {
-            expand.classList.remove('hidden');
-            textEl.textContent = 'Close';
-            loadPlaylistItemsForCard(plid);
-          } else {
-            expand.classList.add('hidden');
-            textEl.textContent = 'Edit Playlist';
-          }
-        });
-      });
-
-      if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") lucide.createIcons();
-    }
 
     async function loadPlaylistItemsForCard(playlistId) {
       var container = document.querySelector('[data-chips="' + playlistId + '"]');
@@ -3671,7 +3090,7 @@
       window.location.href = authUrl;
     });
 
-    ['demo-connect-perf', 'demo-connect-pl'].forEach(function(id) {
+    ['demo-connect-perf', 'demo-connect-lp', 'demo-connect-pl'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) el.addEventListener('click', function() {
         document.getElementById('api-modal-u1v1').classList.remove('hidden');
@@ -3699,8 +3118,7 @@
       if (!state.token) {
         populatePlaylistDropdown(MOCK_PLAYLISTS);
         state.playlists = [...MOCK_PLAYLISTS];
-        // Low performers now uses real Data API - no demo fallback needed
-        state.lowPerformers = [];
+        state.lowPerformers = [...MOCK_LOW_PERFORMERS];
       }
 
       renderQueue();
@@ -3716,11 +3134,223 @@
         addLog('No active session — connect your YouTube account to begin', 'info');
       }
 
+      // Show account count in log if any exist
       var accounts = getAccounts();
       if (accounts.length > 0) {
         addLog(accounts.length + ' saved account(s) found', 'info');
       }
     })();
+
+    // ---- LOW PERFORMERS: preview + delete ----
+    function toggleLpPreview(vid) {
+      var previewDiv = document.getElementById('lp-preview-' + vid);
+      var btn = document.getElementById('lp-preview-btn-' + vid);
+      var row = document.getElementById('lp-row-' + vid);
+      if (!previewDiv) return;
+      var isOpen = previewDiv.style.display === 'block';
+      previewDiv.style.display = isOpen ? 'none' : 'block';
+      if (btn) btn.textContent = isOpen ? '▶ Preview' : '▼ Hide';
+      if (row) {
+        row.style.borderRadius = isOpen ? '12px' : '12px 12px 0 0';
+      }
+    }
+
+    function confirmDeleteVideo(videoId, videoTitle) {
+      if (!confirm('Permanently delete "' + videoTitle + '" from YouTube?
+
+This cannot be undone.')) return;
+      executeDeleteVideo(videoId, videoTitle);
+    }
+
+    async function executeDeleteVideo(videoId, videoTitle) {
+      if (!state.token) { showNotification('Not connected to YouTube.', 'error'); return; }
+      var row = document.getElementById('lp-row-' + videoId);
+      if (row) row.style.opacity = '0.5';
+      addLog('Deleting "' + videoTitle + '" (' + videoId + ')...', 'warning');
+      try {
+        // Remove from playlists first
+        var memberships = [];
+        try {
+          if (typeof getVideoPlaylistMemberships === 'function') {
+            memberships = await getVideoPlaylistMemberships(videoId);
+          }
+        } catch(e) { addLog('Could not check playlists: ' + e.message, 'warning'); }
+        for (var i = 0; i < memberships.length; i++) {
+          var itemId = memberships[i].playlistItemId || memberships[i].id;
+          try {
+            await ytFetch('https://www.googleapis.com/youtube/v3/playlistItems?id=' + itemId, { method: 'DELETE' });
+            addLog('Removed from playlist: ' + (memberships[i].playlistTitle || itemId), 'info');
+          } catch(e) { addLog('Could not remove from playlist: ' + e.message, 'warning'); }
+        }
+        // Delete video
+        await ytFetch('https://www.googleapis.com/youtube/v3/videos?id=' + videoId, { method: 'DELETE' });
+        addLog('Deleted: "' + videoTitle + '"', 'success');
+        showNotification('"' + videoTitle + '" deleted.', 'success');
+        state.lowPerformers = (state.lowPerformers || []).filter(function(v) { return v.id !== videoId; });
+        renderLowPerformers();
+        var countLabel = document.getElementById('lp-count-label');
+        if (countLabel) countLabel.textContent = (state.lowPerformers || []).length + ' video(s) found';
+      } catch(e) {
+        addLog('Delete failed: ' + e.message, 'error');
+        showNotification('Delete failed: ' + e.message, 'error');
+        if (row) row.style.opacity = '1';
+      }
+    }
+
+    // ---- BULK UPLOAD ----
+    var bulkQueue = [];
+
+    function handleBulkDrop(files) {
+      if (!files || !files.length) return;
+      var added = 0;
+      Array.from(files).forEach(function(file) {
+        if (!file.type.startsWith('video/')) return;
+        var id = 'bulk_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+        bulkQueue.push({ id: id, file: file, objectUrl: URL.createObjectURL(file), title: '', desc: '', tags: '', playlist: '', status: 'idle' });
+        added++;
+      });
+      addLog('Added ' + added + ' video(s) to bulk queue. Total: ' + bulkQueue.length, 'info');
+      renderBulkGrid();
+    }
+
+    function renderBulkGrid() {
+      var grid = document.getElementById('bulk-video-grid');
+      var bar = document.getElementById('bulk-action-bar');
+      var countLabel = document.getElementById('bulk-count-label');
+      if (!grid) return;
+      if (!bulkQueue.length) { grid.innerHTML = ''; if (bar) bar.style.display = 'none'; return; }
+      if (bar) bar.style.display = 'flex';
+      if (countLabel) countLabel.textContent = bulkQueue.length + ' video' + (bulkQueue.length !== 1 ? 's' : '') + ' queued';
+
+      var playlistOptions = '<option value="">No playlist</option>';
+      if (state.playlists && state.playlists.length) {
+        state.playlists.forEach(function(p) {
+          var plId = p.id || '';
+          var plTitle = (p.snippet && p.snippet.title) ? p.snippet.title : (p.name || plId);
+          playlistOptions += '<option value="' + plId + '">' + plTitle + '</option>';
+        });
+      }
+
+      grid.innerHTML = bulkQueue.map(function(item) {
+        var statusColor = { idle:'#717171', generating:'#f0b400', done:'#2ba640', error:'#ff4444' }[item.status] || '#717171';
+        var statusLabel = { idle:'Ready', generating:'⏳ Generating...', done:'✓ Done', error:'✗ Error' }[item.status] || 'Ready';
+        return (
+          '<div id="bulk-card-' + item.id + '" style="display:flex;gap:16px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:16px;align-items:flex-start;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#444'" onmouseout="this.style.borderColor='#2a2a2a'">' +
+            '<div style="flex-shrink:0;width:180px;">' +
+              '<video src="' + item.objectUrl + '" style="width:180px;height:102px;object-fit:cover;border-radius:8px;background:#000;display:block;" preload="metadata" controls></video>' +
+              '<p style="color:#555;font-size:10px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + item.file.name + '">' + item.file.name + '</p>' +
+            '</div>' +
+            '<div style="flex:1;min-width:0;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
+                '<span style="font-size:11px;color:' + statusColor + ';font-weight:600;">' + statusLabel + '</span>' +
+                '<button onclick="removeBulkItem('' + item.id + '')" style="background:none;border:none;color:#444;font-size:14px;cursor:pointer;" onmouseover="this.style.color='#ff4444'" onmouseout="this.style.color='#444'">✕</button>' +
+              '</div>' +
+              '<input type="text" id="bulk-title-' + item.id + '" placeholder="Title" value="' + (item.title||'').replace(/"/g,'&quot;') + '" style="width:100%;padding:7px 10px;background:#2a2a2a;border:1px solid #333;border-radius:7px;color:#fff;font-size:12px;margin-bottom:8px;box-sizing:border-box;" oninput="updateBulkField('' + item.id + '','title',this.value)" />' +
+              '<textarea id="bulk-desc-' + item.id + '" placeholder="Description" rows="3" style="width:100%;padding:7px 10px;background:#2a2a2a;border:1px solid #333;border-radius:7px;color:#fff;font-size:12px;resize:vertical;margin-bottom:8px;box-sizing:border-box;" oninput="updateBulkField('' + item.id + '','desc',this.value)">' + (item.desc||'') + '</textarea>' +
+              '<div style="display:flex;gap:8px;margin-bottom:10px;">' +
+                '<input type="text" placeholder="Tags (comma-separated)" value="' + (item.tags||'').replace(/"/g,'&quot;') + '" style="flex:1;padding:7px 10px;background:#2a2a2a;border:1px solid #333;border-radius:7px;color:#fff;font-size:12px;box-sizing:border-box;" oninput="updateBulkField('' + item.id + '','tags',this.value)" />' +
+                '<select style="width:140px;padding:7px 8px;background:#2a2a2a;border:1px solid #333;border-radius:7px;color:#fff;font-size:12px;" onchange="updateBulkField('' + item.id + '','playlist',this.value)">' + playlistOptions + '</select>' +
+              '</div>' +
+              '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+                '<button onclick="generateBulkAI('' + item.id + '')" id="bulk-ai-btn-' + item.id + '" style="padding:7px 14px;background:#ff0000;border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#cc0000'" onmouseout="this.style.background='#ff0000'">🤖 Generate AI</button>' +
+                (item.status === 'done' ? '<button onclick="transferBulkToUpload('' + item.id + '')" style="padding:7px 14px;background:#2ba640;border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">⬆ Send to Upload Tab</button>' : '') +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function updateBulkField(id, field, value) {
+      var item = bulkQueue.find(function(i) { return i.id === id; });
+      if (item) item[field] = value;
+    }
+
+    function removeBulkItem(id) {
+      bulkQueue = bulkQueue.filter(function(i) { if (i.id === id) { URL.revokeObjectURL(i.objectUrl); return false; } return true; });
+      renderBulkGrid();
+    }
+
+    function clearBulkQueue() {
+      bulkQueue.forEach(function(i) { URL.revokeObjectURL(i.objectUrl); });
+      bulkQueue = [];
+      renderBulkGrid();
+    }
+
+    async function generateBulkAI(id) {
+      var item = bulkQueue.find(function(i) { return i.id === id; });
+      if (!item) return;
+      var btn = document.getElementById('bulk-ai-btn-' + id);
+      var apiKey = localStorage.getItem('gemini_api_key');
+      if (!apiKey) { showNotification('Please set your Gemini API key first.', 'error'); return; }
+      item.status = 'generating';
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ Extracting frames...'; }
+      addLog('Bulk AI: extracting frames from "' + item.file.name + '"', 'info');
+      try {
+        var frames = await extractFramesFromVideo(item.file, 20);
+        if (btn) btn.textContent = '🤖 Sending to Gemini...';
+        addLog('Bulk AI: ' + frames.length + ' frames — sending to Gemini...', 'info');
+        var model = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+        var filename = item.file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+        var playlistNames = (state.playlists || []).map(function(p) { return p.snippet && p.snippet.title ? p.snippet.title : (p.name || ''); }).filter(Boolean);
+        var playlistList = playlistNames.length ? playlistNames.join(', ') : 'Tech Tutorials, Vlogs, Product Reviews, How-To, Gaming, Lifestyle';
+        var parts = [{ text: 'You are a YouTube SEO expert. I am giving you ' + frames.length + ' frames from a video named "' + filename + '". Look at ALL frames carefully. Based ONLY on what you see, generate optimized YouTube metadata. Fill ALL four fields completely.
+
+Available playlists: [' + playlistList + ']
+
+Return ONLY valid JSON:
+{"title":"engaging title max 60 chars","description":"paragraph 1\n\nparagraph 2\n\nparagraph 3 with CTA\n\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5","tags":"tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10","playlist":"PlaylistName"}' }];
+        frames.forEach(function(dataUrl) {
+          parts.push({ inline_data: { mime_type: 'image/jpeg', data: dataUrl.replace(/^data:image\/jpeg;base64,/, '') } });
+        });
+        var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: parts }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048, responseMimeType: 'application/json', responseSchema: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, tags: { type: 'string' }, playlist: { type: 'string' } }, required: ['title','description','tags','playlist'] } } })
+        });
+        if (!res.ok) { var err = await res.json().catch(function(){return{};}); throw new Error((err.error&&err.error.message)||'Gemini error '+res.status); }
+        var data = await res.json();
+        var rawText = data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts&&data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : '';
+        var parsed = null;
+        try { parsed = JSON.parse(rawText); } catch(e) { var m=rawText.match(/\{[\s\S]*\}/); if(m) try{parsed=JSON.parse(m[0]);}catch(e2){} }
+        if (!parsed) throw new Error('Could not parse AI response');
+        item.title = parsed.title||''; item.desc = parsed.description||''; item.tags = parsed.tags||''; item.playlist = parsed.playlist||'';
+        item.status = 'done';
+        addLog('Bulk AI done: "' + item.title + '"', 'success');
+        renderBulkGrid();
+        setTimeout(function() { var c=document.getElementById('bulk-card-'+id); if(c) c.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 100);
+      } catch(e) {
+        item.status = 'error'; addLog('Bulk AI error: ' + e.message, 'error'); showNotification('AI failed: ' + e.message, 'error');
+        if (btn) { btn.disabled = false; btn.textContent = '🔁 Retry AI'; }
+        renderBulkGrid();
+      }
+    }
+
+    async function generateAllBulkAI() {
+      var pending = bulkQueue.filter(function(i) { return i.status === 'idle' || i.status === 'error'; });
+      if (!pending.length) { showNotification('No pending videos.', 'warning'); return; }
+      addLog('Generating AI for ' + pending.length + ' video(s) sequentially...', 'info');
+      for (var i = 0; i < pending.length; i++) {
+        await generateBulkAI(pending[i].id);
+        if (i < pending.length - 1) await new Promise(function(r){setTimeout(r,1500);});
+      }
+      showNotification('All AI generation complete!', 'success');
+    }
+
+    function transferBulkToUpload(id) {
+      var item = bulkQueue.find(function(i) { return i.id === id; });
+      if (!item) return;
+      document.querySelectorAll('.nav-item[data-tab]').forEach(function(el) { el.classList.toggle('active', el.getAttribute('data-tab') === 'upload'); });
+      document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.toggle('active', el.id === 'tab-upload'); });
+      var titleEl = document.getElementById('vid-title-y5z6');
+      var descEl = document.getElementById('vid-desc-a7b8');
+      var tagsEl = document.getElementById('vid-tags-c9d0');
+      if (titleEl) titleEl.value = item.title;
+      if (descEl) descEl.value = item.desc;
+      if (tagsEl) tagsEl.value = item.tags;
+      showNotification('Metadata loaded in Upload tab — drop in the video file!', 'success');
+      addLog('Transferred "' + item.title + '" metadata to Upload tab', 'info');
+    }
+
   </script>
 </body>
 </html>
