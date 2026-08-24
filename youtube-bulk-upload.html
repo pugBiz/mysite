@@ -915,21 +915,35 @@
         var actionBar = $('action-bar-z3a4');
         var emptyState = $('empty-state-l5m6');
 
+        // Fix 3 — Safety guard: bail if grid doesn't exist
+        if (!grid) return;
+
         if (bulkQueue.length === 0) {
-          grid.innerHTML = '';
-          grid.appendChild(emptyState);
-          emptyState.classList.remove('hidden');
-          actionBar.classList.add('hidden');
+          // Fix 2 — Remove only non-emptyState children instead of innerHTML = ''
+          Array.from(grid.children).forEach(function(child) {
+            if (!child.id || child.id !== 'empty-state-l5m6') grid.removeChild(child);
+          });
+          // Fix 1 — Null guards around emptyState usage
+          if (emptyState) {
+            grid.appendChild(emptyState);
+            emptyState.classList.remove('hidden');
+          }
+          if (actionBar) actionBar.classList.add('hidden');
           recreateIcons();
           return;
         }
 
-        if (emptyState.parentNode === grid) grid.removeChild(emptyState);
-        emptyState.classList.add('hidden');
-        actionBar.classList.remove('hidden');
+        // Fix 1 — Null guards around emptyState usage
+        if (emptyState && emptyState.parentNode === grid) grid.removeChild(emptyState);
+        if (emptyState) emptyState.classList.add('hidden');
+        if (actionBar) actionBar.classList.remove('hidden');
         $('queue-count-b5c6').textContent = bulkQueue.length + ' video' + (bulkQueue.length > 1 ? 's' : '') + ' queued';
 
-        grid.innerHTML = '';
+        // Fix 2 — Remove only non-emptyState children instead of innerHTML = ''
+        Array.from(grid.children).forEach(function(child) {
+          if (!child.id || child.id !== 'empty-state-l5m6') grid.removeChild(child);
+        });
+
         bulkQueue.forEach(function(item) {
           grid.appendChild(createVideoCard(item));
         });
