@@ -181,188 +181,189 @@
         <div data-id="15" class="mb-5">
           <label data-id="16" class="block text-xs text-muted mb-1">Gemini Model</label>
           <select data-id="17" id="gemini-model-select-q7w4">
-            <option data-id="18" value="gemini-2.5-flash" selected>gemini-2.5-flash</option>
-            <option data-id="19" value="gemini-2.5-flash-8b">gemini-2.5-flash-8b</option>
-            <option data-id="20" value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
-            <option data-id="21" value="gemini-2.0-flash">gemini-2.0-flash</option>
-            <option data-id="22" value="gemini-1.5-pro">gemini-1.5-pro</option>
+            <option data-id="18" value="gemini-3.5-flash" selected>gemini-3.5-flash (default)</option>
+            <option data-id="19" value="gemini-2.5-flash">gemini-2.5-flash</option>
+            <option data-id="20" value="gemini-2.5-flash-8b">gemini-2.5-flash-8b</option>
+            <option data-id="21" value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
+            <option data-id="22" value="gemini-2.0-flash">gemini-2.0-flash</option>
+            <option data-id="23" value="gemini-1.5-pro">gemini-1.5-pro</option>
           </select>
         </div>
-        <button data-id="23" id="save-gemini-btn-v5n6" class="btn btn-red w-full justify-center">Save Settings</button>
+        <button data-id="24" id="save-gemini-btn-v5n6" class="btn btn-red w-full justify-center">Save Settings</button>
       </div>
     </div>
 
     <!-- Client ID Modal -->
-    <div data-id="24" id="modal-clientid-h8j2" class="modal-overlay">
-      <div data-id="25" class="modal-card">
-        <div data-id="26" class="flex justify-between items-center mb-4">
-          <h3 data-id="27" class="text-base font-semibold">Google OAuth Client ID</h3>
-          <button data-id="28" id="close-clientid-modal-c9p5" class="text-dimmed hover:text-white"><i data-id="29" data-lucide="x" class="w-5 h-5"></i></button>
+    <div data-id="25" id="modal-clientid-h8j2" class="modal-overlay">
+      <div data-id="26" class="modal-card">
+        <div data-id="27" class="flex justify-between items-center mb-4">
+          <h3 data-id="28" class="text-base font-semibold">Google OAuth Client ID</h3>
+          <button data-id="29" id="close-clientid-modal-c9p5" class="text-dimmed hover:text-white"><i data-id="30" data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-        <div data-id="30" class="mb-3">
-          <label data-id="31" class="block text-xs text-muted mb-1">Client ID</label>
-          <input data-id="32" type="text" id="clientid-input-r3t7" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" />
+        <div data-id="31" class="mb-3">
+          <label data-id="32" class="block text-xs text-muted mb-1">Client ID</label>
+          <input data-id="33" type="text" id="clientid-input-r3t7" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" />
         </div>
-        <div data-id="33" class="bg-surface rounded-lg p-3 mb-5 text-xs text-muted leading-relaxed">
-          <p data-id="34" class="font-semibold text-blue mb-1">Setup Instructions</p>
-          <ol data-id="35" class="list-decimal list-inside space-y-1">
-            <li data-id="36">Go to <span data-id="37" class="text-blue">console.cloud.google.com</span></li>
-            <li data-id="38">Navigate to APIs & Services → Credentials</li>
-            <li data-id="39">Create OAuth 2.0 Client ID (Web application)</li>
-            <li data-id="40">Add your page URL as an authorized redirect URI</li>
-            <li data-id="41">Enable YouTube Data API v3 in your project</li>
+        <div data-id="34" class="bg-surface rounded-lg p-3 mb-5 text-xs text-muted leading-relaxed">
+          <p data-id="35" class="font-semibold text-blue mb-1">Setup Instructions</p>
+          <ol data-id="36" class="list-decimal list-inside space-y-1">
+            <li data-id="37">Go to <span data-id="38" class="text-blue">console.cloud.google.com</span></li>
+            <li data-id="39">Navigate to APIs & Services → Credentials</li>
+            <li data-id="40">Create OAuth 2.0 Client ID (Web application)</li>
+            <li data-id="41">Add your page URL as an authorized redirect URI</li>
+            <li data-id="42">Enable YouTube Data API v3 in your project</li>
           </ol>
         </div>
-        <button data-id="42" id="save-clientid-btn-m6k8" class="btn btn-red w-full justify-center">Save Client ID</button>
+        <button data-id="43" id="save-clientid-btn-m6k8" class="btn btn-red w-full justify-center">Save Client ID</button>
       </div>
     </div>
 
     <!-- Header -->
-    <header data-id="43" id="header-top-a1b2" class="fixed top-0 left-0 right-0 bg-surface border-b border-border z-50 h-14">
-      <div data-id="44" class="flex items-center justify-between h-full px-4 md:px-6">
-        <div data-id="45" class="flex items-center gap-3">
-          <div data-id="46" class="flex items-center gap-1.5">
-            <svg data-id="47" width="28" height="20" viewBox="0 0 28 20" fill="none">
-              <rect data-id="48" width="28" height="20" rx="4" fill="#FF0000"/>
-              <polygon data-id="49" points="11,5 11,15 20,10" fill="#fff"/>
+    <header data-id="44" id="header-top-a1b2" class="fixed top-0 left-0 right-0 bg-surface border-b border-border z-50 h-14">
+      <div data-id="45" class="flex items-center justify-between h-full px-4 md:px-6">
+        <div data-id="46" class="flex items-center gap-3">
+          <div data-id="47" class="flex items-center gap-1.5">
+            <svg data-id="48" width="28" height="20" viewBox="0 0 28 20" fill="none">
+              <rect data-id="49" width="28" height="20" rx="4" fill="#FF0000"/>
+              <polygon data-id="50" points="11,5 11,15 20,10" fill="#fff"/>
             </svg>
-            <span data-id="50" class="font-bold text-sm md:text-base tracking-tight">Bulk Upload Manager</span>
+            <span data-id="51" class="font-bold text-sm md:text-base tracking-tight">Bulk Upload Manager</span>
           </div>
         </div>
-        <div data-id="51" class="flex items-center gap-2">
+        <div data-id="52" class="flex items-center gap-2">
           <!-- Mobile menu -->
-          <button data-id="52" id="mobile-menu-btn-x3y4" class="md:hidden p-2 text-muted hover:text-white"><i data-id="53" data-lucide="menu" class="w-5 h-5"></i></button>
+          <button data-id="53" id="mobile-menu-btn-x3y4" class="md:hidden p-2 text-muted hover:text-white"><i data-id="54" data-lucide="menu" class="w-5 h-5"></i></button>
           <!-- Desktop buttons -->
-          <div data-id="54" class="hidden md:flex items-center gap-2">
-            <button data-id="55" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="56" data-lucide="key" class="w-3.5 h-3.5"></i> Gemini Key</button>
-            <div data-id="57" class="relative">
-              <button data-id="58" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="59" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
-              <div data-id="60" id="channel-dropdown-h8i9" class="channel-dropdown">
-                <button data-id="61" id="switch-account-btn-j1k2">Switch Account</button>
-                <button data-id="62" id="disconnect-btn-l3m4">Disconnect</button>
+          <div data-id="55" class="hidden md:flex items-center gap-2">
+            <button data-id="56" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="57" data-lucide="key" class="w-3.5 h-3.5"></i> Gemini Key</button>
+            <div data-id="58" class="relative">
+              <button data-id="59" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="60" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
+              <div data-id="61" id="channel-dropdown-h8i9" class="channel-dropdown">
+                <button data-id="62" id="switch-account-btn-j1k2">Switch Account</button>
+                <button data-id="63" id="disconnect-btn-l3m4">Disconnect</button>
               </div>
             </div>
-            <button data-id="63" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="64" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
+            <button data-id="64" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="65" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
           </div>
         </div>
       </div>
     </header>
 
     <!-- Mobile Menu -->
-    <nav data-id="65" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
-      <div data-id="66" class="flex justify-between items-center mb-6">
-        <span data-id="67" class="font-bold text-base">Menu</span>
-        <button data-id="68" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="69" data-lucide="x" class="w-6 h-6"></i></button>
+    <nav data-id="66" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
+      <div data-id="67" class="flex justify-between items-center mb-6">
+        <span data-id="68" class="font-bold text-base">Menu</span>
+        <button data-id="69" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="70" data-lucide="x" class="w-6 h-6"></i></button>
       </div>
-      <div data-id="70" class="flex flex-col gap-3">
-        <button data-id="71" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="72" data-lucide="key" class="w-4 h-4"></i> Gemini Key</button>
-        <button data-id="73" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="74" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
-        <button data-id="75" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="76" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
-        <button data-id="77" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
+      <div data-id="71" class="flex flex-col gap-3">
+        <button data-id="72" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="73" data-lucide="key" class="w-4 h-4"></i> Gemini Key</button>
+        <button data-id="74" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="75" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
+        <button data-id="76" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="77" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
+        <button data-id="78" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <main data-id="78" class="pt-14 min-h-screen">
-      <div data-id="79" class="main-layout flex" style="min-height: calc(100vh - 56px);">
+    <main data-id="79" class="pt-14 min-h-screen">
+      <div data-id="80" class="main-layout flex" style="min-height: calc(100vh - 56px);">
 
         <!-- Sidebar Settings -->
-        <aside data-id="80" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
+        <aside data-id="81" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
 
-          <div data-id="81" class="sidebar-section">
-            <h4 data-id="82" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="83" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
-            <div data-id="84" class="text-xs space-y-1.5">
-              <div data-id="85" class="flex justify-between"><span data-id="86" class="text-dimmed">Model:</span><span data-id="87" id="sidebar-model-d1e2" class="text-muted">gemini-2.5-flash</span></div>
-              <div data-id="88" class="flex justify-between"><span data-id="89" class="text-dimmed">API Key:</span><span data-id="90" id="sidebar-key-status-f3g4" class="text-muted">not set</span></div>
+          <div data-id="82" class="sidebar-section">
+            <h4 data-id="83" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="84" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
+            <div data-id="85" class="text-xs space-y-1.5">
+              <div data-id="86" class="flex justify-between"><span data-id="87" class="text-dimmed">Model:</span><span data-id="88" id="sidebar-model-d1e2" class="text-muted">gemini-3.5-flash</span></div>
+              <div data-id="89" class="flex justify-between"><span data-id="90" class="text-dimmed">API Key:</span><span data-id="91" id="sidebar-key-status-f3g4" class="text-muted">not set</span></div>
             </div>
           </div>
 
-          <div data-id="91" class="sidebar-section">
-            <h4 data-id="92" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="93" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
-            <div data-id="94" class="mb-3">
-              <label data-id="95" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
-              <div data-id="96" class="radio-group" id="privacy-radio-group-h5i6">
-                <label data-id="97"><input data-id="98" type="radio" name="privacy" value="public" /><span data-id="99">Public</span></label>
-                <label data-id="100"><input data-id="101" type="radio" name="privacy" value="unlisted" checked /><span data-id="102">Unlisted</span></label>
-                <label data-id="103"><input data-id="104" type="radio" name="privacy" value="private" /><span data-id="105">Private</span></label>
+          <div data-id="92" class="sidebar-section">
+            <h4 data-id="93" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="94" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
+            <div data-id="95" class="mb-3">
+              <label data-id="96" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
+              <div data-id="97" class="radio-group" id="privacy-radio-group-h5i6">
+                <label data-id="98"><input data-id="99" type="radio" name="privacy" value="public" /><span data-id="100">Public</span></label>
+                <label data-id="101"><input data-id="102" type="radio" name="privacy" value="unlisted" checked /><span data-id="103">Unlisted</span></label>
+                <label data-id="104"><input data-id="105" type="radio" name="privacy" value="private" /><span data-id="106">Private</span></label>
               </div>
             </div>
-            <div data-id="106" class="mb-3 flex items-center justify-between">
-              <label data-id="107" class="text-xs text-dimmed">Made for Kids</label>
-              <label data-id="108" class="relative inline-flex items-center cursor-pointer">
-                <input data-id="109" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
-                <div data-id="110" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+            <div data-id="107" class="mb-3 flex items-center justify-between">
+              <label data-id="108" class="text-xs text-dimmed">Made for Kids</label>
+              <label data-id="109" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="110" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
+                <div data-id="111" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
             </div>
-            <div data-id="111">
-              <label data-id="112" class="block text-xs text-dimmed mb-1.5">Default Language</label>
-              <select data-id="113" id="default-lang-l9m0">
-                <option data-id="114" value="en">English</option>
-                <option data-id="115" value="es">Spanish</option>
-                <option data-id="116" value="fr">French</option>
-                <option data-id="117" value="de">German</option>
-                <option data-id="118" value="pt">Portuguese</option>
-                <option data-id="119" value="ja">Japanese</option>
-                <option data-id="120" value="ko">Korean</option>
-                <option data-id="121" value="zh">Chinese</option>
-                <option data-id="122" value="hi">Hindi</option>
-                <option data-id="123" value="ar">Arabic</option>
+            <div data-id="112">
+              <label data-id="113" class="block text-xs text-dimmed mb-1.5">Default Language</label>
+              <select data-id="114" id="default-lang-l9m0">
+                <option data-id="115" value="en">English</option>
+                <option data-id="116" value="es">Spanish</option>
+                <option data-id="117" value="fr">French</option>
+                <option data-id="118" value="de">German</option>
+                <option data-id="119" value="pt">Portuguese</option>
+                <option data-id="120" value="ja">Japanese</option>
+                <option data-id="121" value="ko">Korean</option>
+                <option data-id="122" value="zh">Chinese</option>
+                <option data-id="123" value="hi">Hindi</option>
+                <option data-id="124" value="ar">Arabic</option>
               </select>
             </div>
           </div>
 
-          <div data-id="124" class="sidebar-section">
-            <h4 data-id="125" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="126" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
-            <div data-id="127" class="flex items-center justify-between mb-3">
-              <label data-id="128" class="text-xs text-dimmed">Auto-schedule uploads</label>
-              <label data-id="129" class="relative inline-flex items-center cursor-pointer">
-                <input data-id="130" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
-                <div data-id="131" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+          <div data-id="125" class="sidebar-section">
+            <h4 data-id="126" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="127" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
+            <div data-id="128" class="flex items-center justify-between mb-3">
+              <label data-id="129" class="text-xs text-dimmed">Auto-schedule uploads</label>
+              <label data-id="130" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="131" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
+                <div data-id="132" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
             </div>
-            <div data-id="132" id="schedule-options-p3q4" class="hidden">
-              <label data-id="133" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
-              <div data-id="134" class="flex flex-wrap gap-1.5 mb-2">
-                <button data-id="135" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
-                <button data-id="136" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
-                <button data-id="137" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
-                <button data-id="138" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="139" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
+            <div data-id="133" id="schedule-options-p3q4" class="hidden">
+              <label data-id="134" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
+              <div data-id="135" class="flex flex-wrap gap-1.5 mb-2">
+                <button data-id="136" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
+                <button data-id="137" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
+                <button data-id="138" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
+                <button data-id="139" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="140" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
               </div>
             </div>
           </div>
 
-          <div data-id="140" class="sidebar-section">
-            <h4 data-id="141" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="142" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
-            <div data-id="143" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
-              <div data-id="144" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
+          <div data-id="141" class="sidebar-section">
+            <h4 data-id="142" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="143" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
+            <div data-id="144" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
+              <div data-id="145" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
             </div>
           </div>
         </aside>
 
         <!-- Bulk Upload Work Area -->
-        <section data-id="145" class="flex-1 p-4 md:p-6 overflow-y-auto">
+        <section data-id="146" class="flex-1 p-4 md:p-6 overflow-y-auto">
           <!-- Drop Zone -->
-          <div data-id="146" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
-            <input data-id="147" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
-            <div data-id="148" class="text-4xl mb-3">🎬</div>
-            <p data-id="149" class="text-base font-semibold mb-1">Drop multiple video files here</p>
-            <p data-id="150" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
+          <div data-id="147" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
+            <input data-id="148" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
+            <div data-id="149" class="text-4xl mb-3">🎬</div>
+            <p data-id="150" class="text-base font-semibold mb-1">Drop multiple video files here</p>
+            <p data-id="151" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
           </div>
 
           <!-- Action Bar -->
-          <div data-id="151" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
-            <span data-id="152" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
-            <div data-id="153" class="flex-1"></div>
-            <button data-id="154" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="155" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
-            <button data-id="156" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="157" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
-            <button data-id="158" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="159" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
+          <div data-id="152" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
+            <span data-id="153" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
+            <div data-id="154" class="flex-1"></div>
+            <button data-id="155" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="156" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
+            <button data-id="157" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="158" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
+            <button data-id="159" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="160" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
           </div>
 
           <!-- Video Cards Grid -->
-          <div data-id="160" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
-            <div data-id="161" id="empty-state-l5m6" class="text-center py-16">
-              <div data-id="162" class="text-dimmed mb-2"><i data-id="163" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
-              <p data-id="164" class="text-muted text-sm">Drop video files above to get started</p>
+          <div data-id="161" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
+            <div data-id="162" id="empty-state-l5m6" class="text-center py-16">
+              <div data-id="163" class="text-dimmed mb-2"><i data-id="164" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
+              <p data-id="165" class="text-muted text-sm">Drop video files above to get started</p>
             </div>
           </div>
         </section>
@@ -370,7 +371,7 @@
     </main>
 
     <!-- Footer -->
-    <footer data-id="165" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
+    <footer data-id="166" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
       Made by Copilot
     </footer>
 
@@ -528,7 +529,7 @@
 
       // ===== SETTINGS PERSISTENCE =====
       function loadSettings() {
-        var model = ls('gemini_model') || 'gemini-2.5-flash';
+        var model = ls('gemini_model') || 'gemini-3.5-flash';
         $('sidebar-model-d1e2').textContent = model;
         $('gemini-model-select-q7w4').value = model;
 
@@ -567,6 +568,11 @@
       // ===== MODALS =====
       function openModal(id) {
         $(id).classList.add('active');
+        // When the Gemini modal opens, sync the model dropdown to saved value
+        if (id === 'modal-gemini-g3x9') {
+          var savedModel = ls('gemini_model') || 'gemini-3.5-flash';
+          $('gemini-model-select-q7w4').value = savedModel;
+        }
       }
       function closeModal(id) {
         $(id).classList.remove('active');
@@ -1141,7 +1147,7 @@
         if (!item) return;
 
         var apiKey = ls('gemini_api_key');
-        var model = ls('gemini_model') || 'gemini-2.5-flash';
+        var model = ls('gemini_model') || 'gemini-3.5-flash';
 
         if (!apiKey) {
           showToast('Set your Gemini API key first', 'warning');
