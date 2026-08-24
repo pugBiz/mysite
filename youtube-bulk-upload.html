@@ -1288,7 +1288,7 @@
 
         card.innerHTML =
           '<div class="flex-shrink-0" style="width:180px">' +
-            '<video src="' + item.objectUrl + '" class="rounded-lg bg-black" style="width:180px;height:102px;object-fit:cover;display:block;" controls preload="metadata" muted></video>' +
+            '<video src="' + item.objectUrl + '" style="width:180px;height:102px;object-fit:contain;background:#000;border-radius:8px;display:block;" preload="metadata" controls></video>' +
             '<p class="text-[11px] text-dimmed mt-1 truncate" title="' + escHtml(item.file.name) + '">' + escHtml(item.file.name) + '</p>' +
             '<p class="text-[10px] text-dimmed">' + formatBytes(item.file.size) + '</p>' +
           '</div>' +
