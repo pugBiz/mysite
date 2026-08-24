@@ -152,6 +152,64 @@
       }
       .channel-dropdown button:hover { background: #333; color: #fff; }
 
+      .btn-links {
+        padding: 7px 14px;
+        background: #1a1f2a;
+        border: 1px solid #3ea6ff;
+        border-radius: 7px;
+        color: #3ea6ff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .btn-links:hover {
+        background: #3ea6ff;
+        color: #fff;
+      }
+
+      .links-result-panel {
+        display: none;
+        margin-top: 10px;
+        background: #161f2a;
+        border: 1px solid #2a3a4a;
+        border-radius: 8px;
+        padding: 12px;
+      }
+
+      .links-result-panel .links-checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-height: 180px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+      }
+
+      .links-result-panel .links-checklist label {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        cursor: pointer;
+        padding: 2px 0;
+      }
+
+      .links-result-panel .links-checklist input[type="checkbox"] {
+        margin-top: 2px;
+        accent-color: #3ea6ff;
+        flex-shrink: 0;
+        width: auto;
+      }
+
+      .links-result-panel .links-checklist span {
+        color: #ccc;
+        font-size: 11px;
+        word-break: break-all;
+      }
+
       @media (max-width: 767px) {
         .main-layout { flex-direction: column !important; }
         .sidebar-panel { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
@@ -981,6 +1039,12 @@
         if (item.status === 'generating') {
           actionButtons += '<span class="text-yellow text-xs pulse-anim flex items-center gap-1"><i data-lucide="loader" class="w-3 h-3"></i> Generating...</span>';
         }
+
+        // Auto-Add Links button — show when a playlist could be selected and we're connected
+        if (state.token) {
+          actionButtons += '<button class="btn-links auto-links-btn" data-id="' + item.id + '"><i data-lucide="link" class="w-3 h-3"></i> Auto-Add Links</button>';
+        }
+
         if ((item.status === 'done' || item.status === 'idle') && state.token) {
           actionButtons += '<button class="btn btn-green text-[11px] py-1.5 upload-single-btn" data-id="' + item.id + '"><i data-lucide="upload" class="w-3 h-3"></i> Upload</button>';
         }
@@ -1009,10 +1073,10 @@
               '<button class="text-dimmed hover:text-ytred remove-btn" data-id="' + item.id + '"><i data-lucide="x" class="w-4 h-4"></i></button>' +
             '</div>' +
             '<input type="text" placeholder="Video title" class="mb-1.5 text-sm font-medium" value="' + escHtml(item.title) + '" data-field="title" data-id="' + item.id + '" />' +
-            '<textarea placeholder="Description" rows="2" class="mb-1.5 text-xs resize-y" data-field="desc" data-id="' + item.id + '">' + escHtml(item.desc) + '</textarea>' +
+            '<textarea placeholder="Description" rows="2" class="mb-1.5 text-xs resize-y desc-textarea" data-field="desc" data-id="' + item.id + '">' + escHtml(item.desc) + '</textarea>' +
             '<input type="text" placeholder="Tags (comma-separated)" class="mb-1.5 text-xs" value="' + escHtml(item.tags) + '" data-field="tags" data-id="' + item.id + '" />' +
             '<div class="flex gap-2 mb-1.5">' +
-              '<select class="flex-1 text-xs" data-field="playlist" data-id="' + item.id + '">' + playlistOptions + '</select>' +
+              '<select class="flex-1 text-xs playlist-select" data-field="playlist" data-id="' + item.id + '">' + playlistOptions + '</select>' +
               '<select class="w-28 text-xs" data-field="privacy" data-id="' + item.id + '">' +
                 '<option value="public"' + (item.privacy === 'public' ? ' selected' : '') + '>Public</option>' +
                 '<option value="unlisted"' + (item.privacy === 'unlisted' ? ' selected' : '') + '>Unlisted</option>' +
@@ -1021,7 +1085,8 @@
             '</div>' +
             scheduleHTML +
             progressHTML +
-            '<div class="flex items-center gap-2 mt-2.5">' + actionButtons + '</div>' +
+            '<div class="flex flex-wrap items-center gap-2 mt-2.5">' + actionButtons + '</div>' +
+            '<div id="links-result-' + item.id + '" class="links-result-panel"></div>' +
           '</div>';
 
         // Attach event listeners
@@ -1034,6 +1099,9 @@
 
           var uploadBtn = card.querySelector('.upload-single-btn');
           if (uploadBtn) uploadBtn.addEventListener('click', function() { uploadVideoToYouTube(item.id); });
+
+          var autoLinksBtn = card.querySelector('.auto-links-btn');
+          if (autoLinksBtn) autoLinksBtn.addEventListener('click', function() { autoAddLinks(item.id); });
 
           // Field change listeners
           card.querySelectorAll('[data-field]').forEach(function(el) {
@@ -1252,6 +1320,168 @@
         }
 
         renderBulkGrid();
+      }
+
+      // ===== AUTO-ADD LINKS =====
+      async function autoAddLinks(cardId) {
+        var item = bulkQueue.find(function(i) { return i.id === cardId; });
+        if (!item) return;
+
+        if (!state.token) {
+          showToast('Connect your YouTube account first.', 'error');
+          return;
+        }
+
+        var resultDiv = document.getElementById('links-result-' + cardId);
+        var cardEl = document.getElementById('card-' + cardId);
+        var playlistEl = cardEl ? cardEl.querySelector('select.playlist-select') : null;
+        var selectedPlaylistId = playlistEl ? playlistEl.value : (item.playlist || '');
+        var selectedPlaylistName = (playlistEl && playlistEl.options[playlistEl.selectedIndex])
+          ? playlistEl.options[playlistEl.selectedIndex].text : selectedPlaylistId;
+
+        if (!selectedPlaylistId) {
+          showToast('Select a playlist for this video first.', 'warning');
+          addLog('Auto-Add Links: no playlist selected for card ' + cardId, 'warning');
+          return;
+        }
+
+        if (resultDiv) {
+          resultDiv.innerHTML = '<p style="color:#aaa;font-size:12px;">⏳ Fetching first video in playlist...</p>';
+          resultDiv.style.display = 'block';
+        }
+        addLog('Auto-Add Links: fetching first video from "' + selectedPlaylistName + '"...', 'info');
+
+        try {
+          // Step 1: Get first video in the playlist
+          var plRes = await ytFetch(
+            'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' +
+            encodeURIComponent(selectedPlaylistId) + '&maxResults=1'
+          );
+          var plItems = (plRes && plRes.items) ? plRes.items : [];
+
+          if (!plItems.length) {
+            showToast('This playlist has no videos to pull links from.', 'warning');
+            addLog('Playlist "' + selectedPlaylistName + '" has no videos', 'warning');
+            if (resultDiv) resultDiv.style.display = 'none';
+            return;
+          }
+
+          var firstItem = plItems[0];
+          var firstVideoId = firstItem.snippet && firstItem.snippet.resourceId
+            ? firstItem.snippet.resourceId.videoId : null;
+          var firstVideoTitle = firstItem.snippet ? firstItem.snippet.title : 'Unknown';
+
+          if (!firstVideoId) {
+            showToast('Could not read video ID from playlist.', 'error');
+            if (resultDiv) resultDiv.style.display = 'none';
+            return;
+          }
+
+          addLog('First video: "' + firstVideoTitle + '" (' + firstVideoId + ')', 'success');
+
+          // Step 2: Fetch full description
+          var vidRes = await ytFetch(
+            'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + firstVideoId
+          );
+          var vidItems = (vidRes && vidRes.items) ? vidRes.items : [];
+          if (!vidItems.length) {
+            showToast('Could not fetch video description.', 'error');
+            if (resultDiv) resultDiv.style.display = 'none';
+            return;
+          }
+
+          var description = (vidItems[0].snippet && vidItems[0].snippet.description)
+            ? vidItems[0].snippet.description : '';
+          addLog('Description fetched (' + description.length + ' chars)', 'info');
+
+          // Step 3: Extract URLs
+          var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>\n]+/g;
+          var rawUrls = description.match(urlRegex) || [];
+          var seen = {};
+          var foundLinks = [];
+          rawUrls.forEach(function(url) {
+            url = url.replace(/[.,;!?:]+$/, '');
+            if (!url || seen[url]) return;
+            if (url.indexOf('ytimg.com') !== -1 || url.indexOf('ggpht.com') !== -1) return;
+            seen[url] = true;
+            foundLinks.push(url);
+          });
+
+          addLog('Found ' + foundLinks.length + ' unique links in "' + firstVideoTitle + '"', foundLinks.length > 0 ? 'success' : 'warning');
+
+          if (!foundLinks.length) {
+            showToast('No links found in that video\'s description.', 'warning');
+            if (resultDiv) resultDiv.innerHTML = '<p style="color:#f0b400;font-size:12px;">No URLs found in "' + escHtml(firstVideoTitle) + '".</p>';
+            return;
+          }
+
+          // Step 4: Show checklist
+          if (resultDiv) {
+            var listId = 'links-list-' + cardId;
+            resultDiv.innerHTML =
+              '<p style="color:#3ea6ff;font-weight:600;font-size:12px;margin-bottom:2px;"><i data-lucide="link" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> ' + foundLinks.length + ' link(s) from: <em style="font-weight:400;">' + escHtml(firstVideoTitle) + '</em></p>' +
+              '<p style="color:#555;font-size:10px;margin-bottom:8px;">Playlist: ' + escHtml(selectedPlaylistName) + '</p>' +
+              '<div id="' + listId + '" class="links-checklist">' +
+              foundLinks.map(function(url) {
+                var short = url.length > 65 ? url.substring(0, 65) + '\u2026' : url;
+                return '<label>' +
+                  '<input type="checkbox" data-url="' + escHtml(url) + '" checked />' +
+                  '<span>' + escHtml(short) + '</span>' +
+                  '</label>';
+              }).join('') +
+              '</div>' +
+              '<div style="display:flex;gap:8px;">' +
+                '<button class="btn btn-blue text-xs append-links-btn" data-card-id="' + cardId + '">✓ Add to Description</button>' +
+                '<button class="btn btn-dark text-xs cancel-links-btn" data-card-id="' + cardId + '">Cancel</button>' +
+              '</div>';
+
+            // Attach listeners for Append and Cancel buttons
+            setTimeout(function() {
+              var appendBtn = resultDiv.querySelector('.append-links-btn');
+              if (appendBtn) appendBtn.addEventListener('click', function() { appendLinks(cardId); });
+
+              var cancelBtn = resultDiv.querySelector('.cancel-links-btn');
+              if (cancelBtn) cancelBtn.addEventListener('click', function() {
+                resultDiv.style.display = 'none';
+              });
+            }, 0);
+
+            recreateIcons();
+          }
+
+        } catch(e) {
+          addLog('Auto-Add Links error: ' + e.message, 'error');
+          showToast('Error: ' + e.message, 'error');
+          if (resultDiv) resultDiv.style.display = 'none';
+        }
+      }
+
+      // ===== APPEND LINKS =====
+      function appendLinks(cardId) {
+        var item = bulkQueue.find(function(i) { return i.id === cardId; });
+        if (!item) return;
+
+        var checkboxes = document.querySelectorAll('#links-list-' + cardId + ' input[type="checkbox"]:checked');
+        var selected = Array.from(checkboxes).map(function(cb) { return cb.getAttribute('data-url'); });
+
+        if (!selected.length) {
+          showToast('No links selected.', 'warning');
+          return;
+        }
+
+        var linksBlock = '\n\n🔗 Related Links:\n' + selected.map(function(u) { return '• ' + u; }).join('\n');
+        item.desc = (item.desc || '').trimEnd() + linksBlock;
+
+        // Update the textarea in the card directly
+        var cardEl = document.getElementById('card-' + cardId);
+        var textarea = cardEl ? cardEl.querySelector('textarea.desc-textarea') : null;
+        if (textarea) textarea.value = item.desc;
+
+        var resultDiv = document.getElementById('links-result-' + cardId);
+        if (resultDiv) resultDiv.style.display = 'none';
+
+        addLog('Appended ' + selected.length + ' link(s) to description for card ' + cardId, 'success');
+        showToast(selected.length + ' link(s) added to description!', 'success');
       }
 
       // ===== YOUTUBE UPLOAD =====
