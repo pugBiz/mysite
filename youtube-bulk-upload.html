@@ -71,6 +71,10 @@
       @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
       @keyframes fadeInUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
       @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+      @keyframes thumbProgress {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(250%); }
+      }
 
       .card-enter { animation: fadeInUp 0.35s ease-out; }
       .pulse-anim { animation: pulse 1.5s infinite; }
@@ -275,6 +279,59 @@
       .gemini-key-item .btn-delete-key:hover {
         color: #ff4444;
         border-color: #ff4444;
+      }
+
+      .btn-thumb-generate {
+        padding: 5px 12px;
+        background: #1a1a2a;
+        border: 1px solid #3ea6ff;
+        border-radius: 6px;
+        color: #3ea6ff;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Inter', sans-serif;
+      }
+      .btn-thumb-generate:hover {
+        background: #3ea6ff;
+        color: #fff;
+      }
+      .btn-thumb-generate:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-thumb-download {
+        padding: 5px 12px;
+        background: #2ba640;
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.2s;
+      }
+      .btn-thumb-download:hover {
+        background: #238a35;
+      }
+
+      .btn-thumb-regen {
+        padding: 5px 12px;
+        background: #2a2a2a;
+        border: 1px solid #444;
+        border-radius: 6px;
+        color: #aaa;
+        font-size: 11px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.2s;
+      }
+      .btn-thumb-regen:hover {
+        border-color: #666;
+        color: #fff;
       }
 
       @media (max-width: 767px) {
@@ -1181,7 +1238,9 @@
             scheduleTime: '',
             status: 'idle',
             uploadProgress: 0,
-            videoId: ''
+            videoId: '',
+            thumbnailUrl: '',
+            thumbnailPrompt: ''
           };
 
           if (isAutoSchedule()) {
@@ -1286,6 +1345,10 @@
           progressHTML = '<div class="progress-bar"><div class="progress-bar-fill" style="width:' + item.uploadProgress + '%"></div></div>';
         }
 
+        // Thumbnail result HTML — show if already generated
+        var thumbResultDisplay = item.thumbnailUrl ? 'block' : 'none';
+        var thumbBtnText = item.thumbnailUrl ? '🖼 Regenerate' : '🖼 Generate Thumbnail';
+
         card.innerHTML =
           '<div class="flex-shrink-0" style="width:180px">' +
             '<video src="' + item.objectUrl + '" style="width:180px;height:102px;object-fit:contain;background:#000;border-radius:8px;display:block;" preload="metadata" controls></video>' +
@@ -1312,6 +1375,26 @@
             progressHTML +
             '<div class="flex flex-wrap items-center gap-2 mt-2.5">' + actionButtons + '</div>' +
             '<div id="links-result-' + item.id + '" class="links-result-panel"></div>' +
+            /* AI Thumbnail Section */
+            '<div id="thumb-section-' + item.id + '" style="margin-top:12px;border-top:1px solid #2a2a2a;padding-top:12px;">' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
+                '<span style="color:#aaa;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">AI Thumbnail</span>' +
+                '<button class="btn-thumb-generate thumb-gen-btn" id="thumb-btn-' + item.id + '" data-id="' + item.id + '">' + thumbBtnText + '</button>' +
+              '</div>' +
+              '<div id="thumb-result-' + item.id + '" style="display:' + thumbResultDisplay + ';">' +
+                '<img id="thumb-img-' + item.id + '" src="' + (item.thumbnailUrl || '') + '" alt="AI Thumbnail" style="width:100%;max-width:320px;height:auto;border-radius:8px;display:block;margin-bottom:8px;border:1px solid #333;" />' +
+                '<div style="display:flex;gap:8px;">' +
+                  '<button class="btn-thumb-download thumb-download-btn" data-id="' + item.id + '"><i data-lucide="download" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> Download</button>' +
+                  '<button class="btn-thumb-regen thumb-regen-btn" data-id="' + item.id + '"><i data-lucide="refresh-cw" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> Regenerate</button>' +
+                '</div>' +
+              '</div>' +
+              '<div id="thumb-loading-' + item.id + '" style="display:none;padding:20px;text-align:center;">' +
+                '<div style="color:#3ea6ff;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;"><i data-lucide="loader" class="w-4 h-4"></i> Generating thumbnail with AI...</div>' +
+                '<div style="margin-top:8px;height:3px;background:#1a1a2a;border-radius:2px;overflow:hidden;">' +
+                  '<div style="height:100%;background:#3ea6ff;animation:thumbProgress 2s ease-in-out infinite;width:60%;border-radius:2px;"></div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
           '</div>';
 
         // Attach event listeners
@@ -1327,6 +1410,16 @@
 
           var autoLinksBtn = card.querySelector('.auto-links-btn');
           if (autoLinksBtn) autoLinksBtn.addEventListener('click', function() { autoAddLinks(item.id); });
+
+          // Thumbnail buttons
+          var thumbGenBtn = card.querySelector('.thumb-gen-btn');
+          if (thumbGenBtn) thumbGenBtn.addEventListener('click', function() { generateThumbnail(item.id); });
+
+          var thumbDownloadBtn = card.querySelector('.thumb-download-btn');
+          if (thumbDownloadBtn) thumbDownloadBtn.addEventListener('click', function() { downloadThumbnail(item.id); });
+
+          var thumbRegenBtn = card.querySelector('.thumb-regen-btn');
+          if (thumbRegenBtn) thumbRegenBtn.addEventListener('click', function() { generateThumbnail(item.id); });
 
           // Field change listeners
           card.querySelectorAll('[data-field]').forEach(function(el) {
@@ -1362,6 +1455,91 @@
           addLog('Removed video from queue', 'info');
         }
         renderBulkGrid();
+      }
+
+      // ===== AI THUMBNAIL GENERATION =====
+      async function generateThumbnail(cardId) {
+        var item = bulkQueue.find(function(i) { return i.id === cardId; });
+        if (!item) return;
+
+        var btn = $('thumb-btn-' + cardId);
+        var resultDiv = $('thumb-result-' + cardId);
+        var loadingDiv = $('thumb-loading-' + cardId);
+        var img = $('thumb-img-' + cardId);
+
+        // Build a rich prompt from the video metadata
+        var title = item.title || item.file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+        var tags = item.tags ? item.tags.split(',').slice(0, 5).map(function(t) { return t.trim(); }).join(', ') : '';
+        var descSnippet = (item.desc || '').replace(/\n/g, ' ').replace(/#\w+/g, '').trim().substring(0, 120);
+        var playlistName = '';
+        if (item.playlist && state.playlists.length > 0) {
+          var matchedPl = state.playlists.find(function(p) { return p.id === item.playlist; });
+          if (matchedPl) playlistName = matchedPl.title;
+        }
+
+        var prompt = 'YouTube video thumbnail, professional, eye-catching, bold text overlay reading "' + title + '", '
+          + (descSnippet ? 'content about: ' + descSnippet + ', ' : '')
+          + (tags ? 'keywords: ' + tags + ', ' : '')
+          + (playlistName ? 'category: ' + playlistName + ', ' : '')
+          + 'vibrant colors, high contrast, 16:9 aspect ratio, cinematic lighting, studio quality, '
+          + 'clickbait thumbnail style, dramatic composition, sharp focus, professional photography';
+
+        if (btn) btn.disabled = true;
+        if (resultDiv) resultDiv.style.display = 'none';
+        if (loadingDiv) loadingDiv.style.display = 'block';
+
+        addLog('Generating AI thumbnail for "' + title + '"...', 'info');
+
+        try {
+          if (!window.AppSDK || !window.AppSDK.ai || !window.AppSDK.ai.generateImage) {
+            throw new Error('AI image generation not available');
+          }
+
+          var result = await AppSDK.ai.generateImage({
+            prompt: prompt,
+            aspectRatio: 'wide',
+            quality: 'medium'
+          });
+
+          if (!result || !result.image) throw new Error('No image returned');
+
+          var imageUrl = 'data:image/' + (result.format || 'png') + ';base64,' + result.image;
+
+          if (img) {
+            img.src = imageUrl;
+            img.alt = 'AI Thumbnail: ' + title;
+          }
+          item.thumbnailUrl = imageUrl;
+          item.thumbnailPrompt = prompt;
+
+          if (loadingDiv) loadingDiv.style.display = 'none';
+          if (resultDiv) resultDiv.style.display = 'block';
+          if (btn) { btn.disabled = false; btn.textContent = '🖼 Regenerate'; }
+
+          addLog('Thumbnail generated for "' + title + '"', 'success');
+          showToast('Thumbnail ready!', 'success');
+
+        } catch(e) {
+          if (loadingDiv) loadingDiv.style.display = 'none';
+          if (btn) { btn.disabled = false; }
+          addLog('Thumbnail generation failed: ' + e.message, 'error');
+          showToast('Thumbnail failed: ' + e.message, 'error');
+        }
+      }
+
+      // ===== DOWNLOAD THUMBNAIL =====
+      function downloadThumbnail(cardId) {
+        var item = bulkQueue.find(function(i) { return i.id === cardId; });
+        if (!item || !item.thumbnailUrl) { showToast('No thumbnail to download.', 'warning'); return; }
+
+        var a = document.createElement('a');
+        a.href = item.thumbnailUrl;
+        var safeName = (item.title || item.file.name || 'thumbnail').replace(/[^a-z0-9]/gi, '_').substring(0, 40);
+        a.download = safeName + '_thumbnail.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        addLog('Thumbnail downloaded for "' + (item.title || item.file.name) + '"', 'success');
       }
 
       // ===== ACTION BAR BUTTONS =====
@@ -1537,13 +1715,17 @@
           addLog('AI metadata ready: ' + item.title.substring(0, 40), 'success');
           showToast('AI metadata generated for ' + item.file.name, 'success');
 
+          // Auto-trigger thumbnail generation
+          addLog('Auto-generating thumbnail...', 'info');
+          renderBulkGrid();
+          generateThumbnail(id);
+
         } catch (e) {
           item.status = 'error';
           addLog('AI error: ' + e.message, 'error');
           showToast('AI generation failed: ' + e.message, 'error');
+          renderBulkGrid();
         }
-
-        renderBulkGrid();
       }
 
       // ===== AUTO-ADD LINKS (CHANGE 2 — fixed) =====
