@@ -1251,7 +1251,8 @@
             videoId: '',
             thumbnailUrl: '',
             thumbnailMime: '',
-            thumbnailPrompt: ''
+            thumbnailPrompt: '',
+            isShort: false
           };
 
           if (isAutoSchedule()) {
@@ -1360,6 +1361,9 @@
         var thumbResultDisplay = item.thumbnailUrl ? 'block' : 'none';
         var thumbBtnText = item.thumbnailUrl ? '🖼 Regenerate' : '🖼 Generate Thumbnail';
 
+        // Short badge indicator
+        var shortBadgeHTML = item.isShort ? '<span style="display:inline-block;background:rgba(255,0,0,0.15);color:#ff0000;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;">SHORT</span>' : '';
+
         card.innerHTML =
           '<div class="flex-shrink-0" style="width:180px">' +
             '<video src="' + item.objectUrl + '" style="width:180px;height:102px;object-fit:contain;background:#000;border-radius:8px;display:block;" preload="metadata" controls></video>' +
@@ -1389,7 +1393,7 @@
             /* AI Thumbnail Section */
             '<div id="thumb-section-' + item.id + '" style="margin-top:12px;border-top:1px solid #2a2a2a;padding-top:12px;">' +
               '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
-                '<span style="color:#aaa;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">AI Thumbnail</span>' +
+                '<span style="color:#aaa;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">AI Thumbnail' + shortBadgeHTML + '</span>' +
                 '<button class="btn-thumb-generate thumb-gen-btn" id="thumb-btn-' + item.id + '" data-id="' + item.id + '">' + thumbBtnText + '</button>' +
               '</div>' +
               '<div id="thumb-result-' + item.id + '" style="display:' + thumbResultDisplay + ';">' +
@@ -1468,7 +1472,7 @@
         renderBulkGrid();
       }
 
-      // ===== AI THUMBNAIL GENERATION (gemini-3.1-flash-image via generateContent) =====
+      // ===== AI THUMBNAIL GENERATION (gemini-3.1-flash-image with real frame context) =====
       async function generateThumbnail(cardId) {
         var item = bulkQueue.find(function(i) { return i.id === cardId; });
         if (!item) return;
@@ -1484,38 +1488,72 @@
           return;
         }
 
-        // Build prompt from video metadata
-        var title = item.title || item.file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-        var tags = item.tags ? item.tags.split(',').slice(0, 5).map(function(t) { return t.trim(); }).join(', ') : '';
-        var descSnippet = (item.desc || '').replace(/\n/g, ' ').replace(/#\w+/g, '').trim().substring(0, 120);
-        var playlist = item.playlist || '';
-
-        var prompt = 'Generate a YouTube video thumbnail image. '
-          + 'Bold eye-catching title text overlay: "' + title + '". '
-          + (descSnippet ? 'Video content: ' + descSnippet + '. ' : '')
-          + (tags ? 'Topics: ' + tags + '. ' : '')
-          + (playlist ? 'Category: ' + playlist + '. ' : '')
-          + 'Style: vibrant colors, high contrast, cinematic lighting, dramatic composition, '
-          + 'professional YouTube thumbnail, 16:9 widescreen format, sharp focus, studio quality, '
-          + 'bold readable text, engaging and clickable design.';
-
         if (btn) btn.disabled = true;
         if (resultDiv) resultDiv.style.display = 'none';
         if (loadingDiv) loadingDiv.style.display = 'block';
 
-        addLog('Generating thumbnail via gemini-3.1-flash-image...', 'info');
-        addLog('Prompt: ' + prompt.substring(0, 100) + '...', 'info');
+        // Detect if Short by video duration
+        var isShort = false;
+        try {
+          var tempVideo = document.createElement('video');
+          tempVideo.src = item.objectUrl;
+          await new Promise(function(resolve) {
+            tempVideo.onloadedmetadata = resolve;
+            tempVideo.onerror = resolve;
+            setTimeout(resolve, 3000);
+          });
+          isShort = tempVideo.duration > 0 && tempVideo.duration <= 65;
+          addLog('Video duration: ' + Math.round(tempVideo.duration) + 's \u2014 ' + (isShort ? 'SHORT (\u2264 60s)' : 'Regular video'), 'info');
+        } catch(e) {
+          addLog('Could not detect duration: ' + e.message, 'warning');
+        }
+
+        // Build metadata parts
+        var title = item.title || item.file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+        var tags = item.tags ? item.tags.split(',').slice(0, 5).map(function(t) { return t.trim(); }).join(', ') : '';
+        var descSnippet = (item.desc || '').replace(/\n/g, ' ').replace(/#\w+/g, '').trim().substring(0, 150);
+        var playlist = item.playlist || '';
+
+        var aspectNote = isShort
+          ? '9:16 vertical portrait format (1080x1920), optimized for YouTube Shorts feed'
+          : '16:9 widescreen landscape format, optimized for YouTube video thumbnail';
+
+        var prompt = 'You are a professional YouTube thumbnail designer. I am giving you real frames from a video. '
+          + 'Based on what you SEE in these frames, generate a compelling YouTube thumbnail image.\n\n'
+          + 'Video title: "' + title + '"\n'
+          + (descSnippet ? 'Description: ' + descSnippet + '\n' : '')
+          + (tags ? 'Tags: ' + tags + '\n' : '')
+          + (playlist ? 'Playlist/Category: ' + playlist + '\n' : '')
+          + '\nThumbnail requirements:\n'
+          + '- Format: ' + aspectNote + '\n'
+          + '- Bold eye-catching title text overlay: "' + title + '"\n'
+          + '- Use the actual visual content from the video frames as the background\n'
+          + '- Vibrant colors, high contrast, cinematic lighting\n'
+          + '- Dramatic composition, sharp focus, professional quality\n'
+          + '- Make it highly clickable and engaging\n'
+          + (isShort ? '- Vertical composition, face/subject centered, text at top or bottom\n' : '- Widescreen composition, rule of thirds\n');
+
+        addLog('Extracting frames for thumbnail context...', 'info');
 
         try {
+          // Extract 5 evenly-spaced frames from the video
+          var frames = await extractFramesFromVideo(item.file, 5);
+          addLog('Sending ' + frames.length + ' frames + prompt to gemini-3.1-flash-image...', 'info');
+
+          // Build parts array: text prompt first, then frame images
+          var parts = [{ text: prompt }];
+          frames.forEach(function(dataUrl, idx) {
+            var base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
+            parts.push({ inline_data: { mime_type: 'image/jpeg', data: base64 } });
+          });
+
           var res = await fetch(
             'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=' + apiKey,
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                contents: [{
-                  parts: [{ text: prompt }]
-                }],
+                contents: [{ parts: parts }],
                 generationConfig: {
                   responseModalities: ['IMAGE', 'TEXT']
                 }
@@ -1530,35 +1568,36 @@
 
           var data = await res.json();
 
-          // Find the image part in the response
+          // Find image part in response
           var imageB64 = null;
           var mimeType = 'image/png';
           var candidates = data.candidates || [];
           for (var ci = 0; ci < candidates.length; ci++) {
-            var parts = (candidates[ci].content && candidates[ci].content.parts) || [];
-            for (var pi = 0; pi < parts.length; pi++) {
-              if (parts[pi].inlineData && parts[pi].inlineData.data) {
-                imageB64 = parts[pi].inlineData.data;
-                mimeType = parts[pi].inlineData.mimeType || 'image/png';
+            var responseParts = (candidates[ci].content && candidates[ci].content.parts) || [];
+            for (var pi = 0; pi < responseParts.length; pi++) {
+              if (responseParts[pi].inlineData && responseParts[pi].inlineData.data) {
+                imageB64 = responseParts[pi].inlineData.data;
+                mimeType = responseParts[pi].inlineData.mimeType || 'image/png';
                 break;
               }
             }
             if (imageB64) break;
           }
 
-          if (!imageB64) throw new Error('No image returned from model — check your API key has image generation enabled');
+          if (!imageB64) throw new Error('No image returned \u2014 check your API key has image generation access');
 
           var dataUrl = 'data:' + mimeType + ';base64,' + imageB64;
           if (img) img.src = dataUrl;
           item.thumbnailUrl = dataUrl;
           item.thumbnailMime = mimeType;
+          item.isShort = isShort;
 
           if (loadingDiv) loadingDiv.style.display = 'none';
           if (resultDiv) resultDiv.style.display = 'block';
-          if (btn) { btn.disabled = false; btn.textContent = '🖼 Regenerate'; }
+          if (btn) { btn.disabled = false; btn.textContent = '\uD83D\uDDBC Regenerate'; }
 
-          addLog('Thumbnail generated for "' + title + '"', 'success');
-          showToast('Thumbnail ready!', 'success');
+          addLog('Thumbnail generated' + (isShort ? ' (Shorts vertical format)' : ' (16:9 landscape)') + ' for "' + title + '"', 'success');
+          showToast('Thumbnail ready!' + (isShort ? ' (Shorts format)' : ''), 'success');
 
         } catch(e) {
           if (loadingDiv) loadingDiv.style.display = 'none';
