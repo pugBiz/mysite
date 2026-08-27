@@ -71,10 +71,6 @@
       @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
       @keyframes fadeInUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
       @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-      @keyframes thumbProgress {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(250%); }
-      }
 
       .card-enter { animation: fadeInUp 0.35s ease-out; }
       .pulse-anim { animation: pulse 1.5s infinite; }
@@ -281,25 +277,44 @@
         border-color: #ff4444;
       }
 
-      .btn-thumb-generate {
-        padding: 5px 12px;
-        background: #1a1a2a;
-        border: 1px solid #3ea6ff;
-        border-radius: 6px;
-        color: #3ea6ff;
-        font-size: 11px;
+      .frame-grid-cell {
+        cursor: pointer;
+        border-radius: 5px;
+        overflow: hidden;
+        border: 2px solid #333;
+        transition: border-color 0.15s;
+      }
+      .frame-grid-cell:hover {
+        border-color: #3ea6ff;
+      }
+      .frame-grid-cell.selected {
+        border-color: #2ba640;
+      }
+      .frame-grid-cell img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+      }
+
+      .btn-frames {
+        padding: 7px 14px;
+        background: #1a2a1a;
+        border: 1px solid #2ba640;
+        border-radius: 7px;
+        color: #2ba640;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s;
-        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
       }
-      .btn-thumb-generate:hover {
-        background: #3ea6ff;
+      .btn-frames:hover {
+        background: #2ba640;
         color: #fff;
-      }
-      .btn-thumb-generate:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
       }
 
       .btn-thumb-download {
@@ -316,22 +331,6 @@
       }
       .btn-thumb-download:hover {
         background: #238a35;
-      }
-
-      .btn-thumb-regen {
-        padding: 5px 12px;
-        background: #2a2a2a;
-        border: 1px solid #444;
-        border-radius: 6px;
-        color: #aaa;
-        font-size: 11px;
-        cursor: pointer;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.2s;
-      }
-      .btn-thumb-regen:hover {
-        border-color: #666;
-        color: #fff;
       }
 
       @media (max-width: 767px) {
@@ -378,184 +377,182 @@
             <option data-id="22" value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
             <option data-id="23" value="gemini-2.0-flash">gemini-2.0-flash</option>
             <option data-id="24" value="gemini-1.5-pro">gemini-1.5-pro</option>
-            <option data-id="25" value="gemini-3.1-flash-image" disabled style="color:#555;font-style:italic;">── Image Models ──</option>
-            <option data-id="26" value="gemini-3.1-flash-image">gemini-3.1-flash-image (thumbnails)</option>
           </select>
         </div>
       </div>
     </div>
 
     <!-- Client ID Modal -->
-    <div data-id="27" id="modal-clientid-h8j2" class="modal-overlay">
-      <div data-id="28" class="modal-card">
-        <div data-id="29" class="flex justify-between items-center mb-4">
-          <h3 data-id="30" class="text-base font-semibold">Google OAuth Client ID</h3>
-          <button data-id="31" id="close-clientid-modal-c9p5" class="text-dimmed hover:text-white"><i data-id="32" data-lucide="x" class="w-5 h-5"></i></button>
+    <div data-id="25" id="modal-clientid-h8j2" class="modal-overlay">
+      <div data-id="26" class="modal-card">
+        <div data-id="27" class="flex justify-between items-center mb-4">
+          <h3 data-id="28" class="text-base font-semibold">Google OAuth Client ID</h3>
+          <button data-id="29" id="close-clientid-modal-c9p5" class="text-dimmed hover:text-white"><i data-id="30" data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-        <div data-id="33" class="mb-3">
-          <label data-id="34" class="block text-xs text-muted mb-1">Client ID</label>
-          <input data-id="35" type="text" id="clientid-input-r3t7" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" />
+        <div data-id="31" class="mb-3">
+          <label data-id="32" class="block text-xs text-muted mb-1">Client ID</label>
+          <input data-id="33" type="text" id="clientid-input-r3t7" placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" />
         </div>
-        <div data-id="36" class="bg-surface rounded-lg p-3 mb-5 text-xs text-muted leading-relaxed">
-          <p data-id="37" class="font-semibold text-blue mb-1">Setup Instructions</p>
-          <ol data-id="38" class="list-decimal list-inside space-y-1">
-            <li data-id="39">Go to <span data-id="40" class="text-blue">console.cloud.google.com</span></li>
-            <li data-id="41">Navigate to APIs & Services → Credentials</li>
-            <li data-id="42">Create OAuth 2.0 Client ID (Web application)</li>
-            <li data-id="43">Add your page URL as an authorized redirect URI</li>
-            <li data-id="44">Enable YouTube Data API v3 in your project</li>
+        <div data-id="34" class="bg-surface rounded-lg p-3 mb-5 text-xs text-muted leading-relaxed">
+          <p data-id="35" class="font-semibold text-blue mb-1">Setup Instructions</p>
+          <ol data-id="36" class="list-decimal list-inside space-y-1">
+            <li data-id="37">Go to <span data-id="38" class="text-blue">console.cloud.google.com</span></li>
+            <li data-id="39">Navigate to APIs & Services → Credentials</li>
+            <li data-id="40">Create OAuth 2.0 Client ID (Web application)</li>
+            <li data-id="41">Add your page URL as an authorized redirect URI</li>
+            <li data-id="42">Enable YouTube Data API v3 in your project</li>
           </ol>
         </div>
-        <button data-id="45" id="save-clientid-btn-m6k8" class="btn btn-red w-full justify-center">Save Client ID</button>
+        <button data-id="43" id="save-clientid-btn-m6k8" class="btn btn-red w-full justify-center">Save Client ID</button>
       </div>
     </div>
 
     <!-- Header -->
-    <header data-id="46" id="header-top-a1b2" class="fixed top-0 left-0 right-0 bg-surface border-b border-border z-50 h-14">
-      <div data-id="47" class="flex items-center justify-between h-full px-4 md:px-6">
-        <div data-id="48" class="flex items-center gap-3">
-          <div data-id="49" class="flex items-center gap-1.5">
-            <svg data-id="50" width="28" height="20" viewBox="0 0 28 20" fill="none">
-              <rect data-id="51" width="28" height="20" rx="4" fill="#FF0000"/>
-              <polygon data-id="52" points="11,5 11,15 20,10" fill="#fff"/>
+    <header data-id="44" id="header-top-a1b2" class="fixed top-0 left-0 right-0 bg-surface border-b border-border z-50 h-14">
+      <div data-id="45" class="flex items-center justify-between h-full px-4 md:px-6">
+        <div data-id="46" class="flex items-center gap-3">
+          <div data-id="47" class="flex items-center gap-1.5">
+            <svg data-id="48" width="28" height="20" viewBox="0 0 28 20" fill="none">
+              <rect data-id="49" width="28" height="20" rx="4" fill="#FF0000"/>
+              <polygon data-id="50" points="11,5 11,15 20,10" fill="#fff"/>
             </svg>
-            <span data-id="53" class="font-bold text-sm md:text-base tracking-tight">Bulk Upload Manager</span>
+            <span data-id="51" class="font-bold text-sm md:text-base tracking-tight">Bulk Upload Manager</span>
           </div>
         </div>
-        <div data-id="54" class="flex items-center gap-2">
+        <div data-id="52" class="flex items-center gap-2">
           <!-- Mobile menu -->
-          <button data-id="55" id="mobile-menu-btn-x3y4" class="md:hidden p-2 text-muted hover:text-white"><i data-id="56" data-lucide="menu" class="w-5 h-5"></i></button>
+          <button data-id="53" id="mobile-menu-btn-x3y4" class="md:hidden p-2 text-muted hover:text-white"><i data-id="54" data-lucide="menu" class="w-5 h-5"></i></button>
           <!-- Desktop buttons -->
-          <div data-id="57" class="hidden md:flex items-center gap-2">
-            <button data-id="58" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="59" data-lucide="key" class="w-3.5 h-3.5"></i> <span data-id="60" id="gemini-btn-label">Gemini Key</span></button>
-            <div data-id="61" class="relative">
-              <button data-id="62" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="63" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
-              <div data-id="64" id="channel-dropdown-h8i9" class="channel-dropdown">
-                <button data-id="65" id="switch-account-btn-j1k2">Switch Account</button>
-                <button data-id="66" id="disconnect-btn-l3m4">Disconnect</button>
+          <div data-id="55" class="hidden md:flex items-center gap-2">
+            <button data-id="56" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="57" data-lucide="key" class="w-3.5 h-3.5"></i> <span data-id="58" id="gemini-btn-label">Gemini Key</span></button>
+            <div data-id="59" class="relative">
+              <button data-id="60" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="61" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
+              <div data-id="62" id="channel-dropdown-h8i9" class="channel-dropdown">
+                <button data-id="63" id="switch-account-btn-j1k2">Switch Account</button>
+                <button data-id="64" id="disconnect-btn-l3m4">Disconnect</button>
               </div>
             </div>
-            <button data-id="67" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="68" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
+            <button data-id="65" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="66" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
           </div>
         </div>
       </div>
     </header>
 
     <!-- Mobile Menu -->
-    <nav data-id="69" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
-      <div data-id="70" class="flex justify-between items-center mb-6">
-        <span data-id="71" class="font-bold text-base">Menu</span>
-        <button data-id="72" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="73" data-lucide="x" class="w-6 h-6"></i></button>
+    <nav data-id="67" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
+      <div data-id="68" class="flex justify-between items-center mb-6">
+        <span data-id="69" class="font-bold text-base">Menu</span>
+        <button data-id="70" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="71" data-lucide="x" class="w-6 h-6"></i></button>
       </div>
-      <div data-id="74" class="flex flex-col gap-3">
-        <button data-id="75" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="76" data-lucide="key" class="w-4 h-4"></i> <span data-id="77" id="mob-gemini-btn-label">Gemini Key</span></button>
-        <button data-id="78" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="79" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
-        <button data-id="80" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="81" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
-        <button data-id="82" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
+      <div data-id="72" class="flex flex-col gap-3">
+        <button data-id="73" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="74" data-lucide="key" class="w-4 h-4"></i> <span data-id="75" id="mob-gemini-btn-label">Gemini Key</span></button>
+        <button data-id="76" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="77" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
+        <button data-id="78" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="79" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
+        <button data-id="80" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <main data-id="83" class="pt-14 min-h-screen">
-      <div data-id="84" class="main-layout flex" style="min-height: calc(100vh - 56px);">
+    <main data-id="81" class="pt-14 min-h-screen">
+      <div data-id="82" class="main-layout flex" style="min-height: calc(100vh - 56px);">
 
         <!-- Sidebar Settings -->
-        <aside data-id="85" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
+        <aside data-id="83" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
 
-          <div data-id="86" class="sidebar-section">
-            <h4 data-id="87" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="88" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
-            <div data-id="89" class="text-xs space-y-1.5">
-              <div data-id="90" class="flex justify-between"><span data-id="91" class="text-dimmed">Model:</span><span data-id="92" id="sidebar-model-d1e2" class="text-muted">gemini-3.5-flash</span></div>
-              <div data-id="93" class="flex justify-between"><span data-id="94" class="text-dimmed">API Keys:</span><span data-id="95" id="sidebar-key-status-f3g4" class="text-muted">0 keys</span></div>
+          <div data-id="84" class="sidebar-section">
+            <h4 data-id="85" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="86" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
+            <div data-id="87" class="text-xs space-y-1.5">
+              <div data-id="88" class="flex justify-between"><span data-id="89" class="text-dimmed">Model:</span><span data-id="90" id="sidebar-model-d1e2" class="text-muted">gemini-3.5-flash</span></div>
+              <div data-id="91" class="flex justify-between"><span data-id="92" class="text-dimmed">API Keys:</span><span data-id="93" id="sidebar-key-status-f3g4" class="text-muted">0 keys</span></div>
             </div>
           </div>
 
-          <div data-id="96" class="sidebar-section">
-            <h4 data-id="97" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="98" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
-            <div data-id="99" class="mb-3">
-              <label data-id="100" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
-              <div data-id="101" class="radio-group" id="privacy-radio-group-h5i6">
-                <label data-id="102"><input data-id="103" type="radio" name="privacy" value="public" /><span data-id="104">Public</span></label>
-                <label data-id="105"><input data-id="106" type="radio" name="privacy" value="unlisted" checked /><span data-id="107">Unlisted</span></label>
-                <label data-id="108"><input data-id="109" type="radio" name="privacy" value="private" /><span data-id="110">Private</span></label>
+          <div data-id="94" class="sidebar-section">
+            <h4 data-id="95" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="96" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
+            <div data-id="97" class="mb-3">
+              <label data-id="98" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
+              <div data-id="99" class="radio-group" id="privacy-radio-group-h5i6">
+                <label data-id="100"><input data-id="101" type="radio" name="privacy" value="public" /><span data-id="102">Public</span></label>
+                <label data-id="103"><input data-id="104" type="radio" name="privacy" value="unlisted" checked /><span data-id="105">Unlisted</span></label>
+                <label data-id="106"><input data-id="107" type="radio" name="privacy" value="private" /><span data-id="108">Private</span></label>
               </div>
             </div>
-            <div data-id="111" class="mb-3 flex items-center justify-between">
-              <label data-id="112" class="text-xs text-dimmed">Made for Kids</label>
-              <label data-id="113" class="relative inline-flex items-center cursor-pointer">
-                <input data-id="114" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
-                <div data-id="115" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+            <div data-id="109" class="mb-3 flex items-center justify-between">
+              <label data-id="110" class="text-xs text-dimmed">Made for Kids</label>
+              <label data-id="111" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="112" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
+                <div data-id="113" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
             </div>
-            <div data-id="116">
-              <label data-id="117" class="block text-xs text-dimmed mb-1.5">Default Language</label>
-              <select data-id="118" id="default-lang-l9m0">
-                <option data-id="119" value="en">English</option>
-                <option data-id="120" value="es">Spanish</option>
-                <option data-id="121" value="fr">French</option>
-                <option data-id="122" value="de">German</option>
-                <option data-id="123" value="pt">Portuguese</option>
-                <option data-id="124" value="ja">Japanese</option>
-                <option data-id="125" value="ko">Korean</option>
-                <option data-id="126" value="zh">Chinese</option>
-                <option data-id="127" value="hi">Hindi</option>
-                <option data-id="128" value="ar">Arabic</option>
+            <div data-id="114">
+              <label data-id="115" class="block text-xs text-dimmed mb-1.5">Default Language</label>
+              <select data-id="116" id="default-lang-l9m0">
+                <option data-id="117" value="en">English</option>
+                <option data-id="118" value="es">Spanish</option>
+                <option data-id="119" value="fr">French</option>
+                <option data-id="120" value="de">German</option>
+                <option data-id="121" value="pt">Portuguese</option>
+                <option data-id="122" value="ja">Japanese</option>
+                <option data-id="123" value="ko">Korean</option>
+                <option data-id="124" value="zh">Chinese</option>
+                <option data-id="125" value="hi">Hindi</option>
+                <option data-id="126" value="ar">Arabic</option>
               </select>
             </div>
           </div>
 
-          <div data-id="129" class="sidebar-section">
-            <h4 data-id="130" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="131" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
-            <div data-id="132" class="flex items-center justify-between mb-3">
-              <label data-id="133" class="text-xs text-dimmed">Auto-schedule uploads</label>
-              <label data-id="134" class="relative inline-flex items-center cursor-pointer">
-                <input data-id="135" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
-                <div data-id="136" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+          <div data-id="127" class="sidebar-section">
+            <h4 data-id="128" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="129" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
+            <div data-id="130" class="flex items-center justify-between mb-3">
+              <label data-id="131" class="text-xs text-dimmed">Auto-schedule uploads</label>
+              <label data-id="132" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="133" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
+                <div data-id="134" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
             </div>
-            <div data-id="137" id="schedule-options-p3q4" class="hidden">
-              <label data-id="138" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
-              <div data-id="139" class="flex flex-wrap gap-1.5 mb-2">
-                <button data-id="140" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
-                <button data-id="141" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
-                <button data-id="142" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
-                <button data-id="143" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="144" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
+            <div data-id="135" id="schedule-options-p3q4" class="hidden">
+              <label data-id="136" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
+              <div data-id="137" class="flex flex-wrap gap-1.5 mb-2">
+                <button data-id="138" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
+                <button data-id="139" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
+                <button data-id="140" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
+                <button data-id="141" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="142" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
               </div>
             </div>
           </div>
 
-          <div data-id="145" class="sidebar-section">
-            <h4 data-id="146" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="147" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
-            <div data-id="148" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
-              <div data-id="149" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
+          <div data-id="143" class="sidebar-section">
+            <h4 data-id="144" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="145" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
+            <div data-id="146" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
+              <div data-id="147" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
             </div>
           </div>
         </aside>
 
         <!-- Bulk Upload Work Area -->
-        <section data-id="150" class="flex-1 p-4 md:p-6 overflow-y-auto">
+        <section data-id="148" class="flex-1 p-4 md:p-6 overflow-y-auto">
           <!-- Drop Zone -->
-          <div data-id="151" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
-            <input data-id="152" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
-            <div data-id="153" class="text-4xl mb-3">🎬</div>
-            <p data-id="154" class="text-base font-semibold mb-1">Drop multiple video files here</p>
-            <p data-id="155" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
+          <div data-id="149" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
+            <input data-id="150" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
+            <div data-id="151" class="text-4xl mb-3">🎬</div>
+            <p data-id="152" class="text-base font-semibold mb-1">Drop multiple video files here</p>
+            <p data-id="153" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
           </div>
 
           <!-- Action Bar -->
-          <div data-id="156" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
-            <span data-id="157" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
-            <div data-id="158" class="flex-1"></div>
-            <button data-id="159" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="160" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
-            <button data-id="161" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="162" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
-            <button data-id="163" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="164" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
+          <div data-id="154" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
+            <span data-id="155" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
+            <div data-id="156" class="flex-1"></div>
+            <button data-id="157" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="158" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
+            <button data-id="159" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="160" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
+            <button data-id="161" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="162" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
           </div>
 
           <!-- Video Cards Grid -->
-          <div data-id="165" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
-            <div data-id="166" id="empty-state-l5m6" class="text-center py-16">
-              <div data-id="167" class="text-dimmed mb-2"><i data-id="168" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
-              <p data-id="169" class="text-muted text-sm">Drop video files above to get started</p>
+          <div data-id="163" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
+            <div data-id="164" id="empty-state-l5m6" class="text-center py-16">
+              <div data-id="165" class="text-dimmed mb-2"><i data-id="166" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
+              <p data-id="167" class="text-muted text-sm">Drop video files above to get started</p>
             </div>
           </div>
         </section>
@@ -563,7 +560,7 @@
     </main>
 
     <!-- Footer -->
-    <footer data-id="170" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
+    <footer data-id="168" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
       Made by Copilot
     </footer>
 
@@ -972,14 +969,6 @@
       // Model change in modal
       $('gemini-model-select-q7w4').addEventListener('change', function() {
         var model = this.value;
-        // Don't save image-only model as the text model
-        if (model === 'gemini-3.1-flash-image') {
-          showToast('This model is for thumbnail generation only. Select a text model for metadata.', 'warning');
-          // Reset to saved model
-          var savedModel = ls('gemini_model') || 'gemini-3.5-flash';
-          this.value = savedModel;
-          return;
-        }
         ls('gemini_model', model);
         $('sidebar-model-d1e2').textContent = model;
         addLog('Gemini model changed to ' + model, 'success');
@@ -1251,7 +1240,7 @@
             videoId: '',
             thumbnailUrl: '',
             thumbnailMime: '',
-            thumbnailPrompt: '',
+            frames: null,
             isShort: false
           };
 
@@ -1342,6 +1331,9 @@
         // Auto-Add Links button
         actionButtons += '<button class="btn-links auto-links-btn" data-id="' + item.id + '"><i data-lucide="link" class="w-3 h-3"></i> Links</button>';
 
+        // Extract Frames button
+        actionButtons += '<button class="btn-frames extract-frames-btn" data-id="' + item.id + '"><i data-lucide="film" class="w-3 h-3"></i> Frames</button>';
+
         if ((item.status === 'done' || item.status === 'idle') && state.token) {
           actionButtons += '<button class="btn btn-green text-[11px] py-1.5 upload-single-btn" data-id="' + item.id + '"><i data-lucide="upload" class="w-3 h-3"></i> Upload</button>';
         }
@@ -1357,12 +1349,32 @@
           progressHTML = '<div class="progress-bar"><div class="progress-bar-fill" style="width:' + item.uploadProgress + '%"></div></div>';
         }
 
-        // Thumbnail result HTML — show if already generated
-        var thumbResultDisplay = item.thumbnailUrl ? 'block' : 'none';
-        var thumbBtnText = item.thumbnailUrl ? '🖼 Regenerate' : '🖼 Generate Thumbnail';
+        // Frame picker section — only shown when frames exist
+        var framePickerHTML = '';
+        if (item.frames && item.frames.length) {
+          framePickerHTML = '<div style="margin-top:12px;border-top:1px solid #2a2a2a;padding-top:12px;">'
+            + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">'
+            + '<span style="color:#aaa;font-size:11px;font-weight:600;">\uD83C\uDFA5 THUMBNAIL — Pick a Frame</span>'
+            + (item.thumbnailUrl
+                ? '<button class="btn-thumb-download thumb-download-btn" data-id="' + item.id + '"><i data-lucide="download" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> Download Selected</button>'
+                : '<span style="color:#555;font-size:10px;">Click a frame to select it as thumbnail</span>')
+            + '</div>';
 
-        // Short badge indicator
-        var shortBadgeHTML = item.isShort ? '<span style="display:inline-block;background:rgba(255,0,0,0.15);color:#ff0000;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;">SHORT</span>' : '';
+          // Selected thumbnail preview
+          if (item.thumbnailUrl) {
+            framePickerHTML += '<img src="' + item.thumbnailUrl + '" alt="Selected thumbnail" style="width:100%;max-width:280px;height:auto;border-radius:6px;border:2px solid #2ba640;display:block;margin-bottom:8px;" />';
+          }
+
+          // Frame grid
+          framePickerHTML += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">';
+          item.frames.forEach(function(frameUrl, idx) {
+            var isSelected = item.thumbnailUrl === frameUrl;
+            framePickerHTML += '<div class="frame-grid-cell' + (isSelected ? ' selected' : '') + '" data-card-id="' + item.id + '" data-frame-idx="' + idx + '">'
+              + '<img src="' + frameUrl + '" alt="Frame ' + (idx + 1) + '" />'
+              + '</div>';
+          });
+          framePickerHTML += '</div></div>';
+        }
 
         card.innerHTML =
           '<div class="flex-shrink-0" style="width:180px">' +
@@ -1390,26 +1402,7 @@
             progressHTML +
             '<div class="flex flex-wrap items-center gap-2 mt-2.5">' + actionButtons + '</div>' +
             '<div id="links-result-' + item.id + '" class="links-result-panel"></div>' +
-            /* AI Thumbnail Section */
-            '<div id="thumb-section-' + item.id + '" style="margin-top:12px;border-top:1px solid #2a2a2a;padding-top:12px;">' +
-              '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
-                '<span style="color:#aaa;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">AI Thumbnail' + shortBadgeHTML + '</span>' +
-                '<button class="btn-thumb-generate thumb-gen-btn" id="thumb-btn-' + item.id + '" data-id="' + item.id + '">' + thumbBtnText + '</button>' +
-              '</div>' +
-              '<div id="thumb-result-' + item.id + '" style="display:' + thumbResultDisplay + ';">' +
-                '<img id="thumb-img-' + item.id + '" src="' + (item.thumbnailUrl || '') + '" alt="AI Thumbnail" style="width:100%;max-width:320px;height:auto;border-radius:8px;display:block;margin-bottom:8px;border:1px solid #333;" />' +
-                '<div style="display:flex;gap:8px;">' +
-                  '<button class="btn-thumb-download thumb-download-btn" data-id="' + item.id + '"><i data-lucide="download" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> Download</button>' +
-                  '<button class="btn-thumb-regen thumb-regen-btn" data-id="' + item.id + '"><i data-lucide="refresh-cw" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> Regenerate</button>' +
-                '</div>' +
-              '</div>' +
-              '<div id="thumb-loading-' + item.id + '" style="display:none;padding:20px;text-align:center;">' +
-                '<div style="color:#3ea6ff;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;"><i data-lucide="loader" class="w-4 h-4"></i> Generating thumbnail with AI...</div>' +
-                '<div style="margin-top:8px;height:3px;background:#1a1a2a;border-radius:2px;overflow:hidden;">' +
-                  '<div style="height:100%;background:#3ea6ff;animation:thumbProgress 2s ease-in-out infinite;width:60%;border-radius:2px;"></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
+            framePickerHTML +
           '</div>';
 
         // Attach event listeners
@@ -1426,15 +1419,21 @@
           var autoLinksBtn = card.querySelector('.auto-links-btn');
           if (autoLinksBtn) autoLinksBtn.addEventListener('click', function() { autoAddLinks(item.id); });
 
-          // Thumbnail buttons
-          var thumbGenBtn = card.querySelector('.thumb-gen-btn');
-          if (thumbGenBtn) thumbGenBtn.addEventListener('click', function() { generateThumbnail(item.id); });
+          var extractFramesBtn = card.querySelector('.extract-frames-btn');
+          if (extractFramesBtn) extractFramesBtn.addEventListener('click', function() { extractFramesForCard(item.id); });
 
+          // Frame picker click listeners
+          card.querySelectorAll('.frame-grid-cell').forEach(function(cell) {
+            cell.addEventListener('click', function() {
+              var cardId = parseInt(cell.dataset.cardId, 10);
+              var frameIdx = parseInt(cell.dataset.frameIdx, 10);
+              selectFrame(cardId, frameIdx);
+            });
+          });
+
+          // Thumbnail download button
           var thumbDownloadBtn = card.querySelector('.thumb-download-btn');
           if (thumbDownloadBtn) thumbDownloadBtn.addEventListener('click', function() { downloadThumbnail(item.id); });
-
-          var thumbRegenBtn = card.querySelector('.thumb-regen-btn');
-          if (thumbRegenBtn) thumbRegenBtn.addEventListener('click', function() { generateThumbnail(item.id); });
 
           // Field change listeners
           card.querySelectorAll('[data-field]').forEach(function(el) {
@@ -1472,154 +1471,49 @@
         renderBulkGrid();
       }
 
-      // ===== AI THUMBNAIL GENERATION (gemini-3.1-flash-image with real frame context) =====
-      async function generateThumbnail(cardId) {
+      // ===== FRAME PICKER =====
+      function selectFrame(cardId, frameIndex) {
         var item = bulkQueue.find(function(i) { return i.id === cardId; });
-        if (!item) return;
-
-        var btn = document.getElementById('thumb-btn-' + cardId);
-        var resultDiv = document.getElementById('thumb-result-' + cardId);
-        var loadingDiv = document.getElementById('thumb-loading-' + cardId);
-        var img = document.getElementById('thumb-img-' + cardId);
-
-        var apiKey = getActiveGeminiKey();
-        if (!apiKey) {
-          showToast('Please add a Gemini API key first.', 'error');
-          return;
-        }
-
-        if (btn) btn.disabled = true;
-        if (resultDiv) resultDiv.style.display = 'none';
-        if (loadingDiv) loadingDiv.style.display = 'block';
-
-        // Detect if Short by video duration
-        var isShort = false;
-        try {
-          var tempVideo = document.createElement('video');
-          tempVideo.src = item.objectUrl;
-          await new Promise(function(resolve) {
-            tempVideo.onloadedmetadata = resolve;
-            tempVideo.onerror = resolve;
-            setTimeout(resolve, 3000);
-          });
-          isShort = tempVideo.duration > 0 && tempVideo.duration <= 65;
-          addLog('Video duration: ' + Math.round(tempVideo.duration) + 's \u2014 ' + (isShort ? 'SHORT (\u2264 60s)' : 'Regular video'), 'info');
-        } catch(e) {
-          addLog('Could not detect duration: ' + e.message, 'warning');
-        }
-
-        // Build metadata parts
-        var title = item.title || item.file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-        var tags = item.tags ? item.tags.split(',').slice(0, 5).map(function(t) { return t.trim(); }).join(', ') : '';
-        var descSnippet = (item.desc || '').replace(/\n/g, ' ').replace(/#\w+/g, '').trim().substring(0, 150);
-        var playlist = item.playlist || '';
-
-        var aspectNote = isShort
-          ? '9:16 vertical portrait format (1080x1920), optimized for YouTube Shorts feed'
-          : '16:9 widescreen landscape format, optimized for YouTube video thumbnail';
-
-        var prompt = 'You are a professional YouTube thumbnail designer. I am giving you real frames from a video. '
-          + 'Based on what you SEE in these frames, generate a compelling YouTube thumbnail image.\n\n'
-          + 'Video title: "' + title + '"\n'
-          + (descSnippet ? 'Description: ' + descSnippet + '\n' : '')
-          + (tags ? 'Tags: ' + tags + '\n' : '')
-          + (playlist ? 'Playlist/Category: ' + playlist + '\n' : '')
-          + '\nThumbnail requirements:\n'
-          + '- Format: ' + aspectNote + '\n'
-          + '- Bold eye-catching title text overlay: "' + title + '"\n'
-          + '- Use the actual visual content from the video frames as the background\n'
-          + '- Vibrant colors, high contrast, cinematic lighting\n'
-          + '- Dramatic composition, sharp focus, professional quality\n'
-          + '- Make it highly clickable and engaging\n'
-          + (isShort ? '- Vertical composition, face/subject centered, text at top or bottom\n' : '- Widescreen composition, rule of thirds\n');
-
-        addLog('Extracting frames for thumbnail context...', 'info');
-
-        try {
-          // Extract 5 evenly-spaced frames from the video
-          var frames = await extractFramesFromVideo(item.file, 5);
-          addLog('Sending ' + frames.length + ' frames + prompt to gemini-3.1-flash-image...', 'info');
-
-          // Build parts array: text prompt first, then frame images
-          var parts = [{ text: prompt }];
-          frames.forEach(function(dataUrl, idx) {
-            var base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
-            parts.push({ inline_data: { mime_type: 'image/jpeg', data: base64 } });
-          });
-
-          var res = await fetch(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=' + apiKey,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: parts }],
-                generationConfig: {
-                  responseModalities: ['IMAGE', 'TEXT']
-                }
-              })
-            }
-          );
-
-          if (!res.ok) {
-            var errData = await res.json().catch(function() { return {}; });
-            throw new Error((errData.error && errData.error.message) ? errData.error.message : 'HTTP ' + res.status);
-          }
-
-          var data = await res.json();
-
-          // Find image part in response
-          var imageB64 = null;
-          var mimeType = 'image/png';
-          var candidates = data.candidates || [];
-          for (var ci = 0; ci < candidates.length; ci++) {
-            var responseParts = (candidates[ci].content && candidates[ci].content.parts) || [];
-            for (var pi = 0; pi < responseParts.length; pi++) {
-              if (responseParts[pi].inlineData && responseParts[pi].inlineData.data) {
-                imageB64 = responseParts[pi].inlineData.data;
-                mimeType = responseParts[pi].inlineData.mimeType || 'image/png';
-                break;
-              }
-            }
-            if (imageB64) break;
-          }
-
-          if (!imageB64) throw new Error('No image returned \u2014 check your API key has image generation access');
-
-          var dataUrl = 'data:' + mimeType + ';base64,' + imageB64;
-          if (img) img.src = dataUrl;
-          item.thumbnailUrl = dataUrl;
-          item.thumbnailMime = mimeType;
-          item.isShort = isShort;
-
-          if (loadingDiv) loadingDiv.style.display = 'none';
-          if (resultDiv) resultDiv.style.display = 'block';
-          if (btn) { btn.disabled = false; btn.textContent = '\uD83D\uDDBC Regenerate'; }
-
-          addLog('Thumbnail generated' + (isShort ? ' (Shorts vertical format)' : ' (16:9 landscape)') + ' for "' + title + '"', 'success');
-          showToast('Thumbnail ready!' + (isShort ? ' (Shorts format)' : ''), 'success');
-
-        } catch(e) {
-          if (loadingDiv) loadingDiv.style.display = 'none';
-          if (btn) { btn.disabled = false; }
-          addLog('Thumbnail failed: ' + e.message, 'error');
-          showToast('Thumbnail failed: ' + e.message, 'error');
-        }
+        if (!item || !item.frames || frameIndex >= item.frames.length) return;
+        item.thumbnailUrl = item.frames[frameIndex];
+        item.thumbnailMime = 'image/jpeg';
+        addLog('Frame ' + (frameIndex + 1) + ' selected as thumbnail for "' + (item.title || item.file.name) + '"', 'success');
+        showToast('Frame ' + (frameIndex + 1) + ' selected as thumbnail!', 'success');
+        renderBulkGrid();
       }
 
       // ===== DOWNLOAD THUMBNAIL =====
       function downloadThumbnail(cardId) {
         var item = bulkQueue.find(function(i) { return i.id === cardId; });
-        if (!item || !item.thumbnailUrl) { showToast('No thumbnail to download.', 'warning'); return; }
-        var ext = (item.thumbnailMime || 'image/png').split('/')[1] || 'png';
+        if (!item || !item.thumbnailUrl) { showToast('No frame selected yet.', 'warning'); return; }
         var a = document.createElement('a');
         a.href = item.thumbnailUrl;
         var safeName = (item.title || item.file.name || 'thumbnail').replace(/[^a-z0-9]/gi, '_').substring(0, 40);
-        a.download = safeName + '_thumbnail.' + ext;
+        a.download = safeName + '_thumbnail.jpg';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        addLog('Thumbnail downloaded for "' + (item.title || item.file.name) + '"', 'success');
+        addLog('Thumbnail frame downloaded for "' + (item.title || item.file.name) + '"', 'success');
+      }
+
+      // ===== EXTRACT FRAMES FOR CARD (manual) =====
+      async function extractFramesForCard(cardId) {
+        var item = bulkQueue.find(function(i) { return i.id === cardId; });
+        if (!item) return;
+        if (item.frames && item.frames.length) {
+          showToast('Frames already extracted. Re-extracting...', 'info');
+        }
+        addLog('Extracting frames from "' + item.file.name + '"...', 'info');
+        try {
+          var frames = await extractFramesFromVideo(item.file, 20);
+          item.frames = frames;
+          addLog('Extracted ' + frames.length + ' frames \u2014 click one to set as thumbnail', 'success');
+          showToast(frames.length + ' frames ready \u2014 pick your thumbnail!', 'success');
+          renderBulkGrid();
+        } catch(e) {
+          addLog('Frame extraction failed: ' + e.message, 'error');
+          showToast('Could not extract frames: ' + e.message, 'error');
+        }
       }
 
       // ===== ACTION BAR BUTTONS =====
@@ -1726,6 +1620,7 @@
 
         try {
           var frames = await extractFramesFromVideo(item.file, 20);
+          item.frames = frames; // store for frame picker
           if (frames.length === 0) throw new Error('Could not extract frames');
 
           var imageParts = frames.map(function(f) {
@@ -1794,11 +1689,9 @@
           item.status = 'done';
           addLog('AI metadata ready: ' + item.title.substring(0, 40), 'success');
           showToast('AI metadata generated for ' + item.file.name, 'success');
+          addLog(frames.length + ' frames extracted \u2014 pick one as thumbnail below', 'info');
 
-          // Auto-trigger thumbnail generation
-          addLog('Auto-generating thumbnail...', 'info');
           renderBulkGrid();
-          generateThumbnail(id);
 
         } catch (e) {
           item.status = 'error';
