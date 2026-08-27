@@ -1628,15 +1628,29 @@
             return { inline_data: { mime_type: 'image/jpeg', data: base64Data } };
           });
 
-          var playlistSuggestion = '';
-          if (state.playlists.length > 0) {
-            playlistSuggestion = ' Available playlists: ' + state.playlists.map(function(p) { return p.title; }).join(', ') + '. Suggest the best matching playlist title from this list, or empty string if none match.';
-          }
+          var filename = item.file.name;
+          var playlistList = state.playlists.length > 0
+            ? state.playlists.map(function(p) { return p.title; }).join(', ')
+            : 'none';
+
+          var promptText = 'You are a YouTube SEO expert AND a natural, engaging writer. I am giving you frames from a video named "' + filename + '". Look at ALL frames carefully and generate optimized YouTube metadata.\n\n'
+            + 'CRITICAL TONE INSTRUCTIONS — the description must:\n'
+            + '- Sound like a real person wrote it, NOT a robot or marketing template\n'
+            + '- Be conversational, warm and direct — like texting a friend about something cool\n'
+            + '- NO generic filler phrases like "In this video", "Join us as we", "We explore", "Dive into", "Buckle up", "Whether you are a beginner or expert"\n'
+            + '- NO hype words like "Amazing", "Incredible", "Mind-blowing", "Game-changing"\n'
+            + '- Start the description with something specific and interesting from the video — not a summary statement\n'
+            + '- Use short punchy sentences. Vary sentence length. Let it breathe.\n'
+            + '- Add a natural call to action at the end (subscribe, comment, etc.) but keep it casual — not salesy\n'
+            + '- Hashtags go on the last line only\n\n'
+            + 'Available playlists: [' + playlistList + ']\n\n'
+            + 'Return ONLY valid JSON:\n'
+            + '{"title":"engaging title max 60 chars","description":"natural conversational description 3-4 short paragraphs\\n\\nCTA paragraph\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5","tags":"tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10","playlist":"PlaylistName"}';
 
           var requestBody = {
             contents: [{
               parts: imageParts.concat([{
-                text: 'These are frames from a video being uploaded to YouTube. Based on these frames, generate optimized YouTube metadata. Create:\n1. An engaging, SEO-optimized title (max 100 chars)\n2. A compelling description (2-3 paragraphs, include relevant keywords)\n3. Relevant tags (10-15 tags, comma-separated)\n4. Best matching playlist name from available options.' + playlistSuggestion + '\n\nRespond in JSON format with keys: title, description, tags, playlist'
+                text: promptText
               }])
             }],
             generationConfig: {
