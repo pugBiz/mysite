@@ -8,7 +8,11 @@
     "label app",
     "label barcode",
     "combine videos",
-    "merge videos"
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner"
   ],
   "global_search": true,
   "min_score": 0,
