@@ -1,5 +1,5 @@
 {
-  "term": "bake croissants",
+  "term": "bake",
   "global_search": true,
   "subreddits": ["baking", "AskCulinary", "breadit"],
   "min_score": 1,
