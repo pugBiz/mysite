@@ -1,0 +1,54 @@
+name: RSS to Pages
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # every 10 minutes
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Run watcher
+        run: python watcher.py
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit matches to gh-pages
+        run: |
+          # create a temporary branch to push to gh-pages
+          git checkout --orphan gh-pages-temp || true
+          git rm -rf .
+          # copy the generated matches.json and croissant.html from main branch
+          cp -f matches.json ../matches.json || true
+          # If you want to publish croissant.html too, copy it:
+          cp -f croissant.html ../croissant.html || true
+          # Move into a temp dir and commit
+          mkdir -p out
+          mv ../matches.json out/matches.json || true
+          mv ../croissant.html out/croissant.html || true
+          cd out
+          git init
+          git add .
+          git commit -m "Update matches.json"
+          git branch -M gh-pages
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push --force origin gh-pages:gh-pages
+
+      - name: Cleanup
+        run: echo "Done"
