@@ -75,6 +75,7 @@
       body{padding:18px}
       .controls{flex-direction:column; align-items:flex-end}
     }
+    .match .sub { color: var(--accent, #d98324); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -96,14 +97,6 @@
       </div>
     </header>
 
-    <section class="controls-row" aria-label="Watch term controls">
-      <label for="termInput" class="small sr-only">Watch term</label>
-      <input id="termInput" type="text" placeholder='Watch terms, comma-separated, e.g. bake croissants, lamination' aria-label="Watch terms" />
-      <button id="saveTerm">Save term</button>
-      <button id="clearTerm" title="Reset to server default">Reset</button>
-      <div class="small" id="termHint">Separate multiple terms with commas. Server terms are authoritative for scheduled runs; a local override only filters what this browser displays &mdash; it cannot fetch terms the server never searched for.</div>
-    </section>
-
     <main>
       <div id="matchesContainer">
         <p class="empty">Loading matches…</p>
@@ -116,18 +109,13 @@
     const MATCHES_JSON = './matches.json';
     const POLL_INTERVAL_MS = 20000;
     const DEFAULT_TERMS = ['bake croissants'];
-    const TERM_KEY = 'croissant_watch_term';
     const THEME_KEY = 'croissant_theme';
 
     // State
     let pollTimer = null;
-    let currentTerms = DEFAULT_TERMS.slice();
     let serverTerms = null;
 
     // Elements
-    const termInput = document.getElementById('termInput');
-    const saveTermBtn = document.getElementById('saveTerm');
-    const clearTermBtn = document.getElementById('clearTerm');
     const displayTerm = document.getElementById('displayTerm');
     const manualRefreshBtn = document.getElementById('manualRefresh');
     const themeToggle = document.getElementById('themeToggle');
@@ -151,44 +139,6 @@
       applyTheme(next);
     });
 
-    // Local term persistence
-    function loadLocalTerm(){
-      const raw = localStorage.getItem(TERM_KEY);
-      const terms = parseTerms(raw);
-      if(terms.length){
-        currentTerms = terms;
-        termInput.value = terms.join(', ');
-        displayTerm.textContent = formatTerms(terms);
-        return true;
-      }
-      return false;
-    }
-    function saveLocalTerm(){
-      const terms = parseTerms(termInput.value);
-      if(terms.length === 0){
-        localStorage.removeItem(TERM_KEY);
-        currentTerms = serverTerms || DEFAULT_TERMS.slice();
-      } else {
-        localStorage.setItem(TERM_KEY, terms.join(', '));
-        currentTerms = terms;
-      }
-      termInput.value = currentTerms.join(', ');
-      displayTerm.textContent = formatTerms(currentTerms);
-      pollStop();
-      fetchMatches();
-    }
-    function clearLocalTerm(){
-      localStorage.removeItem(TERM_KEY);
-      currentTerms = serverTerms || DEFAULT_TERMS.slice();
-      termInput.value = currentTerms.join(', ');
-      displayTerm.textContent = formatTerms(currentTerms);
-      pollStop();
-      fetchMatches();
-    }
-    saveTermBtn.addEventListener('click', saveLocalTerm);
-    clearTermBtn.addEventListener('click', clearLocalTerm);
-    termInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') saveLocalTerm(); });
-
     // Utilities
     // "bake, cold proof" -> ["bake", "cold proof"]
     function parseTerms(str){
@@ -200,32 +150,39 @@
     function formatTerms(terms){
       return terms.map(t => `"${t}"`).join(', ');
     }
+    // created_utc arrives as Unix seconds from the RSS feed
+    function formatPostDate(sec){
+      if(!sec) return null;
+      const d = new Date(Number(sec) * 1000);
+      if(isNaN(d.getTime())) return null;
+      return d.toLocaleString(undefined, {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+    // "3 hours ago" / "2 days ago"
+    function relativeAge(sec){
+      if(!sec) return null;
+      const diff = Math.floor(Date.now() / 1000) - Number(sec);
+      if(diff < 0) return null;
+      if(diff < 60) return 'just now';
+      const units = [
+        ['minute', 60], ['hour', 3600], ['day', 86400],
+        ['month', 2592000], ['year', 31536000]
+      ];
+      let label = 'minute', size = 60;
+      for(const [name, secs] of units){
+        if(diff >= secs){ label = name; size = secs; }
+      }
+      const n = Math.floor(diff / size);
+      return `${n} ${label}${n === 1 ? '' : 's'} ago`;
+    }
     function formatTime(ts){
       try { return new Date(ts).toLocaleString(); } catch(e){ return ts; }
     }
     function escapeHtml(s){
       if(!s) return '';
       return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    }
-
-    // Stem-aware matching, mirrors term_matches() in watcher.py.
-    // "bake" matches "baking" / "baker" / "baked", not just the literal substring.
-    const WORD_RE = /[a-z0-9']+/g;
-    function termMatches(text, term){
-      if(!term) return true;
-      const t = String(term).toLowerCase().trim();
-      const hay = String(text || '').toLowerCase();
-      if(hay.includes(t)) return true;
-
-      const words = t.match(WORD_RE) || [];
-      if(words.length === 0) return false;
-      const tokens = hay.match(WORD_RE) || [];
-
-      return words.every(w => {
-        const stem = (w.length > 3 && w.endsWith('e')) ? w.slice(0, -1) : w;
-        if(stem.length < 3) return tokens.includes(w);
-        return tokens.some(tok => tok.startsWith(stem));
-      });
     }
 
     // Fetch and render with server-term sync
@@ -249,17 +206,10 @@
         }
         if(serverTerms && serverTerms.length === 0) serverTerms = null;
 
-        // If the user has no local override, adopt the server terms
-        const localTerms = parseTerms(localStorage.getItem(TERM_KEY));
-        if(localTerms.length === 0){
-          currentTerms = serverTerms || DEFAULT_TERMS.slice();
-          termInput.value = currentTerms.join(', ');
-        } else {
-          currentTerms = localTerms;
-        }
-        displayTerm.textContent = formatTerms(currentTerms);
+        // Display-only: what the watcher is configured to search for.
+        displayTerm.textContent = formatTerms(serverTerms || DEFAULT_TERMS);
 
-        renderMatchesFiltered(data);
+        renderMatches(data);
       } catch (err){
         showEmpty('Error fetching matches');
         schedulePoll();
@@ -273,7 +223,7 @@
       document.documentElement.classList.remove('refreshing');
     }
 
-    function renderMatchesFiltered(data){
+    function renderMatches(data){
       const c = document.getElementById('matchesContainer');
       if(!data || !Array.isArray(data.matches) || data.matches.length === 0){
         c.innerHTML = '<p class="empty">No matches found in source.</p>';
@@ -282,37 +232,37 @@
         return;
       }
 
-      const terms = (currentTerms && currentTerms.length ? currentTerms : DEFAULT_TERMS)
-        .map(t => t.toLowerCase());
-      const filtered = data.matches.filter(m => {
-        const haystack = [m.title, m.excerpt, m.subreddit].filter(Boolean).join(' ');
-        return terms.some(t => termMatches(haystack, t));
+      // Show everything, newest post first. Undated entries sink to the bottom.
+      const items = data.matches.slice().sort((a, b) => {
+        return (b.created_utc || 0) - (a.created_utc || 0);
       });
-
-      if(filtered.length === 0){
-        c.innerHTML = `<p class="empty">No matches for ${escapeHtml(formatTerms(currentTerms))} (source has ${data.matches.length} items).</p>`;
-        document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
-        schedulePoll();
-        return;
-      }
 
       // Stop polling when matches exist so user can read
       pollStop();
 
-      const html = filtered.map(m => {
+      const html = items.map(m => {
         const excerpt = (m.excerpt || '').replace(/\n/g,' ').slice(0, 400);
         const title = m.title || excerpt || m.url;
+        const posted = formatPostDate(m.created_utc);
+        const age = relativeAge(m.created_utc);
+        const sub = m.subreddit ? `r/${escapeHtml(m.subreddit)}` : 'unknown sub';
+        const author = m.author ? ` • by u/${escapeHtml(m.author)}` : '';
+        const matched = m.matched_term
+          ? ` • matched ${escapeHtml('"' + m.matched_term + '"')}` : '';
+        const postedLine = posted
+          ? `Posted ${escapeHtml(posted)}${age ? ` (${escapeHtml(age)})` : ''}`
+          : 'Post date unavailable';
         return `
           <article class="match" id="match-${escapeHtml(m.id)}" role="article" aria-labelledby="title-${escapeHtml(m.id)}">
             <div><a id="title-${escapeHtml(m.id)}" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(title)}</a></div>
-            <div class="meta">r/${escapeHtml(m.subreddit)} • by u/${escapeHtml(m.author)} • ${escapeHtml(m.type || 'post')}${m.matched_term ? ' • matched ' + escapeHtml('"' + m.matched_term + '"') : ''}</div>
+            <div class="meta"><strong class="sub">${sub}</strong>${author}${matched}</div>
             <div style="margin-top:10px; color:var(--text);">${escapeHtml(excerpt)}</div>
-            <div class="meta" style="margin-top:8px;">Found: ${formatTime(m.found_at || Date.now())}</div>
+            <div class="meta" style="margin-top:8px;">${postedLine} • found ${formatTime(m.found_at || Date.now())}</div>
           </article>`;
       }).join('\n');
 
       c.innerHTML = html;
-      document.getElementById('lastUpdated').textContent = 'Matches found: ' + filtered.length + ' • ' + formatTime(Date.now());
+      document.getElementById('lastUpdated').textContent = 'Matches: ' + items.length + ' • ' + formatTime(Date.now());
       document.documentElement.classList.remove('refreshing');
     }
 
@@ -333,8 +283,7 @@
       fetchMatches();
     });
 
-    // Initialize: load local term if present, then fetch (server term may override display if no local)
-    loadLocalTerm();
+    // Initialize
     fetchMatches();
   </script>
 </body>
