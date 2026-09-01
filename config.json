@@ -1,9 +1,8 @@
 {
   "term": "bake",
   "global_search": true,
-  "subreddits": ["baking", "AskCulinary", "breadit"],
-  "min_score": 1,
-  "max_age_hours": 48,
-  "results_limit_per_query": 25,
-  "user_agent": "CroissantWatcher/1.0 (by your_github_username)"
+  "min_score": 0,
+  "max_age_hours": 168,
+  "results_limit_per_query": 50,
+  "user_agent": "CroissantWatcher/1.0 (by pugBiz)"
 }
