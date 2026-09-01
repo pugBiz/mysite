@@ -196,6 +196,26 @@
       return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     }
 
+    // Stem-aware matching, mirrors term_matches() in watcher.py.
+    // "bake" matches "baking" / "baker" / "baked", not just the literal substring.
+    const WORD_RE = /[a-z0-9']+/g;
+    function termMatches(text, term){
+      if(!term) return true;
+      const t = String(term).toLowerCase().trim();
+      const hay = String(text || '').toLowerCase();
+      if(hay.includes(t)) return true;
+
+      const words = t.match(WORD_RE) || [];
+      if(words.length === 0) return false;
+      const tokens = hay.match(WORD_RE) || [];
+
+      return words.every(w => {
+        const stem = (w.length > 3 && w.endsWith('e')) ? w.slice(0, -1) : w;
+        if(stem.length < 3) return tokens.includes(w);
+        return tokens.some(tok => tok.startsWith(stem));
+      });
+    }
+
     // Fetch and render with server-term sync
     async function fetchMatches(){
       try {
@@ -251,10 +271,8 @@
 
       const term = (currentTerm || DEFAULT_TERM).toLowerCase();
       const filtered = data.matches.filter(m => {
-        const title = (m.title || '').toLowerCase();
-        const excerpt = (m.excerpt || '').toLowerCase();
-        const subreddit = (m.subreddit || '').toLowerCase();
-        return title.includes(term) || excerpt.includes(term) || subreddit.includes(term);
+        const haystack = [m.title, m.excerpt, m.subreddit].filter(Boolean).join(' ');
+        return termMatches(haystack, term);
       });
 
       if(filtered.length === 0){

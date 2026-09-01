@@ -4,5 +4,6 @@
   "min_score": 0,
   "max_age_hours": 168,
   "results_limit_per_query": 50,
-  "user_agent": "CroissantWatcher/1.0 (by pugBiz)"
+  "match_mode": "loose",
+  "user_agent": "CroissantWatcher/1.0 (by u/pugBiz)"
 }
