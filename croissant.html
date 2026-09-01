@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CroissantWatcher — Matches</title>
-  <meta name="description" content="Live view of matches for 'bake croissants' from monitored subreddits." />
+  <meta name="description" content="Live view of matches from monitored subreddits; set your watch term and refresh on demand." />
   <style>
     :root{
       --bg: #ffffff;
@@ -68,6 +68,9 @@
     .toggle{display:inline-flex; gap:8px; align-items:center;}
     .sr-only{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
     .refreshing .status { color: var(--accent); font-weight:600; }
+    .controls-row { display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+    input[type="text"]{padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:var(--text); min-width:220px;}
+    .small { font-size:0.9rem; color:var(--muted); }
     @media (max-width:640px){
       body{padding:18px}
       .controls{flex-direction:column; align-items:flex-end}
@@ -79,7 +82,7 @@
     <header>
       <div>
         <h1>CroissantWatcher</h1>
-        <div class="status">Watching for <strong>"bake croissants"</strong></div>
+        <div class="status">Watching for <strong id="displayTerm">"bake croissants"</strong></div>
       </div>
 
       <div class="controls" aria-hidden="false">
@@ -93,6 +96,14 @@
       </div>
     </header>
 
+    <section class="controls-row" aria-label="Watch term controls">
+      <label for="termInput" class="small sr-only">Watch term</label>
+      <input id="termInput" type="text" placeholder='Enter watch term, e.g. "bake croissants"' aria-label="Watch term" />
+      <button id="saveTerm">Save term</button>
+      <button id="clearTerm" title="Reset to default">Reset</button>
+      <div class="small" id="termHint">Matches are filtered client-side from matches.json</div>
+    </section>
+
     <main>
       <div id="matchesContainer">
         <p class="empty">Loading matches…</p>
@@ -102,12 +113,22 @@
 
   <script>
     // Configuration
-    // Use a relative path so the page works under project pages subpaths like /mysite/
-    const MATCHES_JSON = './matches.json';
+    const MATCHES_JSON = './matches.json'; // relative so project pages subpaths work
     const POLL_INTERVAL_MS = 20000;
-    let pollTimer = null;
+    const DEFAULT_TERM = 'bake croissants';
 
-    // Theme handling: respects system, allows manual override persisted in localStorage
+    // State
+    let pollTimer = null;
+    let currentTerm = DEFAULT_TERM;
+
+    // Elements
+    const termInput = document.getElementById('termInput');
+    const saveTermBtn = document.getElementById('saveTerm');
+    const clearTermBtn = document.getElementById('clearTerm');
+    const displayTerm = document.getElementById('displayTerm');
+    const manualRefreshBtn = document.getElementById('manualRefresh');
+
+    // Theme handling (persisted)
     const THEME_KEY = 'croissant_theme';
     const themeToggle = document.getElementById('themeToggle');
 
@@ -118,21 +139,13 @@
       themeToggle.setAttribute('aria-pressed', theme === 'dark');
     }
 
-    function getStoredTheme(){
-      return localStorage.getItem(THEME_KEY);
-    }
-
-    function detectSystemPref(){
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+    function getStoredTheme(){ return localStorage.getItem(THEME_KEY); }
+    function detectSystemPref(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
 
     // Initialize theme
-    const stored = getStoredTheme();
-    if(stored === 'dark' || stored === 'light'){
-      applyTheme(stored);
-    } else {
-      applyTheme(null); // follow system via CSS media query
-    }
+    const storedTheme = getStoredTheme();
+    if(storedTheme === 'dark' || storedTheme === 'light') applyTheme(storedTheme);
+    else applyTheme(null);
 
     themeToggle.addEventListener('click', () => {
       const current = getStoredTheme() || detectSystemPref();
@@ -141,28 +154,63 @@
       applyTheme(next);
     });
 
+    // Watch term persistence
+    const TERM_KEY = 'croissant_watch_term';
+    function loadTerm(){
+      const t = localStorage.getItem(TERM_KEY);
+      currentTerm = (t && t.trim().length) ? t.trim() : DEFAULT_TERM;
+      termInput.value = currentTerm;
+      displayTerm.textContent = `"${currentTerm}"`;
+    }
+    function saveTerm(){
+      const t = termInput.value.trim();
+      if(t.length === 0){
+        localStorage.removeItem(TERM_KEY);
+        currentTerm = DEFAULT_TERM;
+      } else {
+        localStorage.setItem(TERM_KEY, t);
+        currentTerm = t;
+      }
+      displayTerm.textContent = `"${currentTerm}"`;
+      // Immediately refresh with new term
+      pollStop();
+      fetchMatches();
+    }
+    function clearTerm(){
+      localStorage.removeItem(TERM_KEY);
+      currentTerm = DEFAULT_TERM;
+      termInput.value = currentTerm;
+      displayTerm.textContent = `"${currentTerm}"`;
+      pollStop();
+      fetchMatches();
+    }
+
+    saveTermBtn.addEventListener('click', saveTerm);
+    clearTermBtn.addEventListener('click', clearTerm);
+    termInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') saveTerm();
+    });
+
     // Utilities
     function formatTime(ts){
       try { return new Date(ts).toLocaleString(); } catch(e){ return ts; }
     }
-
     function escapeHtml(s){
       if(!s) return '';
       return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     }
 
-    // Fetch and render
+    // Fetch and render with client-side filtering by currentTerm
     async function fetchMatches(){
       try {
         const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache:'no-store'});
         if(!res.ok){
-          // show a helpful message that includes the actual URL attempted
           showEmpty(`No data (HTTP ${res.status}) — tried ${new URL(MATCHES_JSON, location.href).href}`);
           schedulePoll();
           return;
         }
         const data = await res.json();
-        renderMatches(data);
+        renderMatchesFiltered(data);
       } catch (err){
         showEmpty('Error fetching matches');
         schedulePoll();
@@ -176,10 +224,26 @@
       document.documentElement.classList.remove('refreshing');
     }
 
-    function renderMatches(data){
+    function renderMatchesFiltered(data){
       const c = document.getElementById('matchesContainer');
       if(!data || !Array.isArray(data.matches) || data.matches.length === 0){
-        c.innerHTML = '<p class="empty">No matches found.</p>';
+        c.innerHTML = '<p class="empty">No matches found in source.</p>';
+        document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
+        schedulePoll();
+        return;
+      }
+
+      // Filter client-side by currentTerm (case-insensitive)
+      const term = (currentTerm || DEFAULT_TERM).toLowerCase();
+      const filtered = data.matches.filter(m => {
+        const title = (m.title || '').toLowerCase();
+        const excerpt = (m.excerpt || '').toLowerCase();
+        const subreddit = (m.subreddit || '').toLowerCase();
+        return title.includes(term) || excerpt.includes(term) || subreddit.includes(term);
+      });
+
+      if(filtered.length === 0){
+        c.innerHTML = `<p class="empty">No matches for ${escapeHtml('"' + currentTerm + '"')} (source has ${data.matches.length} items).</p>`;
         document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
         schedulePoll();
         return;
@@ -188,7 +252,7 @@
       // Stop polling when matches exist so user can read
       pollStop();
 
-      const html = data.matches.map(m => {
+      const html = filtered.map(m => {
         const excerpt = (m.excerpt || '').replace(/\n/g,' ').slice(0, 400);
         const title = m.title || excerpt || m.url;
         return `
@@ -201,7 +265,7 @@
       }).join('\n');
 
       c.innerHTML = html;
-      document.getElementById('lastUpdated').textContent = 'Matches found: ' + data.matches.length + ' • ' + formatTime(Date.now());
+      document.getElementById('lastUpdated').textContent = 'Matches found: ' + filtered.length + ' • ' + formatTime(Date.now());
       document.documentElement.classList.remove('refreshing');
     }
 
@@ -216,12 +280,14 @@
       document.documentElement.classList.remove('refreshing');
     }
 
-    document.getElementById('manualRefresh').addEventListener('click', () => {
+    // Manual refresh
+    manualRefreshBtn.addEventListener('click', () => {
       pollStop();
       fetchMatches();
     });
 
-    // Start
+    // Initialize
+    loadTerm();
     fetchMatches();
   </script>
 </body>
