@@ -3,53 +3,136 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CroissantWatcher About</title>
-  <meta name="description" content="CroissantWatcher: a personal Reddit watcher that searches for posts and comments mentioning 'bake croissants'." />
+  <title>CroissantWatcher — Matches</title>
+  <meta name="description" content="Live view of matches for 'bake croissants' from monitored subreddits." />
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; max-width: 760px; margin: 48px auto; line-height: 1.6; color:#111; padding: 0 16px; }
-    header { border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
-    h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
-    p.lead { color:#444; margin-top:0; }
-    code { background:#f6f8fa; padding:2px 6px; border-radius:6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
-    .meta { background:#fafafa; border:1px solid #f0f0f0; padding:12px; border-radius:8px; margin:18px 0; }
-    footer { margin-top:28px; color:#666; font-size:0.95rem; }
-    a { color:#0366d6; text-decoration:none; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; max-width:900px; margin:36px auto; padding:0 18px; color:#111; }
+    header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+    h1 { margin:0; font-size:1.4rem; }
+    .status { color:#666; font-size:0.95rem; }
+    .match { border:1px solid #eee; padding:12px; border-radius:8px; margin:12px 0; background:#fff; }
+    .match a { color:#0366d6; text-decoration:none; font-weight:600; }
+    .meta { color:#666; font-size:0.9rem; margin-top:6px; }
+    .empty { color:#888; margin-top:18px; }
+    .refreshing { color:#0a84ff; font-weight:600; }
+    .time { color:#999; font-size:0.9rem; margin-left:8px; }
+    .controls { margin-top:12px; }
+    button { padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fafafa; cursor:pointer; }
   </style>
 </head>
 <body>
   <header>
-    <h1>CroissantWatcher</h1>
-    <p class="lead">A personal Reddit watcher that searches Reddit for posts and comments mentioning <strong>"bake croissants"</strong>.</p>
+    <div>
+      <h1>CroissantWatcher</h1>
+      <div class="status">Watching for <strong>"bake croissants"</strong></div>
+    </div>
+    <div style="margin-left:auto; text-align:right;">
+      <div id="lastUpdated" class="time">—</div>
+      <div class="controls"><button id="manualRefresh">Refresh now</button></div>
+    </div>
   </header>
 
-  <section>
-    <h2>Purpose</h2>
-    <p>This application is a small single user script that periodically searches Reddit for the keyword <code>bake croissants</code> and notifies the owner via a configured notification channel. It is intended for personal noncommercial use and only reads public Reddit content.</p>
-  </section>
-
-  <section>
-    <h2>How it works</h2>
-    <div class="meta">
-      <strong>Type</strong>: Script<br />
-      <strong>Search scope</strong>: public Reddit posts and comments (keyword: <code>bake croissants</code>)<br />
-      <strong>Runs</strong>: scheduled via GitHub Actions using a single Reddit account<br />
+  <main>
+    <div id="matchesContainer">
+      <p class="empty">Loading matches…</p>
     </div>
-    <p>The app authenticates using a Reddit Script app and calls Reddit's OAuth endpoints to search for new matches. Matches are delivered to the repository owner via the configured notification channel such as a Discord webhook or email.</p>
-  </section>
+  </main>
 
-  <section>
-    <h2>Privacy and data handling</h2>
-    <p>No private data is stored or published by this page. The bot only reads public Reddit content. Credentials such as client secret and account password must be stored securely as GitHub repository secrets and must not be committed to the repository.</p>
-  </section>
+  <script>
+    // Configuration
+    const MATCHES_JSON = '/matches.json'; // served from gh-pages root
+    const POLL_INTERVAL_MS = 20000; // 20 seconds
+    let pollTimer = null;
+    let lastSeenIds = new Set();
 
-  <section>
-    <h2>Source and contact</h2>
-    <p>Source code and configuration: <a href="https://github.com/yourusername/croissant-watcher" target="_blank" rel="noopener">https://github.com/yourusername/croissant-watcher</a></p>
-    <p>Owner: <a href="https://github.com/yourusername" target="_blank" rel="noopener">yourusername</a></p>
-  </section>
+    function formatTime(ts) {
+      try {
+        const d = new Date(ts);
+        return d.toLocaleString();
+      } catch (e) { return ts; }
+    }
 
-  <footer>
-    <p>If you have questions about this app or its use of Reddit's API, open an issue in the repository or contact the owner via the GitHub profile linked above.</p>
-  </footer>
+    async function fetchMatches() {
+      try {
+        const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache: 'no-store'});
+        if (!res.ok) {
+          showEmpty(`No data (HTTP ${res.status})`);
+          schedulePoll();
+          return;
+        }
+        const data = await res.json();
+        renderMatches(data);
+      } catch (err) {
+        showEmpty('Error fetching matches');
+        schedulePoll();
+      }
+    }
+
+    function showEmpty(text) {
+      const c = document.getElementById('matchesContainer');
+      c.innerHTML = `<p class="empty">${text}</p>`;
+      document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
+    }
+
+    function renderMatches(data) {
+      const c = document.getElementById('matchesContainer');
+      if (!data || !Array.isArray(data.matches) || data.matches.length === 0) {
+        c.innerHTML = '<p class="empty">No matches found.</p>';
+        document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
+        schedulePoll();
+        return;
+      }
+
+      // If there are matches, show them and stop auto-refreshing the whole page.
+      pollStop();
+
+      // Build list
+      const html = data.matches.map(m => {
+        const excerpt = (m.excerpt || '').replace(/\n/g, ' ').slice(0, 300);
+        return `
+          <div class="match" id="match-${m.id}">
+            <div><a href="${m.url}" target="_blank" rel="noopener">${escapeHtml(m.title || excerpt || m.url)}</a></div>
+            <div class="meta">r/${escapeHtml(m.subreddit)} • by u/${escapeHtml(m.author)} • ${escapeHtml(m.type || 'post')}</div>
+            <div style="margin-top:8px; color:#222;">${escapeHtml(excerpt)}</div>
+            <div class="meta">Found: ${formatTime(m.found_at || Date.now())}</div>
+          </div>`;
+      }).join('\n');
+
+      c.innerHTML = html;
+      document.getElementById('lastUpdated').textContent = 'Matches found: ' + data.matches.length + ' • ' + formatTime(Date.now());
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/[&<>"']/g, function (m) {
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+      });
+    }
+
+    function schedulePoll() {
+      if (pollTimer) return;
+      pollTimer = setTimeout(() => {
+        pollTimer = null;
+        fetchMatches();
+      }, POLL_INTERVAL_MS);
+      document.querySelector('.status').classList.add('refreshing');
+    }
+
+    function pollStop() {
+      if (pollTimer) {
+        clearTimeout(pollTimer);
+        pollTimer = null;
+      }
+      document.querySelector('.status').classList.remove('refreshing');
+    }
+
+    document.getElementById('manualRefresh').addEventListener('click', () => {
+      pollStop();
+      fetchMatches();
+    });
+
+    // Initial fetch and start polling
+    fetchMatches();
+  </script>
 </body>
 </html>
