@@ -1,9 +1,7 @@
 {
   "terms": [
-    "bake croissants",
-    "change photo date bulk",
-    "ipad edit photo dates",
-    "iphone edit photo dates"
+    "photo date taken",
+    "photo date editor"
   ],
   "global_search": true,
   "min_score": 0,
