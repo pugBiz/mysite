@@ -1,9 +1,14 @@
 {
-  "term": "bake",
+  "terms": [
+    "bake croissants",
+    "lamination",
+    "cold proof"
+  ],
   "global_search": true,
   "min_score": 0,
   "max_age_hours": 168,
   "results_limit_per_query": 50,
   "match_mode": "loose",
+  "query_mode": "separate",
   "user_agent": "CroissantWatcher/1.0 (by u/pugBiz)"
 }

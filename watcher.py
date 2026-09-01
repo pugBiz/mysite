@@ -14,6 +14,21 @@ Trade-off: RSS entries carry no score, so "min_score" in config.json is ignored
 excerpt, subreddit, author, timestamp, permalink — is present, so matches.json
 keeps exactly the same shape and croissant.html needs no changes.
 
+Multiple terms: set "terms" in config.json to a list, e.g.
+
+    "terms": ["bake croissants", "lamination", "cold proof"]
+
+A post is a match if it matches ANY term, and each match records which one hit
+in a "matched_term" field. The old single "term" key still works.
+
+"query_mode" controls how they are fetched:
+  "separate" (default) - one feed request per term. Each term gets its own full
+                         results_limit, so a busy term can't crowd out a quiet
+                         one. Costs one request per term.
+  "combined"           - one request using Reddit's OR syntax,
+                         q=("bake croissants" OR lamination). Cheaper, but all
+                         terms share a single results_limit.
+
 Behaviour notes:
 - If every feed request fails, matches.json is left untouched and the script
   exits non-zero, so a broken run shows up red in Actions instead of silently
@@ -48,13 +63,15 @@ STATE_PATH = os.path.join(ROOT, "state.json")
 MATCHES_PATH = os.path.join(ROOT, "matches.json")
 
 DEFAULT_CONFIG = {
-    "term": "bake croissants",
+    "terms": ["bake croissants"],
+    "term": None,             # legacy single-term key, still honoured
     "global_search": True,
     "subreddits": ["baking", "AskCulinary", "breadit"],
     "min_score": 0,           # ignored: RSS carries no score
     "max_age_hours": 168,
     "results_limit_per_query": 50,
     "match_mode": "loose",    # loose | strict | off
+    "query_mode": "separate",  # separate | combined
     "user_agent": "CroissantWatcher/1.0 (by u/pugBiz)",
 }
 
@@ -117,6 +134,37 @@ def quote_if_needed(term):
     return f'"{t}"'
 
 
+def resolve_terms(cfg):
+    """Build the ordered, de-duplicated list of watch terms.
+
+    Priority: WATCH_TERM env var -> config "terms" list -> config "term" string.
+    The env var and the legacy "term" key both accept a comma-separated list, so
+    you can pass several terms to a manual workflow_dispatch run.
+    """
+    raw = os.getenv("WATCH_TERM")
+    if raw:
+        candidates = raw.split(",")
+    else:
+        candidates = cfg.get("terms") or cfg.get("term") or DEFAULT_CONFIG["terms"]
+        if isinstance(candidates, str):
+            candidates = candidates.split(",")
+
+    terms, seen = [], set()
+    for t in candidates:
+        t = str(t).strip()
+        if t and t.lower() not in seen:
+            seen.add(t.lower())
+            terms.append(t)
+    return terms
+
+
+def build_combined_query(terms):
+    """q=("bake croissants" OR lamination) - one request covering every term."""
+    if len(terms) == 1:
+        return quote_if_needed(terms[0])
+    return "(" + " OR ".join(quote_if_needed(t) for t in terms) + ")"
+
+
 # ---------------------------------------------------------------- matching
 
 WORD_RE = re.compile(r"[a-z0-9']+")
@@ -151,7 +199,16 @@ def term_matches(text, term, mode):
     return True
 
 
-def filter_posts(posts, term, cfg, debug=False):
+def first_matching_term(text, terms, mode):
+    """Return the first term that matches, or None. Any term is enough."""
+    for t in terms:
+        if term_matches(text, t, mode):
+            return t
+    return None
+
+
+def filter_posts(posts, terms, cfg, debug=False):
+    """Keep posts that are recent enough and match at least one term."""
     mode = (cfg.get("match_mode") or "loose").lower()
     max_age_hours = int(cfg.get("max_age_hours") or 168)
     cutoff_ts = now_ts() - int(max_age_hours * 3600)
@@ -171,9 +228,11 @@ def filter_posts(posts, term, cfg, debug=False):
             p.get("excerpt") or "",
             p.get("subreddit") or "",
         ])
-        if not term_matches(haystack, term, mode):
+        hit = first_matching_term(haystack, terms, mode)
+        if hit is None:
             dropped["term"] += 1
             continue
+        p["matched_term"] = hit
         p["found_at"] = iso8601(now_ts())
         out.append(p)
 
@@ -319,20 +378,36 @@ def main(debug=False):
     state = load_state()
     seen_ids = set(state.get("seen_ids", []))
 
-    watch_term = os.getenv("WATCH_TERM") or cfg.get("term") or DEFAULT_CONFIG["term"]
-    watch_term = str(watch_term).strip()
-    query = quote_if_needed(watch_term)
+    terms = resolve_terms(cfg)
+    if not terms:
+        print("FATAL: no watch terms configured. Set \"terms\" in config.json.")
+        sys.exit(1)
 
     user_agent = cfg.get("user_agent") or DEFAULT_CONFIG["user_agent"]
     limit = int(cfg.get("results_limit_per_query") or 50)
+    query_mode = (cfg.get("query_mode") or "separate").lower()
+    subs = cfg.get("subreddits") or []
 
     if int(cfg.get("min_score") or 0) > 0:
         print("WARNING: min_score is set but RSS entries carry no score. "
               "This filter is being ignored.")
 
-    print(f"Watch term: {watch_term!r} | query: {query!r} | "
-          f"match_mode: {cfg.get('match_mode')} | "
+    print(f"Watch terms ({len(terms)}): {terms}")
+    print(f"query_mode: {query_mode} | match_mode: {cfg.get('match_mode')} | "
           f"max_age_hours: {cfg.get('max_age_hours')}")
+
+    # Work out the list of (query, terms_to_match_against) pairs up front.
+    if query_mode == "combined":
+        query_plan = [(build_combined_query(terms), terms)]
+    else:
+        query_plan = [(quote_if_needed(t), [t]) for t in terms]
+
+    targets = ["sitewide"] if cfg.get("global_search") else list(subs)
+    total_requests = len(query_plan) * len(targets)
+    if total_requests > 12:
+        print(f"WARNING: this run will make {total_requests} feed requests "
+              f"({len(query_plan)} queries x {len(targets)} targets). Consider "
+              f"query_mode \"combined\" or fewer terms to avoid rate limiting.")
 
     fetcher = FeedFetcher(user_agent, debug=debug)
 
@@ -340,28 +415,33 @@ def main(debug=False):
     requests_made = 0
     requests_ok = 0
     raw_total = 0
+    per_term_raw = {t: 0 for t in terms}
 
-    if cfg.get("global_search"):
-        requests_made += 1
-        body = fetcher.search_sitewide(query, limit)
-        if body is not None:
-            requests_ok += 1
-            posts = parse_feed(body)
-            raw_total += len(posts)
-            print(f"site-wide: {len(posts)} raw entries")
-            matches.extend(filter_posts(posts, watch_term, cfg, debug))
-    else:
-        for sub in cfg.get("subreddits") or []:
+    for query, match_terms in query_plan:
+        for target in targets:
             requests_made += 1
-            body = fetcher.search_subreddit(sub, query, limit)
+            if target == "sitewide":
+                body = fetcher.search_sitewide(query, limit)
+                label = f"site-wide {query!r}"
+            else:
+                body = fetcher.search_subreddit(target, query, limit)
+                label = f"r/{target} {query!r}"
+
             if body is None:
                 continue
+
             requests_ok += 1
             posts = parse_feed(body)
             raw_total += len(posts)
-            print(f"r/{sub}: {len(posts)} raw entries")
-            matches.extend(filter_posts(posts, watch_term, cfg, debug))
-            time.sleep(2)
+            for t in match_terms:
+                per_term_raw[t] = per_term_raw.get(t, 0) + len(posts)
+            kept = filter_posts(posts, match_terms, cfg, debug)
+            print(f"{label}: {len(posts)} raw entries, {len(kept)} kept")
+            matches.extend(kept)
+
+            # Be polite between requests.
+            if requests_made < total_requests:
+                time.sleep(2)
 
     print(f"Requests: {requests_ok}/{requests_made} succeeded | "
           f"raw entries: {raw_total} | passed filter: {len(matches)}")
@@ -370,20 +450,32 @@ def main(debug=False):
         print("FATAL: every feed request failed. Leaving matches.json untouched.")
         sys.exit(1)
 
-    if raw_total == 0:
-        print("NOTE: the feed came back empty. The requests succeeded, so the "
-              "search term is probably too narrow.")
-    elif not matches:
+    # Flag terms that returned nothing, so a dud term is obvious in the log.
+    quiet = [t for t in terms if per_term_raw.get(t, 0) == 0]
+    if quiet and requests_ok:
+        print(f"NOTE: these terms returned no entries at all: {quiet}")
+
+    if raw_total and not matches:
         print("NOTE: entries came back but all were filtered out. Raise "
               "max_age_hours, or set match_mode to \"off\".")
 
+    # Dedupe within this run (a post can match several terms), then against
+    # everything we have already published.
     new_matches = []
+    batch_ids = set()
     for m in matches:
         mid = m.get("id")
-        if not mid or mid in seen_ids:
+        if not mid or mid in batch_ids or mid in seen_ids:
             continue
+        batch_ids.add(mid)
         new_matches.append(m)
         seen_ids.add(mid)
+
+    if debug and new_matches:
+        by_term = {}
+        for m in new_matches:
+            by_term[m["matched_term"]] = by_term.get(m["matched_term"], 0) + 1
+        print(f"[debug] new matches by term: {by_term}")
 
     existing = load_json(MATCHES_PATH, {"matches": []})
     existing_matches = existing.get("matches", []) if isinstance(existing, dict) else []
@@ -392,12 +484,15 @@ def main(debug=False):
     save_json(MATCHES_PATH, {
         "matches": combined,
         "generated_at": iso8601(now_ts()),
-        "watch_term": watch_term,
+        "watch_terms": terms,
+        # Kept so anything reading the old single-term field still works.
+        "watch_term": ", ".join(terms),
     })
 
     state["seen_ids"] = list(seen_ids)[-1000:]
     state["last_run"] = iso8601(now_ts())
-    state["watch_term"] = watch_term
+    state["watch_terms"] = terms
+    state["watch_term"] = ", ".join(terms)
     save_json(STATE_PATH, state)
 
     print(f"Wrote {len(new_matches)} new matches, total stored: {len(combined)}")

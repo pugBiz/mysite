@@ -98,10 +98,10 @@
 
     <section class="controls-row" aria-label="Watch term controls">
       <label for="termInput" class="small sr-only">Watch term</label>
-      <input id="termInput" type="text" placeholder='Enter watch term, e.g. "bake croissants"' aria-label="Watch term" />
+      <input id="termInput" type="text" placeholder='Watch terms, comma-separated, e.g. bake croissants, lamination' aria-label="Watch terms" />
       <button id="saveTerm">Save term</button>
       <button id="clearTerm" title="Reset to server default">Reset</button>
-      <div class="small" id="termHint">Server term is authoritative for scheduled runs; local override is for this browser only.</div>
+      <div class="small" id="termHint">Separate multiple terms with commas. Server terms are authoritative for scheduled runs; a local override only filters what this browser displays &mdash; it cannot fetch terms the server never searched for.</div>
     </section>
 
     <main>
@@ -115,14 +115,14 @@
     // Configuration
     const MATCHES_JSON = './matches.json';
     const POLL_INTERVAL_MS = 20000;
-    const DEFAULT_TERM = 'bake croissants';
+    const DEFAULT_TERMS = ['bake croissants'];
     const TERM_KEY = 'croissant_watch_term';
     const THEME_KEY = 'croissant_theme';
 
     // State
     let pollTimer = null;
-    let currentTerm = DEFAULT_TERM;
-    let serverTerm = null;
+    let currentTerms = DEFAULT_TERMS.slice();
+    let serverTerms = null;
 
     // Elements
     const termInput = document.getElementById('termInput');
@@ -153,33 +153,35 @@
 
     // Local term persistence
     function loadLocalTerm(){
-      const t = localStorage.getItem(TERM_KEY);
-      if(t && t.trim().length){
-        currentTerm = t.trim();
-        termInput.value = currentTerm;
-        displayTerm.textContent = `"${currentTerm}"`;
+      const raw = localStorage.getItem(TERM_KEY);
+      const terms = parseTerms(raw);
+      if(terms.length){
+        currentTerms = terms;
+        termInput.value = terms.join(', ');
+        displayTerm.textContent = formatTerms(terms);
         return true;
       }
       return false;
     }
     function saveLocalTerm(){
-      const t = termInput.value.trim();
-      if(t.length === 0){
+      const terms = parseTerms(termInput.value);
+      if(terms.length === 0){
         localStorage.removeItem(TERM_KEY);
-        currentTerm = serverTerm || DEFAULT_TERM;
+        currentTerms = serverTerms || DEFAULT_TERMS.slice();
       } else {
-        localStorage.setItem(TERM_KEY, t);
-        currentTerm = t;
+        localStorage.setItem(TERM_KEY, terms.join(', '));
+        currentTerms = terms;
       }
-      displayTerm.textContent = `"${currentTerm}"`;
+      termInput.value = currentTerms.join(', ');
+      displayTerm.textContent = formatTerms(currentTerms);
       pollStop();
       fetchMatches();
     }
     function clearLocalTerm(){
       localStorage.removeItem(TERM_KEY);
-      currentTerm = serverTerm || DEFAULT_TERM;
-      termInput.value = currentTerm;
-      displayTerm.textContent = `"${currentTerm}"`;
+      currentTerms = serverTerms || DEFAULT_TERMS.slice();
+      termInput.value = currentTerms.join(', ');
+      displayTerm.textContent = formatTerms(currentTerms);
       pollStop();
       fetchMatches();
     }
@@ -188,6 +190,16 @@
     termInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') saveLocalTerm(); });
 
     // Utilities
+    // "bake, cold proof" -> ["bake", "cold proof"]
+    function parseTerms(str){
+      return String(str || '')
+        .split(',')
+        .map(t => t.trim())
+        .filter(t => t.length > 0);
+    }
+    function formatTerms(terms){
+      return terms.map(t => `"${t}"`).join(', ');
+    }
     function formatTime(ts){
       try { return new Date(ts).toLocaleString(); } catch(e){ return ts; }
     }
@@ -227,24 +239,25 @@
         }
         const data = await res.json();
 
-        // If server provided a watch_term, use it as serverTerm
-        if(data && data.watch_term){
-          serverTerm = String(data.watch_term || '').trim() || null;
+        // Prefer the watch_terms array; fall back to the legacy watch_term string
+        if(data && Array.isArray(data.watch_terms) && data.watch_terms.length){
+          serverTerms = data.watch_terms.map(t => String(t).trim()).filter(Boolean);
+        } else if(data && data.watch_term){
+          serverTerms = parseTerms(data.watch_term);
         } else {
-          serverTerm = null;
+          serverTerms = null;
         }
+        if(serverTerms && serverTerms.length === 0) serverTerms = null;
 
-        // If user has no local override, adopt server term for display and filtering
-        const hasLocal = !!localStorage.getItem(TERM_KEY);
-        if(!hasLocal){
-          currentTerm = serverTerm || DEFAULT_TERM;
-          termInput.value = currentTerm;
-          displayTerm.textContent = `"${currentTerm}"`;
+        // If the user has no local override, adopt the server terms
+        const localTerms = parseTerms(localStorage.getItem(TERM_KEY));
+        if(localTerms.length === 0){
+          currentTerms = serverTerms || DEFAULT_TERMS.slice();
+          termInput.value = currentTerms.join(', ');
         } else {
-          // keep local override displayed
-          currentTerm = localStorage.getItem(TERM_KEY);
-          displayTerm.textContent = `"${currentTerm}"`;
+          currentTerms = localTerms;
         }
+        displayTerm.textContent = formatTerms(currentTerms);
 
         renderMatchesFiltered(data);
       } catch (err){
@@ -269,14 +282,15 @@
         return;
       }
 
-      const term = (currentTerm || DEFAULT_TERM).toLowerCase();
+      const terms = (currentTerms && currentTerms.length ? currentTerms : DEFAULT_TERMS)
+        .map(t => t.toLowerCase());
       const filtered = data.matches.filter(m => {
         const haystack = [m.title, m.excerpt, m.subreddit].filter(Boolean).join(' ');
-        return termMatches(haystack, term);
+        return terms.some(t => termMatches(haystack, t));
       });
 
       if(filtered.length === 0){
-        c.innerHTML = `<p class="empty">No matches for ${escapeHtml('"' + currentTerm + '"')} (source has ${data.matches.length} items).</p>`;
+        c.innerHTML = `<p class="empty">No matches for ${escapeHtml(formatTerms(currentTerms))} (source has ${data.matches.length} items).</p>`;
         document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
         schedulePoll();
         return;
@@ -291,7 +305,7 @@
         return `
           <article class="match" id="match-${escapeHtml(m.id)}" role="article" aria-labelledby="title-${escapeHtml(m.id)}">
             <div><a id="title-${escapeHtml(m.id)}" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(title)}</a></div>
-            <div class="meta">r/${escapeHtml(m.subreddit)} • by u/${escapeHtml(m.author)} • ${escapeHtml(m.type || 'post')}</div>
+            <div class="meta">r/${escapeHtml(m.subreddit)} • by u/${escapeHtml(m.author)} • ${escapeHtml(m.type || 'post')}${m.matched_term ? ' • matched ' + escapeHtml('"' + m.matched_term + '"') : ''}</div>
             <div style="margin-top:10px; color:var(--text);">${escapeHtml(excerpt)}</div>
             <div class="meta" style="margin-top:8px;">Found: ${formatTime(m.found_at || Date.now())}</div>
           </article>`;
