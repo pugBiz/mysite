@@ -1,9 +1,16 @@
 name: RSS Watcher
 
+permissions:
+  contents: write
+
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes
+    - cron: "*/10 * * * *"   # every 10 minutes; adjust as needed
   workflow_dispatch:
+    inputs:
+      watch_term:
+        description: 'Optional term to use for this run (overrides config.json)'
+        required: false
 
 jobs:
   run-watcher:
@@ -15,26 +22,40 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Set WATCH_TERM if provided
+        if: ${{ github.event.inputs.watch_term != '' }}
+        run: |
+          echo "WATCH_TERM=${{ github.event.inputs.watch_term }}" >> $GITHUB_ENV
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
       - name: Run watcher
+        env:
+          # Optional: provide Reddit OAuth credentials as secrets if you later switch to OAuth
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
         run: python watcher.py
 
-      - name: Commit updated matches.json
+      - name: Commit updated matches.json and state.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          if git diff --quiet matches.json; then
-            echo "No changes in matches.json"
+          # Only commit if there are changes
+          if git status --porcelain | grep -qE "matches.json|state.json"; then
+            git add matches.json state.json || true
+            git commit -m "Update matches.json" || true
+            git push origin HEAD:main
           else
-            git add matches.json state.json
-            git commit -m "Update matches.json"
-            git push
+            echo "No changes to commit"
           fi
