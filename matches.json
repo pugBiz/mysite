@@ -1,0 +1,14 @@
+{
+  "matches": [
+    {
+      "id": "test_1",
+      "title": "Test post: bake croissants",
+      "excerpt": "This is a test match for bake croissants.",
+      "url": "https://example.com/test",
+      "subreddit": "baking",
+      "author": "testuser",
+      "type": "post",
+      "found_at": "2026-09-01T00:00:00Z"
+    }
+  ]
+}
