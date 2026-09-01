@@ -53,7 +53,7 @@
     }
 
     .container{max-width:980px; margin:0 auto;}
-    header{display:flex; gap:12px; align-items:center; margin-bottom:18px;}
+    header{display:flex; gap:12px; align-items:center; margin-bottom:12px;}
     h1{margin:0; font-size:1.4rem;}
     .status{color:var(--muted); font-size:0.95rem;}
     .controls{margin-left:auto; display:flex; gap:8px; align-items:center;}
@@ -100,8 +100,8 @@
       <label for="termInput" class="small sr-only">Watch term</label>
       <input id="termInput" type="text" placeholder='Enter watch term, e.g. "bake croissants"' aria-label="Watch term" />
       <button id="saveTerm">Save term</button>
-      <button id="clearTerm" title="Reset to default">Reset</button>
-      <div class="small" id="termHint">Matches are filtered client-side from matches.json</div>
+      <button id="clearTerm" title="Reset to server default">Reset</button>
+      <div class="small" id="termHint">Server term is authoritative for scheduled runs; local override is for this browser only.</div>
     </section>
 
     <main>
@@ -113,13 +113,16 @@
 
   <script>
     // Configuration
-    const MATCHES_JSON = './matches.json'; // relative so project pages subpaths work
+    const MATCHES_JSON = './matches.json';
     const POLL_INTERVAL_MS = 20000;
     const DEFAULT_TERM = 'bake croissants';
+    const TERM_KEY = 'croissant_watch_term';
+    const THEME_KEY = 'croissant_theme';
 
     // State
     let pollTimer = null;
     let currentTerm = DEFAULT_TERM;
+    let serverTerm = null;
 
     // Elements
     const termInput = document.getElementById('termInput');
@@ -127,26 +130,20 @@
     const clearTermBtn = document.getElementById('clearTerm');
     const displayTerm = document.getElementById('displayTerm');
     const manualRefreshBtn = document.getElementById('manualRefresh');
-
-    // Theme handling (persisted)
-    const THEME_KEY = 'croissant_theme';
     const themeToggle = document.getElementById('themeToggle');
 
+    // Theme handling (persisted)
     function applyTheme(theme){
       if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
       else if(theme === 'light') document.documentElement.setAttribute('data-theme','light');
       else document.documentElement.removeAttribute('data-theme');
       themeToggle.setAttribute('aria-pressed', theme === 'dark');
     }
-
     function getStoredTheme(){ return localStorage.getItem(THEME_KEY); }
     function detectSystemPref(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
-
-    // Initialize theme
     const storedTheme = getStoredTheme();
     if(storedTheme === 'dark' || storedTheme === 'light') applyTheme(storedTheme);
     else applyTheme(null);
-
     themeToggle.addEventListener('click', () => {
       const current = getStoredTheme() || detectSystemPref();
       const next = current === 'dark' ? 'light' : 'dark';
@@ -154,42 +151,41 @@
       applyTheme(next);
     });
 
-    // Watch term persistence
-    const TERM_KEY = 'croissant_watch_term';
-    function loadTerm(){
+    // Local term persistence
+    function loadLocalTerm(){
       const t = localStorage.getItem(TERM_KEY);
-      currentTerm = (t && t.trim().length) ? t.trim() : DEFAULT_TERM;
-      termInput.value = currentTerm;
-      displayTerm.textContent = `"${currentTerm}"`;
+      if(t && t.trim().length){
+        currentTerm = t.trim();
+        termInput.value = currentTerm;
+        displayTerm.textContent = `"${currentTerm}"`;
+        return true;
+      }
+      return false;
     }
-    function saveTerm(){
+    function saveLocalTerm(){
       const t = termInput.value.trim();
       if(t.length === 0){
         localStorage.removeItem(TERM_KEY);
-        currentTerm = DEFAULT_TERM;
+        currentTerm = serverTerm || DEFAULT_TERM;
       } else {
         localStorage.setItem(TERM_KEY, t);
         currentTerm = t;
       }
       displayTerm.textContent = `"${currentTerm}"`;
-      // Immediately refresh with new term
       pollStop();
       fetchMatches();
     }
-    function clearTerm(){
+    function clearLocalTerm(){
       localStorage.removeItem(TERM_KEY);
-      currentTerm = DEFAULT_TERM;
+      currentTerm = serverTerm || DEFAULT_TERM;
       termInput.value = currentTerm;
       displayTerm.textContent = `"${currentTerm}"`;
       pollStop();
       fetchMatches();
     }
-
-    saveTermBtn.addEventListener('click', saveTerm);
-    clearTermBtn.addEventListener('click', clearTerm);
-    termInput.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter') saveTerm();
-    });
+    saveTermBtn.addEventListener('click', saveLocalTerm);
+    clearTermBtn.addEventListener('click', clearLocalTerm);
+    termInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') saveLocalTerm(); });
 
     // Utilities
     function formatTime(ts){
@@ -200,7 +196,7 @@
       return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     }
 
-    // Fetch and render with client-side filtering by currentTerm
+    // Fetch and render with server-term sync
     async function fetchMatches(){
       try {
         const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache:'no-store'});
@@ -210,6 +206,26 @@
           return;
         }
         const data = await res.json();
+
+        // If server provided a watch_term, use it as serverTerm
+        if(data && data.watch_term){
+          serverTerm = String(data.watch_term || '').trim() || null;
+        } else {
+          serverTerm = null;
+        }
+
+        // If user has no local override, adopt server term for display and filtering
+        const hasLocal = !!localStorage.getItem(TERM_KEY);
+        if(!hasLocal){
+          currentTerm = serverTerm || DEFAULT_TERM;
+          termInput.value = currentTerm;
+          displayTerm.textContent = `"${currentTerm}"`;
+        } else {
+          // keep local override displayed
+          currentTerm = localStorage.getItem(TERM_KEY);
+          displayTerm.textContent = `"${currentTerm}"`;
+        }
+
         renderMatchesFiltered(data);
       } catch (err){
         showEmpty('Error fetching matches');
@@ -233,7 +249,6 @@
         return;
       }
 
-      // Filter client-side by currentTerm (case-insensitive)
       const term = (currentTerm || DEFAULT_TERM).toLowerCase();
       const filtered = data.matches.filter(m => {
         const title = (m.title || '').toLowerCase();
@@ -286,8 +301,8 @@
       fetchMatches();
     });
 
-    // Initialize
-    loadTerm();
+    // Initialize: load local term if present, then fetch (server term may override display if no local)
+    loadLocalTerm();
     fetchMatches();
   </script>
 </body>
