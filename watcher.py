@@ -165,6 +165,59 @@ def build_combined_query(terms):
     return "(" + " OR ".join(quote_if_needed(t) for t in terms) + ")"
 
 
+def norm_terms(terms):
+    return {str(t).strip().lower() for t in terms if str(t).strip()}
+
+
+def reconcile_with_previous_terms(existing_matches, prev_terms, terms, debug=False):
+    """Drop stored matches that belong to terms we are no longer watching.
+
+    Returns (retained_matches, seen_ids_or_None, changed).
+
+    When the term list changes, seen_ids is rebuilt from the retained matches
+    only. That matters: seen_ids is what stops a post being added twice, so if
+    we kept the old set, a post originally found under a retired term would be
+    permanently suppressed even if it matches a term you add later.
+
+    Matches saved before matched_term existed have no term to check, so they
+    are treated as belonging to the old configuration and dropped.
+    """
+    current = norm_terms(terms)
+    previous = norm_terms(prev_terms or [])
+
+    if not previous:
+        # First run, or state written by an older version. Nothing to compare.
+        return existing_matches, None, False
+
+    if previous == current:
+        return existing_matches, None, False
+
+    retained, dropped = [], []
+    for m in existing_matches:
+        mt = str(m.get("matched_term") or "").strip().lower()
+        if mt and mt in current:
+            retained.append(m)
+        else:
+            dropped.append(m)
+
+    added = sorted(current - previous)
+    removed = sorted(previous - current)
+    print("Watch terms changed since the last run.")
+    if added:
+        print(f"  added:   {added}")
+    if removed:
+        print(f"  removed: {removed}")
+    print(f"  dropped {len(dropped)} stored match(es) from retired terms, "
+          f"kept {len(retained)}")
+
+    if debug and dropped:
+        for m in dropped[:10]:
+            print(f"    [debug] dropped {m.get('id')} "
+                  f"(matched_term={m.get('matched_term')!r}): {m.get('title')}")
+
+    return retained, {m["id"] for m in retained if m.get("id")}, True
+
+
 # ---------------------------------------------------------------- matching
 
 WORD_RE = re.compile(r"[a-z0-9']+")
@@ -383,6 +436,19 @@ def main(debug=False):
         print("FATAL: no watch terms configured. Set \"terms\" in config.json.")
         sys.exit(1)
 
+    # Load what we already published, and reconcile it against the term list
+    # BEFORE fetching, so seen_ids is correct when we dedupe below.
+    existing = load_json(MATCHES_PATH, {"matches": []})
+    existing_matches = existing.get("matches", []) if isinstance(existing, dict) else []
+    prev_terms = state.get("watch_terms")
+    if prev_terms is None and state.get("watch_term"):
+        prev_terms = [t.strip() for t in str(state["watch_term"]).split(",")]
+
+    existing_matches, rebuilt_seen, terms_changed = reconcile_with_previous_terms(
+        existing_matches, prev_terms, terms, debug)
+    if rebuilt_seen is not None:
+        seen_ids = rebuilt_seen
+
     user_agent = cfg.get("user_agent") or DEFAULT_CONFIG["user_agent"]
     limit = int(cfg.get("results_limit_per_query") or 50)
     query_mode = (cfg.get("query_mode") or "separate").lower()
@@ -477,8 +543,6 @@ def main(debug=False):
             by_term[m["matched_term"]] = by_term.get(m["matched_term"], 0) + 1
         print(f"[debug] new matches by term: {by_term}")
 
-    existing = load_json(MATCHES_PATH, {"matches": []})
-    existing_matches = existing.get("matches", []) if isinstance(existing, dict) else []
     combined = (new_matches + existing_matches)[:MAX_KEEP]
 
     save_json(MATCHES_PATH, {
