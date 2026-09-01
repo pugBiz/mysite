@@ -5,12 +5,16 @@ permissions:
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes; adjust as needed
+    - cron: "*/30 * * * *"   # every 30 min; */10 invites rate limiting
   workflow_dispatch:
     inputs:
       watch_term:
         description: 'Optional term to use for this run (overrides config.json)'
         required: false
+
+concurrency:
+  group: rss-watcher
+  cancel-in-progress: false
 
 jobs:
   run-watcher:
@@ -24,37 +28,29 @@ jobs:
 
       - name: Set WATCH_TERM if provided
         if: ${{ github.event.inputs.watch_term != '' }}
-        run: |
-          echo "WATCH_TERM=${{ github.event.inputs.watch_term }}" >> $GITHUB_ENV
+        run: echo "WATCH_TERM=${{ github.event.inputs.watch_term }}" >> $GITHUB_ENV
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install -r requirements.txt
 
       - name: Run watcher
-        env:
-          # Optional: provide Reddit OAuth credentials as secrets if you later switch to OAuth
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-        run: python watcher.py
+        run: python watcher.py --debug
 
       - name: Commit updated matches.json and state.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Only commit if there are changes
           if git status --porcelain | grep -qE "matches.json|state.json"; then
-            git add matches.json state.json || true
-            git commit -m "Update matches.json" || true
+            git add matches.json state.json
+            git commit -m "Update matches.json"
+            git pull --rebase origin main || true
             git push origin HEAD:main
           else
             echo "No changes to commit"
