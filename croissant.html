@@ -102,7 +102,8 @@
 
   <script>
     // Configuration
-    const MATCHES_JSON = '/matches.json';
+    // Use a relative path so the page works under project pages subpaths like /mysite/
+    const MATCHES_JSON = './matches.json';
     const POLL_INTERVAL_MS = 20000;
     let pollTimer = null;
 
@@ -155,7 +156,8 @@
       try {
         const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache:'no-store'});
         if(!res.ok){
-          showEmpty(`No data (HTTP ${res.status})`);
+          // show a helpful message that includes the actual URL attempted
+          showEmpty(`No data (HTTP ${res.status}) — tried ${new URL(MATCHES_JSON, location.href).href}`);
           schedulePoll();
           return;
         }
