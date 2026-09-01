@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1vykpnh",
+      "fullname": "t3_1vykpnh",
+      "title": "Made Croissants Today For The First-ish Time",
+      "url": "https://www.reddit.com/r/Baking/comments/1vykpnh/made_croissants_today_for_the_firstish_time/",
+      "excerpt": "Today i baked some croissants that I froze a week ago (I made two batches that day, this is the second one of the two, i baked the first one that day but did not take photos) I froze them after they had been rolled up so today I just had to thaw them and let them proof. Which I did, I let them thaw from the freezer to the fridge overnight and then let them proof until they grew and looked ready. I am a bit disappointed with the overall look and laminated dough (They were delicious tho) but tbf i",
+      "subreddit": "Baking",
+      "author": "Four0ut0fFive",
+      "score": null,
+      "created_utc": 1787712563,
+      "type": "post",
+      "matched_term": "bake croissants",
+      "found_at": "2026-09-01T15:07:03+00:00"
+    },
+    {
       "id": "1w4cke2",
       "fullname": "t3_1w4cke2",
       "title": "25M looking for some new friends",
@@ -378,6 +392,11 @@
       "found_at": "2026-09-01T13:51:28+00:00"
     }
   ],
-  "generated_at": "2026-09-01T13:51:28+00:00",
-  "watch_term": "bake"
+  "generated_at": "2026-09-01T15:07:33+00:00",
+  "watch_terms": [
+    "bake croissants",
+    "lamination",
+    "cold proof"
+  ],
+  "watch_term": "bake croissants, lamination, cold proof"
 }
