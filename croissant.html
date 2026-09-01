@@ -6,124 +6,211 @@
   <title>CroissantWatcher — Matches</title>
   <meta name="description" content="Live view of matches for 'bake croissants' from monitored subreddits." />
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; max-width:900px; margin:36px auto; padding:0 18px; color:#111; }
-    header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-    h1 { margin:0; font-size:1.4rem; }
-    .status { color:#666; font-size:0.95rem; }
-    .match { border:1px solid #eee; padding:12px; border-radius:8px; margin:12px 0; background:#fff; }
-    .match a { color:#0366d6; text-decoration:none; font-weight:600; }
-    .meta { color:#666; font-size:0.9rem; margin-top:6px; }
-    .empty { color:#888; margin-top:18px; }
-    .refreshing { color:#0a84ff; font-weight:600; }
-    .time { color:#999; font-size:0.9rem; margin-left:8px; }
-    .controls { margin-top:12px; }
-    button { padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fafafa; cursor:pointer; }
+    :root{
+      --bg: #ffffff;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #0a84ff;
+      --border: #e6e6e6;
+      --shadow: rgba(15,23,42,0.04);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0b1020;
+        --card: #0f1724;
+        --text: #e6eef8;
+        --muted: #9aa6b2;
+        --accent: #58a6ff;
+        --border: #1f2937;
+        --shadow: rgba(2,6,23,0.6);
+      }
+    }
+    [data-theme="dark"]{
+      --bg: #0b1020;
+      --card: #0f1724;
+      --text: #e6eef8;
+      --muted: #9aa6b2;
+      --accent: #58a6ff;
+      --border: #1f2937;
+      --shadow: rgba(2,6,23,0.6);
+    }
+    [data-theme="light"]{
+      --bg: #ffffff;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #0a84ff;
+      --border: #e6e6e6;
+      --shadow: rgba(15,23,42,0.04);
+    }
+
+    html,body{height:100%}
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0; padding:28px; background:var(--bg); color:var(--text);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    .container{max-width:980px; margin:0 auto;}
+    header{display:flex; gap:12px; align-items:center; margin-bottom:18px;}
+    h1{margin:0; font-size:1.4rem;}
+    .status{color:var(--muted); font-size:0.95rem;}
+    .controls{margin-left:auto; display:flex; gap:8px; align-items:center;}
+    .time{color:var(--muted); font-size:0.9rem;}
+    button{background:var(--card); color:var(--text); border:1px solid var(--border); padding:8px 12px; border-radius:8px; cursor:pointer; box-shadow:0 1px 2px var(--shadow);}
+    button:active{transform:translateY(1px)}
+    .match{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid var(--border); padding:14px; border-radius:10px; margin:12px 0; box-shadow:0 6px 18px var(--shadow);}
+    .match a{color:var(--accent); text-decoration:none; font-weight:600;}
+    .meta{color:var(--muted); font-size:0.9rem; margin-top:6px;}
+    .empty{color:var(--muted); margin-top:18px;}
+    .badge{background:var(--card); border:1px solid var(--border); padding:6px 8px; border-radius:999px; color:var(--muted); font-size:0.85rem;}
+    .toggle{display:inline-flex; gap:8px; align-items:center;}
+    .sr-only{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
+    @media (max-width:640px){
+      body{padding:18px}
+      .controls{flex-direction:column; align-items:flex-end}
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>CroissantWatcher</h1>
-      <div class="status">Watching for <strong>"bake croissants"</strong></div>
-    </div>
-    <div style="margin-left:auto; text-align:right;">
-      <div id="lastUpdated" class="time">—</div>
-      <div class="controls"><button id="manualRefresh">Refresh now</button></div>
-    </div>
-  </header>
+  <div class="container" id="pageRoot">
+    <header>
+      <div>
+        <h1>CroissantWatcher</h1>
+        <div class="status">Watching for <strong>"bake croissants"</strong></div>
+      </div>
 
-  <main>
-    <div id="matchesContainer">
-      <p class="empty">Loading matches…</p>
-    </div>
-  </main>
+      <div class="controls" aria-hidden="false">
+        <div class="time" id="lastUpdated">—</div>
+        <div style="width:8px"></div>
+        <button id="manualRefresh" title="Refresh now">Refresh now</button>
+        <div style="width:8px"></div>
+        <div class="toggle" title="Toggle theme">
+          <button id="themeToggle" aria-pressed="false">Toggle theme</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div id="matchesContainer">
+        <p class="empty">Loading matches…</p>
+      </div>
+    </main>
+  </div>
 
   <script>
-    // Configuration
-    const MATCHES_JSON = '/matches.json'; // served from gh-pages root
-    const POLL_INTERVAL_MS = 20000; // 20 seconds
+    // Config
+    const MATCHES_JSON = '/matches.json';
+    const POLL_INTERVAL_MS = 20000;
     let pollTimer = null;
-    let lastSeenIds = new Set();
 
-    function formatTime(ts) {
-      try {
-        const d = new Date(ts);
-        return d.toLocaleString();
-      } catch (e) { return ts; }
+    // Theme handling: respects system, allows manual override persisted in localStorage
+    const root = document.getElementById('pageRoot');
+    const themeToggle = document.getElementById('themeToggle');
+    const THEME_KEY = 'croissant_theme';
+
+    function applyTheme(theme){
+      if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
+      else if(theme === 'light') document.documentElement.setAttribute('data-theme','light');
+      else document.documentElement.removeAttribute('data-theme');
+      themeToggle.setAttribute('aria-pressed', theme === 'dark');
     }
 
-    async function fetchMatches() {
+    function getStoredTheme(){
+      return localStorage.getItem(THEME_KEY);
+    }
+
+    function detectSystemPref(){
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // Initialize theme
+    const stored = getStoredTheme();
+    if(stored === 'dark' || stored === 'light'){
+      applyTheme(stored);
+    } else {
+      // follow system but don't set explicit attribute so CSS media query applies
+      applyTheme(null);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const current = getStoredTheme() || detectSystemPref();
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(THEME_KEY, next);
+      applyTheme(next);
+    });
+
+    // Utility
+    function formatTime(ts){
+      try { return new Date(ts).toLocaleString(); } catch(e){ return ts; }
+    }
+
+    function escapeHtml(s){
+      if(!s) return '';
+      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    // Fetch and render
+    async function fetchMatches(){
       try {
-        const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache: 'no-store'});
-        if (!res.ok) {
+        const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache:'no-store'});
+        if(!res.ok){
           showEmpty(`No data (HTTP ${res.status})`);
           schedulePoll();
           return;
         }
         const data = await res.json();
         renderMatches(data);
-      } catch (err) {
+      } catch (err){
         showEmpty('Error fetching matches');
         schedulePoll();
       }
     }
 
-    function showEmpty(text) {
+    function showEmpty(text){
       const c = document.getElementById('matchesContainer');
-      c.innerHTML = `<p class="empty">${text}</p>`;
+      c.innerHTML = `<p class="empty">${escapeHtml(text)}</p>`;
       document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
     }
 
-    function renderMatches(data) {
+    function renderMatches(data){
       const c = document.getElementById('matchesContainer');
-      if (!data || !Array.isArray(data.matches) || data.matches.length === 0) {
+      if(!data || !Array.isArray(data.matches) || data.matches.length === 0){
         c.innerHTML = '<p class="empty">No matches found.</p>';
         document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
         schedulePoll();
         return;
       }
 
-      // If there are matches, show them and stop auto-refreshing the whole page.
+      // Stop polling when matches exist so user can read
       pollStop();
 
-      // Build list
       const html = data.matches.map(m => {
-        const excerpt = (m.excerpt || '').replace(/\n/g, ' ').slice(0, 300);
+        const excerpt = (m.excerpt || '').replace(/\n/g,' ').slice(0, 400);
+        const title = m.title || excerpt || m.url;
         return `
-          <div class="match" id="match-${m.id}">
-            <div><a href="${m.url}" target="_blank" rel="noopener">${escapeHtml(m.title || excerpt || m.url)}</a></div>
+          <article class="match" id="match-${escapeHtml(m.id)}" role="article" aria-labelledby="title-${escapeHtml(m.id)}">
+            <div><a id="title-${escapeHtml(m.id)}" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(title)}</a></div>
             <div class="meta">r/${escapeHtml(m.subreddit)} • by u/${escapeHtml(m.author)} • ${escapeHtml(m.type || 'post')}</div>
-            <div style="margin-top:8px; color:#222;">${escapeHtml(excerpt)}</div>
-            <div class="meta">Found: ${formatTime(m.found_at || Date.now())}</div>
-          </div>`;
+            <div style="margin-top:10px; color:var(--text);">${escapeHtml(excerpt)}</div>
+            <div class="meta" style="margin-top:8px;">Found: ${formatTime(m.found_at || Date.now())}</div>
+          </article>`;
       }).join('\n');
 
       c.innerHTML = html;
       document.getElementById('lastUpdated').textContent = 'Matches found: ' + data.matches.length + ' • ' + formatTime(Date.now());
     }
 
-    function escapeHtml(s) {
-      if (!s) return '';
-      return s.replace(/[&<>"']/g, function (m) {
-        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
-      });
+    function schedulePoll(){
+      if(pollTimer) return;
+      pollTimer = setTimeout(() => { pollTimer = null; fetchMatches(); }, POLL_INTERVAL_MS);
+      document.querySelector('.status')?.classList?.add('refreshing');
     }
 
-    function schedulePoll() {
-      if (pollTimer) return;
-      pollTimer = setTimeout(() => {
-        pollTimer = null;
-        fetchMatches();
-      }, POLL_INTERVAL_MS);
-      document.querySelector('.status').classList.add('refreshing');
-    }
-
-    function pollStop() {
-      if (pollTimer) {
-        clearTimeout(pollTimer);
-        pollTimer = null;
-      }
-      document.querySelector('.status').classList.remove('refreshing');
+    function pollStop(){
+      if(pollTimer){ clearTimeout(pollTimer); pollTimer = null; }
+      document.querySelector('.status')?.classList?.remove('refreshing');
     }
 
     document.getElementById('manualRefresh').addEventListener('click', () => {
@@ -131,7 +218,7 @@
       fetchMatches();
     });
 
-    // Initial fetch and start polling
+    // Start
     fetchMatches();
   </script>
 </body>
