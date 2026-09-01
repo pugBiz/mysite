@@ -3,7 +3,12 @@
     "woodworking software",
     "aac software",
     "woodworking app",
-    "aac app"
+    "aac app",
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos"
   ],
   "global_search": true,
   "min_score": 0,
