@@ -1,39 +1,11 @@
 {
-  "seen_ids": [
-    "1w4hkxx",
-    "1w4kxzy",
-    "1w4dhkj",
-    "1w4i2gb",
-    "1w4gveo",
-    "1w4iiif",
-    "1w4ih7g",
-    "1w4d25m",
-    "1w4keqv",
-    "1w4k5mb",
-    "1w4i15i",
-    "1w4itc1",
-    "1w4ad4q",
-    "1w4d252",
-    "1w4m3em",
-    "1w4fg4y",
-    "1w4b19b",
-    "1w4fh70",
-    "1w4ltpn",
-    "1w4fqxd",
-    "1w4g5bo",
-    "1w4bfzw",
-    "1w4ea2q",
-    "1w4gp43",
-    "1w4ktg7",
-    "1w4dllm",
-    "1w4azys",
-    "1w4asc2",
-    "1w4h7cp"
-  ],
-  "last_run": "2026-09-01T19:44:28+00:00",
-  "watch_term": "woodworking, aac",
+  "seen_ids": [],
+  "last_run": "2026-09-01T19:58:31+00:00",
+  "watch_term": "woodworking software, aac software, woodworking app, aac app",
   "watch_terms": [
-    "woodworking",
-    "aac"
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "aac app"
   ]
 }
