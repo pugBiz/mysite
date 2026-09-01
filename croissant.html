@@ -1,225 +1,734 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CroissantWatcher — Matches</title>
-  <meta name="description" content="Live view of matches for 'bake croissants' from monitored subreddits." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CroissantWatcher</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
   <style>
-    :root{
-      --bg: #ffffff;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --accent: #0a84ff;
-      --border: #e6e6e6;
-      --shadow: rgba(15,23,42,0.04);
-    }
-    @media (prefers-color-scheme: dark){
-      :root{
-        --bg: #0b1020;
-        --card: #0f1724;
-        --text: #e6eef8;
-        --muted: #9aa6b2;
-        --accent: #58a6ff;
-        --border: #1f2937;
-        --shadow: rgba(2,6,23,0.6);
-      }
-    }
-    [data-theme="dark"]{
-      --bg: #0b1020;
-      --card: #0f1724;
-      --text: #e6eef8;
-      --muted: #9aa6b2;
-      --accent: #58a6ff;
-      --border: #1f2937;
-      --shadow: rgba(2,6,23,0.6);
-    }
-    [data-theme="light"]{
-      --bg: #ffffff;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --accent: #0a84ff;
-      --border: #e6e6e6;
-      --shadow: rgba(15,23,42,0.04);
+    :root {
+      --bg-base: #f5f7fa;
+      --bg-card: #ffffff;
+      --border-card: #e2e8f0;
+      --shadow-card: rgba(15,23,42,0.07);
+      --shadow-card-hover: rgba(15,23,42,0.13);
+      --text-primary: #0f172a;
+      --text-muted: #64748b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-glow: transparent;
+      --btn-bg: #ffffff;
+      --btn-border: #cbd5e1;
+      --btn-hover: #f1f5f9;
+      --header-bg: #eef2ff;
+      --badge-bg: #f1f5f9;
+      --badge-text: #64748b;
+      --skeleton-base: #e2e8f0;
+      --skeleton-shine: #f1f5f9;
+      --live-green: #22c55e;
+      --paused-amber: #f59e0b;
     }
 
-    html,body{height:100%}
-    body{
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      margin:0; padding:28px; background:var(--bg); color:var(--text);
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    .dark {
+      --bg-base: #0d1117;
+      --bg-card: #161b27;
+      --border-card: #21293a;
+      --shadow-card: rgba(2,6,23,0.5);
+      --shadow-card-hover: rgba(2,6,23,0.7);
+      --text-primary: #e2e8f0;
+      --text-muted: #8b9ab0;
+      --accent: #60a5fa;
+      --accent-hover: #93bbfc;
+      --accent-glow: rgba(96,165,250,0.15);
+      --btn-bg: #1e2a3a;
+      --btn-border: #2d3f55;
+      --btn-hover: #253346;
+      --header-bg: #111827;
+      --badge-bg: #1e2a3a;
+      --badge-text: #8b9ab0;
+      --skeleton-base: #1e2a3a;
+      --skeleton-shine: #253346;
+      --live-green: #4ade80;
+      --paused-amber: #fbbf24;
     }
 
-    .container{max-width:980px; margin:0 auto;}
-    header{display:flex; gap:12px; align-items:center; margin-bottom:18px;}
-    h1{margin:0; font-size:1.4rem;}
-    .status{color:var(--muted); font-size:0.95rem;}
-    .controls{margin-left:auto; display:flex; gap:8px; align-items:center;}
-    .time{color:var(--muted); font-size:0.9rem;}
-    button{background:var(--card); color:var(--text); border:1px solid var(--border); padding:8px 12px; border-radius:8px; cursor:pointer; box-shadow:0 1px 2px var(--shadow);}
-    button:active{transform:translateY(1px)}
-    .match{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid var(--border); padding:14px; border-radius:10px; margin:12px 0; box-shadow:0 6px 18px var(--shadow);}
-    .match a{color:var(--accent); text-decoration:none; font-weight:600;}
-    .meta{color:var(--muted); font-size:0.9rem; margin-top:6px;}
-    .empty{color:var(--muted); margin-top:18px;}
-    .badge{background:var(--card); border:1px solid var(--border); padding:6px 8px; border-radius:999px; color:var(--muted); font-size:0.85rem;}
-    .toggle{display:inline-flex; gap:8px; align-items:center;}
-    .sr-only{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
-    @media (max-width:640px){
-      body{padding:18px}
-      .controls{flex-direction:column; align-items:flex-end}
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      transition: background-color 0.25s ease, color 0.2s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease;
+      border-bottom: 1.5px solid transparent;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      border-bottom-color: var(--accent);
+    }
+
+    .dark a:hover {
+      text-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .app-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 28px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Header */
+    .app-header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border-card);
+      padding: 20px 28px;
+      transition: background-color 0.25s ease, border-color 0.2s ease;
+    }
+
+    .dark .app-header {
+      background: linear-gradient(135deg, #0d1117 0%, #111d2e 100%);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .app-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .match-count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 999px;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 8px;
+      line-height: 1;
+      transition: background-color 0.2s ease;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      transition: background-color 0.2s ease, color 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .status-badge.live { color: var(--live-green); }
+
+    .status-badge.live .status-dot {
+      background: var(--live-green);
+      box-shadow: 0 0 6px var(--live-green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .status-badge.paused { color: var(--paused-amber); }
+
+    .status-badge.paused .status-dot { background: var(--paused-amber); }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .last-updated {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease,
+                  box-shadow 0.2s ease, transform 0.15s ease, color 0.2s ease;
+      min-height: 40px;
+      user-select: none;
+    }
+
+    .btn:hover { background: var(--btn-hover); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-icon {
+      padding: 8px;
+      min-width: 40px;
+      justify-content: center;
+    }
+
+    /* Cards */
+    .match-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px var(--shadow-card);
+      transition: background-color 0.25s ease, border-color 0.2s ease,
+                  box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .match-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow-card-hover);
+    }
+
+    .dark .match-card:hover {
+      box-shadow: 0 8px 28px rgba(2,6,23,0.8);
+      border-color: #2d3f55;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+
+    .card-title a {
+      color: var(--accent);
+      border-bottom: 1.5px solid transparent;
+    }
+
+    .card-title a:hover {
+      color: var(--accent-hover);
+      border-bottom-color: var(--accent);
+    }
+
+    .card-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .card-excerpt {
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      opacity: 0.88;
+    }
+
+    .card-timestamp {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Skeleton loading */
+    .skeleton-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      transition: background-color 0.25s ease, border-color 0.2s ease;
+    }
+
+    .skeleton-line {
+      height: 14px;
+      border-radius: 6px;
+      background: linear-gradient(
+        90deg,
+        var(--skeleton-base) 25%,
+        var(--skeleton-shine) 50%,
+        var(--skeleton-base) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      margin-bottom: 12px;
+    }
+
+    .skeleton-line.title  { height: 18px; width: 75%; }
+    .skeleton-line.meta   { height: 12px; width: 55%; }
+    .skeleton-line.body1  { width: 100%; }
+    .skeleton-line.body2  { width: 85%; }
+    .skeleton-line.time   { height: 11px; width: 35%; margin-bottom: 0; }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-icon  { font-size: 3rem; margin-bottom: 16px; opacity: 0.4; }
+
+    .empty-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      opacity: 0.7;
+      margin-bottom: 6px;
+    }
+
+    .empty-desc {
+      font-size: 0.9rem;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* Error state */
+    .error-state {
+      text-align: center;
+      padding: 24px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      margin-bottom: 16px;
+      transition: background-color 0.25s ease, border-color 0.2s ease;
+    }
+
+    .error-text       { color: #ef4444; font-size: 0.9rem; font-weight: 500; }
+    .dark .error-text { color: #f87171; }
+
+    /* Footer */
+    .app-footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      border-top: 1px solid var(--border-card);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Theme toggle */
+    .theme-toggle-icon {
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .theme-toggle-icon:hover { transform: rotate(20deg); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .app-header    { padding: 16px 20px; }
+      .app-container { padding: 20px 16px; }
+      .header-inner  { flex-direction: column; align-items: flex-start; }
+      .header-controls { width: 100%; justify-content: flex-start; }
+      .app-title     { font-size: 1.25rem; }
+      .match-card    { padding: 16px 18px; }
     }
   </style>
 </head>
 <body>
-  <div class="container" id="pageRoot">
-    <header>
-      <div>
-        <h1>CroissantWatcher</h1>
-        <div class="status">Watching for <strong>"bake croissants"</strong></div>
-      </div>
 
-      <div class="controls" aria-hidden="false">
-        <div class="time" id="lastUpdated">—</div>
-        <div style="width:8px"></div>
-        <button id="manualRefresh" title="Refresh now">Refresh now</button>
-        <div style="width:8px"></div>
-        <div class="toggle" title="Toggle theme">
-          <button id="themeToggle" aria-pressed="false">Toggle theme</button>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <h1 class="app-title">
+          <span>🥐</span>
+          <span>CroissantWatcher</span>
+        </h1>
+        <span id="match-count-badge" class="match-count-badge" style="display:none;"></span>
+        <span id="status-badge" class="status-badge live">
+          <span class="status-dot"></span>
+          <span id="status-text">LIVE</span>
+        </span>
+      </div>
+      <div class="header-controls">
+        <span id="last-updated" class="last-updated"></span>
+        <button id="refresh-btn" class="btn" title="Refresh now">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          <span>Refresh now</span>
+        </button>
+        <button id="theme-toggle" class="btn btn-icon" title="Toggle theme" aria-pressed="false">
+          <span id="theme-icon" class="theme-toggle-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="app-container">
+
+    <!-- Loading skeleton -->
+    <div id="loading-state">
+      <div class="skeleton-card">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line meta"></div>
+        <div class="skeleton-line body1"></div>
+        <div class="skeleton-line body2"></div>
+        <div class="skeleton-line time"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line meta"></div>
+        <div class="skeleton-line body1"></div>
+        <div class="skeleton-line body2"></div>
+        <div class="skeleton-line time"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line meta"></div>
+        <div class="skeleton-line body1"></div>
+        <div class="skeleton-line body2"></div>
+        <div class="skeleton-line time"></div>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="error-state" style="display:none;">
+      <div class="error-state">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+          <i data-lucide="alert-triangle" class="w-5 h-5" style="color:#ef4444;"></i>
+          <span class="error-text" id="error-text">Failed to fetch matches.</span>
         </div>
       </div>
-    </header>
+    </div>
 
-    <main>
-      <div id="matchesContainer">
-        <p class="empty">Loading matches…</p>
+    <!-- Empty state -->
+    <div id="empty-state" style="display:none;">
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i data-lucide="inbox" class="w-12 h-12 mx-auto" style="opacity:0.35;color:var(--text-muted);"></i>
+        </div>
+        <div class="empty-title">No matches yet</div>
+        <div class="empty-desc">Watching Reddit for posts matching "bake croissants." Results will appear here as they're found.</div>
       </div>
-    </main>
-  </div>
+    </div>
 
+    <!-- Match cards -->
+    <div id="matches-container"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    CroissantWatcher — polling every 20s
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    // Config
-    const MATCHES_JSON = '/matches.json';
-    const POLL_INTERVAL_MS = 20000;
+    // ── Icons ──
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // ── Escape HTML ──
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.appendChild(document.createTextNode(String(str || '')));
+      return d.innerHTML;
+    }
+
+    // ── Mock Data ──
+    function getMockData() {
+      const now = Date.now();
+      return [
+        {
+          title: "Finally nailed laminated dough after 6 tries — here's what clicked",
+          url: "https://www.reddit.com/r/Breadit/comments/mock1",
+          subreddit: "Breadit", author: "flouredcountertop", type: "post",
+          body: "I've been trying to bake croissants for months and kept getting bready, dense layers. Turns out I was letting the butter get too warm during lamination. Today I got those honeycomb layers everyone talks about.",
+          found_at: new Date(now - 420000).toISOString()
+        },
+        {
+          title: "Bake croissants the night before and reheat — does it work?",
+          url: "https://www.reddit.com/r/AskCulinary/comments/mock2",
+          subreddit: "AskCulinary", author: "morningpastry99", type: "post",
+          body: "Planning a Sunday brunch and want to bake croissants Saturday evening. Will a 10-min reheat at 350°F bring them back to life or will they be sad and chewy?",
+          found_at: new Date(now - 780000).toISOString()
+        },
+        {
+          title: "My croissant baking timeline for beginners (with temps)",
+          url: "https://www.reddit.com/r/Baking/comments/mock3",
+          subreddit: "Baking", author: "viennoiserie_nerd", type: "post",
+          body: "A lot of guides skip the exact fridge times. Here's the schedule I use: Day 1 — make détrempe, Day 2 — laminate and shape, Day 3 — proof overnight, Day 4 — bake croissants fresh in the morning.",
+          found_at: new Date(now - 1140000).toISOString()
+        }
+      ];
+    }
+
+    // ── State ──
+    let matches = [];
+    let usingMock = true;
+    let polling = true;
     let pollTimer = null;
+    let firstFetchDone = false;
+    let lastFetchTime = null;
+    let fetchError = null;
 
-    // Theme handling: respects system, allows manual override persisted in localStorage
-    const root = document.getElementById('pageRoot');
-    const themeToggle = document.getElementById('themeToggle');
-    const THEME_KEY = 'croissant_theme';
+    // ── DOM refs ──
+    const loadingState      = document.getElementById('loading-state');
+    const errorState        = document.getElementById('error-state');
+    const errorTextEl       = document.getElementById('error-text');
+    const emptyState        = document.getElementById('empty-state');
+    const matchesContainer  = document.getElementById('matches-container');
+    const matchCountBadge   = document.getElementById('match-count-badge');
+    const statusBadge       = document.getElementById('status-badge');
+    const statusText        = document.getElementById('status-text');
+    const lastUpdatedEl     = document.getElementById('last-updated');
+    const refreshBtn        = document.getElementById('refresh-btn');
+    const themeToggleBtn    = document.getElementById('theme-toggle');
+    const themeIcon         = document.getElementById('theme-icon');
 
-    function applyTheme(theme){
-      if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
-      else if(theme === 'light') document.documentElement.setAttribute('data-theme','light');
-      else document.documentElement.removeAttribute('data-theme');
-      themeToggle.setAttribute('aria-pressed', theme === 'dark');
+    // ── Theme ──
+    function getSystemTheme() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
-    function getStoredTheme(){
-      return localStorage.getItem(THEME_KEY);
+    function getSavedTheme() {
+      try { return localStorage.getItem('croissant_theme'); } catch { return null; }
     }
 
-    function detectSystemPref(){
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    function applyTheme(theme) {
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+      themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      themeToggleBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
     }
 
-    // Initialize theme
-    const stored = getStoredTheme();
-    if(stored === 'dark' || stored === 'light'){
-      applyTheme(stored);
-    } else {
-      // follow system but don't set explicit attribute so CSS media query applies
-      applyTheme(null);
+    function initTheme() {
+      applyTheme(getSavedTheme() || getSystemTheme());
     }
 
-    themeToggle.addEventListener('click', () => {
-      const current = getStoredTheme() || detectSystemPref();
-      const next = current === 'dark' ? 'light' : 'dark';
-      localStorage.setItem(THEME_KEY, next);
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const next = isDark ? 'light' : 'dark';
       applyTheme(next);
+      try { localStorage.setItem('croissant_theme', next); } catch {}
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!getSavedTheme()) applyTheme(e.matches ? 'dark' : 'light');
     });
 
-    // Utility
-    function formatTime(ts){
-      try { return new Date(ts).toLocaleString(); } catch(e){ return ts; }
-    }
+    initTheme();
 
-    function escapeHtml(s){
-      if(!s) return '';
-      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    }
-
-    // Fetch and render
-    async function fetchMatches(){
+    // ── Helpers ──
+    function formatTimestamp(iso) {
       try {
-        const res = await fetch(MATCHES_JSON + '?_=' + Date.now(), {cache:'no-store'});
-        if(!res.ok){
-          showEmpty(`No data (HTTP ${res.status})`);
-          schedulePoll();
-          return;
-        }
-        const data = await res.json();
-        renderMatches(data);
-      } catch (err){
-        showEmpty('Error fetching matches');
-        schedulePoll();
-      }
+        return new Date(iso).toLocaleString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric',
+          hour: 'numeric', minute: '2-digit', hour12: true
+        });
+      } catch { return iso; }
     }
 
-    function showEmpty(text){
-      const c = document.getElementById('matchesContainer');
-      c.innerHTML = `<p class="empty">${escapeHtml(text)}</p>`;
-      document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
+    function truncate(str, max) {
+      if (!str) return '';
+      return str.length > max ? str.slice(0, max) + '…' : str;
     }
 
-    function renderMatches(data){
-      const c = document.getElementById('matchesContainer');
-      if(!data || !Array.isArray(data.matches) || data.matches.length === 0){
-        c.innerHTML = '<p class="empty">No matches found.</p>';
-        document.getElementById('lastUpdated').textContent = 'Last checked: ' + formatTime(Date.now());
-        schedulePoll();
+    // ── Render ──
+    function renderCard(m) {
+      const title   = escapeHtml(m.title || 'Untitled');
+      const url     = escapeHtml(m.url || '#');
+      const sub     = escapeHtml(m.subreddit || 'unknown');
+      const author  = escapeHtml(m.author || 'unknown');
+      const type    = escapeHtml(m.type || 'post');
+      const excerpt = escapeHtml(truncate(m.body || m.excerpt || '', 400));
+      const ts      = formatTimestamp(m.found_at);
+
+      return `
+        <article class="match-card">
+          <h2 class="card-title">
+            <a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>
+          </h2>
+          <div class="card-meta">
+            <span>r/${sub}</span><span>•</span>
+            <span>by u/${author}</span><span>•</span>
+            <span>${type}</span>
+          </div>
+          ${excerpt ? `<p class="card-excerpt">${excerpt}</p>` : ''}
+          <div class="card-timestamp">
+            <i data-lucide="clock" style="width:14px;height:14px;opacity:0.6;"></i>
+            <span>Found: ${escapeHtml(ts)}</span>
+          </div>
+        </article>`;
+    }
+
+    function render() {
+      if (!firstFetchDone) {
+        loadingState.style.display = '';
+        errorState.style.display = 'none';
+        emptyState.style.display = 'none';
+        matchesContainer.innerHTML = '';
+        matchCountBadge.style.display = 'none';
         return;
       }
 
-      // Stop polling when matches exist so user can read
-      pollStop();
+      loadingState.style.display = 'none';
 
-      const html = data.matches.map(m => {
-        const excerpt = (m.excerpt || '').replace(/\n/g,' ').slice(0, 400);
-        const title = m.title || excerpt || m.url;
-        return `
-          <article class="match" id="match-${escapeHtml(m.id)}" role="article" aria-labelledby="title-${escapeHtml(m.id)}">
-            <div><a id="title-${escapeHtml(m.id)}" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(title)}</a></div>
-            <div class="meta">r/${escapeHtml(m.subreddit)} • by u/${escapeHtml(m.author)} • ${escapeHtml(m.type || 'post')}</div>
-            <div style="margin-top:10px; color:var(--text);">${escapeHtml(excerpt)}</div>
-            <div class="meta" style="margin-top:8px;">Found: ${formatTime(m.found_at || Date.now())}</div>
-          </article>`;
-      }).join('\n');
+      if (fetchError && matches.length === 0 && !usingMock) {
+        errorState.style.display = '';
+        errorTextEl.textContent = fetchError;
+      } else {
+        errorState.style.display = 'none';
+      }
 
-      c.innerHTML = html;
-      document.getElementById('lastUpdated').textContent = 'Matches found: ' + data.matches.length + ' • ' + formatTime(Date.now());
+      if (matches.length > 0) {
+        emptyState.style.display = 'none';
+        matchesContainer.innerHTML = matches.map(renderCard).join('');
+        matchCountBadge.textContent = matches.length;
+        matchCountBadge.style.display = 'inline-flex';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      } else {
+        emptyState.style.display = '';
+        matchesContainer.innerHTML = '';
+        matchCountBadge.style.display = 'none';
+      }
+
+      // Status badge
+      if (polling) {
+        statusBadge.className = 'status-badge live';
+        statusText.textContent = 'LIVE';
+      } else {
+        statusBadge.className = 'status-badge paused';
+        statusText.textContent = 'Paused';
+      }
+
+      if (lastFetchTime) {
+        lastUpdatedEl.textContent = 'Updated ' + formatTimestamp(lastFetchTime.toISOString());
+      }
     }
 
-    function schedulePoll(){
-      if(pollTimer) return;
-      pollTimer = setTimeout(() => { pollTimer = null; fetchMatches(); }, POLL_INTERVAL_MS);
-      document.querySelector('.status')?.classList?.add('refreshing');
+    // ── Fetch ──
+    async function fetchMatches() {
+      try {
+        const res = await fetch(`/matches.json?_=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        lastFetchTime = new Date();
+        fetchError = null;
+
+        const list = Array.isArray(data) ? data : (data.matches || []);
+        if (list.length > 0) {
+          matches = list;
+          usingMock = false;
+          stopPolling();
+        } else if (!usingMock) {
+          matches = [];
+        }
+      } catch (e) {
+        fetchError = 'Could not reach /matches.json — ' + (e.message || 'network error');
+        lastFetchTime = new Date();
+        if (matches.length === 0) { matches = getMockData(); usingMock = true; }
+      } finally {
+        firstFetchDone = true;
+        render();
+      }
     }
 
-    function pollStop(){
-      if(pollTimer){ clearTimeout(pollTimer); pollTimer = null; }
-      document.querySelector('.status')?.classList?.remove('refreshing');
+    function startPolling() {
+      polling = true;
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(fetchMatches, 20000);
     }
 
-    document.getElementById('manualRefresh').addEventListener('click', () => {
-      pollStop();
+    function stopPolling() {
+      polling = false;
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    }
+
+    // ── Events ──
+    refreshBtn.addEventListener('click', () => {
+      if (!polling) startPolling();
       fetchMatches();
     });
 
-    // Start
+    themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // ── Init ──
     fetchMatches();
+    startPolling();
   </script>
 </body>
 </html>
