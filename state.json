@@ -1,11 +1,18 @@
 {
-  "seen_ids": [],
-  "last_run": "2026-09-01T19:58:31+00:00",
-  "watch_term": "woodworking software, aac software, woodworking app, aac app",
+  "seen_ids": [
+    "1w42n29"
+  ],
+  "last_run": "2026-09-01T20:24:22+00:00",
+  "watch_term": "woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos",
   "watch_terms": [
     "woodworking software",
     "aac software",
     "woodworking app",
-    "aac app"
+    "aac app",
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos"
   ]
 }
