@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1w2e341",
+      "fullname": "t3_1w2e341",
+      "title": "I built a garden planner and would love some honest feedback from Alberta Gardeners",
+      "url": "https://www.reddit.com/r/Albertagardening/comments/1w2e341/i_built_a_garden_planner_and_would_love_some/",
+      "excerpt": "Good morning everyone — I'm the developer behind EdenVatika, a garden planner and journal I've been building for gardeners. I made it because I wanted one place to plan beds, keep track of plantings, record harvests and garden observations, and look back at what happened during the season. I put together a demo that doesn't require an account, so you can actually explore it before deciding whether it's useful. What I'm especially curious about is whether the way I've approached garden planning m",
+      "subreddit": "Albertagardening",
+      "author": "amit4blogger",
+      "score": null,
+      "created_utc": 1788086084,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-01T23:13:02+00:00"
+    },
+    {
+      "id": "1w1afj2",
+      "fullname": "t3_1w1afj2",
+      "title": "Built a garden planner for people who don't have a full-sun yard. Looking for beta testers",
+      "url": "https://www.reddit.com/r/sideprojects/comments/1w1afj2/built_a_garden_planner_for_people_who_dont_have_a/",
+      "excerpt": "I've spent the last several weeks building TerraKeep, a garden planning app, mostly because every planner I tried assumed you had full sun and only wanted a vegetable patch. My own yard is half-shade, half-sun, and I wanted something that could handle edible and ornamental plants together, plus flag which ones actually work for shade or support pollinators. Built with Next.js/Tailwind on the frontend, Supabase for backend/auth, Stripe for payments, deployed on Vercel. I have no coding background",
+      "subreddit": "sideprojects",
+      "author": "Stasaitis",
+      "score": null,
+      "created_utc": 1787971155,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-01T23:13:02+00:00"
+    },
+    {
+      "id": "1w1a5is",
+      "fullname": "t3_1w1a5is",
+      "title": "[Android] TerraKeep: Garden Planner - Need 12 testers for a garden planning app",
+      "url": "https://www.reddit.com/r/alphaandbetausers/comments/1w1a5is/android_terrakeep_garden_planner_need_12_testers/",
+      "excerpt": "App Name: TerraKeep: Garden Planner Platform: Android (Google Play, closed testing) Testers Needed: 12 Link: https://play.google.com/apps/testing/co.terrakeep.app TerraKeep is a garden planning app for people who don't have a full-sun backyard. It's built around shade-tolerant plants, and it lets you plan edible and ornamental gardens (plus native/pollinator species) in one place instead of juggling separate apps or spreadsheets. Looking for testers to try core flows: building a garden, viewing ",
+      "subreddit": "alphaandbetausers",
+      "author": "Stasaitis",
+      "score": null,
+      "created_utc": 1787970322,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-01T23:13:02+00:00"
+    },
+    {
       "id": "1w3lwka",
       "fullname": "t3_1w3lwka",
       "title": "Trying to find a free AAC app for my brother",
@@ -71,7 +113,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-01T20:52:02+00:00",
+  "generated_at": "2026-09-01T23:13:02+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
@@ -81,7 +123,11 @@
     "label app",
     "label barcode",
     "combine videos",
-    "merge videos"
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner"
   ],
-  "watch_term": "woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos"
+  "watch_term": "woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner"
 }
