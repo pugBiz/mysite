@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1w5g9p0",
+      "fullname": "t3_1w5g9p0",
+      "title": "IAP Fees",
+      "url": "https://www.reddit.com/r/appledevelopers/comments/1w5g9p0/iap_fees/",
+      "excerpt": "Am I misunderstanding something or are the IAP fees absolutely extortionate? 10x stripe fees in some places. (UK based) Im building a white-label app option for my Gym management SaaS, so was intending on having them able to sell things like workout programmes, memberships, bookings and products through the app. Research suggests that the latter 2 dont require IAP as they're physical items, but a workout programme and membership (unlocking a workout programme or other app functionality) requires",
+      "subreddit": "appledevelopers",
+      "author": "Rhysypops",
+      "score": null,
+      "created_utc": 1788368635,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-02T21:58:04+00:00"
+    },
+    {
+      "id": "1w5nrf7",
+      "fullname": "t3_1w5nrf7",
+      "title": "Filtored: AI Gallery & Cleanup App for Android",
+      "url": "https://www.reddit.com/r/AppsWebappsFullstack/comments/1w5nrf7/filtored_ai_gallery_cleanup_app_for_android/",
+      "excerpt": "App Name: Filtored What it does: Photos and videos pile up fast - duplicates, screenshots, similar photos, old videos, and thousands of memories that can easily get buried. The app combines a modern photo gallery with AI-powered organization and cleanup, helping you find what matters and clear what doesn't. Key Features: 🧠 AI-powered organization - recognize people, faces, and objects, create People profiles, and find the photos you're looking for. 📸 Events & smart browsing - automatically organ",
+      "subreddit": "AppsWebappsFullstack",
+      "author": "Extord00",
+      "score": null,
+      "created_utc": 1788384405,
+      "type": "post",
+      "matched_term": "organize photos",
+      "found_at": "2026-09-02T21:59:04+00:00"
+    },
+    {
+      "id": "1w5nd41",
+      "fullname": "t3_1w5nd41",
+      "title": "Filtored: AI Gallery & Cleanup App for Android",
+      "url": "https://www.reddit.com/r/AppHunt/comments/1w5nd41/filtored_ai_gallery_cleanup_app_for_android/",
+      "excerpt": "App Name: Filtored What it does: Photos and videos pile up fast - duplicates, screenshots, similar photos, old videos, and thousands of memories that can easily get buried. The app combines a modern photo gallery with AI-powered organization and cleanup, helping you find what matters and clear what doesn't. Key Features: 🧠 AI-powered organization - recognize people, faces, and objects, create People profiles, and find the photos you're looking for. 📸 Events & smart browsing - automatically organ",
+      "subreddit": "AppHunt",
+      "author": "Extord00",
+      "score": null,
+      "created_utc": 1788383519,
+      "type": "post",
+      "matched_term": "organize photos",
+      "found_at": "2026-09-02T21:59:04+00:00"
+    },
+    {
       "id": "1w56m91",
       "fullname": "t3_1w56m91",
       "title": "I built a garden planner and would love some honest feedback from Florida gardeners",
@@ -477,7 +519,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-02T19:30:05+00:00",
+  "generated_at": "2026-09-02T21:59:34+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
