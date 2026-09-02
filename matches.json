@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1w56m91",
+      "fullname": "t3_1w56m91",
+      "title": "I built a garden planner and would love some honest feedback from Florida gardeners",
+      "url": "https://www.reddit.com/r/floridagardening/comments/1w56m91/i_built_a_garden_planner_and_would_love_some/",
+      "excerpt": "Good morning everyone — I'm the developer behind EdenVatika, a garden planner and journal I've been building for gardeners. I made it because I wanted one place to plan beds, keep track of plantings, record harvests and garden observations, and look back at what happened during the season. I put together a demo that doesn't require an account, so you can actually explore it before deciding whether it's useful. What I'm especially curious about is whether the way I've approached garden planning m",
+      "subreddit": "floridagardening",
+      "author": "amit4blogger",
+      "score": null,
+      "created_utc": 1788345238,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-02T19:30:05+00:00"
+    },
+    {
+      "id": "1w55pjo",
+      "fullname": "t3_1w55pjo",
+      "title": "Calling all pot-and-planter people (no offense) - EdenVatika Garden Planner",
+      "url": "https://www.reddit.com/r/containergardening/comments/1w55pjo/calling_all_potandplanter_people_no_offense/",
+      "excerpt": "Good morning everyone — I'm the developer behind EdenVatika, a garden planner and journal I've been building for gardeners. I made it because I wanted one place to plan out what's growing in which pot, keep track of plantings, record harvests, and look back at what happened during the season. Container gardening has its own quirks — repotting, moving things around for sun, tighter spacing decisions — and I'm not sure how well my current approach handles that compared to in-ground bed planning. I",
+      "subreddit": "containergardening",
+      "author": "amit4blogger",
+      "score": null,
+      "created_utc": 1788342209,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-02T19:30:05+00:00"
+    },
+    {
       "id": "1w58ed5",
       "fullname": "t3_1w58ed5",
       "title": "Want to try out my Label Design and printing app?",
@@ -449,7 +477,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-02T16:21:38+00:00",
+  "generated_at": "2026-09-02T19:30:05+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
