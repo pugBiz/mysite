@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1w26k36",
+      "fullname": "t3_1w26k36",
+      "title": "CalTrackIQ - free AI food & health tracker, actively in beta",
+      "url": "https://www.reddit.com/r/TestFlight/comments/1w26k36/caltrackiq_free_ai_food_health_tracker_actively/",
+      "excerpt": "AI food/label/barcode scan, voice logging, an AI coach, fasting timer, supplements, gratitude journal, bio-age tracking. Solo-built, free right now, actively iterating on beta feedback.",
+      "subreddit": "TestFlight",
+      "author": "claritynow66",
+      "score": null,
+      "created_utc": 1788060969,
+      "type": "post",
+      "matched_term": "label barcode",
+      "found_at": "2026-09-02T06:18:04+00:00"
+    },
+    {
+      "id": "1w0upab",
+      "fullname": "t3_1w0upab",
+      "title": "Is it real or fake",
+      "url": "https://www.reddit.com/r/fredperry/comments/1w0upab/is_it_real_or_fake/",
+      "excerpt": "Hi everyone, I recently bought this Fred Perry Twin Tipped Polo from Vinted and I’m not sure if it’s genuine. The details on the shirt are: Style: M3600 Colour: Y64 Barcode: 5034605013719 Size: XXL I’ve attached photos of the neck label, wash/care labels, barcode, Laurel Wreath logo, buttons and stitching. Could anyone familiar with Fred Perry please let me know if this looks authentic or if there are any signs that it might be fake? Any specific details I should check would also be appreciated.",
+      "subreddit": "fredperry",
+      "author": "Bebe508888",
+      "score": null,
+      "created_utc": 1787933075,
+      "type": "post",
+      "matched_term": "label barcode",
+      "found_at": "2026-09-02T06:18:04+00:00"
+    },
+    {
       "id": "1w4ul72",
       "fullname": "t3_1w4ul72",
       "title": "Looking for a free AAC app for my 10 yr old brother",
@@ -127,7 +155,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-02T01:19:01+00:00",
+  "generated_at": "2026-09-02T06:19:20+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
