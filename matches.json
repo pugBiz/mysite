@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1w5n144",
+      "fullname": "t3_1w5n144",
+      "title": "merging video and thumbnail only after ~1 week",
+      "url": "https://www.reddit.com/r/jellyfin/comments/1w5n144/merging_video_and_thumbnail_only_after_1_week/",
+      "excerpt": "I have seperate .webms and .webps and usually jellyfin merges them, probably based on filename. But whenever i download new videos it takes some very long time for the client to actually merge them. Ive tried rescanning the directory as well as the entire lib (both \"Scan for new and updated files\" as well as \"Replace all existing metadata\"). Tried restarting jellyfin itself and flipping some settings, nothing so far has worked. This has been going on for about a year so im kind of used to it, bu",
+      "subreddit": "jellyfin",
+      "author": "p1geondove",
+      "score": null,
+      "created_utc": 1788382788,
+      "type": "post",
+      "matched_term": "merge videos",
+      "found_at": "2026-09-03T14:18:07+00:00"
+    },
+    {
       "id": "1w5g9p0",
       "fullname": "t3_1w5g9p0",
       "title": "IAP Fees",
@@ -519,7 +533,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-03T09:35:01+00:00",
+  "generated_at": "2026-09-03T14:19:06+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
