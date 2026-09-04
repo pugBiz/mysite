@@ -1,6 +1,76 @@
 {
   "matches": [
     {
+      "id": "1w784xo",
+      "fullname": "t3_1w784xo",
+      "title": "Every SkullAndCord order takes more work than most people probably realize.",
+      "url": "https://www.reddit.com/r/u_SkullAndCord/comments/1w784xo/every_skullandcord_order_takes_more_work_than/",
+      "excerpt": "From making sure each piece is right, checking colors and hardware, preparing the packaging, printing labels, adding inserts, double-checking addresses, and getting everything packed securely for shipment, there are a lot of small steps behind every order that leaves here. I’m still a small operation, so every package is handled individually. That takes time, but I’d rather take the extra time and make sure each order is prepared properly than rush something out the door. Seeing these packages l",
+      "subreddit": "u/SkullAndCord",
+      "author": "SkullAndCord",
+      "score": null,
+      "created_utc": 1788536980,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-04T16:06:02+00:00"
+    },
+    {
+      "id": "1w77pua",
+      "fullname": "t3_1w77pua",
+      "title": "Why do product labels peel, print differently than expected, or fit poorly?",
+      "url": "https://www.reddit.com/r/Packaging/comments/1w77pua/why_do_product_labels_peel_print_differently_than/",
+      "excerpt": "I work with StickerGiant, a custom sticker and label printing company, and these are three of the most common product-label problems we help businesses troubleshoot. 1. Labels peel or fall off Before changing the material or adhesive, check the application conditions. Moisture, surface residue, cold containers, and applying labels before a container reaches room temperature can all interfere with adhesion. 2. The printed color looks different from the proof A screen is backlit; a printed label i",
+      "subreddit": "Packaging",
+      "author": "RealStickerGiant",
+      "score": null,
+      "created_utc": 1788536034,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-04T16:06:02+00:00"
+    },
+    {
+      "id": "1w6ykdy",
+      "fullname": "t3_1w6ykdy",
+      "title": "I generated test Canada Post shipping labels from WooCommerce, and now I'm being charged for them. How do I get refunds?",
+      "url": "https://www.reddit.com/r/woo_shipping_help/comments/1w6ykdy/i_generated_test_canada_post_shipping_labels_from/",
+      "excerpt": "It depends on your Canada Post account type; contract and non-contract accounts handle this differently. For contract accounts, you can void labels directly from the WooCommerce orders page before they're transmitted to Canada Post; voiding before transmission prevents charges. For non-contract accounts, voiding through the plugin generates a refund request that goes to Canada Post. One plugin that supports both workflows is the Canada Post Shipping Plugin for WooCommerce with Print Label ; cont",
+      "subreddit": "woo_shipping_help",
+      "author": "Brief-Razzmatazz-655",
+      "score": null,
+      "created_utc": 1788510876,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-04T16:06:02+00:00"
+    },
+    {
+      "id": "1w6y90l",
+      "fullname": "t3_1w6y90l",
+      "title": "Any Advice for L3210 printing with Kraft Paper",
+      "url": "https://www.reddit.com/r/Epson/comments/1w6y90l/any_advice_for_l3210_printing_with_kraft_paper/",
+      "excerpt": "I've been having trouble using 300gsm Kraft paper to print labels cause it always comes out uneven where it's printing 1-2cm ahead. I tought adding larger margins would've helped but since the delay varies quite a bit it's hard to make any precise borders",
+      "subreddit": "Epson",
+      "author": "XidJav",
+      "score": null,
+      "created_utc": 1788509795,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-04T16:06:02+00:00"
+    },
+    {
+      "id": "1w6t68t",
+      "fullname": "t3_1w6t68t",
+      "title": "Casio Royale sent Back To The Future",
+      "url": "https://www.reddit.com/r/casiomods/comments/1w6t68t/casio_royale_sent_back_to_the_future/",
+      "excerpt": "I took the clue from a number of other posts that many want to do a Back To The Future Royale. Introducing my attempt, Version 1, to motivate fellow modders. Details: - color laser print labels, logo - color print water transfer flux capacitor - color filters aligned ton bttf title logo - cleared faceplate - Casio AE1200 module - Synoke clear case Plans for Version 2. - 3d print flux capacitor - add small wires to faceplate - capacitor with yellow wires - swap to Synoke module (hate hiding the C",
+      "subreddit": "casiomods",
+      "author": "RSinTO",
+      "score": null,
+      "created_utc": 1788493184,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-04T16:06:02+00:00"
+    },
+    {
       "id": "1w6ud6j",
       "fullname": "t3_1w6ud6j",
       "title": "What takes the most time after you leave a listing appointment?",
@@ -799,7 +869,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-04T11:39:36+00:00",
+  "generated_at": "2026-09-04T16:06:47+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
