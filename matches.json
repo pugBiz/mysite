@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1w6ash8",
+      "fullname": "t3_1w6ash8",
+      "title": "Being \"high functioning\" and accommodations?",
+      "url": "https://www.reddit.com/r/autism/comments/1w6ash8/being_high_functioning_and_accommodations/",
+      "excerpt": "This problem is a little difficult to articulate for me so I'm sorry in advance if this post is worded weird/sounds insensitive, don't hesitate to ask for clarifications. Recently, one of my mutuals celebrated setting up their aac app, and I couldn't help but feel a twinge of envy/jealousy. I've always been very \"high functioning\": not outwardly needing support or help or anything else, mostly managing on my own because I never really lived in an environment that allowed me to need help, if that",
+      "subreddit": "autism",
+      "author": "chaos-construct",
+      "score": null,
+      "created_utc": 1788449661,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-05T23:41:01+00:00"
+    },
+    {
       "id": "1w7vzgs",
       "fullname": "t3_1w7vzgs",
       "title": "Plutonic convo at Pinecrest Diner",
@@ -883,7 +897,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-05T21:37:18+00:00",
+  "generated_at": "2026-09-05T23:43:00+00:00",
   "watch_terms": [
     "woodworking software",
     "aac software",
