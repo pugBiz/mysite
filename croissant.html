@@ -147,8 +147,11 @@
         .map(t => t.trim())
         .filter(t => t.length > 0);
     }
+    // A 20-term list would swamp the header, so collapse past a few.
     function formatTerms(terms){
-      return terms.map(t => `"${t}"`).join(', ');
+      if(!terms || terms.length === 0) return '—';
+      if(terms.length <= 4) return terms.map(t => `"${t}"`).join(', ');
+      return `${terms.length} terms`;
     }
     // created_utc arrives as Unix seconds from the RSS feed
     function formatPostDate(sec){
@@ -207,7 +210,9 @@
         if(serverTerms && serverTerms.length === 0) serverTerms = null;
 
         // Display-only: what the watcher is configured to search for.
-        displayTerm.textContent = formatTerms(serverTerms || DEFAULT_TERMS);
+        const shown = serverTerms || DEFAULT_TERMS;
+        displayTerm.textContent = formatTerms(shown);
+        displayTerm.title = shown.join(', ');
 
         renderMatches(data);
       } catch (err){

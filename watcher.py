@@ -47,6 +47,7 @@ import argparse
 import calendar
 import html
 import json
+import math
 import os
 import re
 import sys
@@ -70,6 +71,8 @@ DEFAULT_CONFIG = {
     "min_score": 0,           # ignored: RSS carries no score
     "max_age_hours": 168,
     "results_limit_per_query": 50,
+    "terms_per_run": 8,           # 0 = every term every run
+    "request_delay_seconds": 5,
     "match_mode": "loose",    # loose | strict | off
     "query_mode": "separate",  # separate | combined
     "user_agent": "CroissantWatcher/1.0 (by u/pugBiz)",
@@ -172,7 +175,11 @@ def norm_terms(terms):
 def reconcile_with_previous_terms(existing_matches, prev_terms, terms, debug=False):
     """Drop stored matches that belong to terms we are no longer watching.
 
-    Returns (retained_matches, seen_ids_or_None, changed).
+    `terms` here must be the FULL configured term list, never the per-run batch.
+    Comparing against a batch would delete matches for every term that simply
+    was not scheduled this run.
+
+    Returns (retained_matches, seen_ids_or_None, changed, added_terms).
 
     When the term list changes, seen_ids is rebuilt from the retained matches
     only. That matters: seen_ids is what stops a post being added twice, so if
@@ -187,10 +194,10 @@ def reconcile_with_previous_terms(existing_matches, prev_terms, terms, debug=Fal
 
     if not previous:
         # First run, or state written by an older version. Nothing to compare.
-        return existing_matches, None, False
+        return existing_matches, None, False, set()
 
     if previous == current:
-        return existing_matches, None, False
+        return existing_matches, None, False, set()
 
     retained, dropped = [], []
     for m in existing_matches:
@@ -215,7 +222,44 @@ def reconcile_with_previous_terms(existing_matches, prev_terms, terms, debug=Fal
             print(f"    [debug] dropped {m.get('id')} "
                   f"(matched_term={m.get('matched_term')!r}): {m.get('title')}")
 
-    return retained, {m["id"] for m in retained if m.get("id")}, True
+    return retained, {m["id"] for m in retained if m.get("id")}, True, current - previous
+
+
+def plan_batch(all_terms, state, per_run, terms_changed, added, debug=False):
+    """Pick which terms to search this run, round-robin across runs.
+
+    Reddit's public .rss endpoints are undocumented but measured at roughly
+    15-18 sequential requests from one IP before everything starts returning
+    429, so a long term list has to be spread over several runs rather than
+    fired off at once.
+
+    The pending queue lives in state.json. Each run takes the first
+    `per_run` terms; when the queue empties it refills from the full list, so
+    every term gets its turn. Terms removed from config drop out of the queue,
+    and when the term list changes the cycle restarts with newly added terms
+    first so a term you just added is searched immediately.
+
+    Returns (batch, remaining_queue).
+    """
+    if per_run <= 0 or per_run >= len(all_terms):
+        return list(all_terms), []
+
+    current = {t.lower() for t in all_terms}
+    queue = [t for t in (state.get("term_queue") or []) if t.lower() in current]
+
+    if terms_changed:
+        head = [t for t in all_terms if t.lower() in added]
+        tail = [t for t in all_terms if t.lower() not in added]
+        queue = head + tail
+        if debug and head:
+            print(f"[debug] term list changed - restarting cycle, new terms first: {head}")
+
+    if not queue:
+        queue = list(all_terms)
+        if debug:
+            print("[debug] term queue empty - starting a fresh cycle")
+
+    return queue[:per_run], queue[per_run:]
 
 
 # ---------------------------------------------------------------- matching
@@ -444,7 +488,7 @@ def main(debug=False):
     if prev_terms is None and state.get("watch_term"):
         prev_terms = [t.strip() for t in str(state["watch_term"]).split(",")]
 
-    existing_matches, rebuilt_seen, terms_changed = reconcile_with_previous_terms(
+    existing_matches, rebuilt_seen, terms_changed, added = reconcile_with_previous_terms(
         existing_matches, prev_terms, terms, debug)
     if rebuilt_seen is not None:
         seen_ids = rebuilt_seen
@@ -453,27 +497,41 @@ def main(debug=False):
     limit = int(cfg.get("results_limit_per_query") or 50)
     query_mode = (cfg.get("query_mode") or "separate").lower()
     subs = cfg.get("subreddits") or []
+    per_run = int(cfg.get("terms_per_run") if cfg.get("terms_per_run") is not None else 8)
+    delay = float(cfg.get("request_delay_seconds") or 5)
+
+    # `terms` is everything configured; `batch` is what this run actually searches.
+    batch, queue_remaining = plan_batch(terms, state, per_run, terms_changed, added, debug)
 
     if int(cfg.get("min_score") or 0) > 0:
         print("WARNING: min_score is set but RSS entries carry no score. "
               "This filter is being ignored.")
 
-    print(f"Watch terms ({len(terms)}): {terms}")
+    print(f"Configured terms: {len(terms)}")
+    if len(batch) < len(terms):
+        runs_per_cycle = math.ceil(len(terms) / max(per_run, 1))
+        print(f"This run searches {len(batch)} of them: {batch}")
+        print(f"  {len(queue_remaining)} queued for later runs "
+              f"({runs_per_cycle} runs per full cycle)")
+    else:
+        print(f"This run searches all of them: {batch}")
     print(f"query_mode: {query_mode} | match_mode: {cfg.get('match_mode')} | "
-          f"max_age_hours: {cfg.get('max_age_hours')}")
+          f"max_age_hours: {cfg.get('max_age_hours')} | delay: {delay}s")
 
     # Work out the list of (query, terms_to_match_against) pairs up front.
     if query_mode == "combined":
-        query_plan = [(build_combined_query(terms), terms)]
+        query_plan = [(build_combined_query(batch), batch)]
     else:
-        query_plan = [(quote_if_needed(t), [t]) for t in terms]
+        query_plan = [(quote_if_needed(t), [t]) for t in batch]
 
     targets = ["sitewide"] if cfg.get("global_search") else list(subs)
     total_requests = len(query_plan) * len(targets)
     if total_requests > 12:
         print(f"WARNING: this run will make {total_requests} feed requests "
-              f"({len(query_plan)} queries x {len(targets)} targets). Consider "
-              f"query_mode \"combined\" or fewer terms to avoid rate limiting.")
+              f"({len(query_plan)} queries x {len(targets)} targets). Reddit's "
+              f".rss endpoints start returning 429 somewhere around 15-18 "
+              f"sequential requests per IP. Lower terms_per_run, or switch "
+              f"query_mode to \"combined\".")
 
     fetcher = FeedFetcher(user_agent, debug=debug)
 
@@ -481,7 +539,7 @@ def main(debug=False):
     requests_made = 0
     requests_ok = 0
     raw_total = 0
-    per_term_raw = {t: 0 for t in terms}
+    per_term_raw = {t: 0 for t in batch}
 
     for query, match_terms in query_plan:
         for target in targets:
@@ -505,9 +563,9 @@ def main(debug=False):
             print(f"{label}: {len(posts)} raw entries, {len(kept)} kept")
             matches.extend(kept)
 
-            # Be polite between requests.
+            # Pace requests. Steady spacing survives better than bursts.
             if requests_made < total_requests:
-                time.sleep(2)
+                time.sleep(delay)
 
     print(f"Requests: {requests_ok}/{requests_made} succeeded | "
           f"raw entries: {raw_total} | passed filter: {len(matches)}")
@@ -517,7 +575,7 @@ def main(debug=False):
         sys.exit(1)
 
     # Flag terms that returned nothing, so a dud term is obvious in the log.
-    quiet = [t for t in terms if per_term_raw.get(t, 0) == 0]
+    quiet = [t for t in batch if per_term_raw.get(t, 0) == 0]
     if quiet and requests_ok:
         print(f"NOTE: these terms returned no entries at all: {quiet}")
 
@@ -548,7 +606,10 @@ def main(debug=False):
     save_json(MATCHES_PATH, {
         "matches": combined,
         "generated_at": iso8601(now_ts()),
+        # Every configured term, so the page shows what is being watched
+        # overall rather than just this run's slice.
         "watch_terms": terms,
+        "searched_this_run": batch,
         # Kept so anything reading the old single-term field still works.
         "watch_term": ", ".join(terms),
     })
@@ -557,6 +618,9 @@ def main(debug=False):
     state["last_run"] = iso8601(now_ts())
     state["watch_terms"] = terms
     state["watch_term"] = ", ".join(terms)
+    # Advance the round-robin. Only reached on a successful run, so a failed
+    # run retries the same batch instead of skipping those terms.
+    state["term_queue"] = queue_remaining
     save_json(STATE_PATH, state)
 
     print(f"Wrote {len(new_matches)} new matches, total stored: {len(combined)}")

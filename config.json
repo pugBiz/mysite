@@ -1,5 +1,10 @@
 {
   "terms": [
+    "bake croissants",
+    "lamination",
+    "cold proof",
+    "butter block",
+    "detrempe",
     "woodworking software",
     "aac software",
     "woodworking app",
@@ -12,7 +17,10 @@
     "print labels",
     "organize photos",
     "video markup",
-    "garden planner"
+    "garden planner",
+    "iphone label designer",
+    "ipad label designer",
+    "selfie camera"
   ],
   "global_search": true,
   "min_score": 0,
@@ -20,5 +28,7 @@
   "results_limit_per_query": 50,
   "match_mode": "loose",
   "query_mode": "separate",
+  "terms_per_run": 8,
+  "request_delay_seconds": 5,
   "user_agent": "CroissantWatcher/1.0 (by u/pugBiz)"
 }
