@@ -1,6 +1,76 @@
 {
   "matches": [
     {
+      "id": "1w8tycx",
+      "fullname": "t3_1w8tycx",
+      "title": "Alternative app for Marklife, Niimbot and Phomemo label printers",
+      "url": "https://www.reddit.com/r/thermalprinting/comments/1w8tycx/alternative_app_for_marklife_niimbot_and_phomemo/",
+      "excerpt": "Hey, a while back I created an open source web app for Marklife printers. Since then, I've been working on a mobile app called Laby, which supports Marklife but also Niimbot and Phomemo models. The idea is pretty simple: connect your printer, make a label and print it. I wanted something straightforward for everyday use with focus on good user performance. (We know the vendor apps sometime don't) It’s for iOS and Android, doesn’t need an account, and you can design and print labels offline. The ",
+      "subreddit": "thermalprinting",
+      "author": "Late-Emotion4358",
+      "score": null,
+      "created_utc": 1788695006,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-06T18:34:04+00:00"
+    },
+    {
+      "id": "1w8tckx",
+      "fullname": "t3_1w8tckx",
+      "title": "Alternative app for Marklife, Niimbot and Phomemo label printers",
+      "url": "https://www.reddit.com/r/printers/comments/1w8tckx/alternative_app_for_marklife_niimbot_and_phomemo/",
+      "excerpt": "Hey, a while back I shared my open source web app for Marklife printers here. Since then, I've been working on a mobile app called Laby, which supports Marklife but also Niimbot and Phomemo models. The idea is pretty simple: connect your printer, make a label and print it. I wanted something straightforward for everyday use with focus on good user performance. (We know the vendor apps sometime don't) It’s for iOS and Android, doesn’t need an account, and you can design and print labels offline. ",
+      "subreddit": "printers",
+      "author": "Late-Emotion4358",
+      "score": null,
+      "created_utc": 1788693074,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-06T18:34:04+00:00"
+    },
+    {
+      "id": "1w8rlpi",
+      "fullname": "t3_1w8rlpi",
+      "title": "The Tag-Removal Hall of Fame (or Shame)",
+      "url": "https://www.reddit.com/r/TheSkinCloset/comments/1w8rlpi/the_tagremoval_hall_of_fame_or_shame/",
+      "excerpt": "We’ve all been there, you buy a shirt that feels like a cloud, only to realize there’s a stiff, plastic feeling ribbon sewn into the neck or side seam that feels like a tiny saw blade. You try to snip it out, and suddenly rip there’s a hole in your brand new top. Let’s settle this: Which brands are the heroes of the Tagless Revolution, and which ones are still using torture grade labels? The Heroes (Tagless & Heat-Press) These brands have moved to printed labels or heat press stamps that sit fla",
+      "subreddit": "TheSkinCloset",
+      "author": "Historical-Station44",
+      "score": null,
+      "created_utc": 1788687307,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-06T18:34:04+00:00"
+    },
+    {
+      "id": "1w8ezv8",
+      "fullname": "t3_1w8ezv8",
+      "title": "Amazon customer service has become garbage",
+      "url": "https://www.reddit.com/r/amazonprime/comments/1w8ezv8/amazon_customer_service_has_become_garbage/",
+      "excerpt": "It used to be amazing. Now they play games. Make you print labels just to add friction to the return process. It is easier just to go to Target.",
+      "subreddit": "amazonprime",
+      "author": "Foreign-Package-4359",
+      "score": null,
+      "created_utc": 1788648499,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-06T18:34:04+00:00"
+    },
+    {
+      "id": "1w8acsh",
+      "fullname": "t3_1w8acsh",
+      "title": "Explain like in 5 please?",
+      "url": "https://www.reddit.com/r/pchelp/comments/1w8acsh/explain_like_in_5_please/",
+      "excerpt": "So, can someone explain like I’m 5 the basic hardware in a pc and their function. I have some level of understanding but these days I just feel lost. I’ll be replacing a 13 yr old gaming desktop that I’ve had. It’s just extremely slow. I have 3 different businesses, one of which is selling trading cards online so I have to upload tons of photos, scans, print labels, etc. I’m also looking for something that would pretty much replace my ps5 and I would do 95% of my gaming on it. What I was looking",
+      "subreddit": "pchelp",
+      "author": "RepresentativeWait45",
+      "score": null,
+      "created_utc": 1788637208,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-06T18:34:04+00:00"
+    },
+    {
       "id": "1w78upr",
       "fullname": "t3_1w78upr",
       "title": "What's the best way to bake just one croissant at time",
@@ -911,7 +981,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-06T16:06:07+00:00",
+  "generated_at": "2026-09-06T18:35:05+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -933,14 +1003,14 @@
     "selfie camera"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera"
 }
