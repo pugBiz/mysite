@@ -165,7 +165,6 @@
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        white-space: nowrap;
       }
       .btn-links:hover {
         background: #3ea6ff;
@@ -211,128 +210,6 @@
         word-break: break-all;
       }
 
-      .gemini-key-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 10px;
-        border: 1px solid #333;
-        border-radius: 8px;
-        margin-bottom: 6px;
-        background: #2a2a2a;
-        transition: all 0.15s;
-      }
-      .gemini-key-item.active-key {
-        background: #1a2a1a;
-        border-color: #2ba640;
-      }
-      .gemini-key-item .key-info {
-        flex: 1;
-        min-width: 0;
-      }
-      .gemini-key-item .key-name {
-        color: #fff;
-        font-size: 13px;
-        font-weight: 600;
-      }
-      .gemini-key-item .key-preview {
-        color: #555;
-        font-size: 10px;
-        font-family: monospace;
-      }
-      .gemini-key-item .active-badge {
-        color: #2ba640;
-        font-size: 10px;
-        margin-left: 6px;
-      }
-      .gemini-key-item .btn-set-active {
-        padding: 4px 10px;
-        background: #1a2a1a;
-        border: 1px solid #2ba640;
-        border-radius: 6px;
-        color: #2ba640;
-        font-size: 11px;
-        cursor: pointer;
-        white-space: nowrap;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.15s;
-      }
-      .gemini-key-item .btn-set-active:hover {
-        background: #2ba640;
-        color: #fff;
-      }
-      .gemini-key-item .btn-delete-key {
-        padding: 4px 8px;
-        background: none;
-        border: 1px solid #444;
-        border-radius: 6px;
-        color: #717171;
-        font-size: 11px;
-        cursor: pointer;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.15s;
-      }
-      .gemini-key-item .btn-delete-key:hover {
-        color: #ff4444;
-        border-color: #ff4444;
-      }
-
-      .frame-grid-cell {
-        cursor: pointer;
-        border-radius: 5px;
-        overflow: hidden;
-        border: 2px solid #333;
-        transition: border-color 0.15s;
-      }
-      .frame-grid-cell:hover {
-        border-color: #3ea6ff;
-      }
-      .frame-grid-cell.selected {
-        border-color: #2ba640;
-      }
-      .frame-grid-cell img {
-        width: 100%;
-        height: auto;
-        display: block;
-        object-fit: cover;
-      }
-
-      .btn-frames {
-        padding: 7px 14px;
-        background: #1a2a1a;
-        border: 1px solid #2ba640;
-        border-radius: 7px;
-        color: #2ba640;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        white-space: nowrap;
-      }
-      .btn-frames:hover {
-        background: #2ba640;
-        color: #fff;
-      }
-
-      .btn-thumb-download {
-        padding: 5px 12px;
-        background: #2ba640;
-        border: none;
-        border-radius: 6px;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.2s;
-      }
-      .btn-thumb-download:hover {
-        background: #238a35;
-      }
-
       @media (max-width: 767px) {
         .main-layout { flex-direction: column !important; }
         .sidebar-panel { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
@@ -345,40 +222,34 @@
     <!-- Toast Container -->
     <div data-id="2" id="toast-container-yt7k" class="toast-container"></div>
 
-    <!-- Gemini Keys Modal -->
+    <!-- Gemini Key Modal -->
     <div data-id="3" id="modal-gemini-g3x9" class="modal-overlay">
-      <div data-id="4" class="modal-card" style="max-width:500px;">
+      <div data-id="4" class="modal-card">
         <div data-id="5" class="flex justify-between items-center mb-4">
-          <h3 data-id="6" class="text-base font-semibold">🔑 Gemini API Keys</h3>
-          <button data-id="7" id="close-gemini-modal-b2k1" class="text-dimmed hover:text-white" style="background:none;border:none;font-size:20px;cursor:pointer;">✕</button>
+          <h3 data-id="6" class="text-base font-semibold">Gemini API Settings</h3>
+          <button data-id="7" id="close-gemini-modal-b2k1" class="text-dimmed hover:text-white"><i data-id="8" data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-
-        <!-- Saved keys list -->
-        <div data-id="8" id="gemini-keys-list" style="margin-bottom:16px;max-height:220px;overflow-y:auto;"></div>
-
-        <!-- Add new key -->
-        <div data-id="9" style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:12px;margin-bottom:16px;">
-          <p data-id="10" style="color:#aaa;font-size:12px;font-weight:600;margin-bottom:8px;">Add New Key</p>
-          <input data-id="11" id="new-key-name" type="text" placeholder="Nickname (e.g. Personal, Work, Backup)" style="margin-bottom:8px;" />
-          <div data-id="12" style="display:flex;gap:8px;margin-bottom:8px;">
-            <input data-id="13" id="new-key-value" type="password" placeholder="AIza..." style="flex:1;" />
-            <button data-id="14" id="toggle-new-key-vis" class="btn btn-dark text-xs" style="white-space:nowrap;">👁 Show</button>
+        <div data-id="9" class="mb-4">
+          <label data-id="10" class="block text-xs text-muted mb-1">Gemini API Key</label>
+          <div data-id="11" class="relative">
+            <input data-id="12" type="password" id="gemini-key-input-p4r2" placeholder="AIza..." class="pr-10" />
+            <button data-id="13" id="toggle-key-vis-k8m3" class="absolute right-2 top-1/2 -translate-y-1/2 text-dimmed hover:text-white"><i data-id="14" data-lucide="eye" class="w-4 h-4"></i></button>
           </div>
-          <button data-id="15" id="add-gemini-key-btn" class="btn btn-red w-full justify-center">+ Add Key</button>
         </div>
-
-        <!-- Model selector -->
-        <div data-id="16">
-          <label data-id="17" class="block text-xs text-muted mb-1.5">Model (applies to all keys)</label>
-          <select data-id="18" id="gemini-model-select-q7w4">
-            <option data-id="19" value="gemini-3.5-flash" selected>gemini-3.5-flash (default)</option>
-            <option data-id="20" value="gemini-2.5-flash">gemini-2.5-flash</option>
-            <option data-id="21" value="gemini-2.5-flash-8b">gemini-2.5-flash-8b</option>
-            <option data-id="22" value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
-            <option data-id="23" value="gemini-2.0-flash">gemini-2.0-flash</option>
-            <option data-id="24" value="gemini-1.5-pro">gemini-1.5-pro</option>
-          </select>
+        <div data-id="15" class="mb-5">
+          <label data-id="16" class="block text-xs text-muted mb-1">Gemini Model</label>
+          <input type="text" id="gemini-model-select-q7w4" list="gemini-model-suggestions" placeholder="e.g. gemini-3.1-flash-lite" autocomplete="off" style="width:100%" />
+          <datalist id="gemini-model-suggestions">
+            <option value="gemini-3.1-flash-lite">
+            <option value="gemini-2.5-flash-lite">
+            <option value="gemini-2.5-flash">
+            <option value="gemini-2.5-flash-8b">
+            <option value="gemini-3.5-flash">
+            <option value="gemini-2.0-flash">
+            <option value="gemini-1.5-pro">
+          </datalist>
         </div>
+        <button data-id="24" id="save-gemini-btn-v5n6" class="btn btn-red w-full justify-center">Save Settings</button>
       </div>
     </div>
 
@@ -424,135 +295,135 @@
           <button data-id="53" id="mobile-menu-btn-x3y4" class="md:hidden p-2 text-muted hover:text-white"><i data-id="54" data-lucide="menu" class="w-5 h-5"></i></button>
           <!-- Desktop buttons -->
           <div data-id="55" class="hidden md:flex items-center gap-2">
-            <button data-id="56" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="57" data-lucide="key" class="w-3.5 h-3.5"></i> <span data-id="58" id="gemini-btn-label">Gemini Key</span></button>
-            <div data-id="59" class="relative">
-              <button data-id="60" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="61" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
-              <div data-id="62" id="channel-dropdown-h8i9" class="channel-dropdown">
-                <button data-id="63" id="switch-account-btn-j1k2">Switch Account</button>
-                <button data-id="64" id="disconnect-btn-l3m4">Disconnect</button>
+            <button data-id="56" id="gemini-key-btn-d4e5" class="btn btn-outline text-xs"><i data-id="57" data-lucide="key" class="w-3.5 h-3.5"></i> Gemini Key</button>
+            <div data-id="58" class="relative">
+              <button data-id="59" id="connect-yt-btn-f6g7" class="btn btn-red text-xs"><i data-id="60" data-lucide="youtube" class="w-3.5 h-3.5"></i> Connect YouTube</button>
+              <div data-id="61" id="channel-dropdown-h8i9" class="channel-dropdown">
+                <button data-id="62" id="switch-account-btn-j1k2">Switch Account</button>
+                <button data-id="63" id="disconnect-btn-l3m4">Disconnect</button>
               </div>
             </div>
-            <button data-id="65" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="66" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
+            <button data-id="64" id="clientid-btn-n5o6" class="btn btn-outline text-xs"><i data-id="65" data-lucide="settings" class="w-3.5 h-3.5"></i> Client ID</button>
           </div>
         </div>
       </div>
     </header>
 
     <!-- Mobile Menu -->
-    <nav data-id="67" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
-      <div data-id="68" class="flex justify-between items-center mb-6">
-        <span data-id="69" class="font-bold text-base">Menu</span>
-        <button data-id="70" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="71" data-lucide="x" class="w-6 h-6"></i></button>
+    <nav data-id="66" id="mobile-menu-p7q8" class="hidden fixed inset-0 bg-bg z-[60] flex flex-col p-5">
+      <div data-id="67" class="flex justify-between items-center mb-6">
+        <span data-id="68" class="font-bold text-base">Menu</span>
+        <button data-id="69" id="mobile-menu-close-r9s0" class="p-2 text-muted hover:text-white"><i data-id="70" data-lucide="x" class="w-6 h-6"></i></button>
       </div>
-      <div data-id="72" class="flex flex-col gap-3">
-        <button data-id="73" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="74" data-lucide="key" class="w-4 h-4"></i> <span data-id="75" id="mob-gemini-btn-label">Gemini Key</span></button>
-        <button data-id="76" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="77" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
-        <button data-id="78" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="79" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
-        <button data-id="80" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
+      <div data-id="71" class="flex flex-col gap-3">
+        <button data-id="72" id="mob-gemini-btn-t1u2" class="btn btn-outline w-full justify-center"><i data-id="73" data-lucide="key" class="w-4 h-4"></i> Gemini Key</button>
+        <button data-id="74" id="mob-connect-btn-v3w4" class="btn btn-red w-full justify-center"><i data-id="75" data-lucide="youtube" class="w-4 h-4"></i> Connect YouTube</button>
+        <button data-id="76" id="mob-clientid-btn-x5y6" class="btn btn-outline w-full justify-center"><i data-id="77" data-lucide="settings" class="w-4 h-4"></i> Client ID</button>
+        <button data-id="78" id="mob-disconnect-btn-z7a8" class="btn btn-dark w-full justify-center hidden">Disconnect</button>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <main data-id="81" class="pt-14 min-h-screen">
-      <div data-id="82" class="main-layout flex" style="min-height: calc(100vh - 56px);">
+    <main data-id="79" class="pt-14 min-h-screen">
+      <div data-id="80" class="main-layout flex" style="min-height: calc(100vh - 56px);">
 
         <!-- Sidebar Settings -->
-        <aside data-id="83" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
+        <aside data-id="81" id="sidebar-panel-b9c0" class="sidebar-panel bg-surface border-r border-border p-4 overflow-y-auto" style="width: 270px; min-width: 270px;">
 
-          <div data-id="84" class="sidebar-section">
-            <h4 data-id="85" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="86" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
-            <div data-id="87" class="text-xs space-y-1.5">
-              <div data-id="88" class="flex justify-between"><span data-id="89" class="text-dimmed">Model:</span><span data-id="90" id="sidebar-model-d1e2" class="text-muted">gemini-3.5-flash</span></div>
-              <div data-id="91" class="flex justify-between"><span data-id="92" class="text-dimmed">API Keys:</span><span data-id="93" id="sidebar-key-status-f3g4" class="text-muted">0 keys</span></div>
+          <div data-id="82" class="sidebar-section">
+            <h4 data-id="83" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="84" data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow"></i> AI Settings</h4>
+            <div data-id="85" class="text-xs space-y-1.5">
+              <div data-id="86" class="flex justify-between"><span data-id="87" class="text-dimmed">Model:</span><span data-id="88" id="sidebar-model-d1e2" class="text-muted">gemini-3.1-flash-lite</span></div>
+              <div data-id="89" class="flex justify-between"><span data-id="90" class="text-dimmed">API Key:</span><span data-id="91" id="sidebar-key-status-f3g4" class="text-muted">not set</span></div>
             </div>
           </div>
 
-          <div data-id="94" class="sidebar-section">
-            <h4 data-id="95" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="96" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
-            <div data-id="97" class="mb-3">
-              <label data-id="98" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
-              <div data-id="99" class="radio-group" id="privacy-radio-group-h5i6">
-                <label data-id="100"><input data-id="101" type="radio" name="privacy" value="public" /><span data-id="102">Public</span></label>
-                <label data-id="103"><input data-id="104" type="radio" name="privacy" value="unlisted" checked /><span data-id="105">Unlisted</span></label>
-                <label data-id="106"><input data-id="107" type="radio" name="privacy" value="private" /><span data-id="108">Private</span></label>
+          <div data-id="92" class="sidebar-section">
+            <h4 data-id="93" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="94" data-lucide="upload" class="w-3.5 h-3.5 text-blue"></i> Upload Settings</h4>
+            <div data-id="95" class="mb-3">
+              <label data-id="96" class="block text-xs text-dimmed mb-1.5">Default Privacy</label>
+              <div data-id="97" class="radio-group" id="privacy-radio-group-h5i6">
+                <label data-id="98"><input data-id="99" type="radio" name="privacy" value="public" /><span data-id="100">Public</span></label>
+                <label data-id="101"><input data-id="102" type="radio" name="privacy" value="unlisted" checked /><span data-id="103">Unlisted</span></label>
+                <label data-id="104"><input data-id="105" type="radio" name="privacy" value="private" /><span data-id="106">Private</span></label>
               </div>
             </div>
-            <div data-id="109" class="mb-3 flex items-center justify-between">
-              <label data-id="110" class="text-xs text-dimmed">Made for Kids</label>
-              <label data-id="111" class="relative inline-flex items-center cursor-pointer">
-                <input data-id="112" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
-                <div data-id="113" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+            <div data-id="107" class="mb-3 flex items-center justify-between">
+              <label data-id="108" class="text-xs text-dimmed">Made for Kids</label>
+              <label data-id="109" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="110" type="checkbox" id="made-for-kids-j7k8" class="sr-only peer" />
+                <div data-id="111" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
             </div>
-            <div data-id="114">
-              <label data-id="115" class="block text-xs text-dimmed mb-1.5">Default Language</label>
-              <select data-id="116" id="default-lang-l9m0">
-                <option data-id="117" value="en">English</option>
-                <option data-id="118" value="es">Spanish</option>
-                <option data-id="119" value="fr">French</option>
-                <option data-id="120" value="de">German</option>
-                <option data-id="121" value="pt">Portuguese</option>
-                <option data-id="122" value="ja">Japanese</option>
-                <option data-id="123" value="ko">Korean</option>
-                <option data-id="124" value="zh">Chinese</option>
-                <option data-id="125" value="hi">Hindi</option>
-                <option data-id="126" value="ar">Arabic</option>
+            <div data-id="112">
+              <label data-id="113" class="block text-xs text-dimmed mb-1.5">Default Language</label>
+              <select data-id="114" id="default-lang-l9m0">
+                <option data-id="115" value="en">English</option>
+                <option data-id="116" value="es">Spanish</option>
+                <option data-id="117" value="fr">French</option>
+                <option data-id="118" value="de">German</option>
+                <option data-id="119" value="pt">Portuguese</option>
+                <option data-id="120" value="ja">Japanese</option>
+                <option data-id="121" value="ko">Korean</option>
+                <option data-id="122" value="zh">Chinese</option>
+                <option data-id="123" value="hi">Hindi</option>
+                <option data-id="124" value="ar">Arabic</option>
               </select>
             </div>
           </div>
 
-          <div data-id="127" class="sidebar-section">
-            <h4 data-id="128" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="129" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
-            <div data-id="130" class="flex items-center justify-between mb-3">
-              <label data-id="131" class="text-xs text-dimmed">Auto-schedule uploads</label>
-              <label data-id="132" class="relative inline-flex items-center cursor-pointer">
-                <input data-id="133" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
-                <div data-id="134" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+          <div data-id="125" class="sidebar-section">
+            <h4 data-id="126" class="text-xs font-semibold text-muted uppercase tracking-wider mb-3 flex items-center gap-1.5"><i data-id="127" data-lucide="calendar-clock" class="w-3.5 h-3.5 text-green"></i> Schedule Settings</h4>
+            <div data-id="128" class="flex items-center justify-between mb-3">
+              <label data-id="129" class="text-xs text-dimmed">Auto-schedule uploads</label>
+              <label data-id="130" class="relative inline-flex items-center cursor-pointer">
+                <input data-id="131" type="checkbox" id="auto-schedule-n1o2" class="sr-only peer" />
+                <div data-id="132" class="w-9 h-5 bg-border rounded-full peer peer-checked:bg-ytred transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
             </div>
-            <div data-id="135" id="schedule-options-p3q4" class="hidden">
-              <label data-id="136" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
-              <div data-id="137" class="flex flex-wrap gap-1.5 mb-2">
-                <button data-id="138" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
-                <button data-id="139" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
-                <button data-id="140" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
-                <button data-id="141" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="142" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
+            <div data-id="133" id="schedule-options-p3q4" class="hidden">
+              <label data-id="134" class="block text-xs text-dimmed mb-1.5">Quick Presets</label>
+              <div data-id="135" class="flex flex-wrap gap-1.5 mb-2">
+                <button data-id="136" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="3">+3 days</button>
+                <button data-id="137" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="7">+7 days</button>
+                <button data-id="138" class="schedule-preset-btn btn btn-outline text-[11px] py-1 px-2" data-days="14">+14 days</button>
+                <button data-id="139" id="best-time-btn-r5s6" class="btn btn-outline text-[11px] py-1 px-2 text-yellow border-yellow"><i data-id="140" data-lucide="zap" class="w-3 h-3"></i> Best Time</button>
               </div>
             </div>
           </div>
 
-          <div data-id="143" class="sidebar-section">
-            <h4 data-id="144" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="145" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
-            <div data-id="146" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
-              <div data-id="147" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
+          <div data-id="141" class="sidebar-section">
+            <h4 data-id="142" class="text-xs font-semibold text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-id="143" data-lucide="scroll-text" class="w-3.5 h-3.5 text-dimmed"></i> Activity Log</h4>
+            <div data-id="144" id="activity-log-t7u8" class="bg-bg rounded-lg p-2 overflow-y-auto text-xs" style="max-height: 120px;">
+              <div data-id="145" class="text-dimmed text-[11px] text-center py-2">No activity yet</div>
             </div>
           </div>
         </aside>
 
         <!-- Bulk Upload Work Area -->
-        <section data-id="148" class="flex-1 p-4 md:p-6 overflow-y-auto">
+        <section data-id="146" class="flex-1 p-4 md:p-6 overflow-y-auto">
           <!-- Drop Zone -->
-          <div data-id="149" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
-            <input data-id="150" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
-            <div data-id="151" class="text-4xl mb-3">🎬</div>
-            <p data-id="152" class="text-base font-semibold mb-1">Drop multiple video files here</p>
-            <p data-id="153" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
+          <div data-id="147" id="drop-zone-v9w0" class="drop-zone p-8 md:p-12 text-center cursor-pointer mb-5 bg-card/30 hover:bg-card/50 transition-colors">
+            <input data-id="148" type="file" id="file-input-x1y2" class="hidden" multiple accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
+            <div data-id="149" class="text-4xl mb-3">🎬</div>
+            <p data-id="150" class="text-base font-semibold mb-1">Drop multiple video files here</p>
+            <p data-id="151" class="text-xs text-dimmed">or click to browse — MP4, MOV, AVI, MKV, WebM</p>
           </div>
 
           <!-- Action Bar -->
-          <div data-id="154" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
-            <span data-id="155" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
-            <div data-id="156" class="flex-1"></div>
-            <button data-id="157" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="158" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
-            <button data-id="159" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="160" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
-            <button data-id="161" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="162" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
+          <div data-id="152" id="action-bar-z3a4" class="hidden mb-5 flex flex-wrap items-center gap-3 bg-surface border border-border rounded-lg p-3">
+            <span data-id="153" id="queue-count-b5c6" class="text-sm font-semibold text-muted"></span>
+            <div data-id="154" class="flex-1"></div>
+            <button data-id="155" id="generate-all-btn-d7e8" class="btn btn-red text-xs"><i data-id="156" data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate All AI Metadata</button>
+            <button data-id="157" id="upload-all-btn-f9g0" class="btn btn-green text-xs"><i data-id="158" data-lucide="upload" class="w-3.5 h-3.5"></i> Upload All Ready</button>
+            <button data-id="159" id="clear-all-btn-h1i2" class="btn btn-dark text-xs"><i data-id="160" data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear All</button>
           </div>
 
           <!-- Video Cards Grid -->
-          <div data-id="163" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
-            <div data-id="164" id="empty-state-l5m6" class="text-center py-16">
-              <div data-id="165" class="text-dimmed mb-2"><i data-id="166" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
-              <p data-id="167" class="text-muted text-sm">Drop video files above to get started</p>
+          <div data-id="161" id="bulk-video-grid-j3k4" class="flex flex-col gap-4">
+            <div data-id="162" id="empty-state-l5m6" class="text-center py-16">
+              <div data-id="163" class="text-dimmed mb-2"><i data-id="164" data-lucide="film" class="w-12 h-12 mx-auto opacity-30"></i></div>
+              <p data-id="165" class="text-muted text-sm">Drop video files above to get started</p>
             </div>
           </div>
         </section>
@@ -560,7 +431,7 @@
     </main>
 
     <!-- Footer -->
-    <footer data-id="168" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
+    <footer data-id="166" class="bg-surface border-t border-border text-center py-3 text-xs text-dimmed">
       Made by Copilot
     </footer>
 
@@ -628,173 +499,12 @@
         return ls('yt_auto_schedule') === 'true';
       }
 
-      // ===== GEMINI MULTI-KEY SYSTEM =====
-
-      function getActiveGeminiKey() {
-        var keys = JSON.parse(localStorage.getItem('gemini_api_keys') || '[]');
-        if (!keys.length) return null;
-        var activeId = localStorage.getItem('gemini_active_key_id');
-        var active = keys.find(function(k) { return k.id === activeId; }) || keys[0];
-        return active ? active.key : null;
-      }
-
-      function getGeminiKeys() {
-        return JSON.parse(localStorage.getItem('gemini_api_keys') || '[]');
-      }
-
-      function migrateOldGeminiKey() {
-        var oldKey = localStorage.getItem('gemini_api_key');
-        if (!oldKey) return;
-        var existing = JSON.parse(localStorage.getItem('gemini_api_keys') || '[]');
-        if (existing.length) return;
-        var id = 'gk_migrated';
-        existing.push({ id: id, name: 'Key 1', key: oldKey });
-        localStorage.setItem('gemini_api_keys', JSON.stringify(existing));
-        localStorage.setItem('gemini_active_key_id', id);
-        localStorage.removeItem('gemini_api_key');
-        addLog('Migrated existing Gemini key to multi-key store', 'info');
-      }
-
-      function renderGeminiKeysList() {
-        var container = $('gemini-keys-list');
-        if (!container) return;
-        var keys = getGeminiKeys();
-        var activeId = localStorage.getItem('gemini_active_key_id') || (keys[0] && keys[0].id);
-
-        if (!keys.length) {
-          container.innerHTML = '<p style="color:#555;font-size:12px;text-align:center;padding:12px;">No keys saved yet. Add one below.</p>';
-          return;
-        }
-
-        container.innerHTML = '';
-        keys.forEach(function(k) {
-          var isActive = k.id === activeId;
-          var preview = k.key ? (k.key.substring(0, 8) + '...' + k.key.slice(-4)) : '(empty)';
-
-          var itemDiv = document.createElement('div');
-          itemDiv.className = 'gemini-key-item' + (isActive ? ' active-key' : '');
-
-          var infoDiv = document.createElement('div');
-          infoDiv.className = 'key-info';
-
-          var nameP = document.createElement('p');
-          nameP.className = 'key-name';
-          nameP.textContent = k.name;
-          if (isActive) {
-            var activeBadge = document.createElement('span');
-            activeBadge.className = 'active-badge';
-            activeBadge.textContent = '● ACTIVE';
-            nameP.appendChild(activeBadge);
-          }
-
-          var previewP = document.createElement('p');
-          previewP.className = 'key-preview';
-          previewP.textContent = preview;
-
-          infoDiv.appendChild(nameP);
-          infoDiv.appendChild(previewP);
-          itemDiv.appendChild(infoDiv);
-
-          if (!isActive) {
-            var setActiveBtn = document.createElement('button');
-            setActiveBtn.className = 'btn-set-active';
-            setActiveBtn.textContent = 'Set Active';
-            setActiveBtn.dataset.keyId = k.id;
-            setActiveBtn.addEventListener('click', function() {
-              setActiveGeminiKey(k.id);
-            });
-            itemDiv.appendChild(setActiveBtn);
-          }
-
-          var deleteBtn = document.createElement('button');
-          deleteBtn.className = 'btn-delete-key';
-          deleteBtn.textContent = '🗑';
-          deleteBtn.dataset.keyId = k.id;
-          deleteBtn.addEventListener('click', function() {
-            deleteGeminiKey(k.id);
-          });
-          itemDiv.appendChild(deleteBtn);
-
-          container.appendChild(itemDiv);
-        });
-      }
-
-      function setActiveGeminiKey(id) {
-        localStorage.setItem('gemini_active_key_id', id);
-        renderGeminiKeysList();
-        updateGeminiHeaderBtn();
-        updateSidebarKeyStatus();
-        addLog('Active Gemini key changed', 'success');
-        showToast('Active key updated', 'success');
-      }
-
-      function deleteGeminiKey(id) {
-        var keys = getGeminiKeys();
-        keys = keys.filter(function(k) { return k.id !== id; });
-        localStorage.setItem('gemini_api_keys', JSON.stringify(keys));
-        var activeId = localStorage.getItem('gemini_active_key_id');
-        if (activeId === id) {
-          localStorage.setItem('gemini_active_key_id', keys[0] ? keys[0].id : '');
-        }
-        renderGeminiKeysList();
-        updateGeminiHeaderBtn();
-        updateSidebarKeyStatus();
-        addLog('Gemini key deleted', 'info');
-        showToast('Key removed', 'info');
-      }
-
-      function addGeminiKey() {
-        var nameEl = $('new-key-name');
-        var keyEl = $('new-key-value');
-        if (!nameEl || !keyEl) return;
-        var name = nameEl.value.trim();
-        var key = keyEl.value.trim();
-        if (!key) { showToast('Please enter an API key.', 'warning'); return; }
-        var keys = getGeminiKeys();
-        var id = 'gk_' + Date.now();
-        keys.push({ id: id, name: name || ('Key ' + (keys.length + 1)), key: key });
-        localStorage.setItem('gemini_api_keys', JSON.stringify(keys));
-        if (!localStorage.getItem('gemini_active_key_id') || !getGeminiKeys().find(function(k) { return k.id === localStorage.getItem('gemini_active_key_id'); })) {
-          localStorage.setItem('gemini_active_key_id', id);
-        }
-        nameEl.value = '';
-        keyEl.value = '';
-        renderGeminiKeysList();
-        updateGeminiHeaderBtn();
-        updateSidebarKeyStatus();
-        addLog('New Gemini key added: ' + (name || 'Key ' + keys.length), 'success');
-        showToast('Key saved!', 'success');
-      }
-
-      function updateGeminiHeaderBtn() {
-        var labelEl = $('gemini-btn-label');
-        var mobLabelEl = $('mob-gemini-btn-label');
-        var keys = getGeminiKeys();
-        var text = keys.length > 0 ? keys.length + ' key' + (keys.length !== 1 ? 's' : '') : 'Gemini Key';
-        if (labelEl) labelEl.textContent = text;
-        if (mobLabelEl) mobLabelEl.textContent = text;
-      }
-
-      function updateSidebarKeyStatus() {
-        var keys = getGeminiKeys();
-        var statusEl = $('sidebar-key-status-f3g4');
-        if (statusEl) {
-          if (keys.length === 0) {
-            statusEl.textContent = 'no keys';
-            statusEl.className = 'text-ytred';
-          } else {
-            var activeKey = getActiveGeminiKey();
-            statusEl.textContent = keys.length + ' key' + (keys.length !== 1 ? 's' : '') + (activeKey ? ' (active)' : '');
-            statusEl.className = 'text-green';
-          }
-        }
-      }
-
       // ===== BEST TIME ALGORITHM =====
       var bestTimeDays = [2, 3, 4, 6]; // Tue, Wed, Thu, Sat
       var bestTimeHours = [11, 12, 13, 14, 15, 16, 18, 20];
       var bestTimeMinutes = [0, 30];
 
+      // FIX 4 — New unique schedule slot function
       function getNextBestScheduleSlot() {
         var idx = parseInt(ls('yt_schedule_rotation_index') || '0', 10);
 
@@ -802,10 +512,12 @@
         var hour = bestTimeHours[Math.floor(idx / 4) % 8];
         var minute = (idx % 2 === 0) ? 0 : 30;
 
+        // Increment and save back immediately
         ls('yt_schedule_rotation_index', String(idx + 1));
 
+        // Find next occurrence of that weekday at least 2 days from now
         var d = new Date();
-        d.setDate(d.getDate() + 2);
+        d.setDate(d.getDate() + 2); // at least 2 days from now
         d.setHours(hour, minute, 0, 0);
 
         for (var i = 0; i < 14; i++) {
@@ -820,6 +532,7 @@
           d.setDate(d.getDate() + 1);
         }
 
+        // Fallback (should not happen with 14-day scan)
         var year2 = d.getFullYear();
         var month2 = String(d.getMonth() + 1).padStart(2, '0');
         var dd2 = String(d.getDate()).padStart(2, '0');
@@ -876,15 +589,14 @@
 
       // ===== SETTINGS PERSISTENCE =====
       function loadSettings() {
-        // Migrate old single key first
-        migrateOldGeminiKey();
-
-        var model = ls('gemini_model') || 'gemini-3.5-flash';
+        var model = ls('gemini_model') || 'gemini-3.1-flash-lite';
         $('sidebar-model-d1e2').textContent = model;
         $('gemini-model-select-q7w4').value = model;
 
-        updateSidebarKeyStatus();
-        updateGeminiHeaderBtn();
+        var key = ls('gemini_api_key');
+        $('sidebar-key-status-f3g4').textContent = key ? '●●●●● set' : 'not set';
+        $('sidebar-key-status-f3g4').className = key ? 'text-green' : 'text-ytred';
+        if (key) $('gemini-key-input-p4r2').value = key;
 
         var privacy = ls('yt_default_privacy') || 'unlisted';
         var radios = document.querySelectorAll('#privacy-radio-group-h5i6 input[name="privacy"]');
@@ -916,10 +628,10 @@
       // ===== MODALS =====
       function openModal(id) {
         $(id).classList.add('active');
+        // When the Gemini modal opens, sync the model dropdown to saved value
         if (id === 'modal-gemini-g3x9') {
-          var savedModel = ls('gemini_model') || 'gemini-3.5-flash';
+          var savedModel = ls('gemini_model') || 'gemini-3.1-flash-lite';
           $('gemini-model-select-q7w4').value = savedModel;
-          renderGeminiKeysList();
         }
       }
       function closeModal(id) {
@@ -955,24 +667,24 @@
         });
       });
 
-      // Toggle new key visibility
-      $('toggle-new-key-vis').addEventListener('click', function() {
-        var inp = $('new-key-value');
+      // Toggle key visibility
+      $('toggle-key-vis-k8m3').addEventListener('click', function() {
+        var inp = $('gemini-key-input-p4r2');
         inp.type = inp.type === 'password' ? 'text' : 'password';
       });
 
-      // Add Gemini Key button
-      $('add-gemini-key-btn').addEventListener('click', function() {
-        addGeminiKey();
-      });
-
-      // Model change in modal
-      $('gemini-model-select-q7w4').addEventListener('change', function() {
-        var model = this.value;
+      // Save Gemini
+      $('save-gemini-btn-v5n6').addEventListener('click', function() {
+        var key = $('gemini-key-input-p4r2').value.trim();
+        var model = $('gemini-model-select-q7w4').value;
+        ls('gemini_api_key', key || null);
         ls('gemini_model', model);
         $('sidebar-model-d1e2').textContent = model;
-        addLog('Gemini model changed to ' + model, 'success');
-        showToast('Model updated: ' + model, 'success');
+        $('sidebar-key-status-f3g4').textContent = key ? '●●●●● set' : 'not set';
+        $('sidebar-key-status-f3g4').className = key ? 'text-green' : 'text-ytred';
+        closeModal('modal-gemini-g3x9');
+        showToast('Gemini settings saved', 'success');
+        addLog('Gemini settings updated', 'success');
       });
 
       // Save Client ID
@@ -1237,13 +949,10 @@
             scheduleTime: '',
             status: 'idle',
             uploadProgress: 0,
-            videoId: '',
-            thumbnailUrl: '',
-            thumbnailMime: '',
-            frames: null,
-            isShort: false
+            videoId: ''
           };
 
+          // FIX 4 — Each video gets a unique schedule slot
           if (isAutoSchedule()) {
             var slot = getNextBestScheduleSlot();
             item.scheduleDate = slot.scheduleDate;
@@ -1266,12 +975,15 @@
         var actionBar = $('action-bar-z3a4');
         var emptyState = $('empty-state-l5m6');
 
+        // Fix 3 — Safety guard: bail if grid doesn't exist
         if (!grid) return;
 
         if (bulkQueue.length === 0) {
+          // Fix 2 — Remove only non-emptyState children instead of innerHTML = ''
           Array.from(grid.children).forEach(function(child) {
             if (!child.id || child.id !== 'empty-state-l5m6') grid.removeChild(child);
           });
+          // Fix 1 — Null guards around emptyState usage
           if (emptyState) {
             grid.appendChild(emptyState);
             emptyState.classList.remove('hidden');
@@ -1281,11 +993,13 @@
           return;
         }
 
+        // Fix 1 — Null guards around emptyState usage
         if (emptyState && emptyState.parentNode === grid) grid.removeChild(emptyState);
         if (emptyState) emptyState.classList.add('hidden');
         if (actionBar) actionBar.classList.remove('hidden');
         $('queue-count-b5c6').textContent = bulkQueue.length + ' video' + (bulkQueue.length > 1 ? 's' : '') + ' queued';
 
+        // Fix 2 — Remove only non-emptyState children instead of innerHTML = ''
         Array.from(grid.children).forEach(function(child) {
           if (!child.id || child.id !== 'empty-state-l5m6') grid.removeChild(child);
         });
@@ -1328,11 +1042,10 @@
           actionButtons += '<span class="text-yellow text-xs pulse-anim flex items-center gap-1"><i data-lucide="loader" class="w-3 h-3"></i> Generating...</span>';
         }
 
-        // Auto-Add Links button
-        actionButtons += '<button class="btn-links auto-links-btn" data-id="' + item.id + '"><i data-lucide="link" class="w-3 h-3"></i> Links</button>';
-
-        // Extract Frames button
-        actionButtons += '<button class="btn-frames extract-frames-btn" data-id="' + item.id + '"><i data-lucide="film" class="w-3 h-3"></i> Frames</button>';
+        // Auto-Add Links button — show when a playlist could be selected and we're connected
+        if (state.token) {
+          actionButtons += '<button class="btn-links auto-links-btn" data-id="' + item.id + '"><i data-lucide="link" class="w-3 h-3"></i> Auto-Add Links</button>';
+        }
 
         if ((item.status === 'done' || item.status === 'idle') && state.token) {
           actionButtons += '<button class="btn btn-green text-[11px] py-1.5 upload-single-btn" data-id="' + item.id + '"><i data-lucide="upload" class="w-3 h-3"></i> Upload</button>';
@@ -1349,36 +1062,10 @@
           progressHTML = '<div class="progress-bar"><div class="progress-bar-fill" style="width:' + item.uploadProgress + '%"></div></div>';
         }
 
-        // Frame picker section — only shown when frames exist
-        var framePickerHTML = '';
-        if (item.frames && item.frames.length) {
-          framePickerHTML = '<div style="margin-top:12px;border-top:1px solid #2a2a2a;padding-top:12px;">'
-            + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">'
-            + '<span style="color:#aaa;font-size:11px;font-weight:600;">\uD83C\uDFA5 THUMBNAIL — Pick a Frame</span>'
-            + (item.thumbnailUrl
-                ? '<button class="btn-thumb-download thumb-download-btn" data-id="' + item.id + '"><i data-lucide="download" class="w-3 h-3" style="display:inline-block;vertical-align:middle;margin-right:4px;"></i> Download Selected</button>'
-                : '<span style="color:#555;font-size:10px;">Click a frame to select it as thumbnail</span>')
-            + '</div>';
-
-          // Selected thumbnail preview
-          if (item.thumbnailUrl) {
-            framePickerHTML += '<img src="' + item.thumbnailUrl + '" alt="Selected thumbnail" style="width:100%;max-width:280px;height:auto;border-radius:6px;border:2px solid #2ba640;display:block;margin-bottom:8px;" />';
-          }
-
-          // Frame grid
-          framePickerHTML += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">';
-          item.frames.forEach(function(frameUrl, idx) {
-            var isSelected = item.thumbnailUrl === frameUrl;
-            framePickerHTML += '<div class="frame-grid-cell' + (isSelected ? ' selected' : '') + '" data-card-id="' + item.id + '" data-frame-idx="' + idx + '">'
-              + '<img src="' + frameUrl + '" alt="Frame ' + (idx + 1) + '" />'
-              + '</div>';
-          });
-          framePickerHTML += '</div></div>';
-        }
-
+        // FIX 2 — Video element with controls attribute
         card.innerHTML =
           '<div class="flex-shrink-0" style="width:180px">' +
-            '<video src="' + item.objectUrl + '" style="width:180px;height:102px;object-fit:contain;background:#000;border-radius:8px;display:block;" preload="metadata" controls></video>' +
+            '<video src="' + item.objectUrl + '" class="rounded-lg bg-black" style="width:180px;height:102px;object-fit:cover;display:block;" controls preload="metadata" muted></video>' +
             '<p class="text-[11px] text-dimmed mt-1 truncate" title="' + escHtml(item.file.name) + '">' + escHtml(item.file.name) + '</p>' +
             '<p class="text-[10px] text-dimmed">' + formatBytes(item.file.size) + '</p>' +
           '</div>' +
@@ -1391,7 +1078,7 @@
             '<textarea placeholder="Description" rows="2" class="mb-1.5 text-xs resize-y desc-textarea" data-field="desc" data-id="' + item.id + '">' + escHtml(item.desc) + '</textarea>' +
             '<input type="text" placeholder="Tags (comma-separated)" class="mb-1.5 text-xs" value="' + escHtml(item.tags) + '" data-field="tags" data-id="' + item.id + '" />' +
             '<div class="flex gap-2 mb-1.5">' +
-              '<select id="playlist-select-' + item.id + '" class="flex-1 text-xs playlist-select" data-field="playlist" data-id="' + item.id + '">' + playlistOptions + '</select>' +
+              '<select class="flex-1 text-xs playlist-select" data-field="playlist" data-id="' + item.id + '">' + playlistOptions + '</select>' +
               '<select class="w-28 text-xs" data-field="privacy" data-id="' + item.id + '">' +
                 '<option value="public"' + (item.privacy === 'public' ? ' selected' : '') + '>Public</option>' +
                 '<option value="unlisted"' + (item.privacy === 'unlisted' ? ' selected' : '') + '>Unlisted</option>' +
@@ -1402,7 +1089,6 @@
             progressHTML +
             '<div class="flex flex-wrap items-center gap-2 mt-2.5">' + actionButtons + '</div>' +
             '<div id="links-result-' + item.id + '" class="links-result-panel"></div>' +
-            framePickerHTML +
           '</div>';
 
         // Attach event listeners
@@ -1418,22 +1104,6 @@
 
           var autoLinksBtn = card.querySelector('.auto-links-btn');
           if (autoLinksBtn) autoLinksBtn.addEventListener('click', function() { autoAddLinks(item.id); });
-
-          var extractFramesBtn = card.querySelector('.extract-frames-btn');
-          if (extractFramesBtn) extractFramesBtn.addEventListener('click', function() { extractFramesForCard(item.id); });
-
-          // Frame picker click listeners
-          card.querySelectorAll('.frame-grid-cell').forEach(function(cell) {
-            cell.addEventListener('click', function() {
-              var cardId = parseInt(cell.dataset.cardId, 10);
-              var frameIdx = parseInt(cell.dataset.frameIdx, 10);
-              selectFrame(cardId, frameIdx);
-            });
-          });
-
-          // Thumbnail download button
-          var thumbDownloadBtn = card.querySelector('.thumb-download-btn');
-          if (thumbDownloadBtn) thumbDownloadBtn.addEventListener('click', function() { downloadThumbnail(item.id); });
 
           // Field change listeners
           card.querySelectorAll('[data-field]').forEach(function(el) {
@@ -1469,51 +1139,6 @@
           addLog('Removed video from queue', 'info');
         }
         renderBulkGrid();
-      }
-
-      // ===== FRAME PICKER =====
-      function selectFrame(cardId, frameIndex) {
-        var item = bulkQueue.find(function(i) { return i.id === cardId; });
-        if (!item || !item.frames || frameIndex >= item.frames.length) return;
-        item.thumbnailUrl = item.frames[frameIndex];
-        item.thumbnailMime = 'image/jpeg';
-        addLog('Frame ' + (frameIndex + 1) + ' selected as thumbnail for "' + (item.title || item.file.name) + '"', 'success');
-        showToast('Frame ' + (frameIndex + 1) + ' selected as thumbnail!', 'success');
-        renderBulkGrid();
-      }
-
-      // ===== DOWNLOAD THUMBNAIL =====
-      function downloadThumbnail(cardId) {
-        var item = bulkQueue.find(function(i) { return i.id === cardId; });
-        if (!item || !item.thumbnailUrl) { showToast('No frame selected yet.', 'warning'); return; }
-        var a = document.createElement('a');
-        a.href = item.thumbnailUrl;
-        var safeName = (item.title || item.file.name || 'thumbnail').replace(/[^a-z0-9]/gi, '_').substring(0, 40);
-        a.download = safeName + '_thumbnail.jpg';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        addLog('Thumbnail frame downloaded for "' + (item.title || item.file.name) + '"', 'success');
-      }
-
-      // ===== EXTRACT FRAMES FOR CARD (manual) =====
-      async function extractFramesForCard(cardId) {
-        var item = bulkQueue.find(function(i) { return i.id === cardId; });
-        if (!item) return;
-        if (item.frames && item.frames.length) {
-          showToast('Frames already extracted. Re-extracting...', 'info');
-        }
-        addLog('Extracting frames from "' + item.file.name + '"...', 'info');
-        try {
-          var frames = await extractFramesFromVideo(item.file, 20);
-          item.frames = frames;
-          addLog('Extracted ' + frames.length + ' frames \u2014 click one to set as thumbnail', 'success');
-          showToast(frames.length + ' frames ready \u2014 pick your thumbnail!', 'success');
-          renderBulkGrid();
-        } catch(e) {
-          addLog('Frame extraction failed: ' + e.message, 'error');
-          showToast('Could not extract frames: ' + e.message, 'error');
-        }
       }
 
       // ===== ACTION BAR BUTTONS =====
@@ -1605,11 +1230,11 @@
         var item = bulkQueue.find(function(q) { return q.id === id; });
         if (!item) return;
 
-        var apiKey = getActiveGeminiKey();
-        var model = ls('gemini_model') || 'gemini-3.5-flash';
+        var apiKey = ls('gemini_api_key');
+        var model = ls('gemini_model') || 'gemini-3.1-flash-lite';
 
         if (!apiKey) {
-          showToast('Add a Gemini API key first', 'warning');
+          showToast('Set your Gemini API key first', 'warning');
           openModal('modal-gemini-g3x9');
           return;
         }
@@ -1620,7 +1245,6 @@
 
         try {
           var frames = await extractFramesFromVideo(item.file, 20);
-          item.frames = frames; // store for frame picker
           if (frames.length === 0) throw new Error('Could not extract frames');
 
           var imageParts = frames.map(function(f) {
@@ -1628,29 +1252,15 @@
             return { inline_data: { mime_type: 'image/jpeg', data: base64Data } };
           });
 
-          var filename = item.file.name;
-          var playlistList = state.playlists.length > 0
-            ? state.playlists.map(function(p) { return p.title; }).join(', ')
-            : 'none';
-
-          var promptText = 'You are a YouTube SEO expert AND a natural, engaging writer. I am giving you frames from a video named "' + filename + '". Look at ALL frames carefully and generate optimized YouTube metadata.\n\n'
-            + 'CRITICAL TONE INSTRUCTIONS — the description must:\n'
-            + '- Sound like a real person wrote it, NOT a robot or marketing template\n'
-            + '- Be conversational, warm and direct — like texting a friend about something cool\n'
-            + '- NO generic filler phrases like "In this video", "Join us as we", "We explore", "Dive into", "Buckle up", "Whether you are a beginner or expert"\n'
-            + '- NO hype words like "Amazing", "Incredible", "Mind-blowing", "Game-changing"\n'
-            + '- Start the description with something specific and interesting from the video — not a summary statement\n'
-            + '- Use short punchy sentences. Vary sentence length. Let it breathe.\n'
-            + '- Add a natural call to action at the end (subscribe, comment, etc.) but keep it casual — not salesy\n'
-            + '- Hashtags go on the last line only\n\n'
-            + 'Available playlists: [' + playlistList + ']\n\n'
-            + 'Return ONLY valid JSON:\n'
-            + '{"title":"engaging title max 60 chars","description":"natural conversational description 3-4 short paragraphs\\n\\nCTA paragraph\\n\\n#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5","tags":"tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8, tag9, tag10","playlist":"PlaylistName"}';
+          var playlistSuggestion = '';
+          if (state.playlists.length > 0) {
+            playlistSuggestion = ' Available playlists: ' + state.playlists.map(function(p) { return p.title; }).join(', ') + '. Suggest the best matching playlist title from this list, or empty string if none match.';
+          }
 
           var requestBody = {
             contents: [{
               parts: imageParts.concat([{
-                text: promptText
+                text: 'These are frames from a video being uploaded to YouTube. Based on these frames, generate optimized YouTube metadata. Create:\n1. An engaging, SEO-optimized title (max 100 chars)\n2. A compelling description (2-3 paragraphs, include relevant keywords)\n3. Relevant tags (10-15 tags, comma-separated)\n4. Best matching playlist name from available options.' + playlistSuggestion + '\n\nRespond in JSON format with keys: title, description, tags, playlist'
               }])
             }],
             generationConfig: {
@@ -1683,6 +1293,7 @@
 
           var parsed = JSON.parse(text);
 
+          // FIX 3 — Log Gemini AI response details
           addLog('AI title: ' + (parsed.title || '(none)'), 'success');
           addLog('AI tags: ' + (parsed.tags || '(none)'), 'info');
           addLog('AI playlist: ' + (parsed.playlist || '(none)'), 'info');
@@ -1703,16 +1314,14 @@
           item.status = 'done';
           addLog('AI metadata ready: ' + item.title.substring(0, 40), 'success');
           showToast('AI metadata generated for ' + item.file.name, 'success');
-          addLog(frames.length + ' frames extracted \u2014 pick one as thumbnail below', 'info');
-
-          renderBulkGrid();
 
         } catch (e) {
           item.status = 'error';
           addLog('AI error: ' + e.message, 'error');
           showToast('AI generation failed: ' + e.message, 'error');
-          renderBulkGrid();
         }
+
+        renderBulkGrid();
       }
 
       // ===== AUTO-ADD LINKS =====
@@ -1726,7 +1335,8 @@
         }
 
         var resultDiv = document.getElementById('links-result-' + cardId);
-        var playlistEl = document.getElementById('playlist-select-' + cardId);
+        var cardEl = document.getElementById('card-' + cardId);
+        var playlistEl = cardEl ? cardEl.querySelector('select.playlist-select') : null;
         var selectedPlaylistId = playlistEl ? playlistEl.value : (item.playlist || '');
         var selectedPlaylistName = (playlistEl && playlistEl.options[playlistEl.selectedIndex])
           ? playlistEl.options[playlistEl.selectedIndex].text : selectedPlaylistId;
@@ -1744,6 +1354,7 @@
         addLog('Auto-Add Links: fetching first video from "' + selectedPlaylistName + '"...', 'info');
 
         try {
+          // Step 1: Get first video in the playlist
           var plRes = await ytFetch(
             'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' +
             encodeURIComponent(selectedPlaylistId) + '&maxResults=1'
@@ -1770,6 +1381,7 @@
 
           addLog('First video: "' + firstVideoTitle + '" (' + firstVideoId + ')', 'success');
 
+          // Step 2: Fetch full description
           var vidRes = await ytFetch(
             'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + firstVideoId
           );
@@ -1784,6 +1396,7 @@
             ? vidItems[0].snippet.description : '';
           addLog('Description fetched (' + description.length + ' chars)', 'info');
 
+          // Step 3: Extract URLs
           var urlRegex = /https?:\/\/[^\s\)\]\,\"\'<>\n]+/g;
           var rawUrls = description.match(urlRegex) || [];
           var seen = {};
@@ -1804,6 +1417,7 @@
             return;
           }
 
+          // Step 4: Show checklist
           if (resultDiv) {
             var listId = 'links-list-' + cardId;
             resultDiv.innerHTML =
@@ -1823,6 +1437,7 @@
                 '<button class="btn btn-dark text-xs cancel-links-btn" data-card-id="' + cardId + '">Cancel</button>' +
               '</div>';
 
+            // Attach listeners for Append and Cancel buttons
             setTimeout(function() {
               var appendBtn = resultDiv.querySelector('.append-links-btn');
               if (appendBtn) appendBtn.addEventListener('click', function() { appendLinks(cardId); });
@@ -1911,6 +1526,7 @@
             status: statusObj
           };
 
+          // Step 1: Initiate resumable upload
           var initResp = await fetch('https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status', {
             method: 'POST',
             headers: {
@@ -1938,6 +1554,7 @@
           var uploadUrl = initResp.headers.get('Location');
           if (!uploadUrl) throw new Error('No upload URI returned');
 
+          // Step 2: Upload the file
           var xhr = new XMLHttpRequest();
           xhr.open('PUT', uploadUrl, true);
           xhr.setRequestHeader('Content-Type', item.file.type || 'video/mp4');
@@ -1961,6 +1578,7 @@
                   addLog('Uploaded: ' + item.title + ' → ' + result.id, 'success');
                   showToast('Upload complete: ' + item.title, 'success');
 
+                  // Add to playlist if selected
                   if (item.playlist) {
                     addToPlaylist(result.id, item.playlist);
                   }
