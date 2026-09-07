@@ -1023,7 +1023,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-07T13:25:23+00:00",
+  "generated_at": "2026-09-07T18:22:02+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1042,17 +1042,20 @@
     "garden planner",
     "iphone label designer",
     "ipad label designer",
-    "selfie camera"
+    "selfie camera",
+    "timer camera",
+    "aac language",
+    "home inspection reports"
   ],
   "searched_this_run": [
+    "timer camera",
+    "aac language",
+    "home inspection reports",
     "avery labels",
     "bake croissants",
     "woodworking software",
     "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "woodworking app"
   ],
-  "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera"
+  "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
