@@ -17,11 +17,14 @@
     "garden planner",
     "iphone label designer",
     "ipad label designer",
-    "selfie camera"
+    "selfie camera",
+    "timer camera",
+    "aac language",
+    "home inspection reports"
   ],
   "global_search": true,
   "min_score": 0,
-  "max_age_hours": 168,
+  "max_age_hours": 48,
   "results_limit_per_query": 50,
   "match_mode": "loose",
   "query_mode": "separate",
