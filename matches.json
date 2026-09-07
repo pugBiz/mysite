@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1w9g3kn",
+      "fullname": "t3_1w9g3kn",
+      "title": "AAC app that has helped with me verbal shutdowns because of how customizable it is!(there is also a feature for if the automatic voice sounds weird to you, you can record what it’s supposed to sound like) *its free*",
+      "url": "https://www.reddit.com/r/Neurodivergent/comments/1w9g3kn/aac_app_that_has_helped_with_me_verbal_shutdowns/",
+      "excerpt": "it’s called sky simple aac. You can also make sections for specific stuff! (Like I have one for cuss words and vocal stims!) Ive been trying to find an app that was easily and highly customizable and it was the first one I’ve been able to find that was free!",
+      "subreddit": "Neurodivergent",
+      "author": "OkGas1974",
+      "score": null,
+      "created_utc": 1788749803,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-07T21:43:19+00:00"
+    },
+    {
+      "id": "1w9eh5w",
+      "fullname": "t3_1w9eh5w",
+      "title": "Really good aac app I found for when I have verbal shutdowns while little (also great for non verbals or others who have verbal shutdowns!)",
+      "url": "https://www.reddit.com/r/ageregression/comments/1w9eh5w/really_good_aac_app_i_found_for_when_i_have/",
+      "excerpt": "It’s called sky simple AAC!",
+      "subreddit": "ageregression",
+      "author": "OkGas1974",
+      "score": null,
+      "created_utc": 1788745069,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-07T21:43:19+00:00"
+    },
+    {
+      "id": "1w98mjr",
+      "fullname": "t3_1w98mjr",
+      "title": "I love it when I play with someone I can talk to.",
+      "url": "https://www.reddit.com/r/SquadBusters/comments/1w98mjr/i_love_it_when_i_play_with_someone_i_can_talk_to/",
+      "excerpt": "Hello, I'm FATE ThatOneDude helped me a lot. I love playing with someone I can strategize with. If we had another person we could talk to, we would have collected over 600 chickens per round. I recorded a video of the first round and wanted to include it in the post, but I don't think I can combine videos with photos. So, I'll post the video of the first round in the next post for those who want to learn how to collect chickens.",
+      "subreddit": "SquadBusters",
+      "author": "FATE1590",
+      "score": null,
+      "created_utc": 1788729642,
+      "type": "post",
+      "matched_term": "combine videos",
+      "found_at": "2026-09-07T21:44:08+00:00"
+    },
+    {
       "id": "1w965ma",
       "fullname": "t3_1w965ma",
       "title": "First time baking Croissants !",
@@ -1023,7 +1065,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-07T18:22:02+00:00",
+  "generated_at": "2026-09-07T21:44:55+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1048,14 +1090,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "timer camera",
-    "aac language",
-    "home inspection reports",
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app"
+    "aac app",
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
