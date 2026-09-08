@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1wav0le",
+      "fullname": "t3_1wav0le",
+      "title": "Bug: 3DFP Scan cannot reliably read 3DFP’s own printed spool labels, though iPhone Camera can",
+      "url": "https://www.reddit.com/r/3dfilamentprofiles/comments/1wav0le/bug_3dfp_scan_cannot_reliably_read_3dfps_own/",
+      "excerpt": "I’m using labels exported directly from 3D Filament Profiles for my spool inventory. The printed QR codes scan reliably with the iPhone Camera app, and the 3D Filament Profiles Scan tool can recognize the same QR code when it is displayed on my laptop screen. But the in-site scanner often fails to recognize that identical QR code once it is printed on the label. This makes scanning spools into locations unreliable, even though the codes themselves appear valid. Could you take a look at whether t",
+      "subreddit": "3dfilamentprofiles",
+      "author": "ComprehensiveBox4954",
+      "score": null,
+      "created_utc": 1788888631,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-08T21:21:03+00:00"
+    },
+    {
+      "id": "1wau4ur",
+      "fullname": "t3_1wau4ur",
+      "title": "Multiple Dymo's on one laptop and web printing. Possible?",
+      "url": "https://www.reddit.com/r/dymo/comments/1wau4ur/multiple_dymos_on_one_laptop_and_web_printing/",
+      "excerpt": "Hi folks, I work at a medical clinic for a major university and we've have physicians randomly seeing patients in different exam rooms, where each room has its own Dymo Labelmaker 550. When we print labels, we do not use the software provided by Dymo. All label printing is done from our EMR web client which communicates with the printer using Dymo's Webhost. The problem is that if somebody connects more than one Dymo printer to their laptop (by using multiple exam rooms), it completely breaks Dy",
+      "subreddit": "dymo",
+      "author": "MarekEOS",
+      "score": null,
+      "created_utc": 1788886793,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-08T21:21:03+00:00"
+    },
+    {
       "id": "1waltrv",
       "fullname": "t3_1waltrv",
       "title": "20 Microtask Sites Like MTurk for Extra Cash",
@@ -1191,7 +1219,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-08T18:03:05+00:00",
+  "generated_at": "2026-09-08T21:22:05+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1216,14 +1244,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
