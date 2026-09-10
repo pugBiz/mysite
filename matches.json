@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1wc7n2t",
+      "fullname": "t3_1wc7n2t",
+      "title": "Does a Canada Post WooCommerce shipping plugin print labels directly to my printer, or do I have to download the PDF first?",
+      "url": "https://www.reddit.com/r/woocommerce_Canada/comments/1wc7n2t/does_a_canada_post_woocommerce_shipping_plugin/",
+      "excerpt": "It's a two-step process, not a direct print. The plugin generates the label as a PDF, which downloads to your computer, and then you print it manually from there. There's no direct printer connection or automatic print command in standard WooCommerce Canada Post integrations. Check out the Canada Post Shipping Plugin for WooCommerce with Print Label ; clicking Print Label downloads the label PDF to your local machine. You then open it and print using whatever printer you have set up. The PDF app",
+      "subreddit": "woocommerce_Canada",
+      "author": "Brief-Razzmatazz-655",
+      "score": null,
+      "created_utc": 1789011331,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-10T19:30:09+00:00"
+    },
+    {
+      "id": "1wc7mik",
+      "fullname": "t3_1wc7mik",
+      "title": "If I generate Canada Post shipping labels in test mode on WooCommerce, will I actually be charged for them?",
+      "url": "https://www.reddit.com/r/woocommerce_Canada/comments/1wc7mik/if_i_generate_canada_post_shipping_labels_in_test/",
+      "excerpt": "No, that's the purpose of test mode. Labels generated while the plugin is in test mode go to Canada Post's test environment, not their live production API, so no actual postage charges are incurred. A plugin that supports test mode for this is the Canada Post Shipping Plugin for WooCommerce with Print Label . Use test mode to verify your label generation workflow, confirm address fields are correct, and check that package details look right, all without any financial risk. Once everything checks",
+      "subreddit": "woocommerce_Canada",
+      "author": "Brief-Razzmatazz-655",
+      "score": null,
+      "created_utc": 1789011288,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-10T19:30:09+00:00"
+    },
+    {
+      "id": "1wbwhjo",
+      "fullname": "t3_1wbwhjo",
+      "title": "I'm freaking out right now, I cant print labels on an order due by tomorrow",
+      "url": "https://www.reddit.com/r/EtsySellers/comments/1wbwhjo/im_freaking_out_right_now_i_cant_print_labels_on/",
+      "excerpt": "What do I do here? The address doesnt come up as incorrect or anything, I checked it on google the address is valid, I cant purchase 7 labels, one is 138 ounces, all other 6 are 64 ounces. all boxes are 9x9x9. What do I do, I am in full panic mode. Buyer is in the USA and so am I. What is preventing me from buying the labels?",
+      "subreddit": "EtsySellers",
+      "author": "Inside-Specialist-55",
+      "score": null,
+      "created_utc": 1788983984,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-10T19:30:09+00:00"
+    },
+    {
       "id": "1wbg3nu",
       "fullname": "t3_1wbg3nu",
       "title": "Would you use an app that turns your travels into a personal world of memories?",
@@ -1247,7 +1289,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-10T16:38:26+00:00",
+  "generated_at": "2026-09-10T19:31:03+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1272,14 +1314,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
