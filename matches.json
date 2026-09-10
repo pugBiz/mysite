@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1wbg3nu",
+      "fullname": "t3_1wbg3nu",
+      "title": "Would you use an app that turns your travels into a personal world of memories?",
+      "url": "https://www.reddit.com/r/appdev/comments/1wbg3nu/would_you_use_an_app_that_turns_your_travels_into/",
+      "excerpt": "The concept is simple: 🌍 You open the app and see a 3D globe . 📍 Countries you've visited are marked. 📸 Tap a country → see all your trips and memories there. Each memory could contain photos, videos, dates, a short story and optionally an itinerary. The idea is to make your travel history feel like your own personal world , rather than having everything buried in your camera roll. There could also be: AI that automatically organizes photos by category (food, nature, architecture, etc.) Sharing ",
+      "subreddit": "appdev",
+      "author": "Silent_Story3204",
+      "score": null,
+      "created_utc": 1788944057,
+      "type": "post",
+      "matched_term": "organize photos",
+      "found_at": "2026-09-10T06:31:02+00:00"
+    },
+    {
+      "id": "1wbg2p5",
+      "fullname": "t3_1wbg2p5",
+      "title": "Would you use an app that turns your travels into a personal world of memories?",
+      "url": "https://www.reddit.com/r/AppBusiness/comments/1wbg2p5/would_you_use_an_app_that_turns_your_travels_into/",
+      "excerpt": "The concept is simple: 🌍 You open the app and see a 3D globe . 📍 Countries you've visited are marked. 📸 Tap a country → see all your trips and memories there. Each memory could contain photos, videos, dates, a short story and optionally an itinerary. The idea is to make your travel history feel like your own personal world , rather than having everything buried in your camera roll. There could also be: AI that automatically organizes photos by category (food, nature, architecture, etc.) Sharing ",
+      "subreddit": "AppBusiness",
+      "author": "Silent_Story3204",
+      "score": null,
+      "created_utc": 1788943959,
+      "type": "post",
+      "matched_term": "organize photos",
+      "found_at": "2026-09-10T06:31:02+00:00"
+    },
+    {
       "id": "1wav0le",
       "fullname": "t3_1wav0le",
       "title": "Bug: 3DFP Scan cannot reliably read 3DFP’s own printed spool labels, though iPhone Camera can",
@@ -1219,7 +1247,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-10T01:22:05+00:00",
+  "generated_at": "2026-09-10T06:31:49+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1244,14 +1272,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
