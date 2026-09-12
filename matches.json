@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wdo581",
+      "fullname": "t3_1wdo581",
+      "title": "Does anyone print their own labels?",
+      "url": "https://www.reddit.com/r/estrogel/comments/1wdo581/does_anyone_print_their_own_labels/",
+      "excerpt": "Hi, probably a bit off topic, but I'd really like to start priting labels for the stuff I make, but I'm not sure wihch label printer to go with, a lot of them require shitty apps with ads, or expensive proprietary label refills, or are just out right bad... I would love to get something that allows for a bit of pazazz , so at the very least printing custom images, and also for printing larger labels (like at least 30mm width) Or if anyone has some other way of printing labels, I'd love to know! ",
+      "subreddit": "estrogel",
+      "author": "IamVickyy",
+      "score": null,
+      "created_utc": 1789150648,
+      "type": "post",
+      "matched_term": "print labels",
+      "found_at": "2026-09-12T00:34:01+00:00"
+    },
+    {
       "id": "1wd3zpk",
       "fullname": "t3_1wd3zpk",
       "title": "Emergency 🚨",
@@ -1597,7 +1611,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-11T22:29:22+00:00",
+  "generated_at": "2026-09-12T00:35:03+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1622,14 +1636,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
