@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wepc7s",
+      "fullname": "t3_1wepc7s",
+      "title": "I made an iPhone app that automatically creates Apple Photos albums",
+      "url": "https://www.reddit.com/r/iosapps/comments/1wepc7s/i_made_an_iphone_app_that_automatically_creates/",
+      "excerpt": "A: Answer: What problem does it solve? I created Instant Photo Album to save time organizing photos from trips, events, or an entire weekend. Choose a start and end date/time, and it automatically creates an Apple Photos album with the photos taken during that time. You can also create an album from a past trip or event by selecting a past date range to gather photos you’ve already taken. B: Better: How does it compare? Compared with creating an album manually in Apple Photos, it saves you the w",
+      "subreddit": "iosapps",
+      "author": "sundaeelectronics",
+      "score": null,
+      "created_utc": 1789249806,
+      "type": "post",
+      "matched_term": "organize photos",
+      "found_at": "2026-09-14T06:56:04+00:00"
+    },
+    {
       "id": "1wel9nl",
       "fullname": "t3_1wel9nl",
       "title": "Mislabeled Packages",
@@ -1863,7 +1877,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-14T04:10:49+00:00",
+  "generated_at": "2026-09-14T06:56:51+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1888,14 +1902,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "aac app",
-    "label software",
-    "label app"
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "print labels",
+    "organize photos",
+    "video markup",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
