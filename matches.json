@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1wgpi9r",
+      "fullname": "t3_1wgpi9r",
+      "title": "I built an AAC app for adults who have difficulty speaking — looking for feedback",
+      "url": "https://www.reddit.com/r/SideProject/comments/1wgpi9r/i_built_an_aac_app_for_adults_who_have_difficulty/",
+      "excerpt": "I built AAC Adult – Text to Speech for adults who have difficulty speaking because of stroke, aphasia, motor speech issues, or temporary loss of speech. The goal was to make it simple and adult-focused rather than overwhelming or childlike. It includes 250+ ready-to-use phrases, type-to-speak, favorites, photos, recorded buttons, Apple Personal Voice support, and multiple languages. It’s free to download, with an optional $19.99 lifetime Pro upgrade — no subscription. App Store: https://apps.app",
+      "subreddit": "SideProject",
+      "author": "Less_Koala_8212",
+      "score": null,
+      "created_utc": 1789444613,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-15T06:34:08+00:00"
+    },
+    {
+      "id": "1wg73ou",
+      "fullname": "t3_1wg73ou",
+      "title": "Verbal Shutdowns",
+      "url": "https://www.reddit.com/r/AutismInWomen/comments/1wg73ou/verbal_shutdowns/",
+      "excerpt": "It's happening more frequently and I hate it. As someone who's normally articulate it's so frustrating and discouraging when I can't talk. I struggle to find the words and it's like my voice disappears. I can't even whisper and the best I can manage is to mouth a word or two. I have an AAC app on my phone and it's really helpful but I feel uncomfortable and like I'm inconveniencing others when I use it.",
+      "subreddit": "AutismInWomen",
+      "author": "pinkgirl1200",
+      "score": null,
+      "created_utc": 1789400849,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-15T06:34:08+00:00"
+    },
+    {
       "id": "1wfygge",
       "fullname": "t3_1wfygge",
       "title": "I built Coltiveo: A visual garden planner that tracks seed lineage, companion planting, and harvests over generations (Feedback welcome!)",
@@ -1891,7 +1919,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-15T01:18:03+00:00",
+  "generated_at": "2026-09-15T06:34:42+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1916,11 +1944,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "ipad label designer",
-    "selfie camera",
-    "timer camera",
-    "aac language",
-    "home inspection reports"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "aac app",
+    "label software",
+    "label app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
