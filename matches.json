@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wfzzjo",
+      "fullname": "t3_1wfzzjo",
+      "title": "[12 Testers Needed]",
+      "url": "https://www.reddit.com/r/AndroidAppTesters/comments/1wfzzjo/12_testers_needed/",
+      "excerpt": "I’m looking for Android testers for TimberLab, a woodworking app that turns a photo or text description of a project into a 3D model with an exact cut list and shopping list. I’d also be very happy to test your app in return — just send me your links! To get access, first join the testers group: https://groups.google.com/g/timberlab-testers Then download the app here: https://play.google.com/store/apps/details?id=com.shani.timberlab",
+      "subreddit": "AndroidAppTesters",
+      "author": "shnikwood",
+      "score": null,
+      "created_utc": 1789382851,
+      "type": "post",
+      "matched_term": "woodworking app",
+      "found_at": "2026-09-15T21:05:02+00:00"
+    },
+    {
       "id": "1wfwt3p",
       "fullname": "t3_1wfwt3p",
       "title": "Just launched Instant Photo Album: automatically create Apple Photos albums by date and time",
@@ -1933,7 +1947,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-15T17:35:22+00:00",
+  "generated_at": "2026-09-15T21:05:49+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1958,11 +1972,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "ipad label designer",
-    "selfie camera",
-    "timer camera",
-    "aac language",
-    "home inspection reports"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "aac app",
+    "label software",
+    "label app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
