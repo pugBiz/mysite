@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1whele4",
+      "fullname": "t3_1whele4",
+      "title": "VibeCoding Copilot 2.0",
+      "url": "https://www.reddit.com/r/VibeCodeDevs/comments/1whele4/vibecoding_copilot_20/",
+      "excerpt": "​ Most \"AI\" labelled apps or chat bots like Gemini or chatgpt lack agentic control over your system.Meanwhile most agentic software usually lean way deeply in software engineering and coding and also heavy and expansive. I tried to get a balance , an AI that can do agentic work like managing my documents, booking events, play spotify e.t.c without burning through my wallet I came up with this AI personal assistant Kinda what Microsoft Copilot was meant to become.",
+      "subreddit": "VibeCodeDevs",
+      "author": "Recursive-Thoughts",
+      "score": null,
+      "created_utc": 1789510311,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-16T09:28:06+00:00"
+    },
+    {
       "id": "1whj4ky",
       "fullname": "t3_1whj4ky",
       "title": "Honor Pad X8 selfie cam stopped working",
@@ -2157,7 +2171,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-16T04:13:50+00:00",
+  "generated_at": "2026-09-16T09:28:06+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -2182,11 +2196,14 @@
     "home inspection reports"
   ],
   "searched_this_run": [
-    "ipad label designer",
-    "selfie camera",
-    "timer camera",
-    "aac language",
-    "home inspection reports"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "aac app",
+    "label software",
+    "label app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, aac app, label software, label app, label barcode, combine videos, merge videos, print labels, organize photos, video markup, garden planner, iphone label designer, ipad label designer, selfie camera, timer camera, aac language, home inspection reports"
 }
