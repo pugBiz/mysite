@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1wh6919",
+      "fullname": "t3_1wh6919",
+      "title": "My first time baking croissants!",
+      "url": "https://www.reddit.com/r/Baking/comments/1wh6919/my_first_time_baking_croissants/",
+      "excerpt": "Just wanted to share my first attempt at baking croissants using the recipe from Joshua Weissman and they turned out pretty good I think. The only things that bothered me was that the croissants leaked out a bit of butter while baking (even though I made sure they were not getting to warm during proofing) and they also ended up a bit flat in my opinion and cut open were relatively compressed so no real big air chambers :( Maybe next time I will put them in the fridge for a short time right befor",
+      "subreddit": "Baking",
+      "author": "TwoBerries",
+      "score": null,
+      "created_utc": 1789491998,
+      "type": "post",
+      "matched_term": "bake croissants",
+      "found_at": "2026-09-17T00:14:01+00:00"
+    },
+    {
+      "id": "1whx6p8",
+      "fullname": "t3_1whx6p8",
+      "title": "How your email finds me on a Monday morning after a holiday, woodwork designed and made by me.",
+      "url": "https://www.reddit.com/r/somethingimade/comments/1whx6p8/how_your_email_finds_me_on_a_monday_morning_after/",
+      "excerpt": "",
+      "subreddit": "somethingimade",
+      "author": "mtomsky",
+      "score": null,
+      "created_utc": 1789565115,
+      "type": "post",
+      "matched_term": "woodwork design",
+      "found_at": "2026-09-17T00:15:03+00:00"
+    },
+    {
       "id": "1whele4",
       "fullname": "t3_1whele4",
       "title": "VibeCoding Copilot 2.0",
@@ -519,7 +547,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-16T21:34:49+00:00",
+  "generated_at": "2026-09-17T00:15:22+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -548,7 +576,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "aac language"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
