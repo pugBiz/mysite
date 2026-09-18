@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wjgqy9",
+      "fullname": "t3_1wjgqy9",
+      "title": "I built an AAC app for my non-verbal autistic daughter — I need Android testers to get it published on the app store.",
+      "url": "https://www.reddit.com/r/GooglePlayClosedTest/comments/1wjgqy9/i_built_an_aac_app_for_my_nonverbal_autistic/",
+      "excerpt": "",
+      "subreddit": "GooglePlayClosedTest",
+      "author": "Apprehensive-Put-386",
+      "score": null,
+      "created_utc": 1789707305,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-18T10:56:05+00:00"
+    },
+    {
       "id": "1wh6919",
       "fullname": "t3_1wh6919",
       "title": "My first time baking croissants!",
@@ -547,7 +561,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-18T05:41:38+00:00",
+  "generated_at": "2026-09-18T10:56:05+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -576,7 +590,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
