@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1wk4l7v",
+      "fullname": "t3_1wk4l7v",
+      "title": "I made a Mac menu-bar app that shows your creating vs consuming balance",
+      "url": "https://www.reddit.com/r/MacStack/comments/1wk4l7v/i_made_a_mac_menubar_app_that_shows_your_creating/",
+      "excerpt": "Hey everyone — I’m the developer of Makebar. Screen time doesn’t tell you much when your work and distractions happen on the same Mac. Makebar keeps your creating/consuming balance visible in the menu bar. You label apps and websites as Create, Neutral, or Consume. Xcode might be Create, YouTube might be Consume — the categories are yours. • Activity history stays on your Mac • Optional Chrome and Safari website tracking • 7- and 30-day analytics • macOS 14+ It doesn’t block sites or distinguish",
+      "subreddit": "MacStack",
+      "author": "jfgaviria",
+      "score": null,
+      "created_utc": 1789770732,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-19T21:22:04+00:00"
+    },
+    {
+      "id": "1wjubqg",
+      "fullname": "t3_1wjubqg",
+      "title": "Friday Manenos",
+      "url": "https://www.reddit.com/r/Kenya/comments/1wjubqg/friday_manenos/",
+      "excerpt": "I've used the Soma Label app and it says the KC is legit 😁",
+      "subreddit": "Kenya",
+      "author": "apz33",
+      "score": null,
+      "created_utc": 1789747475,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-19T21:22:04+00:00"
+    },
+    {
+      "id": "1wkfmk9",
+      "fullname": "t3_1wkfmk9",
+      "title": "Made an Excel garden planner - anyone want to try it?",
+      "url": "https://www.reddit.com/r/Raisedbed/comments/1wkfmk9/made_an_excel_garden_planner_anyone_want_to_try_it/",
+      "excerpt": "Hey! I’ve been working on an Excel planner for vegetable gardens. It helps with planting dates, bed space, and what to do next.Would love some honest feedback from gardeners. Happy to send it over for free 🙏Hey! I’ve been working on an Excel planner for vegetable gardens. It helps with planting dates, bed space, and what to do next. Would love some honest feedback from gardeners. Happy to send it over for free 🙏",
+      "subreddit": "Raisedbed",
+      "author": "Tree-lion",
+      "score": null,
+      "created_utc": 1789803004,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-19T21:23:07+00:00"
+    },
+    {
       "id": "1wjq8ge",
       "fullname": "t3_1wjq8ge",
       "title": "Spine labels - Avery size question",
@@ -575,7 +617,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-19T18:47:20+00:00",
+  "generated_at": "2026-09-19T21:23:26+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -604,14 +646,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
