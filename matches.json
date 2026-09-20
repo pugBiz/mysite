@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wk7g8l",
+      "fullname": "t3_1wk7g8l",
+      "title": "GoPro Owner Needs Some Advice",
+      "url": "https://www.reddit.com/r/gopro/comments/1wk7g8l/gopro_owner_needs_some_advice/",
+      "excerpt": "I bought a GoPro 13 recently this was the very 1st GoPro I ever owned. I took it to a convention it was very informative. That the video files are not compatible with DaVinci Resolve unless you convert them. Otherwise they show as sound files. Trying to combine videos has been more miss than hit. What I need and I really hope someone can help me. If a good cheap or free MP4 joiner program. That doesn't reverse how the files are set. Like 1 2 3 not 3 2 1. I am running win 11. But will work with G",
+      "subreddit": "gopro",
+      "author": "Tishtoss",
+      "score": null,
+      "created_utc": 1789778116,
+      "type": "post",
+      "matched_term": "combine videos",
+      "found_at": "2026-09-20T23:27:06+00:00"
+    },
+    {
       "id": "1wk6p51",
       "fullname": "t3_1wk6p51",
       "title": "I built a full AAC app for kids who struggle to speak, 6 languages, live on both stores, in a few months with Claude Code",
@@ -645,7 +659,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-20T21:29:08+00:00",
+  "generated_at": "2026-09-20T23:28:00+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -674,14 +688,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
