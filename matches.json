@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wmn9n6",
+      "fullname": "t3_1wmn9n6",
+      "title": "Best Small Printer for Printing 8.5x11 Avery Labels",
+      "url": "https://www.reddit.com/r/Printing/comments/1wmn9n6/best_small_printer_for_printing_85x11_avery_labels/",
+      "excerpt": "Hey All, I'm looking for recommendations for a small printer that will print color and black and white avery labels. My current printer is causing steaks and lines. Thanks Everyone",
+      "subreddit": "Printing",
+      "author": "withak13",
+      "score": null,
+      "created_utc": 1790020018,
+      "type": "post",
+      "matched_term": "avery labels",
+      "found_at": "2026-09-22T07:31:56+00:00"
+    },
+    {
       "id": "1wk7g8l",
       "fullname": "t3_1wk7g8l",
       "title": "GoPro Owner Needs Some Advice",
@@ -659,7 +673,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-22T01:44:39+00:00",
+  "generated_at": "2026-09-22T07:33:25+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -688,7 +702,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
