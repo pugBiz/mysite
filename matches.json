@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1wo3q8z",
+      "fullname": "t3_1wo3q8z",
+      "title": "New, Free AAC App: Model Communicator (Mod Approved This Post)",
+      "url": "https://www.reddit.com/r/SpicyAutism/comments/1wo3q8z/new_free_aac_app_model_communicator_mod_approved/",
+      "excerpt": "Hi! My name is Kara, and I’m excited to introduce you all to MoCo-60, the pilot grid on a new AAC app called Model Communicator (MoCo). MoCo is a free app, and was created by myself (an SLP) and my co-founder (our developer) to help eliminate financial barriers that prevent individuals from utilizing AAC support. We commit to MoCo’s core system remaining free across all grid sizes, forever. Before we go further with developing different grid sizes, it’s very important to me that we consult AAC u",
+      "subreddit": "SpicyAutism",
+      "author": "lionbear7",
+      "score": null,
+      "created_utc": 1790164012,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-23T18:34:03+00:00"
+    },
+    {
+      "id": "1wmrxkw",
+      "fullname": "t3_1wmrxkw",
+      "title": "Free therapy apps?",
+      "url": "https://www.reddit.com/r/slp/comments/1wmrxkw/free_therapy_apps/",
+      "excerpt": "What free apps are you loving for therapy? I'm not talking about AAC apps, as I am already covered in that area. I'm looking for free apps to use with a prek-3rd grade caseload for language, articulation, and general reinforcers. A lot of the lists I'm finding online are outdated. Do you have any recommendations for free apps?",
+      "subreddit": "slp",
+      "author": "Suspicious-Hawk-1126",
+      "score": null,
+      "created_utc": 1790030563,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-09-23T18:34:03+00:00"
+    },
+    {
       "id": "1wn6dp9",
       "fullname": "t3_1wn6dp9",
       "title": "I built a garden planner and I'd like Austin gardeners to poke holes in it",
@@ -687,7 +715,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-23T14:21:31+00:00",
+  "generated_at": "2026-09-23T18:34:03+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -716,7 +744,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
