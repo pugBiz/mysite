@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wn6dp9",
+      "fullname": "t3_1wn6dp9",
+      "title": "I built a garden planner and I'd like Austin gardeners to poke holes in it",
+      "url": "https://www.reddit.com/r/AustinGardening/comments/1wn6dp9/i_built_a_garden_planner_and_id_like_austin/",
+      "excerpt": "I built a garden planner (EdenVatika) and I've been asking gardeners in different regions to poke holes in it. Austin is interesting because it's not really a simple \"last frost → plant → harvest\" kind of place. You've got a long growing season, but the summer heat can be a bigger constraint than frost. One question, mainly: the app currently works backwards from frost dates to tell you when to sow and when you'll harvest. But in Austin, there are crops where getting them in before the serious h",
+      "subreddit": "AustinGardening",
+      "author": "amit4blogger",
+      "score": null,
+      "created_utc": 1790074967,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-23T04:11:07+00:00"
+    },
+    {
       "id": "1wmn9n6",
       "fullname": "t3_1wmn9n6",
       "title": "Best Small Printer for Printing 8.5x11 Avery Labels",
@@ -673,7 +687,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-22T23:45:49+00:00",
+  "generated_at": "2026-09-23T04:11:26+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -702,14 +716,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
