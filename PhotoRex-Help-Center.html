@@ -43,6 +43,8 @@
         --card: #FFFFFF;
         --muted: #6B7280;
         --border: #E5E7EB;
+        --shadow-card: 0 1px 3px rgba(26,26,46,0.06), 0 1px 2px rgba(26,26,46,0.04);
+        --shadow-card-hover: 0 10px 25px rgba(26,26,46,0.1), 0 4px 10px rgba(26,26,46,0.06);
         --radius: 12px;
       }
 
@@ -56,43 +58,105 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      .faq-item { border-bottom: 1px solid var(--border); transition: background 0.2s ease; }
-      .faq-item:hover { background: rgba(245,197,24,0.04); }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.2s ease;
+      }
+
+      .faq-item:hover {
+        background: rgba(245,197,24,0.04);
+      }
 
       .faq-question {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 18px 0; cursor: pointer; user-select: none; gap: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0;
+        cursor: pointer;
+        user-select: none;
+        gap: 16px;
       }
 
-      .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; padding-bottom: 0; }
-      .faq-answer.open { max-height: 300px; padding-bottom: 18px; }
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease, padding 0.35s ease;
+        padding-bottom: 0;
+      }
 
-      .faq-chevron { transition: transform 0.3s ease; flex-shrink: 0; }
-      .faq-chevron.rotated { transform: rotate(180deg); }
+      .faq-answer.open {
+        max-height: 300px;
+        padding-bottom: 18px;
+      }
+
+      .faq-chevron {
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .faq-chevron.rotated {
+        transform: rotate(180deg);
+      }
 
       .chip {
-        padding: 6px 16px; border-radius: 9999px; font-size: 13px; font-weight: 600;
-        border: 2px solid var(--primary); background: transparent; color: var(--dark);
-        cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+        padding: 6px 16px;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 600;
+        border: 2px solid var(--primary);
+        background: transparent;
+        color: var(--dark);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
       }
-      .chip:hover { background: var(--primary-light); }
-      .chip.active { background: var(--primary); color: var(--dark); }
+
+      .chip:hover {
+        background: var(--primary-light);
+      }
+
+      .chip.active {
+        background: var(--primary);
+        color: var(--dark);
+      }
 
       .tab-btn-main {
-        padding: 10px 24px; border-radius: 9999px; font-size: 15px; font-weight: 600;
-        border: 2px solid var(--border); background: transparent; color: var(--muted);
-        cursor: pointer; transition: all 0.25s ease;
+        padding: 10px 24px;
+        border-radius: 9999px;
+        font-size: 15px;
+        font-weight: 600;
+        border: 2px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.25s ease;
       }
-      .tab-btn-main:hover { border-color: var(--primary); color: var(--dark); }
-      .tab-btn-main.active { background: var(--primary); border-color: var(--primary); color: var(--dark); }
+
+      .tab-btn-main:hover {
+        border-color: var(--primary);
+        color: var(--dark);
+      }
+
+      .tab-btn-main.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--dark);
+      }
 
       .sticky-header {
-        position: sticky; top: 0; z-index: 50;
+        position: sticky;
+        top: 0;
+        z-index: 50;
         background: rgba(255,255,255,0.92);
-        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border); transition: box-shadow 0.3s ease;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        transition: box-shadow 0.3s ease;
       }
-      .sticky-header.scrolled { box-shadow: 0 2px 12px rgba(26,26,46,0.08); }
+
+      .sticky-header.scrolled {
+        box-shadow: 0 2px 12px rgba(26,26,46,0.08);
+      }
 
       .thumb-gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
       .thumb-gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
@@ -101,160 +165,307 @@
       .thumb-gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
       .thumb-gradient-6 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
 
-      .thumb-icon { color: rgba(255,255,255,0.3); }
+      .thumb-icon {
+        color: rgba(255,255,255,0.3);
+      }
 
       .search-input:focus {
-        outline: none; box-shadow: 0 0 0 3px rgba(245,197,24,0.35); border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(245,197,24,0.35);
+        border-color: var(--primary);
       }
 
-      .no-results { text-align: center; padding: 60px 20px; color: var(--muted); }
+      .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--muted);
+      }
 
-      .chips-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .chips-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
       .chips-scroll::-webkit-scrollbar { display: none; }
 
+      /* Player area styles */
       .player-wrapper {
-        position: relative; width: 100%; padding-bottom: 56.25%; height: 0;
-        overflow: hidden; border-radius: var(--radius); background: #000;
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: var(--radius);
+        background: #000;
       }
-      .player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+      .player-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
 
       .player-placeholder {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; transition: box-shadow 0.3s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: box-shadow 0.3s ease;
       }
-      .player-placeholder:hover { box-shadow: 0 8px 30px rgba(26,26,46,0.15); }
-      .player-placeholder:hover .player-play-btn { transform: translate(-50%, -50%) scale(1.1); background: rgba(0,0,0,0.85); }
+
+      .player-placeholder:hover {
+        box-shadow: 0 8px 30px rgba(26,26,46,0.15);
+      }
+
+      .player-placeholder:hover .player-play-btn {
+        transform: translate(-50%, -50%) scale(1.1);
+        background: rgba(0,0,0,0.85);
+      }
 
       .player-play-btn {
-        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 72px; height: 72px; background: rgba(0,0,0,0.65); border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        transition: transform 0.25s ease, background 0.25s ease; z-index: 2;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 72px;
+        height: 72px;
+        background: rgba(0,0,0,0.65);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.25s ease, background 0.25s ease;
+        z-index: 2;
       }
-      .player-play-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
 
-      .playlist-sidebar {
-        max-height: 600px; overflow-y: auto;
-        scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+      .player-play-btn svg {
+        width: 28px;
+        height: 28px;
+        fill: white;
+        margin-left: 4px;
       }
-      .playlist-sidebar::-webkit-scrollbar { width: 5px; }
-      .playlist-sidebar::-webkit-scrollbar-track { background: transparent; }
-      .playlist-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+      /* Playlist sidebar */
+      .playlist-sidebar {
+        max-height: 600px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+      }
+
+      .playlist-sidebar::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      .playlist-sidebar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .playlist-sidebar::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
 
       .playlist-row {
-        display: flex; align-items: center; gap: 12px; padding: 10px 12px;
-        border-radius: 10px; cursor: pointer; transition: background 0.2s ease;
-        border-left: 3px solid transparent; position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        border-left: 3px solid transparent;
+        position: relative;
       }
-      .playlist-row:hover { background: rgba(245,197,24,0.08); }
-      .playlist-row.active { background: rgba(245,197,24,0.12); border-left-color: var(--primary); }
+
+      .playlist-row:hover {
+        background: rgba(245,197,24,0.08);
+      }
+
+      .playlist-row.active {
+        background: rgba(245,197,24,0.12);
+        border-left-color: var(--primary);
+      }
 
       .playlist-row-thumb {
-        width: 110px; min-width: 110px; aspect-ratio: 16/9; border-radius: 8px;
-        overflow: hidden; display: flex; align-items: center; justify-content: center;
-        position: relative; flex-shrink: 0;
+        width: 110px;
+        min-width: 110px;
+        aspect-ratio: 16/9;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        flex-shrink: 0;
       }
+
       .playlist-row-thumb .mini-play {
-        position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-        background: rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.2s ease;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: opacity 0.2s ease;
       }
-      .playlist-row:hover .mini-play, .playlist-row.active .mini-play { opacity: 1; }
+
+      .playlist-row:hover .mini-play,
+      .playlist-row.active .mini-play {
+        opacity: 1;
+      }
 
       .mini-play-icon {
-        width: 28px; height: 28px; background: rgba(0,0,0,0.6); border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: rgba(0,0,0,0.6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-      .mini-play-icon svg { width: 12px; height: 12px; fill: white; margin-left: 2px; }
+
+      .mini-play-icon svg {
+        width: 12px;
+        height: 12px;
+        fill: white;
+        margin-left: 2px;
+      }
 
       .now-playing-badge {
-        display: none; align-items: center; gap: 4px;
-        font-size: 11px; font-weight: 700; color: var(--primary-dark); margin-top: 4px;
+        display: none;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-top: 4px;
       }
-      .playlist-row.active .now-playing-badge { display: flex; }
 
-      .now-playing-bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
-      .now-playing-bars span { width: 3px; background: var(--primary-dark); border-radius: 1px; animation: barPulse 1s ease-in-out infinite; }
+      .playlist-row.active .now-playing-badge {
+        display: flex;
+      }
+
+      .now-playing-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        height: 12px;
+      }
+
+      .now-playing-bars span {
+        width: 3px;
+        background: var(--primary-dark);
+        border-radius: 1px;
+        animation: barPulse 1s ease-in-out infinite;
+      }
+
       .now-playing-bars span:nth-child(1) { height: 6px; animation-delay: 0s; }
       .now-playing-bars span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
       .now-playing-bars span:nth-child(3) { height: 4px; animation-delay: 0.3s; }
 
-      @keyframes barPulse { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.5); } }
-
-      @media (max-width: 767px) {
-        .playlist-sidebar { max-height: none; overflow-y: visible; }
-        .playlist-row-thumb { width: 100px; min-width: 100px; }
+      @keyframes barPulse {
+        0%, 100% { transform: scaleY(1); }
+        50% { transform: scaleY(0.5); }
       }
-      @media (max-width: 640px) { .tab-btn-main { padding: 8px 18px; font-size: 14px; } }
+
+      /* Mobile playlist cards */
+      @media (max-width: 767px) {
+        .playlist-sidebar {
+          max-height: none;
+          overflow-y: visible;
+        }
+        .playlist-row-thumb {
+          width: 100px;
+          min-width: 100px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .tab-btn-main { padding: 8px 18px; font-size: 14px; }
+      }
     </style>
 </head>
-<body class="bg-bg min-h-screen">
+<body data-id="0" class="bg-bg min-h-screen">
+    <app-icon data-id="1" hidden data-icon="camera" data-palette="Yellow"></app-icon>
 
     <!-- STICKY HEADER -->
-    <header id="sticky-header-h3k9" class="sticky-header">
-      <div class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-              <i data-lucide="camera" class="w-6 h-6 text-dark"></i>
+    <header data-id="2" id="sticky-header-h3k9" class="sticky-header">
+      <div data-id="3" class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
+        <div data-id="4" class="flex items-center justify-between h-16">
+          <div data-id="5" class="flex items-center gap-3">
+            <div data-id="6" class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+              <i data-id="7" data-lucide="camera" class="w-6 h-6 text-dark"></i>
             </div>
-            <span class="font-bold text-dark text-lg hidden sm:inline">PhotoRex</span>
+            <span data-id="8" class="font-bold text-dark text-lg hidden sm:inline">PhotoRex</span>
           </div>
-          <nav class="hidden md:flex items-center gap-6">
-            <a href="#tutorials-section" class="text-sm font-medium text-muted hover:text-dark transition-colors">Tutorials</a>
-            <a href="#faq-section" class="text-sm font-medium text-muted hover:text-dark transition-colors">FAQ</a>
-            <a href="#support-banner-s9d2" class="text-sm font-medium text-muted hover:text-dark transition-colors">Contact</a>
-            <a href="mailto:support@photorex.com" class="text-sm font-semibold text-dark bg-primary hover:bg-primary-dark px-4 py-2 rounded-full transition-colors">Get Support</a>
+          <nav data-id="9" class="hidden md:flex items-center gap-6">
+            <a data-id="10" href="#tutorials-section" class="text-sm font-medium text-muted hover:text-dark transition-colors">Tutorials</a>
+            <a data-id="11" href="#faq-section" class="text-sm font-medium text-muted hover:text-dark transition-colors">FAQ</a>
+            <a data-id="12" href="#support-banner-s9d2" class="text-sm font-medium text-muted hover:text-dark transition-colors">Contact</a>
+            <a data-id="13" href="mailto:support@photorex.com" class="text-sm font-semibold text-dark bg-primary hover:bg-primary-dark px-4 py-2 rounded-full transition-colors">Get Support</a>
           </nav>
-          <button id="mobile-menu-btn-x4r1" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
-            <i data-lucide="menu" class="w-6 h-6 text-dark"></i>
+          <button data-id="14" id="mobile-menu-btn-x4r1" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
+            <i data-id="15" data-lucide="menu" class="w-6 h-6 text-dark"></i>
           </button>
         </div>
       </div>
     </header>
 
     <!-- MOBILE MENU -->
-    <nav id="mobile-menu-m8k2" class="hidden fixed inset-0 bg-white z-[60] flex-col p-6">
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-            <i data-lucide="camera" class="w-6 h-6 text-dark"></i>
+    <nav data-id="16" id="mobile-menu-m8k2" class="hidden fixed inset-0 bg-white z-[60] flex-col p-6">
+      <div data-id="17" class="flex items-center justify-between mb-8">
+        <div data-id="18" class="flex items-center gap-3">
+          <div data-id="19" class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+            <i data-id="20" data-lucide="camera" class="w-6 h-6 text-dark"></i>
           </div>
-          <span class="font-bold text-dark text-lg">PhotoRex</span>
+          <span data-id="21" class="font-bold text-dark text-lg">PhotoRex</span>
         </div>
-        <button id="mobile-menu-close-c2v7" class="p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Close menu">
-          <i data-lucide="x" class="w-6 h-6 text-dark"></i>
+        <button data-id="22" id="mobile-menu-close-c2v7" class="p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Close menu">
+          <i data-id="23" data-lucide="x" class="w-6 h-6 text-dark"></i>
         </button>
       </div>
-      <div class="flex flex-col gap-2">
-        <a href="#tutorials-section" class="mobile-nav-link text-base font-medium text-dark py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">📹 Video Tutorials</a>
-        <a href="#faq-section" class="mobile-nav-link text-base font-medium text-dark py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">❓ FAQ & Help</a>
-        <a href="#support-banner-s9d2" class="mobile-nav-link text-base font-medium text-dark py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">💬 Contact Support</a>
-        <hr class="my-3 border-border" />
-        <a href="mailto:support@photorex.com" class="text-center text-base font-semibold text-dark bg-primary hover:bg-primary-dark px-6 py-3 rounded-full transition-colors">Get Support</a>
+      <div data-id="24" class="flex flex-col gap-2">
+        <a data-id="25" href="#tutorials-section" class="mobile-nav-link text-base font-medium text-dark py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">📹 Video Tutorials</a>
+        <a data-id="26" href="#faq-section" class="mobile-nav-link text-base font-medium text-dark py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">❓ FAQ & Help</a>
+        <a data-id="27" href="#support-banner-s9d2" class="mobile-nav-link text-base font-medium text-dark py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">💬 Contact Support</a>
+        <hr data-id="28" class="my-3 border-border" />
+        <a data-id="29" href="mailto:support@photorex.com" class="text-center text-base font-semibold text-dark bg-primary hover:bg-primary-dark px-6 py-3 rounded-full transition-colors">Get Support</a>
       </div>
     </nav>
 
-    <main>
-      <!-- HERO -->
-      <section id="hero-section-a7b3" class="bg-white border-b border-border">
-        <div class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-16">
-          <div class="text-center max-w-2xl mx-auto">
-            <div class="flex items-center justify-center gap-3 mb-5">
-              <div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center">
-                <i data-lucide="camera" class="w-7 h-7 text-dark"></i>
+    <main data-id="30">
+      <!-- HERO SECTION -->
+      <section data-id="31" id="hero-section-a7b3" class="bg-white border-b border-border">
+        <div data-id="32" class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-16">
+          <div data-id="33" class="text-center max-w-2xl mx-auto">
+            <div data-id="34" class="flex items-center justify-center gap-3 mb-5">
+              <div data-id="35" class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center">
+                <i data-id="36" data-lucide="camera" class="w-7 h-7 text-dark"></i>
               </div>
-              <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-dark tracking-tight">PhotoRex Help Center</h1>
+              <h1 data-id="37" class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-dark tracking-tight">PhotoRex Help Center</h1>
             </div>
-            <p class="text-muted text-base md:text-lg mb-8 leading-relaxed">Tutorials and help for PhotoRex — the iPad app for batch renaming, redating, converting, and organizing your photos and videos.</p>
-            <div class="relative max-w-xl mx-auto">
-              <i data-lucide="search" class="w-5 h-5 text-muted-light absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-              <input type="text" id="search-input-k9m3"
+            <p data-id="38" class="text-muted text-base md:text-lg mb-8 leading-relaxed">Tutorials and help for PhotoRex — the iPad app for batch renaming, redating, converting, and organizing your photos and videos.</p>
+            <div data-id="39" class="relative max-w-xl mx-auto">
+              <i data-id="40" data-lucide="search" class="w-5 h-5 text-muted-light absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              <input data-id="41"
+                type="text"
+                id="search-input-k9m3"
                 class="search-input w-full pl-12 pr-12 py-3.5 bg-bg border-2 border-border rounded-xl text-base text-dark placeholder:text-muted-light transition-all"
                 placeholder="Search tutorials, FAQs, and help articles..."
-                aria-label="Search help center" />
-              <button id="search-clear-btn-q4f1" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-gray-200 transition-colors hidden" aria-label="Clear search">
-                <i data-lucide="x" class="w-4 h-4 text-muted"></i>
+                aria-label="Search help center"
+              />
+              <button data-id="42" id="search-clear-btn-q4f1" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-gray-200 transition-colors hidden" aria-label="Clear search">
+                <i data-id="43" data-lucide="x" class="w-4 h-4 text-muted"></i>
               </button>
             </div>
           </div>
@@ -262,60 +473,71 @@
       </section>
 
       <!-- NAVIGATION TABS -->
-      <section class="bg-white border-b border-border">
-        <div class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
-          <div class="flex items-center justify-center gap-3 py-4">
-            <button class="tab-btn-main active" data-main-tab="videos">📹 Video Tutorials</button>
-            <button class="tab-btn-main" data-main-tab="faq">❓ FAQ & Help Articles</button>
+      <section data-id="44" id="nav-tabs-r5t1" class="bg-white border-b border-border">
+        <div data-id="45" class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
+          <div data-id="46" class="flex items-center justify-center gap-3 py-4">
+            <button data-id="47" class="tab-btn-main active" data-main-tab="videos">📹 Video Tutorials</button>
+            <button data-id="48" class="tab-btn-main" data-main-tab="faq">❓ FAQ & Help Articles</button>
           </div>
         </div>
       </section>
 
-      <!-- VIDEO TUTORIALS SECTION -->
-      <section id="tutorials-section" class="py-8 md:py-12">
-        <div class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
-          <div class="chips-scroll flex gap-2 pb-6" id="playlist-chips-w2x8">
-            <button class="chip active" data-playlist="all">All</button>
-            <button class="chip" data-playlist="renaming">Renaming Files</button>
-            <button class="chip" data-playlist="dates-metadata">Dates & Metadata</button>
-            <button class="chip" data-playlist="converting">Converting Files</button>
+      <!-- VIDEO TUTORIALS SECTION — INLINE PLAYER LAYOUT -->
+      <section data-id="49" id="tutorials-section" class="py-8 md:py-12">
+        <div data-id="50" class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
+          <!-- Playlist Chips -->
+          <div data-id="51" class="chips-scroll flex gap-2 pb-6" id="playlist-chips-w2x8">
+            <button data-id="52" class="chip active" data-playlist="all">All</button>
+            <button data-id="53" class="chip" data-playlist="renaming">Renaming Files</button>
+            <button data-id="54" class="chip" data-playlist="dates-metadata">Dates & Metadata</button>
+            <button data-id="55" class="chip" data-playlist="converting">Converting Files</button>
           </div>
-          <div class="flex flex-col md:flex-row gap-6">
-            <!-- Player -->
-            <div class="w-full md:w-[65%]">
-              <div class="md:sticky md:top-[80px]">
-                <div class="player-wrapper" id="player-wrapper-v1">
-                  <div id="player-placeholder-v1" class="player-placeholder thumb-gradient-1">
-                    <i data-lucide="file-text" class="thumb-icon" style="width:80px;height:80px;"></i>
-                    <div class="player-play-btn" id="player-play-btn-v1">
-                      <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+
+          <!-- Two-column player layout -->
+          <div data-id="56" class="flex flex-col md:flex-row gap-6">
+            <!-- Left column: Player (65%) -->
+            <div data-id="57" class="w-full md:w-[65%]">
+              <div data-id="58" class="md:sticky md:top-[80px]">
+                <!-- Player area with responsive 16:9 -->
+                <div data-id="59" class="player-wrapper" id="player-wrapper-v1">
+                  <!-- Placeholder shown before playing -->
+                  <div data-id="60" id="player-placeholder-v1" class="player-placeholder thumb-gradient-1">
+                    <i data-id="61" data-lucide="file-text" class="thumb-icon" style="width:80px;height:80px;" id="player-icon-v1"></i>
+                    <div data-id="62" class="player-play-btn" id="player-play-btn-v1">
+                      <svg data-id="63" viewBox="0 0 24 24"><polygon data-id="64" points="8,5 19,12 8,19"/></svg>
                     </div>
                   </div>
                 </div>
-                <div class="mt-5">
-                  <h2 id="player-title-v1" class="text-lg md:text-xl lg:text-2xl font-bold text-dark leading-snug mb-2"></h2>
-                  <p id="player-desc-v1" class="text-muted text-sm md:text-base leading-relaxed mb-3"></p>
-                  <a id="yt-link" href="#" target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 text-sm font-semibold text-dark bg-primary hover:bg-primary-dark px-4 py-2 rounded-full transition-colors hidden">
-                    <i data-lucide="external-link" class="w-4 h-4"></i> Watch on YouTube
+
+                <!-- Video info below player -->
+                <div data-id="65" class="mt-5">
+                  <h2 data-id="66" id="player-title-v1" class="text-lg md:text-xl lg:text-2xl font-bold text-dark leading-snug mb-2"></h2>
+                  <p data-id="67" id="player-desc-v1" class="text-muted text-sm md:text-base leading-relaxed mb-3"></p>
+                  <a data-id="68" id="yt-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-dark bg-primary hover:bg-primary-dark px-4 py-2 rounded-full transition-colors hidden">
+                    <i data-id="69" data-lucide="external-link" class="w-4 h-4"></i>
+                    Watch on YouTube
                   </a>
                 </div>
               </div>
             </div>
-            <!-- Sidebar -->
-            <div class="w-full md:w-[35%]">
-              <div class="bg-white rounded-xl border border-border shadow-sm">
-                <div class="px-4 py-3 border-b border-border">
-                  <h3 class="font-bold text-dark text-sm flex items-center gap-2">
-                    <i data-lucide="list-video" class="w-4 h-4 text-primary-dark"></i>
-                    <span id="playlist-count-label">6 Videos</span>
+
+            <!-- Right column: Playlist sidebar (35%) -->
+            <div data-id="70" class="w-full md:w-[35%]">
+              <div data-id="71" class="bg-white rounded-xl border border-border shadow-sm">
+                <div data-id="72" class="px-4 py-3 border-b border-border">
+                  <h3 data-id="73" class="font-bold text-dark text-sm flex items-center gap-2">
+                    <i data-id="74" data-lucide="list-video" class="w-4 h-4 text-primary-dark"></i>
+                    <span data-id="75" id="playlist-count-label">6 Videos</span>
                   </h3>
                 </div>
-                <div id="playlist-sidebar-container" class="playlist-sidebar p-2"></div>
-                <div id="no-videos-msg-p8r2" class="no-results hidden py-8">
-                  <i data-lucide="video-off" class="w-10 h-10 mx-auto mb-3 text-muted-light"></i>
-                  <p class="text-base font-semibold mb-1">No tutorials found</p>
-                  <p class="text-muted text-sm">Try adjusting your search or filter</p>
+                <div data-id="76" id="playlist-sidebar-container" class="playlist-sidebar p-2">
+                  <!-- Playlist rows rendered by JS -->
+                </div>
+                <!-- No results for sidebar -->
+                <div data-id="77" id="no-videos-msg-p8r2" class="no-results hidden py-8">
+                  <i data-id="78" data-lucide="video-off" class="w-10 h-10 mx-auto mb-3 text-muted-light"></i>
+                  <p data-id="79" class="text-base font-semibold mb-1">No tutorials found</p>
+                  <p data-id="80" class="text-muted text-sm">Try adjusting your search or filter</p>
                 </div>
               </div>
             </div>
@@ -323,32 +545,38 @@
         </div>
       </section>
 
-      <!-- FAQ SECTION -->
-      <section id="faq-section" class="py-8 md:py-12 hidden">
-        <div class="max-w-[800px] mx-auto px-4 md:px-6 lg:px-8">
-          <div id="faq-container-b3v1"></div>
-          <div id="no-faq-msg-z5k9" class="no-results hidden">
-            <i data-lucide="help-circle" class="w-12 h-12 mx-auto mb-4 text-muted-light"></i>
-            <p class="text-lg font-semibold mb-1">No matching questions found</p>
-            <p class="text-muted text-sm">Try a different search term</p>
+      <!-- FAQ & HELP SECTION -->
+      <section data-id="81" id="faq-section" class="py-8 md:py-12 hidden">
+        <div data-id="82" class="max-w-[800px] mx-auto px-4 md:px-6 lg:px-8">
+          <div data-id="83" id="faq-container-b3v1">
+            <!-- FAQ items rendered by JS -->
+          </div>
+
+          <!-- No results -->
+          <div data-id="84" id="no-faq-msg-z5k9" class="no-results hidden">
+            <i data-id="85" data-lucide="help-circle" class="w-12 h-12 mx-auto mb-4 text-muted-light"></i>
+            <p data-id="86" class="text-lg font-semibold mb-1">No matching questions found</p>
+            <p data-id="87" class="text-muted text-sm">Try a different search term</p>
           </div>
         </div>
       </section>
 
       <!-- STILL NEED HELP BANNER -->
-      <section id="support-banner-s9d2" class="py-8 md:py-12">
-        <div class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
-          <div class="bg-primary rounded-2xl p-8 md:p-12 text-center">
-            <div class="max-w-lg mx-auto">
-              <i data-lucide="headset" class="w-10 h-10 mx-auto mb-4 text-dark"></i>
-              <h2 class="text-2xl md:text-3xl font-bold text-dark mb-3">Still need help?</h2>
-              <p class="text-dark-light text-base md:text-lg mb-8 opacity-80">Our support team is ready to assist you — we usually respond within a few hours.</p>
-              <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="mailto:support@photorex.com" class="inline-flex items-center gap-2 bg-dark text-white font-semibold px-6 py-3 rounded-full hover:bg-dark-light transition-colors min-h-[44px]">
-                  <i data-lucide="mail" class="w-5 h-5"></i> Email Support
+      <section data-id="88" id="support-banner-s9d2" class="py-8 md:py-12">
+        <div data-id="89" class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8">
+          <div data-id="90" class="bg-primary rounded-2xl p-8 md:p-12 text-center">
+            <div data-id="91" class="max-w-lg mx-auto">
+              <i data-id="92" data-lucide="headset" class="w-10 h-10 mx-auto mb-4 text-dark"></i>
+              <h2 data-id="93" class="text-2xl md:text-3xl font-bold text-dark mb-3">Still need help?</h2>
+              <p data-id="94" class="text-dark-light text-base md:text-lg mb-8 opacity-80">Our support team is ready to assist you — we usually respond within a few hours.</p>
+              <div data-id="95" class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a data-id="96" href="mailto:support@photorex.com" id="email-support-btn-e4w2" class="inline-flex items-center gap-2 bg-dark text-white font-semibold px-6 py-3 rounded-full hover:bg-dark-light transition-colors min-h-[44px]">
+                  <i data-id="97" data-lucide="mail" class="w-5 h-5"></i>
+                  Email Support
                 </a>
-                <a href="#" class="inline-flex items-center gap-2 bg-white text-dark font-semibold px-6 py-3 rounded-full hover:bg-gray-50 transition-colors border-2 border-dark/10 min-h-[44px]">
-                  <i data-lucide="messages-square" class="w-5 h-5"></i> Join Community
+                <a data-id="98" href="#" id="community-btn-g7j3" class="inline-flex items-center gap-2 bg-white text-dark font-semibold px-6 py-3 rounded-full hover:bg-gray-50 transition-colors border-2 border-dark/10 min-h-[44px]">
+                  <i data-id="99" data-lucide="messages-square" class="w-5 h-5"></i>
+                  Join Community
                 </a>
               </div>
             </div>
@@ -358,293 +586,503 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-border">
-      <div class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-8">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <i data-lucide="camera" class="w-5 h-5 text-dark"></i>
+    <footer data-id="100" class="bg-white border-t border-border">
+      <div data-id="101" class="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-8">
+        <div data-id="102" class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div data-id="103" class="flex items-center gap-2">
+            <div data-id="104" class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <i data-id="105" data-lucide="camera" class="w-5 h-5 text-dark"></i>
             </div>
-            <span class="font-bold text-dark">PhotoRex</span>
+            <span data-id="106" class="font-bold text-dark">PhotoRex</span>
           </div>
-          <p class="text-sm text-muted">&copy; 2026 PhotoRex. All rights reserved.</p>
-          <div class="flex items-center gap-5">
-            <a href="#" class="text-sm text-muted hover:text-dark transition-colors">Privacy Policy</a>
-            <a href="#" class="text-sm text-muted hover:text-dark transition-colors">Terms of Service</a>
+          <p data-id="107" class="text-sm text-muted">&copy; 2026 PhotoRex. All rights reserved.</p>
+          <div data-id="108" class="flex items-center gap-5">
+            <a data-id="109" href="#" class="text-sm text-muted hover:text-dark transition-colors">Privacy Policy</a>
+            <a data-id="110" href="#" class="text-sm text-muted hover:text-dark transition-colors">Terms of Service</a>
           </div>
         </div>
+        <p data-id="111" class="text-center text-xs text-muted-light mt-6">Made by Copilot</p>
       </div>
     </footer>
 
     <script>
-      window.addEventListener('load', function () {
+      window.addEventListener('load', function() {
+      // === DATA ===
+      const videos = [
+        {
+          id: 'v1',
+          videoId: '2xe2mY7iHWY',
+          title: 'Rename files in bulk on iPad using a sequential counter',
+          desc: 'Learn how to rename multiple files at once using a sequential counter in PhotoRex.',
+          playlist: 'renaming',
+          gradient: 1,
+          icon: 'file-text'
+        },
+        {
+          id: 'v2',
+          videoId: '0ISy5G6Px2I',
+          title: 'Fix photos with missing dates in bulk on iPad using PhotoRex',
+          desc: 'Quickly restore or correct missing date information across multiple photos at once.',
+          playlist: 'dates-metadata',
+          gradient: 2,
+          icon: 'calendar-check'
+        },
+        {
+          id: 'v3',
+          videoId: 'qh6p3EuKc_M',
+          title: 'How to Remove Metadata from Photos on iPad with PhotoRex',
+          desc: 'Strip EXIF and metadata from your photos in bulk to protect your privacy.',
+          playlist: 'dates-metadata',
+          gradient: 3,
+          icon: 'shield-check'
+        },
+        {
+          id: 'v4',
+          videoId: '13LntdGIERU',
+          title: 'How to convert image formats and manage file metadata on iPad',
+          desc: 'Convert between image formats and manage file metadata, all within PhotoRex.',
+          playlist: 'converting',
+          gradient: 4,
+          icon: 'repeat'
+        },
+        {
+          id: 'v5',
+          videoId: 'RMXBqaWmzW4',
+          title: 'Different ways to edit file dates in bulk using your iPad',
+          desc: 'Explore multiple methods for batch editing file dates directly on your iPad.',
+          playlist: 'dates-metadata',
+          gradient: 5,
+          icon: 'clock'
+        },
+        {
+          id: 'v6',
+          videoId: 'JQoFccDn0js',
+          title: 'The fastest way to rename files on the iPad',
+          desc: 'A quick guide to the fastest renaming workflow available in PhotoRex.',
+          playlist: 'renaming',
+          gradient: 6,
+          icon: 'zap'
+        },
+      ];
 
-        const videos = [
-          { id: 'v1', videoId: '2xe2mY7iHWY', title: 'Rename files in bulk on iPad using a sequential counter', desc: 'Learn how to rename multiple files at once using a sequential counter in PhotoRex.', playlist: 'renaming', gradient: 1, icon: 'file-text' },
-          { id: 'v2', videoId: '0ISy5G6Px2I', title: 'Fix photos with missing dates in bulk on iPad using PhotoRex', desc: 'Quickly restore or correct missing date information across multiple photos at once.', playlist: 'dates-metadata', gradient: 2, icon: 'calendar-check' },
-          { id: 'v3', videoId: 'qh6p3EuKc_M', title: 'How to Remove Metadata from Photos on iPad with PhotoRex', desc: 'Strip EXIF and metadata from your photos in bulk to protect your privacy.', playlist: 'dates-metadata', gradient: 3, icon: 'shield-check' },
-          { id: 'v4', videoId: '13LntdGIERU', title: 'How to convert image formats and manage file metadata on iPad', desc: 'Convert between image formats and manage file metadata, all within PhotoRex.', playlist: 'converting', gradient: 4, icon: 'repeat' },
-          { id: 'v5', videoId: 'RMXBqaWmzW4', title: 'Different ways to edit file dates in bulk using your iPad', desc: 'Explore multiple methods for batch editing file dates directly on your iPad.', playlist: 'dates-metadata', gradient: 5, icon: 'clock' },
-          { id: 'v6', videoId: 'JQoFccDn0js', title: 'The fastest way to rename files on the iPad', desc: 'A quick guide to the fastest renaming workflow available in PhotoRex.', playlist: 'renaming', gradient: 6, icon: 'zap' },
-        ];
+      const playlistLabels = {
+        'renaming': 'Renaming Files',
+        'dates-metadata': 'Dates & Metadata',
+        'converting': 'Converting Files'
+      };
 
-        const playlistLabels = { 'renaming': 'Renaming Files', 'dates-metadata': 'Dates & Metadata', 'converting': 'Converting Files' };
+      const faqData = [
+        {
+          category: 'Getting Started',
+          items: [
+            { q: 'What is PhotoRex?', a: 'PhotoRex is an iPad app for batch renaming, redating, converting, and organizing your photos and videos. It helps you manage large collections efficiently with powerful bulk editing tools.', tags: 'what is photorex about app purpose ipad' },
+            { q: 'Is PhotoRex available on iPhone or Mac?', a: 'PhotoRex is currently designed for iPad. Check the App Store for the latest availability on other Apple platforms.', tags: 'iphone mac availability platforms devices apple' },
+            { q: 'How do I import photos and videos into PhotoRex?', a: 'Open PhotoRex and tap the "+" or import button. You can select files from your Photos library, Files app, or connected cloud storage. PhotoRex works with your existing iPad photo library.', tags: 'import photos videos add files library cloud' },
+          ]
+        },
+        {
+          category: 'Renaming Files',
+          items: [
+            { q: 'How do I rename multiple files at once?', a: 'Select the files you want to rename, then use the Rename tool. You can choose a naming pattern (e.g., "Vacation_001") with a sequential counter, date-based naming, or custom text. PhotoRex applies the pattern to all selected files in one tap.', tags: 'rename batch bulk multiple files sequential counter pattern' },
+            { q: 'Can I use dates in file names?', a: 'Yes! PhotoRex supports date-based renaming patterns. You can insert the photo\'s creation date, modification date, or a custom date into the filename using various format options (e.g., YYYY-MM-DD, MM_DD_YYYY).', tags: 'date filename rename pattern format creation modification' },
+            { q: 'What happens if two files get the same name?', a: 'PhotoRex automatically handles naming conflicts by appending a sequential number or suffix to prevent duplicates. You\'ll never lose a file due to a naming collision.', tags: 'duplicate conflict same name overwrite' },
+          ]
+        },
+        {
+          category: 'Dates & Metadata',
+          items: [
+            { q: 'How do I fix photos with missing or incorrect dates?', a: 'Select the affected photos, open the Date Editor, and choose how to set the date — you can enter a specific date, shift all dates by an offset, or use the file\'s creation date. Changes are applied in bulk.', tags: 'fix missing incorrect date wrong date bulk edit batch' },
+            { q: 'How do I remove metadata (EXIF data) from photos?', a: 'Select your photos, then use the Remove Metadata tool. You can strip all EXIF data — including location, camera info, and timestamps — to protect your privacy before sharing.', tags: 'remove metadata exif strip privacy location gps camera info' },
+            { q: 'Can I edit the GPS location in photo metadata?', a: 'PhotoRex focuses on date editing and metadata removal. For GPS location changes, you may need a dedicated geotagging app, but you can fully remove location data with PhotoRex.', tags: 'gps location edit geotag remove strip' },
+          ]
+        },
+        {
+          category: 'Converting & Editing',
+          items: [
+            { q: 'What image formats can PhotoRex convert between?', a: 'PhotoRex supports converting between popular formats including JPEG, PNG, HEIF/HEIC, and more. Select your files, choose the target format, and convert in bulk.', tags: 'convert format jpeg png heif heic image file type' },
+            { q: 'Can I crop, rotate, or trim files in bulk?', a: 'Yes! PhotoRex offers batch cropping, rotating, and trimming tools. Select multiple files and apply the same transformation to all of them at once — saving you significant time.', tags: 'crop rotate trim bulk batch edit transform' },
+            { q: 'Does converting files reduce image quality?', a: 'PhotoRex lets you choose quality settings when converting. For lossless formats like PNG, there is no quality loss. For JPEG, you can control the compression level to balance quality and file size.', tags: 'quality convert compression lossless lossy jpeg png' },
+          ]
+        },
+        {
+          category: 'Troubleshooting',
+          items: [
+            { q: 'PhotoRex can\'t access my photo library — what do I do?', a: 'Go to iPad Settings → Privacy & Security → Photos → PhotoRex, and ensure access is set to "Full Access" or "Add Photos Only" as needed. Then relaunch the app.', tags: 'access permissions photos library privacy settings ipad' },
+            { q: 'My changes aren\'t saving — what\'s wrong?', a: 'Make sure you have enough free storage on your iPad. Also check that you\'ve granted PhotoRex write access to your Photos library in Settings. If the issue persists, try force-quitting and reopening the app.', tags: 'save error storage space write access permissions not saving' },
+            { q: 'The app is running slowly with large batches.', a: 'Processing hundreds or thousands of files can be memory-intensive. Try working in smaller batches (50-100 files at a time), close other apps, and ensure your iPad has sufficient free storage.', tags: 'slow performance speed large batch memory storage' },
+          ]
+        }
+      ];
 
-        const faqData = [
-          {
-            category: 'Getting Started',
-            items: [
-              { q: 'What is PhotoRex?', a: 'PhotoRex is an iPad app for batch renaming, redating, converting, and organizing your photos and videos. It helps you manage large collections efficiently with powerful bulk editing tools.', tags: 'what is photorex about app purpose ipad' },
-              { q: 'Is PhotoRex available on iPhone or Mac?', a: 'PhotoRex is currently designed for iPad. Check the App Store for the latest availability on other Apple platforms.', tags: 'iphone mac availability platforms devices apple' },
-              { q: 'How do I import photos and videos into PhotoRex?', a: 'Open PhotoRex and tap the "+" or import button. You can select files from your Photos library, Files app, or connected cloud storage.', tags: 'import photos videos add files library cloud' },
-            ]
-          },
-          {
-            category: 'Renaming Files',
-            items: [
-              { q: 'How do I rename multiple files at once?', a: 'Select the files you want to rename, then use the Rename tool. You can choose a naming pattern with a sequential counter, date-based naming, or custom text. PhotoRex applies the pattern to all selected files in one tap.', tags: 'rename batch bulk multiple files sequential counter pattern' },
-              { q: 'Can I use dates in file names?', a: "Yes! PhotoRex supports date-based renaming patterns. You can insert the photo's creation date, modification date, or a custom date into the filename using various format options (e.g., YYYY-MM-DD).", tags: 'date filename rename pattern format creation modification' },
-              { q: 'What happens if two files get the same name?', a: 'PhotoRex automatically handles naming conflicts by appending a sequential number or suffix to prevent duplicates.', tags: 'duplicate conflict same name overwrite' },
-            ]
-          },
-          {
-            category: 'Dates & Metadata',
-            items: [
-              { q: 'How do I fix photos with missing or incorrect dates?', a: 'Select the affected photos, open the Date Editor, and choose how to set the date — you can enter a specific date, shift all dates by an offset, or use the file\'s creation date. Changes are applied in bulk.', tags: 'fix missing incorrect date wrong date bulk edit batch' },
-              { q: 'How do I remove metadata (EXIF data) from photos?', a: 'Select your photos, then use the Remove Metadata tool. You can strip all EXIF data — including location, camera info, and timestamps — to protect your privacy before sharing.', tags: 'remove metadata exif strip privacy location gps camera info' },
-              { q: 'Can I edit the GPS location in photo metadata?', a: 'PhotoRex focuses on date editing and metadata removal. You can fully remove location data with PhotoRex, but for GPS location changes you may need a dedicated geotagging app.', tags: 'gps location edit geotag remove strip' },
-            ]
-          },
-          {
-            category: 'Converting & Editing',
-            items: [
-              { q: 'What image formats can PhotoRex convert between?', a: 'PhotoRex supports converting between popular formats including JPEG, PNG, HEIF/HEIC, and more. Select your files, choose the target format, and convert in bulk.', tags: 'convert format jpeg png heif heic image file type' },
-              { q: 'Can I crop, rotate, or trim files in bulk?', a: 'Yes! PhotoRex offers batch cropping, rotating, and trimming tools. Select multiple files and apply the same transformation to all of them at once.', tags: 'crop rotate trim bulk batch edit transform' },
-              { q: 'Does converting files reduce image quality?', a: 'PhotoRex lets you choose quality settings when converting. For lossless formats like PNG there is no quality loss. For JPEG you can control the compression level.', tags: 'quality convert compression lossless lossy jpeg png' },
-            ]
-          },
-          {
-            category: 'Troubleshooting',
-            items: [
-              { q: "PhotoRex can't access my photo library — what do I do?", a: 'Go to iPad Settings → Privacy & Security → Photos → PhotoRex, and ensure access is set to "Full Access". Then relaunch the app.', tags: 'access permissions photos library privacy settings ipad' },
-              { q: "My changes aren't saving — what's wrong?", a: "Make sure you have enough free storage on your iPad and that PhotoRex has write access to your Photos library in Settings. If the issue persists, try force-quitting and reopening the app.", tags: 'save error storage space write access permissions not saving' },
-              { q: 'The app is running slowly with large batches.', a: 'Try working in smaller batches (50–100 files at a time), close other apps, and ensure your iPad has sufficient free storage.', tags: 'slow performance speed large batch memory storage' },
-            ]
-          }
-        ];
-
+      // === ICONS INIT ===
+      if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
         lucide.createIcons();
+      }
 
-        const searchInput = document.getElementById('search-input-k9m3');
-        const searchClearBtn = document.getElementById('search-clear-btn-q4f1');
-        const playlistContainer = document.getElementById('playlist-sidebar-container');
-        const noVideosMsg = document.getElementById('no-videos-msg-p8r2');
-        const noFaqMsg = document.getElementById('no-faq-msg-z5k9');
-        const faqContainer = document.getElementById('faq-container-b3v1');
-        const tutorialsSection = document.getElementById('tutorials-section');
-        const faqSection = document.getElementById('faq-section');
-        const stickyHeader = document.getElementById('sticky-header-h3k9');
-        const playlistCountLabel = document.getElementById('playlist-count-label');
-        const playerPlaceholder = document.getElementById('player-placeholder-v1');
-        const playerPlayBtn = document.getElementById('player-play-btn-v1');
-        const playerTitle = document.getElementById('player-title-v1');
-        const playerDesc = document.getElementById('player-desc-v1');
-        const ytLink = document.getElementById('yt-link');
+      // === ELEMENTS ===
+      const searchInput = document.getElementById('search-input-k9m3');
+      const searchClearBtn = document.getElementById('search-clear-btn-q4f1');
+      const playlistContainer = document.getElementById('playlist-sidebar-container');
+      const noVideosMsg = document.getElementById('no-videos-msg-p8r2');
+      const noFaqMsg = document.getElementById('no-faq-msg-z5k9');
+      const faqContainer = document.getElementById('faq-container-b3v1');
+      const tutorialsSection = document.getElementById('tutorials-section');
+      const faqSection = document.getElementById('faq-section');
+      const stickyHeader = document.getElementById('sticky-header-h3k9');
+      const playlistCountLabel = document.getElementById('playlist-count-label');
 
-        let activeTab = 'videos', activePlaylist = 'all', searchQuery = '';
-        let activeVideoId = null, currentVideo = null;
+      // Player elements
+      const ytLink = document.getElementById('yt-link');
+      const playerWrapper = document.getElementById('player-wrapper-v1');
+      const playerPlaceholder = document.getElementById('player-placeholder-v1');
+      const playerPlayBtn = document.getElementById('player-play-btn-v1');
+      const playerTitle = document.getElementById('player-title-v1');
+      const playerDesc = document.getElementById('player-desc-v1');
 
-        // Mobile menu
-        document.getElementById('mobile-menu-btn-x4r1').addEventListener('click', function () {
-          var m = document.getElementById('mobile-menu-m8k2');
-          m.classList.remove('hidden'); m.classList.add('flex');
+      let activeTab = 'videos';
+      let activePlaylist = 'all';
+      let searchQuery = '';
+      let activeVideoId = null;
+      let currentVideo = null;
+
+      // === MOBILE MENU ===
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn-x4r1');
+      const mobileMenu = document.getElementById('mobile-menu-m8k2');
+      const mobileMenuClose = document.getElementById('mobile-menu-close-c2v7');
+
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('flex');
+      });
+
+      mobileMenuClose.addEventListener('click', function() {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+      });
+
+      document.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
         });
-        document.getElementById('mobile-menu-close-c2v7').addEventListener('click', function () {
-          var m = document.getElementById('mobile-menu-m8k2');
-          m.classList.add('hidden'); m.classList.remove('flex');
-        });
-        document.querySelectorAll('.mobile-nav-link').forEach(function (l) {
-          l.addEventListener('click', function () {
-            var m = document.getElementById('mobile-menu-m8k2');
-            m.classList.add('hidden'); m.classList.remove('flex');
-          });
-        });
+      });
 
-        // Sticky scroll
-        window.addEventListener('scroll', function () {
-          stickyHeader.classList.toggle('scrolled', window.scrollY > 10);
-        });
-
-        // Main tabs
-        document.querySelectorAll('.tab-btn-main').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            activeTab = btn.dataset.mainTab;
-            document.querySelectorAll('.tab-btn-main').forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            tutorialsSection.classList.toggle('hidden', activeTab !== 'videos');
-            faqSection.classList.toggle('hidden', activeTab !== 'faq');
-            applyFilters();
-          });
-        });
-
-        // Playlist chips
-        document.querySelectorAll('.chip').forEach(function (chip) {
-          chip.addEventListener('click', function () {
-            activePlaylist = chip.dataset.playlist;
-            document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
-            chip.classList.add('active');
-            renderPlaylist();
-          });
-        });
-
-        // Search
-        searchInput.addEventListener('input', function () {
-          searchQuery = searchInput.value.trim().toLowerCase();
-          searchClearBtn.classList.toggle('hidden', !searchQuery);
-          applyFilters();
-        });
-        searchClearBtn.addEventListener('click', function () {
-          searchInput.value = ''; searchQuery = '';
-          searchClearBtn.classList.add('hidden');
-          applyFilters();
-        });
-
-        function applyFilters() { renderPlaylist(); renderFaq(); }
-
-        function setActiveVideo(video) {
-          if (!video) return;
-          currentVideo = video; activeVideoId = video.videoId;
-          playerPlaceholder.className = 'player-placeholder thumb-gradient-' + video.gradient;
-          playerTitle.textContent = video.title;
-          playerDesc.textContent = video.desc;
-          ytLink.href = 'https://www.youtube.com/watch?v=' + video.videoId;
-          ytLink.classList.remove('hidden');
-          document.querySelectorAll('.playlist-row').forEach(function (r) {
-            r.classList.toggle('active', r.dataset.videoId === video.videoId);
-          });
+      // === STICKY HEADER SCROLL ===
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 10) {
+          stickyHeader.classList.add('scrolled');
+        } else {
+          stickyHeader.classList.remove('scrolled');
         }
+      });
 
-        function openVideo(video) {
-          if (!video) return;
-          window.open('https://www.youtube.com/watch?v=' + video.videoId, '_blank');
-        }
+      // === MAIN TABS ===
+      document.querySelectorAll('.tab-btn-main').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var tab = btn.dataset.mainTab;
+          activeTab = tab;
+          document.querySelectorAll('.tab-btn-main').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
 
-        playerPlayBtn.addEventListener('click', function (e) { e.stopPropagation(); if (currentVideo) openVideo(currentVideo); });
-        playerPlaceholder.addEventListener('click', function () { if (currentVideo) openVideo(currentVideo); });
-
-        function getFilteredVideos() {
-          return videos.filter(function (v) {
-            var matchPlaylist = activePlaylist === 'all' || v.playlist === activePlaylist;
-            var matchSearch = !searchQuery ||
-              v.title.toLowerCase().includes(searchQuery) ||
-              v.desc.toLowerCase().includes(searchQuery) ||
-              playlistLabels[v.playlist].toLowerCase().includes(searchQuery);
-            return matchPlaylist && matchSearch;
-          });
-        }
-
-        function renderPlaylist() {
-          var filtered = getFilteredVideos();
-          playlistContainer.innerHTML = '';
-          noVideosMsg.classList.toggle('hidden', filtered.length > 0);
-          playlistCountLabel.textContent = filtered.length + ' Video' + (filtered.length !== 1 ? 's' : '');
-
-          filtered.forEach(function (v) {
-            var row = document.createElement('div');
-            row.className = 'playlist-row' + (v.videoId === activeVideoId ? ' active' : '');
-            row.dataset.videoId = v.videoId;
-            row.innerHTML =
-              '<div class="playlist-row-thumb thumb-gradient-' + v.gradient + '">' +
-                '<i data-lucide="' + v.icon + '" class="thumb-icon" style="width:28px;height:28px;"></i>' +
-                '<div class="mini-play"><div class="mini-play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div>' +
-              '</div>' +
-              '<div class="flex-1 min-w-0">' +
-                '<h4 class="font-semibold text-dark text-[13px] leading-snug mb-1 line-clamp-2">' + v.title + '</h4>' +
-                '<span class="inline-block text-[11px] font-semibold bg-primary-light text-dark-light px-2 py-0.5 rounded-full">' + playlistLabels[v.playlist] + '</span>' +
-                '<div class="now-playing-badge"><div class="now-playing-bars"><span></span><span></span><span></span></div>Now Playing</div>' +
-              '</div>';
-            row.addEventListener('click', function () { setActiveVideo(v); });
-            playlistContainer.appendChild(row);
-          });
-
-          if (!filtered.find(function (v) { return v.videoId === activeVideoId; }) && filtered.length > 0) {
-            setActiveVideo(filtered[0]);
+          if (tab === 'videos') {
+            tutorialsSection.classList.remove('hidden');
+            faqSection.classList.add('hidden');
+          } else {
+            tutorialsSection.classList.add('hidden');
+            faqSection.classList.remove('hidden');
           }
-          lucide.createIcons();
-        }
-
-        function renderFaq() {
-          faqContainer.innerHTML = '';
-          var hasResults = false;
-          faqData.forEach(function (group) {
-            var items = group.items.filter(function (item) {
-              return !searchQuery ||
-                item.q.toLowerCase().includes(searchQuery) ||
-                item.a.toLowerCase().includes(searchQuery) ||
-                item.tags.toLowerCase().includes(searchQuery) ||
-                group.category.toLowerCase().includes(searchQuery);
-            });
-            if (!items.length) return;
-            hasResults = true;
-            var section = document.createElement('div');
-            section.className = 'mb-8';
-            var header = document.createElement('h3');
-            header.className = 'text-lg font-bold text-dark mb-2 flex items-center gap-2';
-            header.innerHTML = '<i data-lucide="folder" class="w-5 h-5 text-primary-dark"></i> ' + group.category;
-            section.appendChild(header);
-            items.forEach(function (item) {
-              var faqItem = document.createElement('div');
-              faqItem.className = 'faq-item';
-              var q = document.createElement('button');
-              q.className = 'faq-question w-full text-left';
-              q.innerHTML = '<span class="font-medium text-dark text-[15px] leading-snug">' + item.q + '</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-muted flex-shrink-0"></i>';
-              var a = document.createElement('div');
-              a.className = 'faq-answer';
-              a.innerHTML = '<p class="text-muted text-sm leading-relaxed">' + item.a + '</p>';
-              q.addEventListener('click', function () {
-                var isOpen = a.classList.contains('open');
-                document.querySelectorAll('.faq-answer.open').forEach(function (el) {
-                  el.classList.remove('open');
-                  var chev = el.previousElementSibling.querySelector('.faq-chevron');
-                  if (chev) chev.classList.remove('rotated');
-                });
-                if (!isOpen) { a.classList.add('open'); q.querySelector('.faq-chevron').classList.add('rotated'); }
-              });
-              faqItem.appendChild(q); faqItem.appendChild(a);
-              section.appendChild(faqItem);
-            });
-            faqContainer.appendChild(section);
-          });
-          noFaqMsg.classList.toggle('hidden', hasResults);
-          lucide.createIcons();
-        }
-
-        // Smooth nav scroll
-        document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-          link.addEventListener('click', function (e) {
-            var href = link.getAttribute('href');
-            if (href === '#') return;
-            var target = document.querySelector(href);
-            if (!target) return;
-            e.preventDefault();
-            if (href === '#faq-section') {
-              document.querySelectorAll('.tab-btn-main').forEach(function (b) { b.classList.remove('active'); });
-              document.querySelector('[data-main-tab="faq"]').classList.add('active');
-              activeTab = 'faq'; tutorialsSection.classList.add('hidden'); faqSection.classList.remove('hidden'); applyFilters();
-            } else if (href === '#tutorials-section') {
-              document.querySelectorAll('.tab-btn-main').forEach(function (b) { b.classList.remove('active'); });
-              document.querySelector('[data-main-tab="videos"]').classList.add('active');
-              activeTab = 'videos'; tutorialsSection.classList.remove('hidden'); faqSection.classList.add('hidden'); applyFilters();
-            }
-            setTimeout(function () { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
-          });
+          applyFilters();
         });
+      });
 
-        // Init
-        setActiveVideo(videos[0]);
+      // === PLAYLIST CHIPS ===
+      document.querySelectorAll('.chip').forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          activePlaylist = chip.dataset.playlist;
+          document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          renderPlaylist();
+        });
+      });
+
+      // === SEARCH ===
+      searchInput.addEventListener('input', function() {
+        searchQuery = searchInput.value.trim().toLowerCase();
+        searchClearBtn.classList.toggle('hidden', searchQuery.length === 0);
+        applyFilters();
+      });
+
+      searchClearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchQuery = '';
+        searchClearBtn.classList.add('hidden');
+        applyFilters();
+      });
+
+      function applyFilters() {
         renderPlaylist();
         renderFaq();
+      }
+
+      // === PLAY VIDEO INLINE (embedded YouTube iframe) ===
+      function playVideo(video) {
+        if (!video) return;
+
+        // Update active state first
+        setActiveVideo(video);
+
+        // Hide the placeholder
+        playerPlaceholder.style.display = 'none';
+
+        // Remove any existing iframe
+        var existingIframe = playerWrapper.querySelector('iframe');
+        if (existingIframe) {
+          existingIframe.remove();
+        }
+
+        // Create new iframe for embedded playback
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + video.videoId + '?autoplay=1&rel=0&playsinline=1';
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; border:0;';
+
+        playerWrapper.appendChild(iframe);
+      }
+
+      // === SET ACTIVE VIDEO (update player display — resets to placeholder) ===
+      function setActiveVideo(video) {
+        if (!video) return;
+        currentVideo = video;
+        activeVideoId = video.videoId;
+
+        // Remove any existing iframe (reset to placeholder view)
+        var existingIframe = playerWrapper.querySelector('iframe');
+        if (existingIframe) {
+          existingIframe.remove();
+        }
+
+        // Show placeholder again
+        playerPlaceholder.style.display = 'flex';
+
+        // Update placeholder background
+        playerPlaceholder.className = 'player-placeholder thumb-gradient-' + video.gradient;
+
+        // Update title and description
+        playerTitle.textContent = video.title;
+        playerDesc.textContent = video.desc;
+
+        // Update YouTube link
+        ytLink.href = 'https://www.youtube.com/watch?v=' + video.videoId;
+        ytLink.classList.remove('hidden');
+
+        // Highlight active row in sidebar
+        document.querySelectorAll('.playlist-row').forEach(function(row) {
+          if (row.dataset.videoId === video.videoId) {
+            row.classList.add('active');
+          } else {
+            row.classList.remove('active');
+          }
+        });
+      }
+
+      // === PLAY BUTTON CLICK — plays video inline ===
+      playerPlayBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (currentVideo) {
+          playVideo(currentVideo);
+        }
       });
+
+      playerPlaceholder.addEventListener('click', function() {
+        if (currentVideo) {
+          playVideo(currentVideo);
+        }
+      });
+
+      // === GET FILTERED VIDEOS ===
+      function getFilteredVideos() {
+        return videos.filter(function(v) {
+          var matchPlaylist = activePlaylist === 'all' || v.playlist === activePlaylist;
+          var matchSearch = !searchQuery ||
+            v.title.toLowerCase().includes(searchQuery) ||
+            v.desc.toLowerCase().includes(searchQuery) ||
+            playlistLabels[v.playlist].toLowerCase().includes(searchQuery);
+          return matchPlaylist && matchSearch;
+        });
+      }
+
+      // === RENDER PLAYLIST SIDEBAR ===
+      function renderPlaylist() {
+        var filtered = getFilteredVideos();
+        playlistContainer.innerHTML = '';
+
+        if (filtered.length === 0) {
+          noVideosMsg.classList.remove('hidden');
+          playlistCountLabel.textContent = '0 Videos';
+        } else {
+          noVideosMsg.classList.add('hidden');
+          playlistCountLabel.textContent = filtered.length + ' Video' + (filtered.length !== 1 ? 's' : '');
+        }
+
+        filtered.forEach(function(v) {
+          var row = document.createElement('div');
+          row.className = 'playlist-row';
+          row.dataset.videoId = v.videoId;
+
+          if (v.videoId === activeVideoId) {
+            row.classList.add('active');
+          }
+
+          row.innerHTML =
+            '<div class="playlist-row-thumb thumb-gradient-' + v.gradient + '">' +
+              '<i data-lucide="' + v.icon + '" class="thumb-icon" style="width:28px;height:28px;"></i>' +
+              '<div class="mini-play">' +
+                '<div class="mini-play-icon">' +
+                  '<svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex-1 min-w-0">' +
+              '<h4 class="font-semibold text-dark text-[13px] leading-snug mb-1 line-clamp-2">' + v.title + '</h4>' +
+              '<span class="inline-block text-[11px] font-semibold bg-primary-light text-dark-light px-2 py-0.5 rounded-full">' + playlistLabels[v.playlist] + '</span>' +
+              '<div class="now-playing-badge">' +
+                '<div class="now-playing-bars"><span></span><span></span><span></span></div>' +
+                'Now Playing' +
+              '</div>' +
+            '</div>';
+
+          row.addEventListener('click', function() {
+            playVideo(v);
+          });
+
+          playlistContainer.appendChild(row);
+        });
+
+        // If active video is not in filtered list, load first visible
+        var activeInList = filtered.find(function(v) { return v.videoId === activeVideoId; });
+        if (!activeInList && filtered.length > 0) {
+          setActiveVideo(filtered[0]);
+        }
+
+        // Re-init lucide icons for new elements
+        if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+          lucide.createIcons();
+        }
+      }
+
+      // === RENDER FAQ ===
+      function renderFaq() {
+        faqContainer.innerHTML = '';
+        var hasResults = false;
+
+        faqData.forEach(function(group) {
+          var filteredItems = group.items.filter(function(item) {
+            if (!searchQuery) return true;
+            return item.q.toLowerCase().includes(searchQuery) ||
+              item.a.toLowerCase().includes(searchQuery) ||
+              item.tags.toLowerCase().includes(searchQuery) ||
+              group.category.toLowerCase().includes(searchQuery);
+          });
+
+          if (filteredItems.length === 0) return;
+          hasResults = true;
+
+          var section = document.createElement('div');
+          section.className = 'mb-8';
+
+          var header = document.createElement('h3');
+          header.className = 'text-lg font-bold text-dark mb-2 flex items-center gap-2';
+          header.innerHTML = '<i data-lucide="folder" class="w-5 h-5 text-primary-dark"></i> ' + group.category;
+          section.appendChild(header);
+
+          filteredItems.forEach(function(item) {
+            var faqItem = document.createElement('div');
+            faqItem.className = 'faq-item';
+
+            var questionBtn = document.createElement('button');
+            questionBtn.className = 'faq-question w-full text-left';
+            questionBtn.innerHTML =
+              '<span class="font-medium text-dark text-[15px] leading-snug">' + item.q + '</span>' +
+              '<i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-muted flex-shrink-0"></i>';
+
+            var answerDiv = document.createElement('div');
+            answerDiv.className = 'faq-answer';
+            answerDiv.innerHTML = '<p class="text-muted text-sm leading-relaxed pl-0">' + item.a + '</p>';
+
+            questionBtn.addEventListener('click', function() {
+              var isOpen = answerDiv.classList.contains('open');
+              // Close all other open items
+              document.querySelectorAll('.faq-answer.open').forEach(function(el) {
+                el.classList.remove('open');
+                var chev = el.previousElementSibling.querySelector('.faq-chevron');
+                if (chev) chev.classList.remove('rotated');
+              });
+              if (!isOpen) {
+                answerDiv.classList.add('open');
+                var chev = questionBtn.querySelector('.faq-chevron');
+                if (chev) chev.classList.add('rotated');
+              }
+            });
+
+            faqItem.appendChild(questionBtn);
+            faqItem.appendChild(answerDiv);
+            section.appendChild(faqItem);
+          });
+
+          faqContainer.appendChild(section);
+        });
+
+        if (!hasResults) {
+          noFaqMsg.classList.remove('hidden');
+        } else {
+          noFaqMsg.classList.add('hidden');
+        }
+
+        if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+          lucide.createIcons();
+        }
+      }
+
+      // === SMOOTH SCROLL FOR NAV LINKS ===
+      document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var href = link.getAttribute('href');
+          if (href === '#') return;
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            // Switch tab if needed
+            if (href === '#faq-section') {
+              document.querySelectorAll('.tab-btn-main').forEach(function(b) { b.classList.remove('active'); });
+              document.querySelector('[data-main-tab="faq"]').classList.add('active');
+              activeTab = 'faq';
+              tutorialsSection.classList.add('hidden');
+              faqSection.classList.remove('hidden');
+              applyFilters();
+            } else if (href === '#tutorials-section') {
+              document.querySelectorAll('.tab-btn-main').forEach(function(b) { b.classList.remove('active'); });
+              document.querySelector('[data-main-tab="videos"]').classList.add('active');
+              activeTab = 'videos';
+              tutorialsSection.classList.remove('hidden');
+              faqSection.classList.add('hidden');
+              applyFilters();
+            }
+            setTimeout(function() {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+          }
+        });
+      });
+
+      // === INITIAL RENDER ===
+      setActiveVideo(videos[0]);
+      renderPlaylist();
+      renderFaq();
+      }); // end window load
     </script>
 </body>
 </html>
