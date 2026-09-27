@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wpuwzr",
+      "fullname": "t3_1wpuwzr",
+      "title": "What are your tips for purchases and receipts to Google Rewards?",
+      "url": "https://www.reddit.com/r/GoogleOpinionReward/comments/1wpuwzr/what_are_your_tips_for_purchases_and_receipts_to/",
+      "excerpt": "What do you guys do to get the most points from your purchases and receipts? I have it setup so my purchases and receipts go to a specific label, which google apps scripts has access to. Every time i get an email with a receipt, it gets put in the label, apps scripts runs, and then a telegram message comes to me with the subject, email details, and a \"submit\" button. When i hit submit, it forwards the email to google rewards, and adds another label that shows it's has been processed and forwarde",
+      "subreddit": "GoogleOpinionReward",
+      "author": "BusyPooping",
+      "score": null,
+      "created_utc": 1790338961,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-27T10:26:05+00:00"
+    },
+    {
       "id": "1wr1la7",
       "fullname": "t3_1wr1la7",
       "title": "Candle Jars & Lids etc for sale!",
@@ -771,7 +785,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-27T04:42:06+00:00",
+  "generated_at": "2026-09-27T10:27:27+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -800,14 +814,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
