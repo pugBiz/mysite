@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1wst18q",
+      "fullname": "t3_1wst18q",
+      "title": "Can somebody help me figure out how to use this bugger rh-40 label printer won't connect to my phone",
+      "url": "https://www.reddit.com/r/techsupport/comments/1wst18q/can_somebody_help_me_figure_out_how_to_use_this/",
+      "excerpt": "I'm using a model RH-40 thermal label printer and it's not connecting to my phone, I w tried the a printer app and also the flash label app, if you need any additional information please lmk",
+      "subreddit": "techsupport",
+      "author": "Own-Corner2294",
+      "score": null,
+      "created_utc": 1790634651,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-29T23:55:02+00:00"
+    },
+    {
+      "id": "1wsc7c7",
+      "fullname": "t3_1wsc7c7",
+      "title": "Advice on liquidating some .app domains",
+      "url": "https://www.reddit.com/r/Domains/comments/1wsc7c7/advice_on_liquidating_some_app_domains/",
+      "excerpt": "Hey! I am looking for some advice on liquidating following domains listed below. What are your best advices to get these sold either in bulk or per domain for good/ reasonable price as possible? And what would those prices maybe be? bankvault.app copytraders.app creditscoring.app daytraders.app e-scooter.app labelling.app nocost.app safestorage.app safetystorage.app secdata.app secit.app",
+      "subreddit": "Domains",
+      "author": "Xanimater",
+      "score": null,
+      "created_utc": 1790595418,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-09-29T23:55:02+00:00"
+    },
+    {
+      "id": "1wt8lcb",
+      "fullname": "t3_1wt8lcb",
+      "title": "I built a smart garden planner app after forgetting what I planted where one too many times",
+      "url": "https://www.reddit.com/r/SquareFootGardening/comments/1wt8lcb/i_built_a_smart_garden_planner_app_after/",
+      "excerpt": "I created Plotera because I kept forgetting what I'd done in the garden, when and where. I wanted somewhere I could plan the garden and its layout before anything went in the ground. Fast forward 12 months, and it's grown into much more than that. I've built Plotera around the idea of smart gardening. If you record and track your planting, Plotera combines it with your local climate zone, daily weather, your fertiliser logs, soil pH and more. It helps you manage your garden, and it also advises ",
+      "subreddit": "SquareFootGardening",
+      "author": "pabsth3rd",
+      "score": null,
+      "created_utc": 1790684364,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-09-29T23:56:05+00:00"
+    },
+    {
       "id": "1wticql",
       "fullname": "t3_1wticql",
       "title": "Most AAC apps still look like they were designed for children. Is that as annoying from the inside as it looks from outside?",
@@ -841,7 +883,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-09-29T20:11:08+00:00",
+  "generated_at": "2026-09-29T23:56:24+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -870,14 +912,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
