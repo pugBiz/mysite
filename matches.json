@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wv9m1s",
+      "fullname": "t3_1wv9m1s",
+      "title": "CD LABEL software?",
+      "url": "https://www.reddit.com/r/Cd_collectors/comments/1wv9m1s/cd_label_software/",
+      "excerpt": "Hello! I know of disketch label software, but i can SWEAR there were many others that were infinitely better, and i don't know if I'm going crazy and imagining things. So if anyone could drop recommendations for software like that that would allow me to make the cd labels i would be very thankful",
+      "subreddit": "Cd_collectors",
+      "author": "Korranov",
+      "score": null,
+      "created_utc": 1790884712,
+      "type": "post",
+      "matched_term": "label software",
+      "found_at": "2026-10-01T20:14:08+00:00"
+    },
+    {
       "id": "1wuzxkk",
       "fullname": "t3_1wuzxkk",
       "title": "Avery Labels for Classroom Books",
@@ -897,7 +911,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-01T14:43:39+00:00",
+  "generated_at": "2026-10-01T20:15:51+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -926,14 +940,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
