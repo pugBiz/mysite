@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wuzxkk",
+      "fullname": "t3_1wuzxkk",
+      "title": "Avery Labels for Classroom Books",
+      "url": "https://www.reddit.com/r/Printing/comments/1wuzxkk/avery_labels_for_classroom_books/",
+      "excerpt": "I have made a tool mainly for Teacher and Teaching Assistants to use to print Avery labels. 100% Free to use, print from a csv file. If anyone wants to try it: https://labels.welwyntech.co.uk/ I would like to get some feedback.",
+      "subreddit": "Printing",
+      "author": "PomeloTechnical7126",
+      "score": null,
+      "created_utc": 1790862548,
+      "type": "post",
+      "matched_term": "avery labels",
+      "found_at": "2026-10-01T14:42:03+00:00"
+    },
+    {
       "id": "1wst18q",
       "fullname": "t3_1wst18q",
       "title": "Can somebody help me figure out how to use this bugger rh-40 label printer won't connect to my phone",
@@ -883,7 +897,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-01T07:01:44+00:00",
+  "generated_at": "2026-10-01T14:43:39+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -912,7 +926,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
