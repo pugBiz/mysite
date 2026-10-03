@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1ww6j88",
+      "fullname": "t3_1ww6j88",
+      "title": "Seamless Continuation No Degradation (proof at the end)",
+      "url": "https://www.reddit.com/r/StableDiffusion/comments/1ww6j88/seamless_continuation_no_degradation_proof_at_the/",
+      "excerpt": "V7.1 of the workflow https://github.com/roycho87/minimax_wf Video Combiner https://github.com/roycho87/seamless_video_combiner Audio Splitter https://github.com/roycho87/minimax_continuous_audio_splitter I've changed my profile so that my previous tutorials are available. Look through those for questions on how to use these. With this method you can seamlessly combine videos with no burn. (or at least the exact same amount of very very little burn) Fast forward to 2:00 for proof. Enjoy. Edit: I'",
+      "subreddit": "StableDiffusion",
+      "author": "roychodraws",
+      "score": null,
+      "created_utc": 1790978515,
+      "type": "post",
+      "matched_term": "combine videos",
+      "found_at": "2026-10-03T13:12:02+00:00"
+    },
+    {
+      "id": "1wv7nlp",
+      "fullname": "t3_1wv7nlp",
+      "title": "Installing ffmpeg",
+      "url": "https://www.reddit.com/r/ffmpeg/comments/1wv7nlp/installing_ffmpeg/",
+      "excerpt": "Windows 11 user here. For years, I've used dl-dlp to download YouTube videos of musical performances, and stripped away the video track to create mp3 files that I store on an iPod for use in the car. I periodically check that I have the latest version of dl-dlp Recently, I've noticed that instead of downloading a combined video/audio file, this process has resulted in separate video and audio files. And the dialog that appears in the command window explains that this is happening because ffmpeg ",
+      "subreddit": "ffmpeg",
+      "author": "AlternativeWild3449",
+      "score": null,
+      "created_utc": 1790880275,
+      "type": "post",
+      "matched_term": "combine videos",
+      "found_at": "2026-10-03T13:12:02+00:00"
+    },
+    {
       "id": "1wwexf5",
       "fullname": "t3_1wwexf5",
       "title": "Borders for Avery Labels in MS Word",
@@ -967,7 +995,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-03T07:51:22+00:00",
+  "generated_at": "2026-10-03T13:13:04+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -996,14 +1024,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
