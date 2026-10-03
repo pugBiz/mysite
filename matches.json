@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1wwexf5",
+      "fullname": "t3_1wwexf5",
+      "title": "Borders for Avery Labels in MS Word",
+      "url": "https://www.reddit.com/r/word/comments/1wwexf5/borders_for_avery_labels_in_ms_word/",
+      "excerpt": "",
+      "subreddit": "word",
+      "author": "Friendly_Part2777",
+      "score": null,
+      "created_utc": 1791004578,
+      "type": "post",
+      "matched_term": "avery labels",
+      "found_at": "2026-10-03T07:49:55+00:00"
+    },
+    {
+      "id": "1wwexc6",
+      "fullname": "t3_1wwexc6",
+      "title": "Borders for Avery Labels in MS Word",
+      "url": "https://www.reddit.com/r/MicrosoftWord/comments/1wwexc6/borders_for_avery_labels_in_ms_word/",
+      "excerpt": "I need help creating and printing a metallic gold border inside each label using the Avery 22806 label template in Microsoft Word. I’m looking for guidance on how to set up the border so it is positioned correctly within each label and prints with a metallic gold appearance. I have the hex color for the project, the shape, but trying to get consistency, I can also provide the template that im working with",
+      "subreddit": "MicrosoftWord",
+      "author": "Friendly_Part2777",
+      "score": null,
+      "created_utc": 1791004569,
+      "type": "post",
+      "matched_term": "avery labels",
+      "found_at": "2026-10-03T07:49:55+00:00"
+    },
+    {
+      "id": "1wvc0kz",
+      "fullname": "t3_1wvc0kz",
+      "title": "Pastry Pirates - if captain jack sparrow baked croissants",
+      "url": "https://www.reddit.com/r/WebGames/comments/1wvc0kz/pastry_pirates_if_captain_jack_sparrow_baked/",
+      "excerpt": "Pastry Pirates has you battle, bribe and buy ingredients around the Caribbean to become the Best Baker on the Sugar Seas. Games take 15 minutes, and I would LOVE to know if you can understand how to play it!",
+      "subreddit": "WebGames",
+      "author": "wyattroy",
+      "score": null,
+      "created_utc": 1790890546,
+      "type": "post",
+      "matched_term": "bake croissants",
+      "found_at": "2026-10-03T07:50:01+00:00"
+    },
+    {
       "id": "1wupjmb",
       "fullname": "t3_1wupjmb",
       "title": "AAC device tips?",
@@ -925,7 +967,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-03T01:48:30+00:00",
+  "generated_at": "2026-10-03T07:51:22+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -954,7 +996,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
