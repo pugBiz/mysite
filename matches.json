@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1wwu62x",
+      "fullname": "t3_1wwu62x",
+      "title": "With the recent merging of videos games do you think we’ll get a tale of three wastelands?",
+      "url": "https://www.reddit.com/r/Fallout/comments/1wwu62x/with_the_recent_merging_of_videos_games_do_you/",
+      "excerpt": "Recently some modders have used antropic to basically merge video games the most well known one is Minecraft and Elden ring combination.",
+      "subreddit": "Fallout",
+      "author": "Quiet-Adeptness5653",
+      "score": null,
+      "created_utc": 1791051820,
+      "type": "post",
+      "matched_term": "merge videos",
+      "found_at": "2026-10-04T05:14:03+00:00"
+    },
+    {
+      "id": "1wvmf17",
+      "fullname": "t3_1wvmf17",
+      "title": "Audacity Video/Image Merge",
+      "url": "https://www.reddit.com/r/glitch_art/comments/1wvmf17/audacity_videoimage_merge/",
+      "excerpt": "Does anyone know how to merge videos or images using audacity. Ive tried following tutorials, but they are at least 13 years old and very outdated regarding merging of the two. Ive even tried older versions of audacity, but none seem to work.",
+      "subreddit": "glitch_art",
+      "author": "abdshtsvh",
+      "score": null,
+      "created_utc": 1790921902,
+      "type": "post",
+      "matched_term": "merge videos",
+      "found_at": "2026-10-04T05:14:03+00:00"
+    },
+    {
       "id": "1ww6j88",
       "fullname": "t3_1ww6j88",
       "title": "Seamless Continuation No Degradation (proof at the end)",
@@ -995,7 +1023,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-03T23:40:05+00:00",
+  "generated_at": "2026-10-04T05:14:50+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1024,14 +1052,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
