@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1wwp51l",
+      "fullname": "t3_1wwp51l",
+      "title": "AAC awareness month post 1",
+      "url": "https://www.reddit.com/r/autism/comments/1wwp51l/aac_awareness_month_post_1/",
+      "excerpt": "(Image description: Screen recording of proloquo 2 go aac app. Goes through how to use, edit page, through a few folders, search feature, as well as text to speech.) Hi! His name is Foxy, he autistic and use third person. If you have problem with that, here door. 🚪He is a full time AAC user and it is aac awareness month, so he gonna yap about AAC. What is AAC AAC stands for alternative and augmented communication. It includes anything that isn’t mouth words or sign language and is communicating ",
+      "subreddit": "autism",
+      "author": "10_Screaming_Foxes",
+      "score": null,
+      "created_utc": 1791039079,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-10-04T19:31:07+00:00"
+    },
+    {
       "id": "1wwu62x",
       "fullname": "t3_1wwu62x",
       "title": "With the recent merging of videos games do you think we’ll get a tale of three wastelands?",
@@ -1023,7 +1037,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-04T15:56:21+00:00",
+  "generated_at": "2026-10-04T19:31:07+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1052,7 +1066,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
