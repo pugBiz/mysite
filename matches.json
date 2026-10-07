@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1x03cpl",
+      "fullname": "t3_1x03cpl",
+      "title": "how much are you paying to ship your orders? I can help 📦",
+      "url": "https://www.reddit.com/r/SmallBusinessSellers/comments/1x03cpl/how_much_are_you_paying_to_ship_your_orders_i_can/",
+      "excerpt": "Hey everyone! I see a lot of awesome handmade stuff on here, and I know shipping costs can eat into profits fast, especially on smaller items like keychains, jewelry, or phone cases. I help sellers get discounted USPS and UPS labels, cheaper than what you'd pay at the post office or through label apps. If you want to see what you'd save, comment or DM me your usual package size/weight and where you ship from, and I'll send you a free quote. No pressure at all 🙂 Also happy to answer any shipping ",
+      "subreddit": "SmallBusinessSellers",
+      "author": "No-Way-2683",
+      "score": null,
+      "created_utc": 1791395631,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-07T20:44:04+00:00"
+    },
+    {
+      "id": "1wzq1fl",
+      "fullname": "t3_1wzq1fl",
+      "title": "I built a garden planner and I'd like Minnesota gardeners to poke holes in it",
+      "url": "https://www.reddit.com/r/Minnesota_Gardening/comments/1wzq1fl/i_built_a_garden_planner_and_id_like_minnesota/",
+      "excerpt": "I build a garden planner (EdenVatika) and I've been asking gardeners in different regions to poke holes in it. Minnesota is a good stress test: a short season, a big gap between the north and south of the state, and springs that can swing from 70° to frost in the same week. One question, mainly: the app works backwards from your frost dates to tell you when to sow and when you'll harvest. Does that hold up here, or are Minnesota's late-May frosts and early-fall cold snaps too unpredictable for a",
+      "subreddit": "Minnesota_Gardening",
+      "author": "amit4blogger",
+      "score": null,
+      "created_utc": 1791357131,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-07T20:45:07+00:00"
+    },
+    {
       "id": "1wy6tev",
       "fullname": "t3_1wy6tev",
       "title": "Ride-Hailing App Development: Complete Guide",
@@ -1065,7 +1093,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-07T15:23:53+00:00",
+  "generated_at": "2026-10-07T20:45:26+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1094,14 +1122,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
