@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1x08xy8",
+      "fullname": "t3_1x08xy8",
+      "title": "stuck on finding a approach for app detection ( making a transformer modal out of unlabeled network data) [R] [P]",
+      "url": "https://www.reddit.com/r/MLQuestions/comments/1x08xy8/stuck_on_finding_a_approach_for_app_detection/",
+      "excerpt": "As the title suggests I'm currently trying to make a modal to identify which app is being used. The thing is I don't have labelled data and generating it is out of question since that is a lot of work ( I need to detect like 3-5K apps give or take) my data is structured roughly like this: Traffic is divided into ~15-second windows/bags. Each bag contains multiple network flows. Each flow has features such as: domain protocol bytes sent bytes received timestamp/timing information I have a very la",
+      "subreddit": "MLQuestions",
+      "author": "AdventurousWear618",
+      "score": null,
+      "created_utc": 1791408585,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-09T20:16:02+00:00"
+    },
+    {
+      "id": "1x08xbn",
+      "fullname": "t3_1x08xbn",
+      "title": "stuck on finding a approach for app detection ( making a transformer modal out of unlabeled network data) [R] [P]",
+      "url": "https://www.reddit.com/r/MachineLearning/comments/1x08xbn/stuck_on_finding_a_approach_for_app_detection/",
+      "excerpt": "As the title suggests I'm currently trying to make a modal to identify which app is being used. The thing is I don't have labelled data and generating it is out of question since that is a lot of work ( I need to detect like 3-5K apps give or take) my data is structured roughly like this: Traffic is divided into ~15-second windows/bags. Each bag contains multiple network flows. Each flow has features such as: domain protocol bytes sent bytes received timestamp/timing information I have a very la",
+      "subreddit": "MachineLearning",
+      "author": "AdventurousWear618",
+      "score": null,
+      "created_utc": 1791408545,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-09T20:16:02+00:00"
+    },
+    {
       "id": "1x0yqpk",
       "fullname": "t3_1x0yqpk",
       "title": "Few bakes from the past week!!",
@@ -1149,7 +1177,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-09T15:09:25+00:00",
+  "generated_at": "2026-10-09T20:17:24+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1178,14 +1206,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
