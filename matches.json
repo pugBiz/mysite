@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1x2lqjs",
+      "fullname": "t3_1x2lqjs",
+      "title": "I couldn’t find a free label designer with everything I needed, so I built my own",
+      "url": "https://www.reddit.com/r/SideProject/comments/1x2lqjs/i_couldnt_find_a_free_label_designer_with/",
+      "excerpt": "I print a lot of labels: price tags, product labels, barcodes. I tried many free label programs, but each one was missing something I needed. One had no background images, another couldn’t save my own design as a template, and others couldn’t create barcodes inside the program, generate barcodes in bulk, connect to a Wi-Fi printer, or find a page by its name or by what’s on it. So I built LabelAxis, one tool that does it all. It’s a free Windows app for designing labels and printing them exactly",
+      "subreddit": "SideProject",
+      "author": "_anonredditer",
+      "score": null,
+      "created_utc": 1791655291,
+      "type": "post",
+      "matched_term": "label barcode",
+      "found_at": "2026-10-12T08:54:02+00:00"
+    },
+    {
       "id": "1x2lj1q",
       "fullname": "t3_1x2lj1q",
       "title": "good eats",
@@ -1205,7 +1219,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-12T01:38:24+00:00",
+  "generated_at": "2026-10-12T08:55:03+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1234,14 +1248,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
