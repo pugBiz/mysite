@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1x7mrk8",
+      "fullname": "t3_1x7mrk8",
+      "title": "[0 YoE] Recent Grad Targeting Software Developer and Test Automation Roles – Looking for Resume Feedback",
+      "url": "https://www.reddit.com/r/EngineeringResumes/comments/1x7mrk8/0_yoe_recent_grad_targeting_software_developer/",
+      "excerpt": "https://preview.redd.it/bsjp2mhn8vvh1.png?width=5100&format=png&auto=webp&s=6b81fa7548413adb379de30cc7a371739b81ea4c Recent Software Engineering graduate based in Canada, targeting entry-level software engineering/development and test automation roles. I’m actively applying (over 200 applications and no callbacks) and would like feedback on whether my resume communicates my experience clearly. For the jobs in the experience section labeled Software Role and Engineering Role, I don’t have many re",
+      "subreddit": "EngineeringResumes",
+      "author": "patientlamb",
+      "score": null,
+      "created_utc": 1792172477,
+      "type": "post",
+      "matched_term": "label software",
+      "found_at": "2026-10-17T05:24:57+00:00"
+    },
+    {
+      "id": "1x6xuoi",
+      "fullname": "t3_1x6xuoi",
+      "title": "Customizable Icons",
+      "url": "https://www.reddit.com/r/shortcuts/comments/1x6xuoi/customizable_icons/",
+      "excerpt": "https://www.icloud.com/shortcuts/5f598341501a4741ba8f30c6e76e39ca What this does This shortcut makes you choose an app to customize then it creates a shortcut and waits for you to add it to your library so that it can put it on your homescreen. Shortcut Configuration Settings WT stands for wait time WT is the amount of time you have before the shortcut checks your library and adds your customized app onto your homescreen. CL stands for custom label you can modify the boolean to true if you want ",
+      "subreddit": "shortcuts",
+      "author": "IhavenorealusernameD",
+      "score": null,
+      "created_utc": 1792098950,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-17T05:25:03+00:00"
+    },
+    {
+      "id": "1x7gs9e",
+      "fullname": "t3_1x7gs9e",
+      "title": "I built a free garden planner that knows southern hemisphere seasons. Feedback welcome.",
+      "url": "https://www.reddit.com/r/GardeningAustralia/comments/1x7gs9e/i_built_a_free_garden_planner_that_knows_southern/",
+      "excerpt": "Hi all. I've spent this year building Milpa, a free garden planner, and I'd love to hear from gardeners in the southern hemisphere, since your spring is going on right now. It gives your location's frost odds: when the last spring frost usually comes, and how late it can be in a bad year. Outside the US these come from 30 years of modelled weather.. Find yours at https://milpa.garden/frost/ It plans a bed with plant teams that grow well together, and puts every job on a calendar: sow, plant out,",
+      "subreddit": "GardeningAustralia",
+      "author": "slothroplives",
+      "score": null,
+      "created_utc": 1792158678,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-17T05:26:06+00:00"
+    },
+    {
       "id": "1x7w4vf",
       "fullname": "t3_1x7w4vf",
       "title": "Inkjet Printer needed!",
@@ -1275,7 +1317,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-17T00:43:36+00:00",
+  "generated_at": "2026-10-17T05:26:25+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1304,14 +1346,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
