@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1x7w4vf",
+      "fullname": "t3_1x7w4vf",
+      "title": "Inkjet Printer needed!",
+      "url": "https://www.reddit.com/r/astoria/comments/1x7w4vf/inkjet_printer_needed/",
+      "excerpt": "Hi all! I’m trying to print labels for my wedding invites. We have Avery labels. The Prime Printing & Binding place said they can’t do it and now that Staples is closed, we’re not sure where to go! Any recommendations?",
+      "subreddit": "astoria",
+      "author": "Beneficial-Try-1284",
+      "score": null,
+      "created_utc": 1792195705,
+      "type": "post",
+      "matched_term": "avery labels",
+      "found_at": "2026-10-17T00:42:01+00:00"
+    },
+    {
       "id": "1x71zh8",
       "fullname": "t3_1x71zh8",
       "title": "A guide to free bulk barcode printing with GS1 Digital Link and Avery templates",
@@ -1261,7 +1275,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-16T22:00:25+00:00",
+  "generated_at": "2026-10-17T00:43:36+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1290,7 +1304,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
