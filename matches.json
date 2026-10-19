@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1x8l2ju",
+      "fullname": "t3_1x8l2ju",
+      "title": "Advice appreciated!",
+      "url": "https://www.reddit.com/r/AppDevelopers/comments/1x8l2ju/advice_appreciated/",
+      "excerpt": "Hey there! I am a speech therapist and looking to start a communication app. I don’t even know where to begin. These apps are very complex and have lots of features. Here is a link for more information: https://www.speechandlanguagekids.com/aac-apps-review/ Where do I begin!? Any advice is appreciated.",
+      "subreddit": "AppDevelopers",
+      "author": "Certain_product_7994",
+      "score": null,
+      "created_utc": 1792270742,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-10-19T11:06:59+00:00"
+    },
+    {
       "id": "1x8yzyx",
       "fullname": "t3_1x8yzyx",
       "title": "Something new.....",
@@ -1331,7 +1345,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-19T05:07:35+00:00",
+  "generated_at": "2026-10-19T11:06:59+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1360,7 +1374,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
