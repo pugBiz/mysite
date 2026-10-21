@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1xal7r0",
+      "fullname": "t3_1xal7r0",
+      "title": "Ipo label App- apply and check allotment feedback and Bugs",
+      "url": "https://www.reddit.com/r/AppBusiness/comments/1xal7r0/ipo_label_app_apply_and_check_allotment_feedback/",
+      "excerpt": "Hello Everyone, I build this app called IPO Label which is available on play store. I need a real feedback from users like what is wrong, what to change, any error or bugs Amyone who knows IPO in India will understand better. Currently Apply button is not enabled as we are in middle of conversation with NSE and BSE and it might take some time from them too. Till Everyone can check their allotment, it is working fine and fast too. 1 feature you may like it if you are using any other Ipo app, you ",
+      "subreddit": "AppBusiness",
+      "author": "TaxDependent-",
+      "score": null,
+      "created_utc": 1792479591,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-21T21:55:02+00:00"
+    },
+    {
+      "id": "1xbougb",
+      "fullname": "t3_1xbougb",
+      "title": "I built a garden planner and most people quit after day one. Help me understand why?",
+      "url": "https://www.reddit.com/r/Raisedbed/comments/1xbougb/i_built_a_garden_planner_and_most_people_quit/",
+      "excerpt": "I'm a solo developer working on EdenVatika, a garden planner (beds/pots layout, planting dates from your local frost dates, harvest journal). The hard truth: most people who sign up use it for a single day and never come back. I'd rather hear why than guess. If you've tried any garden planning app (mine or others) and dropped it — what made you stop? Too much setup? Not useful after planting? Just easier to use a notebook? Link if you want to poke at it: https://edenvatika.com - honest criticism",
+      "subreddit": "Raisedbed",
+      "author": "amit4blogger",
+      "score": null,
+      "created_utc": 1792593267,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-21T21:56:05+00:00"
+    },
+    {
       "id": "1x8l2ju",
       "fullname": "t3_1x8l2ju",
       "title": "Advice appreciated!",
@@ -1345,7 +1373,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-21T18:13:24+00:00",
+  "generated_at": "2026-10-21T21:56:24+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1374,14 +1402,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
