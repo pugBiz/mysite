@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1xdqrv3",
+      "fullname": "t3_1xdqrv3",
+      "title": "DYMO Label v.8 Address Label Software - Looking for Replacement software",
+      "url": "https://www.reddit.com/r/CommercialPrinting/comments/1xdqrv3/dymo_label_v8_address_label_software_looking_for/",
+      "excerpt": "Address Label Software: I have been using Dymo label printers for years and have used their DYMO Label v.8 Address Book - Label designer software. It looks like Sanford/Dymo are no longer updating the software. Has anyone found a good replacement \"Address Book - Label designer software\" that works with Dymo printers well? The biggest feature I am looking for is the ability to create multiple \"Address Books\" as you can in DYMO Label v.8",
+      "subreddit": "CommercialPrinting",
+      "author": "NoAdvertising7471",
+      "score": null,
+      "created_utc": 1792791242,
+      "type": "post",
+      "matched_term": "label software",
+      "found_at": "2026-10-23T23:56:31+00:00"
+    },
+    {
       "id": "1xd6c2f",
       "fullname": "t3_1xd6c2f",
       "title": "Avery Labels for Teacher & Classroom",
@@ -1415,7 +1429,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-23T21:14:48+00:00",
+  "generated_at": "2026-10-23T23:58:00+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1444,14 +1458,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
