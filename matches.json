@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1xd5amx",
+      "fullname": "t3_1xd5amx",
+      "title": "Butter in my croissants keep melting",
+      "url": "https://www.reddit.com/r/Baking/comments/1xd5amx/butter_in_my_croissants_keep_melting/",
+      "excerpt": "Hi everyone! I tried making croissants and the butter keeps melting even when i put it in the fridge after laminating or folding before the next fold. its resting right now before i shape them but my biggest worry is if would still leak while shaping or baking. What would i expect when baking it already? Would the butter leak or would there be almost no layers? is there a chance to save it? thank you! First time baking croissants",
+      "subreddit": "Baking",
+      "author": "Reasonable-Cook-4127",
+      "score": null,
+      "created_utc": 1792733022,
+      "type": "post",
+      "matched_term": "bake croissants",
+      "found_at": "2026-10-24T13:31:05+00:00"
+    },
+    {
+      "id": "1xd1zy6",
+      "fullname": "t3_1xd1zy6",
+      "title": "Butter in my croissants keep melting",
+      "url": "https://www.reddit.com/r/BakingPhilippines/comments/1xd1zy6/butter_in_my_croissants_keep_melting/",
+      "excerpt": "Hi everyone! I tried making croissants and yung butter palaging nagmmelt kahit na i put it in the fridge after laminating or folding before the next fold. Nakarest sya ngayon pero leaking pa rin sya. What would i expect when baking it na? Would the butter leak or wala masyadong layers? I feel like mahirap sya i shape later on. may chance pa ba to save it? thank you! First time baking croissants",
+      "subreddit": "BakingPhilippines",
+      "author": "Reasonable-Cook-4127",
+      "score": null,
+      "created_utc": 1792722625,
+      "type": "post",
+      "matched_term": "bake croissants",
+      "found_at": "2026-10-24T13:31:05+00:00"
+    },
+    {
       "id": "1xdqrv3",
       "fullname": "t3_1xdqrv3",
       "title": "DYMO Label v.8 Address Label Software - Looking for Replacement software",
@@ -1429,7 +1457,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-24T09:02:22+00:00",
+  "generated_at": "2026-10-24T13:32:27+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1458,7 +1486,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
