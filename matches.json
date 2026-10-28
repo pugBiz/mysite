@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1xh9j8k",
+      "fullname": "t3_1xh9j8k",
+      "title": "What should a modern social platform offer beyond scrolling through videos?",
+      "url": "https://www.reddit.com/r/u_Altruistic_Art7977/comments/1xh9j8k/what_should_a_modern_social_platform_offer_beyond/",
+      "excerpt": "Social platforms have become a big part of how we watch videos, discover creators, and connect with people. But I think there's still room for platforms that bring more of these experiences together. I've been working on LOVEZII, a social platform that combines video sharing, live streaming, chat, and creator-focused features in one place. The idea is to give people different ways to participate, whether they want to watch content, connect with others, go live, or explore ways to support creator",
+      "subreddit": "u/Altruistic_Art7977",
+      "author": "Altruistic_Art7977",
+      "score": null,
+      "created_utc": 1793146821,
+      "type": "post",
+      "matched_term": "combine videos",
+      "found_at": "2026-10-28T06:08:02+00:00"
+    },
+    {
       "id": "1xg7sga",
       "fullname": "t3_1xg7sga",
       "title": "Orien: Speak with Eyes - A free AAC app for those with ALS",
@@ -1541,7 +1555,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-28T00:22:02+00:00",
+  "generated_at": "2026-10-28T06:09:04+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1570,14 +1584,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
