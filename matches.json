@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1xg7sga",
+      "fullname": "t3_1xg7sga",
+      "title": "Orien: Speak with Eyes - A free AAC app for those with ALS",
+      "url": "https://www.reddit.com/r/AssistiveTechnology/comments/1xg7sga/orien_speak_with_eyes_a_free_aac_app_for_those/",
+      "excerpt": "",
+      "subreddit": "AssistiveTechnology",
+      "author": "Orien4Free",
+      "score": null,
+      "created_utc": 1793045511,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-10-28T00:22:02+00:00"
+    },
+    {
+      "id": "1xg7s6r",
+      "fullname": "t3_1xg7s6r",
+      "title": "Orien: Speak with Eyes - A free AAC app for those with ALS",
+      "url": "https://www.reddit.com/r/alsRESOURCES/comments/1xg7s6r/orien_speak_with_eyes_a_free_aac_app_for_those/",
+      "excerpt": "Hi everyone, First, I'm sorry to anyone living with this disease, and to everyone caring for someone who is. I don't have ALS. I've watched it slowly take people and I've watched families spend thousands on communication devices, or wait months on insurance, while someone they love loses their voice. I wanted to build something that could help in the meantime. So I built Orien: Speak with Eyes. It's a free iPhone app that lets someone communicate using only their eyes, and it went live on the Ap",
+      "subreddit": "alsRESOURCES",
+      "author": "Orien4Free",
+      "score": null,
+      "created_utc": 1793045494,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-10-28T00:22:02+00:00"
+    },
+    {
+      "id": "1xg65ri",
+      "fullname": "t3_1xg65ri",
+      "title": "Recommended AAC apps?",
+      "url": "https://www.reddit.com/r/autism/comments/1xg65ri/recommended_aac_apps/",
+      "excerpt": "I often times have verbal shutdowns and during times of meltdown and Shutdowns I often struggle to communicate so was considering looking into AAC to use when I'm struggling verbally. I'm wondering which apps are useful and which apps aren't so useful, I don't mind it being paid for etc if needed. Thank you for any advice.",
+      "subreddit": "autism",
+      "author": "UncomfortableAutist2",
+      "score": null,
+      "created_utc": 1793041879,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-10-28T00:22:02+00:00"
+    },
+    {
       "id": "1xg8zdd",
       "fullname": "t3_1xg8zdd",
       "title": "[HIRING] B2B Appointment Setter | $150/Month Per Customer, Recurring | Remote US | Commission Only",
@@ -1499,7 +1541,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-27T20:52:06+00:00",
+  "generated_at": "2026-10-28T00:22:02+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1528,7 +1570,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
