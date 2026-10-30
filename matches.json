@@ -1,6 +1,62 @@
 {
   "matches": [
     {
+      "id": "1xiwkuf",
+      "fullname": "t3_1xiwkuf",
+      "title": "Nutrition Analysis and Labelling Software",
+      "url": "https://www.reddit.com/r/FoodTech/comments/1xiwkuf/nutrition_analysis_and_labelling_software/",
+      "excerpt": "",
+      "subreddit": "FoodTech",
+      "author": "Brief-Witness-3878",
+      "score": null,
+      "created_utc": 1793308793,
+      "type": "post",
+      "matched_term": "label software",
+      "found_at": "2026-10-30T01:44:50+00:00"
+    },
+    {
+      "id": "1xiwkg0",
+      "fullname": "t3_1xiwkg0",
+      "title": "Nutrition Analysis and Labelling Software",
+      "url": "https://www.reddit.com/r/foodscience/comments/1xiwkg0/nutrition_analysis_and_labelling_software/",
+      "excerpt": "I am collecting volunteers to test Nutrition Analysis and Labelling software. The software is compliant with US, Canada, UK/EU and AUS/NZ regulations, uses data bases from those countries and generates Nutrition Facts and FOP symbols for those markets. Custom databases per user are permitted, no limit on the number of labels and the first 100 users will be eligible for the founder series pricing, starting at US$39 per user. Send me your email address and I can connect you.",
+      "subreddit": "foodscience",
+      "author": "Brief-Witness-3878",
+      "score": null,
+      "created_utc": 1793308767,
+      "type": "post",
+      "matched_term": "label software",
+      "found_at": "2026-10-30T01:44:50+00:00"
+    },
+    {
+      "id": "1xif4oh",
+      "fullname": "t3_1xif4oh",
+      "title": "I built a free, open-source terminal app for managing Firebase Remote Config across many projects",
+      "url": "https://www.reddit.com/r/coolgithubprojects/comments/1xif4oh/i_built_a_free_opensource_terminal_app_for/",
+      "excerpt": "Hi all! At my company we develop a white-label app, so we have 60+ Firebase projects. Keeping Remote Config in sync across all of them through the console is painful: changing one parameter can mean opening dozens of projects and clicking through each one. So I built fbrcm , a terminal manager for Remote Config. It has an interactive TUI, a full CLI, and an MCP server. It’s free, open source (MIT), not monetized, and not affiliated with or endorsed by Google or Firebase. It can Discover all the ",
+      "subreddit": "coolgithubprojects",
+      "author": "Pitiful_Passion_3054",
+      "score": null,
+      "created_utc": 1793265736,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-30T01:45:02+00:00"
+    },
+    {
+      "id": "1xih49c",
+      "fullname": "t3_1xih49c",
+      "title": "Made a Garden Planner to help plan and track our raised bed gardens",
+      "url": "https://www.reddit.com/r/BuildWithClaude/comments/1xih49c/made_a_garden_planner_to_help_plan_and_track_our/",
+      "excerpt": "My wife and I grow vegetables in raised beds, and our planning lived in spreadsheets and my memory. I have very little development experience, so I used Claude Code to build something better. What it does Draws the garden as a map of beds, with a grid of squares you plant into Keeps planting history and outcomes, and warns about crop rotation, spacing, shade and companions Works out planting dates from frost-date tables, then builds the seed-starting calendar and a “this week” list Tracks seed p",
+      "subreddit": "BuildWithClaude",
+      "author": "gmccolgan3",
+      "score": null,
+      "created_utc": 1793272479,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-30T01:46:04+00:00"
+    },
+    {
       "id": "1xh9j8k",
       "fullname": "t3_1xh9j8k",
       "title": "What should a modern social platform offer beyond scrolling through videos?",
@@ -1555,7 +1611,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-29T21:42:37+00:00",
+  "generated_at": "2026-10-30T01:46:24+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1584,14 +1640,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
