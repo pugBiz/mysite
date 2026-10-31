@@ -1,6 +1,62 @@
 {
   "matches": [
     {
+      "id": "1xjxox6",
+      "fullname": "t3_1xjxox6",
+      "title": "Anyone else find nutrition labels/apps hard to trust in sg? Especially self-reported ones.",
+      "url": "https://www.reddit.com/r/SingaporeFitness/comments/1xjxox6/anyone_else_find_nutrition_labelsapps_hard_to/",
+      "excerpt": "For eg. One diluted taste small cup mr bean yields 17.5g protein?",
+      "subreddit": "SingaporeFitness",
+      "author": "Opposite_Ad_7925",
+      "score": null,
+      "created_utc": 1793410898,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-10-31T20:12:01+00:00"
+    },
+    {
+      "id": "1xjxc2a",
+      "fullname": "t3_1xjxc2a",
+      "title": "Built a mobile-first garden planner for my wife’s raised beds — looking for early testers (free interactive demo, no signup)",
+      "url": "https://www.reddit.com/r/SquareFootGardening/comments/1xjxc2a/built_a_mobilefirst_garden_planner_for_my_wifes/",
+      "excerpt": "",
+      "subreddit": "SquareFootGardening",
+      "author": "Ancient-Vermicelli99",
+      "score": null,
+      "created_utc": 1793409845,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-31T20:13:04+00:00"
+    },
+    {
+      "id": "1xjvlca",
+      "fullname": "t3_1xjvlca",
+      "title": "Built a mobile-first garden planner for my wife’s raised beds — looking for early testers (free interactive demo, no signup)",
+      "url": "https://www.reddit.com/r/Raisedbed/comments/1xjvlca/built_a_mobilefirst_garden_planner_for_my_wifes/",
+      "excerpt": "",
+      "subreddit": "Raisedbed",
+      "author": "Ancient-Vermicelli99",
+      "score": null,
+      "created_utc": 1793405083,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-31T20:13:04+00:00"
+    },
+    {
+      "id": "1xjvkzd",
+      "fullname": "t3_1xjvkzd",
+      "title": "Built a mobile-first garden planner for my wife’s raised beds — looking for early testers (free interactive demo, no signup)",
+      "url": "https://www.reddit.com/r/homestead/comments/1xjvkzd/built_a_mobilefirst_garden_planner_for_my_wifes/",
+      "excerpt": "Hi all, Watching my wife juggle paper notebooks, seed packets, and weather forecasts between our raised beds prompted me to build Smart Garden Planner. The goal was simple: make something fast, clean, and mobile-first that helps you track your beds, companion pairings, calendar reminders, and harvest yields without feeling like an enterprise spreadsheet. You can try the full experience with dummy data with zero signup or email required: 🔗 smartgardenplanner.com/demo For all you crushing your gar",
+      "subreddit": "homestead",
+      "author": "Ancient-Vermicelli99",
+      "score": null,
+      "created_utc": 1793405054,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-10-31T20:13:04+00:00"
+    },
+    {
       "id": "1xkdjop",
       "fullname": "t3_1xkdjop",
       "title": "Anyone have Avery labels to spare?",
@@ -1653,7 +1709,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-31T16:16:38+00:00",
+  "generated_at": "2026-10-31T20:13:23+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1682,14 +1738,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
