@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1xkdjop",
+      "fullname": "t3_1xkdjop",
+      "title": "Anyone have Avery labels to spare?",
+      "url": "https://www.reddit.com/r/washingtondc/comments/1xkdjop/anyone_have_avery_labels_to_spare/",
+      "excerpt": "I'm in a bind with a work project and need to find some shipping labels ASAP to pick up today. None of what I need is available to pick up in stores for some reason. I am looking for any labels that are compatible with a laser printer and are either 3.5\" x 5\" OR 5.5\" x 8.5\" Please let me know and I'll reach out to you directly. Thanks!",
+      "subreddit": "washingtondc",
+      "author": "jessbg96",
+      "score": null,
+      "created_utc": 1793461553,
+      "type": "post",
+      "matched_term": "avery labels",
+      "found_at": "2026-10-31T16:15:02+00:00"
+    },
+    {
       "id": "1xj8vjq",
       "fullname": "t3_1xj8vjq",
       "title": "Telemedicine App Development: Build from Scratch or Use a White-Label Solution?",
@@ -1639,7 +1653,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-31T11:05:46+00:00",
+  "generated_at": "2026-10-31T16:16:38+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1668,7 +1682,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
