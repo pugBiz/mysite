@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1xj8vjq",
+      "fullname": "t3_1xj8vjq",
+      "title": "Telemedicine App Development: Build from Scratch or Use a White-Label Solution?",
+      "url": "https://www.reddit.com/r/AppDevelopers/comments/1xj8vjq/telemedicine_app_development_build_from_scratch/",
+      "excerpt": "If you're launching a telemedicine platform in the US, one of the biggest early decisions is whether to build custom software or use an existing white-label solution. Both approaches can work, but they involve different tradeoffs in cost, launch time, flexibility, and long-term control. https://preview.redd.it/uv873k174kyh1.jpeg?width=2080&format=pjpg&auto=webp&s=e52718e4cc42fe1cdc7bf43393c17c3a535e36e9 The important question isn't which technology is better. It's which approach fits your health",
+      "subreddit": "AppDevelopers",
+      "author": "mtechhub99",
+      "score": null,
+      "created_utc": 1793345303,
+      "type": "post",
+      "matched_term": "label software",
+      "found_at": "2026-10-30T23:58:30+00:00"
+    },
+    {
       "id": "1xjlvwr",
       "fullname": "t3_1xjlvwr",
       "title": "Best Autism AAC App",
@@ -1625,7 +1639,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-10-30T20:03:04+00:00",
+  "generated_at": "2026-10-31T00:00:05+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1654,14 +1668,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
