@@ -1,6 +1,34 @@
 {
   "matches": [
     {
+      "id": "1xl616l",
+      "fullname": "t3_1xl616l",
+      "title": "[Update] Block App Updates - Block updates for selected App Store apps without disabling updates for everything else",
+      "url": "https://www.reddit.com/r/jailbreak/comments/1xl616l/update_block_app_updates_block_updates_for/",
+      "excerpt": "Release Post: [Free Release] Block App Updates — block updates for individual App Store apps I have fixed several issues and made some improvements, then uploaded to my repo. Change Logs 1.0.2 Fixes Committing changes no longer breaks TrollStore, TrollStore Lite, or jailbreak applications (missing labels, apps that do not launch or disappear, letterboxed display). Their registrations are restored automatically, so Refresh App Registrations or uicache is no longer needed. Applying changes is much",
+      "subreddit": "jailbreak",
+      "author": "ichitaso",
+      "score": null,
+      "created_utc": 1793547265,
+      "type": "post",
+      "matched_term": "label app",
+      "found_at": "2026-11-02T18:44:04+00:00"
+    },
+    {
+      "id": "1xkm6kz",
+      "fullname": "t3_1xkm6kz",
+      "title": "A gardener in Vietnam just planted mướp in the garden app I built. What else do Vietnamese home gardens grow that I'm missing?",
+      "url": "https://www.reddit.com/r/VietNam/comments/1xkm6kz/a_gardener_in_vietnam_just_planted_mướp_in_the/",
+      "excerpt": "I'm the developer of a garden planner app (Vernalo). I build it alone, in the US, and I check new sign-ups most mornings. Today someone in Vietnam, using the app in Vietnamese, planted five mướp (ridge gourd). It wasn't on the app's \"popular in your region\" list for Vietnam, so they searched for it and planted it anyway. That's my first Vietnamese gardener and it made my week. It also showed me a gap. My Vietnam regional list has water spinach, bitter melon leaf, banana blossom, pennywort and a ",
+      "subreddit": "VietNam",
+      "author": "Plant_Anywhere",
+      "score": null,
+      "created_utc": 1793482931,
+      "type": "post",
+      "matched_term": "garden planner",
+      "found_at": "2026-11-02T18:45:06+00:00"
+    },
+    {
       "id": "1xl5pvl",
       "fullname": "t3_1xl5pvl",
       "title": "Which app should I use to learn as someone working with nonverbal youth",
@@ -1751,7 +1779,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-11-02T08:06:02+00:00",
+  "generated_at": "2026-11-02T18:45:25+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1780,14 +1808,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
