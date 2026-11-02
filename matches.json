@@ -1,6 +1,48 @@
 {
   "matches": [
     {
+      "id": "1xl5pvl",
+      "fullname": "t3_1xl5pvl",
+      "title": "Which app should I use to learn as someone working with nonverbal youth",
+      "url": "https://www.reddit.com/r/slp/comments/1xl5pvl/which_app_should_i_use_to_learn_as_someone/",
+      "excerpt": "I am a children’s (psycho)therapist and I primarily work in the I/DD and ASD space. I really want to download an AAC app on my own so I can learn about the mechanics first hand. Some kids also feel a little insecure about the AAC so I would love to be able to have conversations where the two of us are using our own devices. I currently have a work iPad I would want to lock into the AAC app while working with one of these cases. I’ve been looking at apps and I’m between two. Our devices are work ",
+      "subreddit": "slp",
+      "author": "mischeviouswoman",
+      "score": null,
+      "created_utc": 1793546502,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-11-02T08:06:02+00:00"
+    },
+    {
+      "id": "1xkkj05",
+      "fullname": "t3_1xkkj05",
+      "title": "Parent who built a free AAC app for my son: looking for honest feedback",
+      "url": "https://www.reddit.com/r/specialneedsparenting/comments/1xkkj05/parent_who_built_a_free_aac_app_for_my_son/",
+      "excerpt": "",
+      "subreddit": "specialneedsparenting",
+      "author": "Impressive-Past-2890",
+      "score": null,
+      "created_utc": 1793478482,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-11-02T08:06:02+00:00"
+    },
+    {
+      "id": "1xke03h",
+      "fullname": "t3_1xke03h",
+      "title": "Custom AAC app",
+      "url": "https://www.reddit.com/r/u_ADHD_papa/comments/1xke03h/custom_aac_app/",
+      "excerpt": "",
+      "subreddit": "u/ADHD_papa",
+      "author": "ADHD_papa",
+      "score": null,
+      "created_utc": 1793462650,
+      "type": "post",
+      "matched_term": "aac app",
+      "found_at": "2026-11-02T08:06:02+00:00"
+    },
+    {
       "id": "1xjxox6",
       "fullname": "t3_1xjxox6",
       "title": "Anyone else find nutrition labels/apps hard to trust in sg? Especially self-reported ones.",
@@ -1709,7 +1751,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-11-02T01:23:08+00:00",
+  "generated_at": "2026-11-02T08:06:02+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1738,7 +1780,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "bulk rotate photos"
+    "avery labels",
+    "bake croissants",
+    "woodworking software",
+    "aac software",
+    "woodworking app",
+    "woodwork modeling",
+    "woodwork design",
+    "aac app"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
