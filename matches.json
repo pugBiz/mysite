@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1xmvda8",
+      "fullname": "t3_1xmvda8",
+      "title": "Snapchat launches free digital safety course for Canadian teens, citing 32% cyberbullying rate among youth aged 9–17",
+      "url": "https://www.reddit.com/r/planhub/comments/1xmvda8/snapchat_launches_free_digital_safety_course_for/",
+      "excerpt": "Snapchat has launched The Keys: A Guide to Digital Safety in Canada, a free, interactive online course designed to help teenagers and families recognize and respond to common online threats. Announced November 2 following Canada's 21st annual Media Literacy Week, the program was developed with Common Sense Media and informed by Canadian organizations MediaSmarts and Jack.org. Inspired by driver's education, the course combines videos with realistic scenarios where participants practise respondin",
+      "subreddit": "planhub",
+      "author": "Planhub-ca",
+      "score": null,
+      "created_utc": 1793718361,
+      "type": "post",
+      "matched_term": "combine videos",
+      "found_at": "2026-11-03T22:15:04+00:00"
+    },
+    {
       "id": "1xl616l",
       "fullname": "t3_1xl616l",
       "title": "[Update] Block App Updates - Block updates for selected App Store apps without disabling updates for everything else",
@@ -1779,7 +1793,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-11-03T16:56:07+00:00",
+  "generated_at": "2026-11-03T22:16:06+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1808,14 +1822,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
