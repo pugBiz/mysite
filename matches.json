@@ -1,6 +1,20 @@
 {
   "matches": [
     {
+      "id": "1xrherl",
+      "fullname": "t3_1xrherl",
+      "title": "I built a free online video editor that works directly in your browser – looking for feedback",
+      "url": "https://www.reddit.com/r/u_Warm-Forever8473/comments/1xrherl/i_built_a_free_online_video_editor_that_works/",
+      "excerpt": "Hey everyone! I've been working on a project called WayToVideo, an online video editing tool. The idea behind it is simple: I wanted to make video editing accessible without requiring people to install heavy desktop software or create an account. Some features include: Multitrack video and audio editing Trim and merge videos Add subtitles and music Video compression 1080p and 4K export No watermark One thing I'm particularly focusing on is browser-based processing and user privacy. I'd really ap",
+      "subreddit": "u/Warm-Forever8473",
+      "author": "Warm-Forever8473",
+      "score": null,
+      "created_utc": 1794195562,
+      "type": "post",
+      "matched_term": "merge videos",
+      "found_at": "2026-11-10T10:55:01+00:00"
+    },
+    {
       "id": "1xr46v3",
       "fullname": "t3_1xr46v3",
       "title": "The smell of freshly baked croissants",
@@ -1905,7 +1919,7 @@
       "found_at": "2026-09-01T20:24:06+00:00"
     }
   ],
-  "generated_at": "2026-11-10T02:41:05+00:00",
+  "generated_at": "2026-11-10T10:55:49+00:00",
   "watch_terms": [
     "avery labels",
     "bake croissants",
@@ -1934,14 +1948,14 @@
     "bulk rotate photos"
   ],
   "searched_this_run": [
-    "avery labels",
-    "bake croissants",
-    "woodworking software",
-    "aac software",
-    "woodworking app",
-    "woodwork modeling",
-    "woodwork design",
-    "aac app"
+    "label software",
+    "label app",
+    "label barcode",
+    "combine videos",
+    "merge videos",
+    "organize photos into albums",
+    "garden planner",
+    "iphone label designer"
   ],
   "watch_term": "avery labels, bake croissants, woodworking software, aac software, woodworking app, woodwork modeling, woodwork design, aac app, label software, label app, label barcode, combine videos, merge videos, organize photos into albums, garden planner, iphone label designer, ipad label designer, pet selfie camera, camera for seniors, apps for seniors, aac language, home inspection app, redate photos, bulk crop photos, bulk rotate photos"
 }
